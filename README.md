@@ -276,3 +276,8 @@
 
 # 4.最后
 Happy LaTeXing !!!
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=NanmiCoder/MediaCrawler&type=Date)](https://star-history.com/#NanmiCoder/MediaCrawler&Date)
+
