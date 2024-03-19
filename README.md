@@ -1,6 +1,6 @@
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=NanmiCoder/MediaCrawler&type=Date)](https://star-history.com/#zongpingding/All-About-TeX&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=zongpingding/All-About-TeX&type=Date)](https://star-history.com/#zongpingding/All-About-TeX&Date)
 
 # 1.声明
 
