@@ -1,3 +1,7 @@
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=NanmiCoder/MediaCrawler&type=Date)](https://star-history.com/#zongpingding/All-About-TeX&Date)
+
 # 1.声明
 
 * 本仓库仅供学习交流使用，我自己搜集了许多的LaTeX相关的内容，集中于此，本仓库中的任何内容均为涉及任何形式的商业活动 
@@ -276,8 +280,4 @@
 
 # 4.最后
 Happy LaTeXing !!!
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=NanmiCoder/MediaCrawler&type=Date)](https://star-history.com/#NanmiCoder/MediaCrawler&Date)
 
