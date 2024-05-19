@@ -165,7 +165,6 @@
 │   ├── The LaTeX Companion【2nd】.pdf
 │   └── The TEXbook.pdf
 ├── 经典文档手册
-│   ├── 批量注册mathpix帐号方法.pdf
 │   ├── asymptote_1.79手册【汉化】.pdf
 │   ├── asymptote-faq-zh-cn.pdf
 │   ├── asymptote manual_2.38.pdf
