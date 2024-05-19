@@ -1,0 +1,628 @@
+% !TeX TS-program = xelatex
+
+\documentclass[aspectratio=169]{beamer}
+\usepackage{etoolbox}
+\usepackage{booktabs}
+
+\input{../preamble.tex}
+
+\title{\LaTeX3教程四：常用库}
+\date{2021年12月17日}
+
+\begin{document}
+
+\maketitle
+
+\section{凭据表}
+
+\begin{frame}[fragile]{凭据表 （token list)}
+\begin{itemize}
+\item 用于存储文档，命令等内容
+\item 提供多种使用及修改的接口
+\item 可用于存储参数供其它函数调用
+\item 主要缺点：无法存储换行符
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{凭据表的基本操作}
+
+对凭据表变量赋值
+\begin{texcode**}
+\ExplSyntaxOn
+\tl_gclear:N \g_tmpa_tl %清除旧值
+\tl_gset:Nn \g_tmpa_tl {新值}
+\cs_meaning:N \g_tmpa_tl
+\ExplSyntaxOff
+\end{texcode**}
+
+在左侧追加
+\begin{texcode**}
+\ExplSyntaxOn
+\tl_gput_left:Nn \g_tmpa_tl {一个}
+\cs_meaning:N \g_tmpa_tl
+\ExplSyntaxOff
+\end{texcode**}
+
+在右侧追加
+\begin{texcode**}
+\ExplSyntaxOn
+\tl_gput_right:Nn \g_tmpa_tl {被定义}
+\cs_meaning:N \g_tmpa_tl
+\ExplSyntaxOff
+\end{texcode**}
+
+\end{frame}
+
+\begin{frame}[fragile]{凭据表的基本操作}
+
+遍历
+\begin{texcode**}
+\ExplSyntaxOn
+\tl_set:Nn \l_tmpa_tl {ab{cd}\P e}
+\tl_map_inline:Nn \l_tmpa_tl {
+    \par 元素：#1
+}
+\ExplSyntaxOff
+\end{texcode**}
+
+\end{frame}
+
+\begin{frame}[fragile]{凭据表的基本操作}
+
+按元素序号访问
+\begin{texcode**}
+\ExplSyntaxOn
+\tl_set:Nn \l_tmpa_tl {ab{cd}\P e}
+\par\tl_count:N \l_tmpa_tl
+\par\tl_item:Nn \l_tmpa_tl {1}
+\par\tl_item:Nn \l_tmpa_tl {2}
+\par\tl_item:Nn \l_tmpa_tl {3}
+\par\tl_item:Nn \l_tmpa_tl {4}
+\par\tl_item:Nn \l_tmpa_tl {5}
+\ExplSyntaxOff
+\end{texcode**}
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]{凭据表的基本操作}
+
+取头/取尾
+\begin{texcode**}
+\ExplSyntaxOn
+\tl_set:Nn \l_tmpa_tl {abcde}
+\par\tl_head:N \l_tmpa_tl
+\par\tl_tail:N \l_tmpa_tl
+\ExplSyntaxOff
+\end{texcode**}
+
+遍历
+\begin{texcode**}
+\ExplSyntaxOn
+\tl_set:Nn \l_tmpa_tl {ab{cd}\P e}
+\tl_map_inline:Nn \l_tmpa_tl {
+    \par 元素：#1
+}
+\ExplSyntaxOff
+\end{texcode**}
+
+\end{frame}
+
+\begin{frame}[fragile]{凭据表与字符串}
+
+字符串库 (string)与凭据表十分相似。两者的区别主要在于字符串中所存储的所有内容都会以原样输出。
+\begin{texcode**}
+\ExplSyntaxOn
+\tl_set:Nn \l_tmpa_tl {$\frac{\alpha}{\beta}$}
+\tl_use:N \l_tmpa_tl
+\ExplSyntaxOff
+\end{texcode**}
+
+\begin{texcode**}
+\ExplSyntaxOn
+\str_set:Nn \l_tmpa_str {$\frac{\alpha}{\beta}$}
+\str_use:N \l_tmpa_str
+\ExplSyntaxOff
+\end{texcode**}
+
+\end{frame}
+
+\begin{frame}[fragile]{中英文数字转换}
+
+\begin{texcode**}
+\ExplSyntaxOn
+\tl_new:N \g_doc_chn_num_tl
+\tl_gset:Nn \g_doc_chn_num_tl {一二三四五六七八九}
+\cs_gset:Npn \doc_arabic_to_chn_a:n #1 {
+    \tl_item:Nn \g_doc_chn_num_tl {#1}
+}
+\par\doc_arabic_to_chn_a:n {1}
+\par\doc_arabic_to_chn_a:n {3}
+\par\doc_arabic_to_chn_a:n {5}
+\ExplSyntaxOff
+\end{texcode**}
+
+\end{frame}
+
+\begin{frame}[fragile]{中英文数字转换}
+
+\begin{texcode**}[0.1]
+\ExplSyntaxOn
+\tl_new:N \g_doc_chn_dec_tl
+\tl_gset:Nn \g_doc_chn_dec_tl {十百千万}
+\cs_gset:Npn \doc_arabic_to_chn:n #1 {
+  \tl_set_eq:NN \l_tmpa_tl \g_doc_chn_dec_tl
+  \tl_clear:N \l_tmpb_tl
+  \doc_arabic_to_chn_b:nN {#1} \l_tmpa_tl     \tl_use:N \l_tmpb_tl
+}
+\cs_gset:Npn \doc_arabic_to_chn_b:nN #1#2 {
+  \int_set:Nn \l_tmpa_int {\int_div_truncate:nn {#1}{10}}
+  \int_set:Nn \l_tmpb_int {\int_mod:nn {#1}{10}}
+  \int_compare:nNnT {\l_tmpb_int} > {0} {
+      \tl_put_left:Nx \l_tmpb_tl {\doc_arabic_to_chn_a:n {\l_tmpb_int}}
+  }
+  \int_compare:nNnT {\l_tmpa_int} > {0} {
+      \tl_put_left:Nx \l_tmpb_tl {\tl_head:N #2}
+      \tl_set:Nx #2 {\tl_tail:N #2}
+      \exp_args:Nx \doc_arabic_to_chn_b:nN {\int_use:N \l_tmpa_int} #2
+  }
+}
+\ExplSyntaxOff
+\end{texcode**}
+
+\end{frame}
+
+\begin{frame}[fragile]{中英文数字转换}
+
+\begin{texcode**}
+\ExplSyntaxOn
+\par\doc_arabic_to_chn:n {5}
+\par\doc_arabic_to_chn:n {15}
+\par\doc_arabic_to_chn:n {615}
+\par\doc_arabic_to_chn:n {4615}
+\par\doc_arabic_to_chn:n {84615}
+\par\doc_arabic_to_chn:n {20}
+\par\doc_arabic_to_chn:n {320}
+\ExplSyntaxOff
+\end{texcode**}
+
+\end{frame}
+
+\begin{frame}[fragile]{接收文本参数的格式化}
+
+假设我们想设计一个命令，它能根据一个参数来选择如何格式化文字。比如\texinl|\fmt{cu}{abc}|会将abc加粗；\texinl|\fmt{xie}{abc}|会使用斜体；\texinl|\fmt{xian}{abc}|会使用下划线等。
+
+\begin{texcode**}
+\ExplSyntaxOn
+\newcommand{\fmt}[2]{
+    \str_if_eq:nnT {#1} {cu} {\textbf{#2}}
+    \str_if_eq:nnT {#1} {xie} {\textit{#2}}
+    \str_if_eq:nnT {#1} {xian} {\underline{#2}}
+}
+\par\fmt{cu}{abc}
+\par\fmt{xie}{abc}
+\par\fmt{xian}{abc}
+\ExplSyntaxOff
+\end{texcode**}
+
+\texinl|\tl_if_eq:|不仅比较字符，还会比较字符的类别码 (category code)。因此可能出现字符看上去相等但是程序判断为不等的情况。
+
+\end{frame}
+
+
+\begin{frame}[fragile]{接收文本参数的格式化}
+
+
+\begin{texcode**}[0.2]
+\ExplSyntaxOn
+\newcommand{\fmt}[2]{
+    \str_case:nnTF {#1} {
+        {cu} {\textbf{#2}}
+        {xie} {\textit{#2}}
+        {xian} {\underline{#2}}
+    }{
+        \textcolor{green}{\ (good)}
+    }{
+        \textcolor{red}{#2\ (bad)}
+    }
+}
+\par\fmt{cu}{abc}
+\par\fmt{xie}{abc}
+\par\fmt{xian}{abc}
+\par\fmt{123}{abc}
+\ExplSyntaxOff
+\end{texcode**}
+
+\end{frame}
+
+
+\section{序列表}
+
+
+\begin{frame}[fragile]{序列表 (sequence)}
+
+\begin{itemize}
+\item 用于存储并管理一系列的元素
+\item 可以按序号访问，也可以只访问首元素或尾元素
+\item 可以把多个元素连接起来
+\end{itemize}
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]{序列表的基本操作}
+
+在右侧追加
+\begin{texcode**}
+\ExplSyntaxOn
+\seq_gclear:N \g_tmpa_seq
+\seq_gput_right:Nn \g_tmpa_seq {一}
+\seq_gput_right:Nn \g_tmpa_seq {个}
+\seq_gput_right:Nn \g_tmpa_seq {元素}
+\par\seq_use:Nn  \g_tmpa_seq {,~}
+\ExplSyntaxOff
+\end{texcode**}
+
+在左侧追加
+\begin{texcode**}
+\ExplSyntaxOn
+\seq_gput_left:Nn \g_tmpa_seq {不只}
+\par\seq_use:Nn  \g_tmpa_seq {,~}
+\ExplSyntaxOff
+\end{texcode**}
+
+\end{frame}
+
+\begin{frame}[fragile]{序列表的基本操作}
+
+获取最左侧元素
+\begin{texcode**}
+\ExplSyntaxOn
+\seq_get_left:NN \g_tmpa_seq \l_tmpa_tl
+\tl_use:N \l_tmpa_tl
+\ExplSyntaxOff
+\end{texcode**}
+
+获取最右侧元素
+\begin{texcode**}
+\ExplSyntaxOn
+\seq_get_right:NN \g_tmpa_seq \l_tmpa_tl
+\tl_use:N \l_tmpa_tl
+\ExplSyntaxOff
+\end{texcode**}
+
+\texinl|\seq_pop_left:| 以及 \texinl|\seq_pop_right:|的功能类似，但是会从序列中移除元素。
+
+\end{frame}
+
+\begin{frame}[fragile]{序列表的基本操作}
+
+遍历
+\begin{texcode**}
+\ExplSyntaxOn
+\seq_map_inline:Nn \g_tmpa_seq {
+    \par 元素：#1
+}
+\ExplSyntaxOff
+\end{texcode**}
+
+\end{frame}
+
+\begin{frame}[fragile]{序列表的基本操作}
+
+按序号访问
+\begin{texcode**}
+\ExplSyntaxOn
+\par\seq_item:Nn \g_tmpa_seq {1}
+\par\seq_item:Nn \g_tmpa_seq {3}
+\ExplSyntaxOff
+\end{texcode**}
+
+序列表的本质是凭据表
+\begin{texcode**}
+\ExplSyntaxOn
+\cs_meaning:N \g_tmpa_seq
+\ExplSyntaxOff
+\end{texcode**}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{序列表的基本操作}
+
+连接序列表中的元素
+\begin{texcode**}
+\ExplSyntaxOn
+\par\seq_use:Nn \g_tmpa_seq {，}
+\par\seq_use:Nn \g_tmpa_seq {——}
+\ExplSyntaxOff
+\end{texcode**}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{制作正弦表}
+
+我们希望制作如下表格：
+
+\begin{center}
+\ExplSyntaxOn
+\seq_gclear:N \g_tmpa_seq
+\int_step_inline:nnn {0} {18} {
+    \seq_put_right:Nn \l_tmpa_seq {
+        $\sin #1^\circ = \fp_eval:n {sin(#1 * \c_one_degree_fp)}$
+    }
+    \int_compare:nNnT {#1} > {0} {
+        \int_compare:nNnT {\int_mod:nn {#1 + 1} {3}} = {0} {
+            \seq_gput_right:Nx \g_tmpa_seq {
+                \seq_use:Nn \l_tmpa_seq {&}
+            }
+            \seq_clear:N \l_tmpa_seq
+        }
+    }
+} 
+
+\tiny
+\begin{tabular}{lll}
+\toprule
+\seq_use:Nn \g_tmpa_seq {\\}
+\\ \bottomrule
+\end{tabular}
+\ExplSyntaxOff
+\end{center}
+
+\end{frame}
+
+\begin{frame}[fragile]{制作正弦表}
+
+\begin{texcode*}
+\ExplSyntaxOn
+\seq_gclear:N \g_tmpa_seq
+\int_step_inline:nnn {0} {18} {
+    \seq_put_right:Nn \l_tmpa_seq {
+        $\sin #1^\circ = \fp_eval:n {sin(#1 * \c_one_degree_fp)}$
+    }
+    \int_compare:nNnT {#1} > {0} {
+        \int_compare:nNnT {\int_mod:nn {#1 + 1} {3}} = {0} {
+            \seq_gput_right:Nx \g_tmpa_seq {
+                \seq_use:Nn \l_tmpa_seq {&}
+            }
+            \seq_clear:N \l_tmpa_seq
+        }
+    }
+} 
+\ExplSyntaxOff
+\end{texcode*}
+
+\end{frame}
+
+\begin{frame}[fragile]{制作正弦表}
+
+\begin{texcode*}
+\ExplSyntaxOn
+\tiny
+\centering
+\begin{tabular}{lll}
+\toprule
+\seq_use:Nn \g_tmpa_seq {\\}
+\\ \bottomrule
+\end{tabular}
+\par
+\ExplSyntaxOff
+\end{texcode*}
+
+\end{frame}
+
+\begin{frame}[fragile]{随机列表}
+
+设计两个命令：
+\begin{itemize}
+\item \texinl|\AddToList|：把元素加入列表
+\item \texinl|\ShowList|：以随机顺序输出列表中的元素
+\end{itemize}
+
+\begin{texcode*}
+\ExplSyntaxOn
+\seq_gclear:N \g_tmpa_seq
+\cs_gset:Npn \AddToList #1 {
+    \seq_gput_right:Nn \g_tmpa_seq {#1}
+}
+\ExplSyntaxOff
+\end{texcode*}
+
+\end{frame}
+
+\begin{frame}[fragile]{随机列表}
+
+
+\begin{texcode*}
+\ExplSyntaxOn
+\cs_gset:Npn \ShowList {
+    \seq_shuffle:N \g_tmpa_seq
+    \begin{itemize}
+        \seq_map_inline:Nn \g_tmpa_seq {
+            \item ##1
+        }
+    \end{itemize}
+}
+\ExplSyntaxOff
+\end{texcode*}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{随机列表}
+
+\begin{texcode**}
+\AddToList{两}
+\AddToList{只}
+\AddToList{老虎}
+\AddToList{跑}
+\AddToList{得}
+\AddToList{快}
+\ShowList
+\end{texcode**}
+
+\end{frame}
+
+\begin{frame}[fragile]{逗号分隔表 (comma-separated list)}
+
+\begin{itemize}
+\item 接口与序列基本相同
+\item 区别：可以用逗号分隔的内容来赋值
+\end{itemize}
+
+\begin{texcode**}
+\ExplSyntaxOn
+\clist_set:Nn \l_tmpa_clist {a,b,cd,\P,e}
+\clist_map_inline:Nn \l_tmpa_clist {
+    \par 元素：#1
+}
+\ExplSyntaxOff
+\end{texcode**}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{逗号分隔表 (comma-separated list)}
+
+
+按序号访问
+\begin{texcode**}
+\ExplSyntaxOn
+\clist_set:Nn \l_tmpa_clist {a,b,cd,\P,e}
+\par\clist_item:Nn \l_tmpa_clist {1}
+\par\clist_item:Nn \l_tmpa_clist {2}
+\par\clist_item:Nn \l_tmpa_clist {3}
+\par\clist_item:Nn \l_tmpa_clist {4}
+\par\clist_item:Nn \l_tmpa_clist {5}
+\ExplSyntaxOff
+\end{texcode**}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{接收文本参数的格式化}
+
+
+\begin{texcode**}[0.2]
+\ExplSyntaxOn
+\newcommand{\fmt}[2]{
+    \group_begin:
+    \clist_set:Nn \l_tmpa_clist {#1}
+    \clist_map_inline:Nn \l_tmpa_clist {
+        \str_case:nn {##1} {
+            {cu} {\bfseries}
+            {xie} {\itshape}
+            {hong} {\color{red}}
+        }
+    } #2
+    \group_end:
+}
+\ExplSyntaxOff
+\par\fmt{cu}{abc}
+\par\fmt{xie}{abc}
+\par\fmt{hong}{abc}
+\par\fmt{cu,hong}{abc}
+\par\fmt{xie,hong}{abc}
+\par\fmt{cu,xie,hong}{abc}
+\end{texcode**}
+
+\end{frame}
+
+\section{属性表}
+
+\begin{frame}[fragile]{属性表 (property list)}
+
+\begin{itemize}
+\item 与Python中的字典（dict）类似，提供键—值访问
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{属性表的基本操作}
+
+设置值
+\begin{texcode**}
+\ExplSyntaxOn
+\prop_gput:Nnn \g_tmpa_prop {key1} {val1}
+\prop_gput:Nnn \g_tmpa_prop {key2} {val2}
+\ExplSyntaxOff
+\end{texcode**}
+
+取回值
+\begin{texcode**}
+\ExplSyntaxOn
+\par\prop_item:Nn \g_tmpa_prop {key1}
+\par\prop_item:Nn \g_tmpa_prop {key2}
+\ExplSyntaxOff
+\end{texcode**}
+取回值的函数还有\texinl|\prop_get:|及\texinl|\prop_pop|等。
+
+\end{frame}
+
+\begin{frame}[fragile]{属性表的基本操作}
+
+遍历
+\begin{texcode**}
+\ExplSyntaxOn
+\prop_map_inline:Nn \g_tmpa_prop {
+    \par 键：#1 \quad 值：#2
+}
+\ExplSyntaxOff
+\end{texcode**}
+遍历输出的顺序是未定义的。
+
+\end{frame}
+
+\begin{frame}[fragile]{属性表的基本操作}
+
+属性表也可通过类似逗号分隔表的方式初始化。
+\begin{texcode**}
+\ExplSyntaxOn
+\prop_set_from_keyval:Nn \l_tmpa_prop {
+    1=一,
+    2=二,
+    3=三
+}
+
+\prop_map_inline:Nn \l_tmpa_prop {
+    \par 键：#1 \quad 值：#2
+}
+\ExplSyntaxOff
+\end{texcode**}
+
+\end{frame}
+
+\begin{frame}[fragile]{缩写管理}
+设计两个命令：
+\begin{itemize}
+\item \texinl|\AddAcronym|：用于添加缩写到系统中
+\item \texinl|\Acro|：用于取回缩写的全称
+\end{itemize}
+
+\begin{texcode**}
+\ExplSyntaxOn
+\prop_new:N \g_doc_acro_prop
+\newcommand{\AddAcronym}[2]{
+    \prop_gput:Nnn \g_doc_acro_prop {#1} {#2}
+}
+\newcommand{\Acro}[1]{
+    \textbf{\prop_item:Nn \g_doc_acro_prop {#1}}
+}
+\ExplSyntaxOff
+
+\AddAcronym{gmm}{高斯混合模型}
+\AddAcronym{em}{期望最大化算法}
+
+使用\Acro{em}来优化\Acro{gmm}
+\end{texcode**}
+
+\end{frame}
+
+
+
+\end{document}

@@ -1,0 +1,170 @@
+% Written by metapost version 2.02
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="LinLibertineT-tlf-ot1--base";
+_s("2",_n1,1.00000,0.0000,0.0000,);
+_n3="LibertineMathMI";
+_s(";",_n3,1.00000,4.1743,0.0000,);
+setbounds _p to (0,-0.0548)--(7.7160,-0.0548)--
+ (7.7160,7.0236)--(0,7.0236)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n3="LibertineMathMI";
+_s("%",_n3,1.00000,-0.1494,0.0000,);
+setbounds _p to (0,-0.0548)--(5.7634,-0.0548)--
+ (5.7634,6.5405)--(0,6.5405)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n3="LibertineMathMI";
+_s("&",_n3,1.00000,-0.3985,0.0000,);
+setbounds _p to (0,-2.1071)--(7.0585,-2.1071)--
+ (7.0585,6.5405)--(0,6.5405)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n3="LibertineMathMI";
+_s(char34,_n3,1.00000,-0.0996,0.0000,);
+setbounds _p to (0,-0.0548)--(8.7073,-0.0548)--
+ (8.7073,6.5405)--(0,6.5405)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n3="LibertineMathMI";
+_s("0",_n3,1.00000,-0.3288,0.0000,);
+setbounds _p to (0,-0.0548)--(4.8618,-0.0548)--
+ (4.8618,4.3337)--(0,4.3337)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n3="LibertineMathMI";
+_s("G",_n3,1.00000,-0.2989,0.0000,);
+setbounds _p to (0,-0.0548)--(5.3250,-0.0548)--
+ (5.3250,4.3337)--(0,4.3337)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n3="LibertineMathMI";
+_s("~",_n3,1.00000,-0.5977,0.0000,);
+setbounds _p to (0,-2.3263)--(4.9962,-2.3263)--
+ (4.9962,4.3337)--(0,4.3337)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n7="LinLibertineTI-tlf-ot1--base";
+_s("scarabaeus",_n7,1.00000,0.0000,0.0000,);
+interim linecap:=0;
+vardef _r(expr _a,_w)(text _t) =
+  addto _p doublepath _a withpen pencircle scaled _w _t enddef;_r((0.0000,-2.0622)..(42.9389,-2.0622), 0.5579,);
+setbounds _p to (0,-2.8991)--(42.9389,-2.8991)--
+ (42.9389,6.9489)--(0,6.9489)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n3="LibertineMathMI";
+_s("A",_n3,1.00000,-0.3985,0.0000,);
+_n11="txmiaX";
+_s("=",_n11,1.00000,7.0164,0.0000,);
+_s(";",_n3,1.00000,15.2233,0.0000,);
+_n1="LinLibertineT-tlf-ot1--base";
+_s("cos",_n1,1.00000,20.4254,0.0000,);
+_s("2",_n1,1.00000,35.2564,0.0000,);
+_s("C",_n3,1.00000,39.5403,0.0000,);
+_n13="txsys";
+_s(char0,_n13,1.00000,45.7591,0.0000,);
+_s("0",_n3,1.00000,53.9805,0.0000,);
+_s("cos",_n1,1.00000,60.8314,0.0000,);
+_s("C",_n3,1.00000,75.3137,0.0000,);
+setbounds _p to (0,-0.1146)--(79.3187,-0.1146)--
+ (79.3187,7.0236)--(0,7.0236)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n3="LibertineMathMI";
+_s("$",_n3,1.00000,-0.4483,0.0000,);
+_n13="txsys";
+_s("0",_n13,0.73000,7.0451,3.6164,);
+setbounds _p to (0,-0.0548)--(10.1032,-0.0548)--
+ (10.1032,6.9255)--(0,6.9255)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n3="LibertineMathMI";
+_s("$",_n3,1.00000,-0.4483,0.0000,);
+setbounds _p to (0,-0.0548)--(7.0087,-0.0548)--
+ (7.0087,6.5405)--(0,6.5405)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n3="LibertineMathMI";
+_s(char22,_n3,1.00000,-0.2989,0.0000,);
+setbounds _p to (0,-0.0548)--(6.4956,-0.0548)--
+ (6.4956,6.5405)--(0,6.5405)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n3="LibertineMathMI";
+_s(char23,_n3,1.00000,-0.0996,0.0000,);
+setbounds _p to (0,-0.0548)--(5.8979,-0.0548)--
+ (5.8979,6.5405)--(0,6.5405)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n3="LibertineMathMI";
+_s(char24,_n3,1.00000,-0.5977,0.0000,);
+setbounds _p to (0,-0.0548)--(6.2416,-0.0548)--
+ (6.2416,6.5405)--(0,6.5405)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n3="LibertineMathMI";
+_s(char25,_n3,1.00000,-0.0996,0.0000,);
+setbounds _p to (0,-0.0548)--(7.2976,-0.0548)--
+ (7.2976,6.5405)--(0,6.5405)--cycle;
+_p endgroup
+mpxbreak

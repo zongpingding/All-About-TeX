@@ -1,0 +1,77 @@
+\documentclass[12pt, fontset=windows]{article}
+\usepackage{ctex}
+\usepackage{blindtext}
+\usepackage{tikz}
+\usepackage[inline]{asymptote}
+\usepackage{tcolorbox}
+\usepackage{ctex}
+\usepackage{float}
+
+
+\title{Test TexMaker}
+\date{\today}
+\author{Eurake}
+\begin{document}
+	\maketitle
+	
+	\section{基本功能测试}
+	Hello \LaTeX
+	
+	你好 \LaTeX\footnote{一个脚注测试}
+		
+	\section{tikz绘图测试}
+	\begin{tikzpicture}[overlay]
+		\draw[ultra thick, red] (0,2pt)--(0.8\linewidth, 2pt);
+	\end{tikzpicture}
+	\blindtext
+	
+	\section{测试asy绘图}
+	\subsection{背景材料}
+	\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=BackInfo]
+	    Asymptote comes with a convenient LaTeX style file asymptote.sty (v1.36 or later required)
+	    that makes LaTeX Asymptote-aware.
+	    Entering Asymptote code directly into the LaTeX
+	    source file, at the point where it is needed, keeps figures organized and avoids the need to
+	    invent new file names for each figure. Simply add the line \verb |\usepackage{asymptote}| at the
+	    beginning of your file and enclose your Asymptote code within a \verb |\egin{asy}|...\verb |\end{asy}|
+	    environment.
+	
+	    \textbf{注意：}\par
+	    As with the LaTeX comment environmenti
+	    \begin{itemize}
+	        \item 1. the \verb |\end{asy}| command must
+	        appear on a line by itself, with no trailing commands/comments.
+	        \item 2. A blank line is not
+	        allowed after \verb |\begin{asy}|.
+	    \end{itemize}
+	\end{tcolorbox}
+	
+	根据不同的编译工具有不同的编译选择,比如下面的latex和pdflatex选项。以下假设有一个文件
+	名为 \textbf{Test.tex}
+	\begin{figure}[!htb]
+	    \begin{minipage}[t]{0.4\linewidth}
+	        \vspace*{0pt}
+	        \begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=流程一]
+	            PlainTeX：
+	            \begin{itemize}
+	                \item 1. latex Test.tex
+	                \item 2. asy Test-*.asy
+	                \item 3. latex Test.tex
+	            \end{itemize}
+	        \end{tcolorbox}
+	    \end{minipage}
+	    \hfill
+	    \begin{minipage}[t]{0.6\linewidth}
+	        \vspace*{0pt}
+	        \begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=流程二]
+	            pdfLaTeX
+	            \begin{itemize}
+	                \item 1. pdflatex Test.tex
+	                \item 2. asy Test-*.asy
+	                \item 3. pdflatex Test.tex
+	            \end{itemize}  
+	        \end{tcolorbox}
+	    \end{minipage}
+	\end{figure}
+		
+\end{document}

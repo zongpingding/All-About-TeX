@@ -1,0 +1,273 @@
+\documentclass{ctexart}
+\usepackage{tikz,lipsum,lmodern}
+\usepackage[most]{tcolorbox}
+\usepackage[top=1cm,bottom=1cm,left=1cm,right=1mm]{geometry}  
+\usepackage{listings} 
+\lstset{numbers=left,breaklines,
+numberstyle= \tiny,keywordstyle= \color{ blue!70},commentstyle=\color{red!50!green!50!blue!50},
+frame=shadowbox, rulesepcolor= \color{ red!20!green!20!blue!20},
+escapeinside=``} 
+\begin{document}
+
+\section{Colored boxes}
+
+\subsection{1}
+\begin{lstlisting}[language={TeX}]
+\begin{tcolorbox}[colback=red!5!white,colframe=red!75!black]
+  My box.
+\end{tcolorbox}
+\end{lstlisting}
+\begin{tcolorbox}[colback=red!5!white,colframe=red!75!black]
+  My box.
+\end{tcolorbox}
+
+
+\subsection{2}
+\begin{lstlisting}[language={TeX}]
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=`给框加标题`]
+  My box with my title.
+\end{tcolorbox}
+\end{lstlisting}
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=`给框加标题`]
+  My box with my title.
+\end{tcolorbox}
+
+\subsection{3}
+\begin{lstlisting}[language={TeX}]
+\begin{tcolorbox}[colback=green!5!white,colframe=green!75!black]
+  Upper part of my box.
+  \tcblower
+  Lower part of my box.
+\end{tcolorbox}
+\end{lstlisting}
+\begin{tcolorbox}[colback=green!5!white,colframe=green!75!black]
+  Upper part of my box.
+  \tcblower
+  Lower part of my box.
+\end{tcolorbox}
+
+\subsection{4}
+\begin{lstlisting}[language={TeX}]
+\begin{tcolorbox}[colback=yellow!5!white,colframe=yellow!50!black,
+  colbacktitle=yellow!75!black,title=My title]
+  I can do this also with a title.
+  \tcblower
+  Lower part of my box.
+\end{tcolorbox}
+\end{lstlisting}
+\begin{tcolorbox}[colback=yellow!5!white,colframe=yellow!50!black,
+  colbacktitle=yellow!75!black,title=My title]
+  I can do this also with a title.
+  \tcblower
+  Lower part of my box.
+\end{tcolorbox}
+
+\subsection{5}
+\begin{lstlisting}[language={TeX}]
+\begin{tcolorbox}[colback=yellow!10!white,colframe=red!75!black,lowerbox=invisible,
+  savelowerto=\jobname_ex.tex]
+  Now, we play hide and seek. Where is the lower part?
+  \tcblower
+  I'm invisible until you find me.
+\end{tcolorbox}
+\end{lstlisting}
+\begin{tcolorbox}[colback=yellow!10!white,colframe=red!75!black,lowerbox=invisible,
+  savelowerto=\jobname_ex.tex]
+  Now, we play hide and seek. Where is the lower part?
+  \tcblower
+  I'm invisible until you find me.
+\end{tcolorbox}
+
+\subsection{6}
+\begin{lstlisting}[language={TeX}]
+\begin{tcolorbox}[colback=yellow!10!white,colframe=red!75!black,title=Here I am]
+  \input{\jobname_ex.tex}
+\end{tcolorbox}
+\end{lstlisting}
+\begin{tcolorbox}[colback=yellow!10!white,colframe=red!75!black,title=Here I am]
+  \input{\jobname_ex.tex}
+\end{tcolorbox}
+
+\subsection{7}
+\begin{lstlisting}[language={TeX}]
+\begin{tcolorbox}[enhanced,sharp corners=uphill,
+    colback=blue!50!white,colframe=blue!25!black,coltext=yellow,
+    fontupper=\Large\bfseries,arc=6mm,boxrule=2mm,boxsep=5mm,
+    borderline={0.3mm}{0.3mm}{white}]
+  Funny settings.
+\end{tcolorbox}
+\end{lstlisting}
+\begin{tcolorbox}[enhanced,sharp corners=uphill,
+    colback=blue!50!white,colframe=blue!25!black,coltext=yellow,
+    fontupper=\Large\bfseries,arc=6mm,boxrule=2mm,boxsep=5mm,
+    borderline={0.3mm}{0.3mm}{white}]
+  Funny settings.
+\end{tcolorbox}
+
+\subsection{8}
+\begin{lstlisting}[language={TeX}]
+\begin{tcolorbox}[enhanced,frame style image=blueshade.png,
+  opacityback=0.75,opacitybacktitle=0.25,
+  colback=blue!5!white,colframe=blue!75!black,
+  title=My title]
+  This box is filled with an external image.\par
+  Title and interior are made partly transparent to show the image.
+\end{tcolorbox}
+\end{lstlisting}
+\begin{tcolorbox}[enhanced,frame style image=blueshade.png,
+  opacityback=0.75,opacitybacktitle=0.25,
+  colback=blue!5!white,colframe=blue!75!black,
+  title=My title]
+  This box is filled with an external image.\par
+  Title and interior are made partly transparent to show the image.
+\end{tcolorbox}
+
+\subsection{9}
+\begin{lstlisting}[language={TeX}]
+\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+  colback=blue!5!white,colframe=blue!75!black,colbacktitle=red!80!black,
+  title=`给框加标题`,fonttitle=\bfseries,
+  boxed title style={size=small,colframe=red!50!black} ]
+  This box uses a \textit{boxed title}. The box of the title can
+  be formatted independently from the main box.
+\end{tcolorbox}
+\end{lstlisting}
+\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+  colback=blue!5!white,colframe=blue!75!black,colbacktitle=red!80!black,
+  title=给框加标题,fonttitle=\bfseries,
+  boxed title style={size=small,colframe=red!50!black} ]
+  This box uses a \textit{boxed title}. The box of the title can
+  be formatted independently from the main box.
+\end{tcolorbox}
+
+
+%----------------------------------------------------------
+\section{LaTeX代码和显示效果并列展示}
+如果把可选参数里的标题相关的选项``title,fonttitle''去掉，会产生没有表题栏的框。
+\subsection{平行}
+\begin{lstlisting}[language={TeX}]
+\begin{tcblisting}{colback=red!5!white,colframe=red!75!black,title=`平行展示`,fonttitle=\bfseries}
+This is a \LaTeX\ example:
+\begin{equation}
+\sum\limits_{i=1}^n i = \frac{n(n+1)}{2}.
+\end{equation}
+\end{tcblisting}
+\end{lstlisting}
+\begin{tcblisting}{colback=red!5!white,colframe=red!75!black,title=平行展示,fonttitle=\bfseries}
+This is a \LaTeX\ example:
+\begin{equation}
+\sum\limits_{i=1}^n i = \frac{n(n+1)}{2}.
+\end{equation}
+\end{tcblisting}
+
+\subsection{并列}
+\begin{lstlisting}[language={TeX}]
+\begin{tcblisting}{colback=red!5!white,colframe=red!75!black,listing side text,title=`并列展示`,fonttitle=\bfseries}
+This is a \LaTeX\ example:
+\begin{equation}
+\sum\limits_{i=1}^n i = \frac{n(n+1)}{2}.
+\end{equation}
+\end{tcblisting}
+\end{lstlisting}
+\begin{tcblisting}{colback=red!5!white,colframe=red!75!black,listing side text,
+  title=并列展示,fonttitle=\bfseries}
+This is a \LaTeX\ example:
+\begin{equation}
+\sum\limits_{i=1}^n i = \frac{n(n+1)}{2}.
+\end{equation}
+\end{tcblisting}
+
+
+%----------------------------------------------------------
+\section{Theorems}
+
+\newtcbtheorem[auto counter,number within=section]{theo}%
+  {Theorem}{fonttitle=\bfseries\upshape, fontupper=\slshape,
+     arc=0mm, colback=blue!5!white,colframe=blue!75!black}{theorem}
+
+\begin{theo}{Summation of Numbers}{summation}
+  For all natural number $n$ it holds:
+  \begin{equation}
+  \tcbhighmath{\sum\limits_{i=1}^n i = \frac{n(n+1)}{2}.}
+  \end{equation}
+\end{theo}
+
+We have given Theorem \ref{theorem:summation} on page \pageref{theorem:summation}.
+
+\newtcbtheorem[use counter from=theo]{antheo}%
+  {Theorem}{theorem style=change,oversize,enlarge top by=1mm,enlarge bottom by=1mm,
+    enhanced jigsaw,interior hidden,fuzzy halo=1mm with green,
+     fonttitle=\bfseries\upshape,fontupper=\slshape,
+     colframe=green!75!black,coltitle=green!50!blue!75!black}{antheorem}
+
+\begin{antheo}{Summation of Numbers}{summation}
+  For all natural number $n$ it holds:
+  \begin{equation}
+  \tcbhighmath{\sum\limits_{i=1}^n i = \frac{n(n+1)}{2}.}
+  \end{equation}
+\end{antheo}
+
+%----------------------------------------------------------
+\section{加图片水印}
+
+\begin{tcolorbox}[enhanced,watermark graphics=Picture/海琴烟.jpg,
+  watermark opacity=0.3,watermark zoom=0.9,
+  colback=green!5!white,colframe=green!75!black,
+  fonttitle=\bfseries, title=Box with a watermark picture]
+  一方面，老师上课比较“即兴”，讲的时候很多东西都是穿插着讲的，并不依循一个特定的逻辑顺序，所以在整理的过程中，就需要充分理解上课所讲的材料，理清它们的关系，然后重新归纳出一个合乎逻辑的顺序。另一方面，由于时间很紧张，很多定理和命题，老师都没有给出证明，这些证明我都在整理笔记的过程中自己独立完成了。回头看来，这个过程其实使自己受到了一个充分的数学训练——相当于把整个体系从头到尾推导了一遍。很多概念，定理，以及它们的关系，在这个过程中被充分消化了。
+\end{tcolorbox}
+
+%----------------------------------------------------------
+\section{Boxes in boxes}
+\begin{tcolorbox}[colback=yellow!10!white,colframe=yellow!50!black,
+  every box/.style={fonttitle=\bfseries},title=Box]
+  \begin{tcolorbox}[enhanced,colback=red!10!white,colframe=red!50!black,
+    colbacktitle=red!85!black,
+    title=Box inside box,drop fuzzy shadow]
+    \begin{tcolorbox}[beamer,colframe=blue!50!black,title=Box inside box inside box]
+      And now for something completely different: Boxes!\par\medskip
+      \newtcbox{\mybox}[1][]{nobeforeafter,tcbox raise base,colframe=green!50!black,colback=green!10!white,
+        sharp corners,top=1pt,bottom=1pt,before upper=\strut,#1}
+      \mybox[rounded corners=west]{This} \mybox{is} \mybox{another} \mybox[rounded corners=east]{box.}
+    \end{tcolorbox}
+  \end{tcolorbox}
+\end{tcolorbox}
+
+
+
+
+\section{Fit Boxes}
+``fit to height''制定框的高度，框里的内容会自动调整到合适的字体大小以适应该高度。
+\begin{tcolorbox}[enhanced,fit to height=5cm,
+  colback=green!25!black!10!white,colframe=green!75!black,title=Fit box (10cm),
+  drop fuzzy shadow,watermark color=white,watermark text=Fit]
+
+由于老师讲课没有依据特定的教材（这似乎是MIT的风格，我在这上的所有课都没有特定教材的），而且连lecture notes都没有。我的做法是在堂上记下笔记，然后每周都抽出时间把笔记用Latex整理成Notes。事实上，这些整理出来的Notes我在整理完后已经不太需要看了，真正发挥作用的是这个整理的过程，它对于知识的吸收起到了很重要的作用。
+
+一方面，老师上课比较“即兴”，讲的时候很多东西都是穿插着讲的，并不依循一个特定的逻辑顺序，所以在整理的过程中，就需要充分理解上课所讲的材料，理清它们的关系，然后重新归纳出一个合乎逻辑的顺序。另一方面，由于时间很紧张，很多定理和命题，老师都没有给出证明，这些证明我都在整理笔记的过程中自己独立完成了。回头看来，这个过程其实使自己受到了一个充分的数学训练——相当于把整个体系从头到尾推导了一遍。很多概念，定理，以及它们的关系，在这个过程中被充分消化了。
+\end{tcolorbox}
+
+\begin{tcolorbox}[enhanced,fit to height=2cm,
+  colback=green!25!black!10!white,colframe=green!75!black,title=Fit box (5cm),
+  drop fuzzy shadow,watermark color=white,watermark text=Fit]
+由于老师讲课没有依据特定的教材（这似乎是MIT的风格，我在这上的所有课都没有特定教材的），而且连lecture notes都没有。我的做法是在堂上记下笔记，然后每周都抽出时间把笔记用Latex整理成Notes。事实上，这些整理出来的Notes我在整理完后已经不太需要看了，真正发挥作用的是这个整理的过程，它对于知识的吸收起到了很重要的作用。
+
+一方面，老师上课比较“即兴”，讲的时候很多东西都是穿插着讲的，并不依循一个特定的逻辑顺序，所以在整理的过程中，就需要充分理解上课所讲的材料，理清它们的关系，然后重新归纳出一个合乎逻辑的顺序。另一方面，由于时间很紧张，很多定理和命题，老师都没有给出证明，这些证明我都在整理笔记的过程中自己独立完成了。回头看来，这个过程其实使自己受到了一个充分的数学训练——相当于把整个体系从头到尾推导了一遍。很多概念，定理，以及它们的关系，在这个过程中被充分消化了。
+\end{tcolorbox}
+\section{可断的框}
+该框的内容如果在当前页不能完全显示，可以自动顺延到下一页，产生断裂的框。
+\begin{tcolorbox}[enhanced jigsaw,breakable,pad at break*=1mm,
+  colback=blue!5!white,colframe=blue!75!black,title=Breakable box,
+  watermark color=white,watermark text=\Roman{tcbbreakpart}]
+决定选数学作为minor，从这个学期开始会上一系列的数学课。这个学期选的是Real and Functional Analysis，这门课已经进入尾声，下周就要考试了。
+
+这门课主要讲的是测度论和勒贝格积分理论，以及一些基础的泛函分析，这些内容自己以前也自学过，不过经过一个学期的学习，还是觉得有不少新的收获。
+
+由于老师讲课没有依据特定的教材（这似乎是MIT的风格，我在这上的所有课都没有特定教材的），而且连lecture notes都没有。我的做法是在堂上记下笔记，然后每周都抽出时间把笔记用Latex整理成Notes。事实上，这些整理出来的Notes我在整理完后已经不太需要看了，真正发挥作用的是这个整理的过程，它对于知识的吸收起到了很重要的作用。
+
+一方面，老师上课比较“即兴”，讲的时候很多东西都是穿插着讲的，并不依循一个特定的逻辑顺序，所以在整理的过程中，就需要充分理解上课所讲的材料，理清它们的关系，然后重新归纳出一个合乎逻辑的顺序。另一方面，由于时间很紧张，很多定理和命题，老师都没有给出证明，这些证明我都在整理笔记的过程中自己独立完成了。回头看来，这个过程其实使自己受到了一个充分的数学训练——相当于把整个体系从头到尾推导了一遍。很多概念，定理，以及它们的关系，在这个过程中被充分消化了。
+\end{tcolorbox}
+\end{document}
+————————————————
+版权声明：本文为CSDN博主「东明山庄」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/golden1314521/article/details/42871065

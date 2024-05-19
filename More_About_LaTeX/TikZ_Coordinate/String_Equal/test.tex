@@ -1,0 +1,24 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper, total={6.5in, 10in}]{geometry}
+\RequirePackage{expl3, l3sys-shell}
+
+
+\begin{document}
+\ExplSyntaxOn
+% \tl_new:N \foo
+% \tl_set:Nn \foo {foo1}
+% \tl_if_eq:NnTF \foo{foo}{
+%     foo1
+% }{
+%     foo2
+% }
+
+\newcommand{\test}[1]{
+    \str_if_eq:nnTF {#1}{foo}{foo1}{foo2}
+}
+
+\test{fool}
+\ExplSyntaxOff
+
+
+\end{document}

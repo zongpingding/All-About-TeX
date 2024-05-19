@@ -1,0 +1,211 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{lshort-zh-cn-style}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% lshort 调用的宏包
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 基本工具宏包
+%
+\RequirePackage{amsmath,amsthm}
+\RequirePackage{hologo,verbatim,fancyvrb,layout,multicol}
+\RequirePackage[normalem]{ulem}
+\RequirePackage{colortbl,tabularx,multirow,makecell,booktabs}
+\RequirePackage{graphicx,xcolor,float,subfig}
+\RequirePackage{makeidx}
+\RequirePackage[inner=1in,outer=1.5in,vmargin=1in,marginparwidth=1in]{geometry}
+\RequirePackage{tikz}
+
+%
+% ctex 宏包 2.2(2015/06/24) 或以上版本
+% ctex 宏包的字号设定会让许多固定字号的字体宏包报太多 warning，应当抑制
+% 中文正文字体使用 Fandol
+%
+\PassOptionsToPackage{no-math}{fontspec}
+\RequirePackage[zihao=false,scheme=chinese,fontset=fandol]{ctex}[2015/06/24] %% heading=true选项会使得section居中
+
+% %
+% % 字体和符号宏包
+% %
+\setmainfont{cmun}[
+  Extension       = .otf,
+  UprightFont     = *rm,
+  ItalicFont      = *ti,
+  SlantedFont     = *sl,
+  BoldFont        = *bx,
+  BoldItalicFont  = *bi,
+  BoldSlantedFont = *bl,
+]
+\setsansfont{cmun}[
+  Extension      = .otf,
+  UprightFont    = *ss,
+  ItalicFont     = *si,
+  BoldFont       = *sx,
+  BoldItalicFont = *so,
+]
+\setmonofont{cmun}[
+  Extension      = .otf,
+  UprightFont    = *btl,% light version
+  ItalicFont     = *bto,%  light version
+  BoldFont       = *tb,
+  BoldItalicFont = *tx,
+]
+\RequirePackage{amssymb,latexsym,textcomp,mathrsfs,euscript,yhmath} % 与默认字体不冲突的一些符号包
+% % 消除 \t 命令的字体 warning
+\AtBeginDocument{%}
+  \renewcommand*\t[1]{{\edef\restore@font{\the\font}\usefont{OML}{cmm}{m}{it}\accent"7F\restore@font#1}}
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% lshort 用到的自定义命令
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 源自 TeX FAQ 的超链接命令
+% CTAN 镜像暂用清华源
+\newcommand{\Email}{\begingroup \def\UrlLeft{<}\def\UrlRight{>} \urlstyle{tt}\Url}     % email address
+\def\mailto|#1|{\href{mailto:#1}{\Email|#1|}}        % url to mail somewhere
+\def\CTANref{\begingroup \urlstyle{tt}\Url}
+\def\CTAN|#1|{\href{http://mirrors.tuna.tsinghua.edu.cn/CTAN/#1}{\CTANref|CTAN://#1|}}
+\newcommand{\contrib}[3]{#1\quad\mailto|#2|{\small\\\quad\textit{#3}}\\[1ex]}
+
+%
+% 示意长度
+%
+\def\demowidth#1{\rule{0.4pt}{1ex}\rule{#1}{1.2pt}\rule{0.4pt}{1ex}}
+
+%
+% 命令和环境的写法
+%
+\DeclareRobustCommand*\cmd[1]{\texttt{\char`\\#1}}
+\DeclareRobustCommand\cs[1]{\texttt{\char`\\#1}}
+\def\crcmd{\cmd{\char`\\}}
+\DeclareRobustCommand*\env[1]{\texttt{#1}}
+\DeclareRobustCommand*\pkg[1]{\textsf{#1}}
+\DeclareRobustCommand*\cls[1]{\textsf{#1}}
+\DeclareRobustCommand*\marg{\@ifstar\@marg\@margmeta}
+\DeclareRobustCommand*\oarg{\@ifstar\@oarg\@oargmeta}
+\DeclareRobustCommand*\Arg[1]{\@meta{#1}}
+\def\@oarg#1{\textcolor{gray}{\texttt{[#1]}}}
+\def\@oargmeta#1{\@oarg{\@meta{#1}}}
+\def\@marg#1{\texttt{\{#1\}}}
+\def\@margmeta#1{\@marg{\@meta{#1}}}
+\def\@meta#1{$\m@th\langle$\textnormal{\textit{#1}}$\m@th\rangle$}
+
+%
+% 命令和环境的索引
+%
+\def\pkgindex#1{\@for\pkgname:=#1\do{\index{\pkgname @\pkg{\pkgname} 宏包}}}
+\def\clsindex#1{\@for\clsname:=#1\do{\index{\clsname @\cls{\clsname} 文档类}}}
+\def\cmdindex{\@ifnextchar[{\pkgcmdindex}{\ltxcmdindex}}
+\def\envindex{\@ifnextchar[{\pkgenvindex}{\ltxenvindex}}
+\def\ltxcmdindex#1{\@for\@ltxcmd:=#1\do{\index{\@ltxcmd @\cmd{\@ltxcmd}}}}
+\def\ltxenvindex#1{\@for\@ltxenv:=#1\do{\index{\@ltxenv @\env{\@ltxenv} 环境}}}
+\def\pkgcmdindex[#1]#2{\@for\@pkgcmd:=#2\do{\index{\@pkgcmd @\cmd{\@pkgcmd} (\pkg{#1})}}}
+\def\pkgenvindex[#1]#2{\@for\@pkgenv:=#2\do{\index{\@pkgenv @\env{\@pkgenv} 环境 (\pkg{#1})}}}
+
+%
+% 文本和数学符号索引
+%
+\def\symindex#1{\@for\t@xtsym:=#1\do{\index{\t@xtsym @\cmd{\t@xtsym} (\textit{符号} \expandafter\protect\csname \t@xtsym\endcsname)}}}
+\def\mathindex#1{\@for\m@thcmd:=#1\do{\index{\m@thcmd @\cmd{\m@thcmd} (\textit{数学命令})}}}
+\def\msymindex#1{\@for\m@thsym:=#1\do{\index{\m@thsym @\cmd{\m@thsym} (\textit{数学符号}$\expandafter\protect\csname \m@thsym\endcsname$)}}}
+\def\maccindex#1{\@for\m@thacc:=#1\do{\index{\m@thacc @\cmd{\m@thacc} (\textit{数学重音}$\expandafter\protect\csname \m@thacc\endcsname{a}$)}}}
+\def\waccindex#1{\@for\wideacc:=#1\do{\index{\wideacc @\cmd{\wideacc} (\textit{数学重音}$\expandafter\protect\csname \wideacc\endcsname{AB}$)}}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% lshort 用到的自定义环境
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 每章最前的介绍内容环境 intro
+%
+\newenvironment{intro}
+  {\advance\leftskip\parindent\advance\rightskip\parindent\sffamily}%
+  {\par\vspace*{2ex minus 1.5ex}}
+
+
+%% 自定义的一个绘图环境
+%% 注意：这里不能添加默认参数的选项， 会报错
+\newenvironment{Axis}
+    {\begin{tikzpicture}
+        % 1. 标记重要的点
+        \coordinate (O) at (0, 0);
+        \coordinate (ymax) at (0, 6);
+        \coordinate (ymin) at (0, -1.3);
+        \coordinate (xmax) at (6, 0);
+        \coordinate (xmin) at (-1.3, 0);
+
+        % 2. 绘制基本的坐标轴
+        \draw[-stealth, thick] (ymin) -- (ymax);
+        \draw[-stealth, thick] (xmin) -- (xmax);
+        \node[blue, right=6pt, below] at (ymax) {$y$};
+        \node[blue, below=6pt, left] at (xmax) {$x$};
+
+        % 3. 给x, y轴加上刻度
+        \node[black, left=8pt, below] at (O) {$O$};
+        \draw[black] (0, 0.5) -- (0.05, 0.5);
+        \draw[black] (0.5, 0) -- ( 0.5, 0.05);
+        \foreach \loc/\x in
+            {-1/-1, 1/1, 2/2, 3/3, 4/4, 5/5}
+            {\node[blue, below] at (\loc, 0) {$\x$};
+            \draw[black, thick] (\loc, 0) -- (\loc, 0.1);
+            \draw[black] (\loc+0.5, 0) -- (\loc+0.5, 0.05);
+            } 
+        \foreach \loc/\y in
+            {-1/-1, 1/1, 2/2, 3/3, 4/4, 5/5}
+            {\node[blue, left] at (0, \loc) {$\y$};
+            \draw[black, thick] (0, \loc) -- (0.1, \loc);
+            \draw[black] (0, \loc+0.5) -- (0.05, \loc+0.5);
+            }
+    }
+    {\end{tikzpicture}}
+%
+% 展示命令
+%
+\newenvironment{command}%
+  {\trivlist\item\relax%
+  \def\arraystretch{1.2}%
+  \hskip\parindent%
+  \begin{tabular}{>{\columncolor{blue!5}}l}
+  }{\end{tabular}\endtrivlist}
+
+
+% 示例环境 example
+% 环境中的代码写入临时文件 lshort-zh-cn-example.aux
+% 再从临时文件中读取，分别生成代码盒子和示例盒子
+\newwrite\example@out
+\newlength\savefboxrule
+\newlength\savefboxsep
+\edef\example@name{\jobname-example.aux}
+\newenvironment{example}%
+{\begingroup\@bsphack
+  \immediate\openout\example@out=\example@name
+  \let\do\@makeother\dospecials\catcode`\^^M\active
+  \def\verbatim@processline{\immediate\write\example@out{\the\verbatim@line}}%
+  \verbatim@start}%
+{\immediate\closeout\example@out\@esphack\endgroup%
+  \trivlist\item\relax
+  \setlength{\savefboxrule}{\fboxrule}%
+  \setlength{\savefboxsep}{\fboxsep}%
+  \setlength{\fboxsep}{0.015\textwidth}%
+  \setlength{\fboxrule}{0.4pt}%
+  \fcolorbox[gray]{0}{0.95}{%
+    \begin{minipage}[c]{0.55\linewidth}%
+      \setlength{\fboxrule}{\savefboxrule}%
+      \setlength{\fboxsep}{\savefboxsep}%
+      \small\verbatiminput{\example@name}%
+    \end{minipage}%
+  }%
+  \hfill%
+  \fbox{%
+    \begin{minipage}[c]{0.35\linewidth}%
+      \setlength{\fboxrule}{\savefboxrule}%
+      \setlength{\fboxsep}{\savefboxsep}%
+      \setlength{\parskip}{1ex plus 0.4ex minus 0.2ex}%
+      \normalsize\input{\example@name}%
+    \end{minipage}%
+  }%
+  \endtrivlist
+}
+\endinput

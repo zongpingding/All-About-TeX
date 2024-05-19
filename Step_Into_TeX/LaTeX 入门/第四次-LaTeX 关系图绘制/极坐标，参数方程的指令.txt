@@ -1,0 +1,42 @@
+\documentclass[10pt]{article}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.15}
+\usepackage{mathrsfs}
+\usetikzlibrary{arrows}
+\pagestyle{empty}
+ 
+%<<<<<<<WARNING>>>>>>>
+% PGF/Tikz doesn't support the following mathematical functions:
+% cosh, acosh, sinh, asinh, tanh, atanh,
+% x^r with r not integer
+
+% Plotting will be done using GNUPLOT
+% GNUPLOT must be installed and you must allow Latex to call external
+% programs by adding the following option to your compiler
+% shell-escape    OR    enable-write18 
+% Example: pdflatex --shell-escape file.tex 
+
+\begin{document}
+\definecolor{qqqqff}{rgb}{0,0,1}
+\begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=1cm,y=1cm]
+\begin{axis}[
+x=1cm,y=1cm,
+axis lines=middle,
+ymajorgrids=true,
+xmajorgrids=true,
+xmin=-5.919933636583668,
+xmax=7.586351382066715,
+ymin=-4.5756759439451535,
+ymax=4.3487938400465715,
+xtick={-5,-4,...,7},
+ytick={-4,-3,...,4},]
+\clip(-5.919933636583668,-4.5756759439451535) rectangle (7.586351382066715,4.3487938400465715);
+\draw[line width=2pt,color=qqqqff, smooth,samples=100,domain=-9:9] plot[parametric] function{2*(sin((t)))**(3),3*(cos((t)))**(3)};
+\draw[line width=2pt, smooth,samples=100,domain=0:6.283185307179586] plot[parametric] function{(1+cos((t)))*cos((t)),(1+cos((t)))*sin((t))};
+\begin{scriptsize}
+\draw[color=qqqqff] (0.6003418896613444,-1.8756776806641593) node {Âp¹};
+\draw[color=black] (2.0478934061057004,0.20124406032122083) node {$d$};
+\end{scriptsize}
+\end{axis}
+\end{tikzpicture}
+\end{document}

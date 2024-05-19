@@ -1,0 +1,12 @@
+<snippet>
+	<content><![CDATA[
+\begin{bmatrix}
+	 $1 & $1  & \cdots & $1\\\\
+	 $2 & $2  & \cdots & $2\\\\
+	 \cdots\\\\
+	 $3 & $3  & \cdots & $3\\\\
+\end{bmatrix} 
+]]></content>
+	<tabTrigger>hmx</tabTrigger>
+	<scope>text.tex.latex</scope>
+</snippet>

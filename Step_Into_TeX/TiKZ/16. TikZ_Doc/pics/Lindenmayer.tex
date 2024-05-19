@@ -1,0 +1,49 @@
+\documentclass[10pt,varwidth]{standalone}
+% 1.必须添加varwidth选项，不然就会报错
+\usepackage{geometry}
+\geometry{a4paper,left=1in,right=.3in,top=1in,bottom=1.2in}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=1.16}
+% 2.引用的tikz库
+\usetikzlibrary{matrix,chains,trees,scopes,decorations}
+\usetikzlibrary{arrows.meta,automata,positioning,shadows,3d}
+\usetikzlibrary {decorations.pathmorphing}
+\usetikzlibrary {backgrounds,mindmap,shadows}
+\usetikzlibrary {patterns, quotes}
+\usetikzlibrary {graphs,fadings}
+\usetikzlibrary {arrows,shapes.geometric}
+\usepgflibrary {shadings}
+
+\begin{document}
+\usetikzlibrary {lindenmayersystems}
+\begin{tikzpicture}
+    \pgfdeclarelindenmayersystem{Koch curve}{
+        \rule{F -> F-F++F-F}
+    }
+    \shadedraw [top color=white, bottom color=blue!50, draw=blue!50!black]
+    [l-system={Koch curve, step=2pt, angle=60, axiom=F++F++F, order=3}]
+    lindenmayer system -- cycle;
+\end{tikzpicture}
+\hspace*{3em}
+\begin{tikzpicture}
+    \draw [green!50!black, rotate=90]
+    [l-system={rule set={F -> FF-[-F+F]+[+F-F]}, axiom=F, order=4, step=2pt,
+    randomize step percent=25, angle=30, randomize angle percent=5}]
+    lindenmayer system;
+\end{tikzpicture}
+\hspace*{3em}
+\begin{tikzpicture}[l-system={step=1.75pt, order=5, angle=60}]
+    \pgfdeclarelindenmayersystem{Sierpinski triangle}{
+    \symbol{X}{\pgflsystemdrawforward}
+    \symbol{Y}{\pgflsystemdrawforward}
+    \rule{X -> Y-X-Y}
+    \rule{Y -> X+Y+X}
+    }
+    \draw [help lines] grid (3,2);
+    \draw [red] (0,0) l-system
+    [l-system={Sierpinski triangle, axiom=+++X, anchor=south west}];
+    \draw [blue] (3,2) l-system
+    [l-system={Sierpinski triangle, axiom=X, anchor=north east}];
+\end{tikzpicture}
+\end{document}

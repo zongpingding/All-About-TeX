@@ -1,0 +1,29 @@
+\documentclass{article}
+\usepackage{xfp}
+
+\title{\LaTeX{} can compute}
+
+\begin{document}
+\maketitle
+
+
+\section{Basic arithmetic}
+Basic arithmetic: addition $x+y$, subtraction $x − y$, multiplication $x ∗ y$, division $x/y$, square root
+$\sqrt{x}$, and parentheses.
+\[
+	\frac{\sin(3.4)}{2} + 2\cdot 10^{-3} =  \fpeval{sin(3.5)/2 + 2e-3}
+\]
+
+\section{Bool Logic}
+if {\bf true} return 1, if {\sf false} return 0; For example
+
+\begin{itemize}
+\item \{1 != 2\} returns \fpeval{1 != 2}
+\item \{1 >? 2\} returns \fpeval{2 > 1}
+\item max(1, 5, 3, -6) retruns \fpeval{max(1, 5, 3, -6)}
+\end{itemize}
+
+
+
+
+\end{document}

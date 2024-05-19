@@ -1,8 +1,0 @@
-<snippet>
-	<content><![CDATA[
-\$$1_{\rm $2}\$
-]]></content>
-	<tabTrigger>b</tabTrigger>
-	<scope>text.tex.latex</scope>
-</snippet>
-

@@ -1,0 +1,39 @@
+\documentclass{article}
+\usepackage{pst-3dplot}
+\usepackage{animate}
+%draws a torus sector
+\newcommand{\torus}[2]{% #1: angle of the torus sector,
+    % #2: linewidth of leading circle
+    \psset{Beta=20,Alpha=50,linewidth=0.1pt,origin={0,0,0},unit=0.35}%
+    \begin{pspicture}(-12.3,-6.3)(12.3,7)%
+        \parametricplotThreeD[xPlotpoints=100](80,#1)(0,360){%
+            t cos 2 mul 4 u sin 2 mul add mul
+            t sin 2 mul 4 u sin 2 mul add mul
+            u cos 4 mul
+        }%
+        \parametricplotThreeD[yPlotpoints=75](0,360)(80,#1){%
+            u cos 2 mul 4 t sin 2 mul add mul
+            u sin 2 mul 4 t sin 2 mul add mul
+            t cos 4 mul
+        }%
+        \parametricplotThreeD[yPlotpoints=1,linewidth=#2](0,360)(#1,#1){%
+            u cos 2 mul 4 t sin 2 mul add mul
+            u sin 2 mul 4 t sin 2 mul add mul
+            t cos 4 mul
+        }%
+    \end{pspicture}%
+}
+
+
+
+\begin{document}
+\begin{center}
+    \begin{animateinline}[poster=last, controls, palindrome]{12}%
+    \multiframe{29}{iAngle=80+10, dLineWidth=2.9pt+-0.1pt}{%
+        %iAngle = 80, 90, ..., 360 degrees
+        %dLineWidth = 2.9pt, 2.8pt, ..., 0.1pt
+        \torus{\iAngle}{\dLineWidth}%
+    }%
+    \end{animateinline}%
+\end{center}
+\end{document}

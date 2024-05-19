@@ -1,0 +1,11 @@
+<snippet>
+	<content><![CDATA[
+\begin{figure}[!htb]
+	\includegraphics[scale=$1]{$2}
+	\label{$3}
+	\caption{$3}
+\end{figure}
+]]></content>
+	<tabTrigger>fig</tabTrigger>
+	<scope>text.tex.latex</scope>
+</snippet>

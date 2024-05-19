@@ -1,0 +1,14 @@
+<snippet>
+	<content><![CDATA[
+\begin{equation}
+	\begin{bmatrix}
+		 $1 & 0  & \cdots & 0\\\\
+		 0  & $1 & \cdots & 0\\\\
+		 \cdots\\\\
+		 0  &    & \cdots & $1\\\\
+	\end{bmatrix} 
+\end{equation}
+]]></content>
+	<tabTrigger>diag</tabTrigger>
+	<scope>text.tex.latex</scope>
+</snippet>

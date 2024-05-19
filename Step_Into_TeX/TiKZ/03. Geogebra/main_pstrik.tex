@@ -1,0 +1,19 @@
+\documentclass[10pt]{article}
+\usepackage{pstricks-add}
+\pagestyle{empty}
+\begin{document}
+\newrgbcolor{qqwuqq}{0 0.39215686274509803 0}
+\newrgbcolor{zzttff}{0.6 0.2 1}
+\psset{xunit=1cm,yunit=1cm,algebraic=true,dimen=middle,dotstyle=o,dotsize=5pt 0,linewidth=2pt,arrowsize=3pt 2,arrowinset=0.25}
+\begin{pspicture*}(-9.172437057005768,-4.856403570428432)(17.03909430843534,12.40825842227539)
+\psaxes[labelFontSize=\scriptstyle,xAxis=true,yAxis=true,Dx=2,Dy=2,ticksize=-2pt 0,subticks=2]{->}(0,0)(-9.172437057005768,-4.856403570428432)(17.03909430843534,12.40825842227539)
+\psplot[linewidth=2pt,linecolor=qqwuqq,plotpoints=200]{-9.172437057005768}{17.03909430843534}{x^(3)+x^(2)-2*x}
+\psplot[linewidth=2pt,linecolor=blue,plotpoints=200]{-9.172437057005768}{17.03909430843534}{3*SIN(x)}
+\psplot[linewidth=2pt,linecolor=zzttff,plotpoints=200]{-9.172437057005768}{17.03909430843534}{x*2.718281828459045^(x)}
+\begin{scriptsize}
+\rput[bl](-2.532182444427352,-4.670010458496407){\qqwuqq{$f$}}
+\rput[bl](-8.98604394507374,-1.384831860694465){\blue{$g$}}
+\rput[bl](-8.98604394507374,0.013116478795722968){\zzttff{$h$}}
+\end{scriptsize}
+\end{pspicture*}
+\end{document}

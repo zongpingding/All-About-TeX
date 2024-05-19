@@ -1,0 +1,508 @@
+\documentclass[twoside,openany,12pt]{beautynote} 
+% Input Some Information of the doc
+\doctitle{Complex Geometry}
+\docsubtitle{The Proof of Hodge Theorem}
+\dockeywords{Hodge theorem, Proof}
+
+% Hyperref always required second to last.
+\RequirePackage{hyperref}
+\makeatletter
+\hypersetup{%
+    % hidelinks,
+    pdfstartview=Fit,%
+    pdfmenubar=true,%
+    pdftoolbar=true,%
+    bookmarksopen=false,%
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=purple,
+    pdftitle={\@docsubtitle},%
+    pdfauthor={\@author},%
+    pdfsubject={\@doctitle},%
+    pdflang={\languagename},%
+    pdfkeywords={\@dockeywords},%
+    pdfproducer={pdfTeX}}
+\makeatother
+
+% Cleveref as the last one.
+\RequirePackage{cleveref}
+%%%%%%%%%%%%%%%%%
+\author{Ethan Lu}
+\footext{}
+\copyrightpage%
+{Faculty of Pure Mathematics}% Your Faculty
+{XX University}% Your University
+{Press of XX University}% Your Publisher
+{01A75, 00B50}% AMS
+{XX}% Your City
+% If you do not want to fill one of the fields, please leave it like this: {}
+\usepackage{appendix}
+%%%%%%%%%% Start TeXmacs macros
+\newcommand\embold[1]{\bf #1}
+\newcommand\slanted[1]{\itshape #1}
+\newcommand{\assign}{:=}
+\newcommand{\comma}{{,}}
+\newcommand{\mathd}{\mathrm{d}}
+\newcommand{\tmcolor}[2]{{\color{#1}{#2}}}
+\newcommand{\tmop}[1]{\ensuremath{\operatorname{#1}}}
+\newcommand{\tmverbatim}[1]{\text{{\ttfamily{#1}}}}
+%%%%%%%%%% End TeXmacs macros
+\begin{document}
+% Titlepage
+\maketitle\clearpage
+%%%%%%%%%%%%%%%% Copyright-Page %%%%%%%%%%%%%%%%%%%%%%%
+\copyrights
+\pagestyle{\auxsettings}
+\makeatletter
+\thispagestyle{copyright}
+\ifdefempty{\@faculty}{}{\noindent{\large\textsc{\@faculty}} \\}
+\ifdefempty{\@university}{}{{\large\textsc{\@university}} \\[1em]}
+\ifdefempty{\@publisher}{}{\textit{Published by:} \@publisher \\}
+\ifthenelse{\boolean{copyright}}{\textit{Copyright by:} \textsc{\templateauthor }\\}{} 
+\ifdefempty{\@ams}{}{\textit{AMS Classification (2023):} \@ams.\\}
+\vfill
+\ifdefempty{\@city}{}{\noindent\@city, on \today\\}
+\copyright\,\the\year\, \textsc{The Authors}
+\doclicenseThis
+\cleardoublepage
+\makeatother
+%%%%%%%%%%%%%%%% Copyright-Page %%%%%%%%%%%%%%%%%%%%%%%
+% Toc
+    \tableofcontents
+% Main Contents
+\pagestyle{\defaultsettings}
+\chapter{The proof of Hodge decomposition}
+\section{Proof of Hodge decomposition}
+
+\subsection{Proof of the Hodge Theorem 1: Local Theory}
+
+Hilbert space provides an effective representation for Fourier series
+and Fourier transform based on polynomial representation on any orthogonal
+system, which is also one of the core concepts of functional analysis.
+
+We are looking for the element of smallest norm in the affine subspace $\psi +
+\overline{\partial} A^{p, q - 1} (M) \subset A^{p, q} (M)$. Clearly such an
+element can be found in the closure of $\psi + \overline{\partial} A^{p, q -
+1} (M)$ in the completion $\mathcal{L}^{p, q} (M) $ of the pre-Hilbert space
+$A^{p, q} (M)$, simply by orthogonal projection. The problem is to show that
+the element found in this way in fact lies in $A^{p, q} (M)$.
+
+\begin{lemma}
+  There is an inclusion
+  \[ C^s (T) \subset H_s . \]
+\end{lemma}
+
+\begin{proof}[Using Induction Method]
+  Firstly we show that $C^0 (T) \subset H_0  (s = 0)$, then through
+  $(D_{\alpha} \varphi)_{\xi} = \xi^{\alpha} \varphi_{\xi}$,i.e. $\|D^{\alpha}
+  \varphi \|_0^2 = \sum_{\xi} | \xi^{\alpha} |^2 | \varphi_{\xi} |^2$, it
+  suffice to show the conclusion.
+\end{proof}
+
+Some remarks:
+
+\begin{align*}
+  D^{\alpha} e^{- i < \xi, x >} & = \overline{D_1^{\alpha_1} \cdots
+  D_n^{\alpha_n} e^{i \sum_{j = 1}^n \xi_j^{\alpha_j} x_j}}\\
+  & = \overline{ \frac{1}{i^n} \cdot \frac{\partial^n}{\partial  x_1 \cdots
+  \partial x_n} \left( e^{i \sum_{j = 1}^n \xi_j^{\alpha_j} x_j} \right)}\\
+  & = (\xi_{1 }^{\alpha_1} \cdots \xi_n^{\alpha_n}) \overline{e^{i \sum_{j =
+  1}^n \xi_j^{\alpha_j} x_j}}\\
+  & = \xi^{\alpha} e^{- i < \xi, x >} .
+\end{align*}
+
+\begin{lemma}[Soblev Lemma]
+  
+  \[ {\color[HTML]{800080}H_{s + [n / 2] + 1} \subset C^s T}, \]
+  that is , every $u \in H_{s + [n / 2] + 1}$ is the Fourier series of a
+  function $\varphi \in C^s T$, and this series converges uniformly to
+  $\varphi$.
+\end{lemma}
+
+\begin{proof}
+  First,consider the case $s = 0$; let
+  \[ u = \sum_{\xi \in \mathbb{Z}^n} u_{\xi} e^{i \langle \xi, x \rangle}
+     \tmcolor{brown}{\in H_{[n / 2] + 1}} \]
+  with
+  \[  \sum_{\xi} (1 +\| \xi \|^2 )^{[n / 2] + 1} | u_{\xi} |^2 < \infty . \]
+  
+  
+  Observe that the partial sums
+  \[ S_R (x) = \sum_{\| \xi \| \leqslant R} u_{\xi} e^{i < \xi, x >} \]
+  are continous, and for ${R \leqslant R'}^{}$, one has
+  \[  | S_R (x) - S_{R'} (x) | \leqslant \|u\|_{[n / 2] + 1} \sum_{\| \xi \|
+     \neq 0} \frac{1}{\| \xi \|^{n + 1}}, \]
+  where $\sum_{\| \xi \| \neq 0} \frac{1}{\| \xi \|^{n + 1}}$ is a convergent
+  positive series. From which follows that $S_R (x)$ converges uniformly to
+  $\varphi \in C^0 (T)$ with $\varphi_{\xi} = u_{\xi}$. (Here $S_R (x)$ is a
+  Cauchy sequnce.)
+  
+  Now we proeed by induction on $s$. Since the proof for general $n$ involves
+  only inessential formalism beyond what we have just done together with the
+  one-variable case, we shall complete the argument only when $n = 1$.
+  
+  So by induction, we suppose $H_{s + 1} \subset C^s (T)$ (Induction
+  hypothesis) and
+  \[ u = \sum_{\xi \in \mathbb{Z}} u_{\xi} e^{i \xi x} \]
+  (When $n = 1$, $\xi = (\xi), x = (x)$, then $< \xi, x > = \xi x$.)
+  
+  satisfies $u \in H_{s + 2} \subset H_{s + 1}$, i.e.
+  \[  \sum_{\xi} | \xi |^{2 s + 4} | u_{\xi} |^2 < \infty . \]
+  Set
+  \[ v = \sum_{\xi \neq 0} i \xi u_{\xi} e^{i \xi x}  (= u' ?) . \]
+  Then $v \in H_{s + 1}$, and therefore is a function in $C^s (T)$ by
+  induction hypothesis. And the convergence being uniform, we may integrate
+  term-by-term:
+  \[ C^{s + 1} (T) \ni \int_0^x v (t) \mathd t = \sum_{\xi} u_{\xi} e^{i \xi
+     x} = u (x) - u_0, \]
+  so $u' (x) = v (x)$ and $u \in C^{s + 1} (T)$. (From $v \in H_{s + 1}
+  \subset C^s (T) \Longrightarrow u \in H_{s + 2} \subset C^{s + 1} (T)$, just
+  need to prove $u' (x) = v (x) .$)
+  
+  
+\end{proof}
+
+\begin{lemma}[Rellich Lemma]
+  For $s > r$, the inclusion
+  \[ H_s \subset H_r \]
+  is compact.
+\end{lemma}
+
+\begin{proof}
+  Given a bounded sequnce $\{ u_k \}$ in $H_s$, we want to find a convergent
+  sequence in $H_r$.
+  
+  Firstly, the lemma is equivalent to \tmcolor{red}{the limit of every Cauchy
+  sequence of $H_r$ is in $H_r$}. Thus, we can give a bounded sequence $\{ u_k
+  \} $in $H_s$, then one can find a Cauchy sequence induced by $\{ u_k \}$ in
+  $H_r$.
+  
+  Since $\{ u_k \} \subset H_s$, we have
+  \[ \|u_k \|_s^2 = \sum_{\xi} (1 +\| \xi \|^2)^s | u_{k, \xi} |^2 \leqslant
+     C, \; \exists C > 0, \]
+  and since $\{ u_k \} \subset H_r$, similary, we have
+  \[ \|u_k \|_r^2 = \sum_{\xi} (1 +\| \xi \|^2)^r | u_{k, \xi} |^2 \leqslant
+     C', \; \exists C' > 0. \]
+  
+  
+  Since $H_s \subset H_r$, for all $k$ we have
+  \[ \sum_{\xi} (1 +\| \xi \|^2)^r | u_{k, \xi} |^2 \leqslant \sum_{\xi} (1
+     +\| \xi \|^2)^s | u_{k, \xi} |^2 \leqslant C. \]
+  Then for fixed $\xi$ the sequence $\{ (1 +\| \xi \|^2)^{r / 2} u_{k, \xi}
+  \}_k$ is bounded and hence has a Cauchy subsequence. {\color[HTML]{B5005A}By
+  the standard diagonalization}, then , we can {\color[HTML]{B4005A}find
+  subsequence $\{ u_k \}$ such that $\{ (1 +\| \xi \|^2)^{r / 2} u_{k, \xi}
+  \}_k$ is Cauchy sequence for every $\xi$.}
+  
+  Now the remaining task is to show that the $\{ u_k \}$ what we find is dose
+  a Cauchy sequence, which will lead us to verify the $\{ u_k \}$satisfy the
+  cauchy principle of convergence of norm version! Thus, we have
+  \begin{eqnarray}
+    \|u_k - u_l \| & = & \sum_{\| \xi \| \leqslant R} (1 +\| \xi \|^2)^r |
+    u_{k, \xi} - u_{l, \xi} |^2 + \sum_{\| \xi \|> R} (1 +\| \xi \|^2)^r |
+    u_{k, \xi} - u_{l, \xi} |^2 \nonumber\\
+    & = & \sum_{\| \xi \| \leqslant R} (1 +\| \xi \|^2)^r | u_{k, \xi} -
+    u_{l, \xi} |^2 + \sum_{\| \xi \|> R} \frac{(1 +\| \xi \|^2)^s }{(1 +\| \xi
+    \|^2)^{s - r}} | u_{k, \xi} - u_{l, \xi} |^2 \nonumber\\
+    & < & \varepsilon . \nonumber
+  \end{eqnarray}
+  
+\end{proof}
+
+\begin{remark}
+  Since for fixed $\xi$, $\{ u_{k, \xi} \}_k$ is a Cauchy sequence, then we
+  have $| u_{k, \xi} - u_{l, \xi} |  < \varepsilon$ for any $k, l \geqslant N,
+  \exists N > 0$. Then we just need to consider the left unique variable
+  $\xi$, which is divided into two cases that if  $\| \xi \| \leqslant R$ or
+  not.
+\end{remark}
+
+\begin{definition}[Weak Solution]
+  A function $\varphi \in L^2 (T) = H_0$ is siad to be a
+  weak solution to $\Delta_d
+  \varphi = \psi$ if
+  \[  (\Delta_d \eta, \varphi) = (\eta, \psi), \]
+  for all $\eta \in C^{\infty} (T)$.
+\end{definition}
+
+\begin{definition}[Self-Disjoint]
+  If a function $\varphi \in L^2 (T) = H_0 \cap C^{\infty} (T)$, the
+  Laplacian $\Delta_d$ is
+  self-disjoint, i.e.
+  \[  (\eta, \Delta_d \varphi) = (\eta, \psi) \Longleftrightarrow \Delta_d
+     \varphi = \psi, \]
+  for all $\eta \in C^{\infty} (T)$.
+\end{definition}
+
+{\color[HTML]{B4005A}Weak solutions are easy to find by Hilbert space
+  methods, and {\bf the point is to prove regularity.}}
+
+
+we first note that the weak solutions of the homogeneous equation $\Delta_d
+\varphi = 0$ satisfy  $$(\| \xi \|^2 e^{i < \xi, x >}, \varphi_{\xi}) = 0 \text{ for
+all $\xi$.}$$  Thus the weak harmonic space consists of the constant functions,
+defined by $\varphi_{\xi} = 0$ for $\xi \neq 0$.($\Rightarrow \; \varphi_0 =
+0$ is a necessary condition for (\ref{1}) to have a weak solution $\varphi$.)
+\begin{equation}
+  \Delta_d \varphi = \psi, \label{1}
+\end{equation}
+Next, we observe that {\color[HTML]{870043}{\shadowtext{(\ref{1}) makes sense when
+$\psi \in L^2 (T) = H_0$ by} $$\Delta_d^2 \varphi = \Delta_d  (\Delta_d \varphi)
+= \Delta_d \psi = 0 .$$} A necessary condition for it to have a weak solution
+is that $\psi_0 = 0$, i.e. $\psi$ should be
+orthogonal to the harmonic space}. ($\psi$ is
+a weak solution to (\ref{1}))
+
+Now assuming this to be the case,
+\[ {\color[HTML]{000080}\varphi = - \sum_{\xi \neq 0} \frac{1}{\| \xi \|^2}
+   \psi_{\xi} e^{i < \xi, x >}} \]
+{\shadowtext{gives a formal Fourier series solution to (\ref{1})}}. Since
+clearly, $\psi \in L^2 (T) \Longrightarrow \varphi \in L^2 (T)$, it is a weak
+solution. 
+
+\begin{definition}[Green's Operator]
+  For $\psi \in L^2 (T)$, if we define the Green's operator by
+  \begin{equation}
+    G (\psi) = - \sum_{\xi \neq 0} \frac{1}{\| \xi \|^2 } \psi_{\xi} e^{i < x
+    \comma x >}, \label{2}
+  \end{equation}
+  then
+  \[ G : \; H_s \longrightarrow \; H_{s + 2 } \]
+  is a bounded linear operator. 
+  
+  {\color[HTML]{008080}\shadowtext{(By
+  Rellich Lemma, $H_{s + 2} \subset H_s$ is compact, which leads to the
+  boundedness.)}} {\color[HTML]{008080}(As $G \in
+  \mathfrak{F}$ (the space of formal Fourier series), then clearly it is a
+  linear operator for $\mathfrak{F}$ is a linear space.)} In case
+  {\color[HTML]{800080}$\psi$ is perpendicular to the harmonic
+  space}{\color[HTML]{AA007F}, and $\varphi = G (\psi)$ provides a weak
+  solution to (\ref{1}).} By Sobolev lemma, if $\psi \in C^{\infty} (T)$ then
+  $\varphi \in C^{\infty} (T)$ and $\varphi$ is a solution to (\ref{1}) in the
+  usual sense. Finally, by the Rellich lemma
+  \[ G \; : \; L^2 (T) \longrightarrow L^2 (T), \]
+  is a compact and self-disjoint operator. The spectral decomposition for $G$
+  on $L^2 (T)$ is just Fourier series.
+\end{definition}
+
+The operator
+\[ I + \Delta_d \; : \; H_s \longrightarrow H_{s - 2} \]
+is trivially, since
+{\color[HTML]{800080}$\Delta$ is second order}.
+
+More importantly,
+
+the identity
+\[ {\color[HTML]{B4005A}\| (I + \Delta_d) \varphi \|_{s - 2}^2 =\| \varphi
+   \|_s^2} \]
+allows us to {\color[HTML]{800080}invert $I + \Delta_d$ on $L^2
+(T)$} using {{\color[HTML]{800080}the closed graph theorem}}.
+
+The identity may be calculated as follows:
+\begin{align*}
+  \| (I + \Delta_d) \varphi \|_{s - 2}^2 & =  \sum_{\xi \neq 0} (1 +\| \xi
+  \|^2)^{s - 2} | ((I + \Delta_d ) \varphi)_{\xi} |^2\\
+  & =  \sum_{\xi \neq 0} (1 +\| \xi \|^2)^{s - 2} | \varphi_{\xi} +
+  (\Delta_d \varphi)_{\xi} |^2\\
+  & =  \sum_{\xi \neq 0} (1 +\| \xi \|^2)^{s - 2} | \varphi_{\xi} +\| \xi
+  \|^2 \varphi_{\xi} |^2\\
+  & =  \sum_{\xi \neq 0} (1 +\| \xi \|^2)^{s - 2} \cdot (1 +\| \xi \|^2)^2
+  \cdot | \varphi_{\xi} |^2\\
+  & =  \sum_{\xi \neq 0} (1 +\| \xi \|^2)^s | \varphi_{\xi} |^2\\
+  & =  \| \varphi \|^2_s
+\end{align*}
+Where $(\Delta_d \varphi)_{\xi}$ is the Fourier coefficient of $\Delta_d
+\varphi = - \sum_{\xi} \varphi_{\xi} \| \xi \|^2 e^{i < \xi, x >}$.
+
+\subsection{ Distribution}
+
+\begin{definition}[The Condition of continuity for Distribution]
+  The \tmcolor{red}{linear} functions
+  \[ \lambda \; : \; C^{\infty} (T) \longrightarrow \mathbb{C}, \]
+  which are {{\color[HTML]{B4005A}continuous}} in the sense that
+  \[  {\color[HTML]{B4005A}| \lambda (\varphi) | \leqslant
+    C_{\lambda} \sup_{[\alpha] \leqslant k, x \in T} | D^{\alpha} \varphi (x)
+    | \quad \text{ for some $k$.}}\]
+\end{definition}
+
+Each distribution generates a formal Fourier series $\sum \lambda_{\xi} e^{i <
+\xi, x >}$ where
+\[ \lambda_{\xi} = \lambda (e^{i < \xi, x >}) . \]
+{\color[HTML]{B4005A}It follows from the definition of
+continuity of $\lambda$ and the above estimate on $\sup_{x \in T} | D^{\alpha}
+\varphi (x) |$ that each distribution $\lambda$ is a continuous linear
+function on $H_s$ for some $s$.} The pairing
+\[  (u, v) = \sum_{\xi} u_{\xi} v_{\xi} \]
+identifies $H_{- s}$ with the dual of $H_s$, so that $\lambda \in H_{- s}$
+with its formal Fourier series given above. If we denote by $\mathcal{D} (T)$
+the space of distributions, then we conclude that
+\[ \mathcal{D} (T) = H_{- \infty} . \]
+
+\begin{definition}[The derivatives of a distribution]
+  The derivatives of a distribution are defined by
+  \[ D^{\alpha} \lambda (\varphi) = \lambda (D^{\alpha} \varphi) . \]
+  The Fourier coefficients of $D^{\alpha} \lambda$ are $(D^{\alpha}
+  \lambda)_{\xi} = \xi^{\alpha} \lambda_{\xi}$.
+\end{definition}
+
+With this definition, a distribution is obtained by taking a finite
+number of derivatives of a continuous function.
+
+{\color[HTML]{B4005A}
+  A distribution $\lambda$ is said to be in $L^2$ in case $\lambda \in H_0
+  \subset H_{- \infty}$. Then we may describe the Soblev spaces by:
+  $H_s$ consists of all distributions $\lambda$ such that the
+  distributional derivatives $D^{\alpha} \lambda$ are in $L^2$ for $[\alpha]
+  \leqslant s$.}
+
+\subsection{ The proof of Hodge Theorem}
+
+The essential idea is to produce the Green's operator by
+Hilbert-space trick, and then to use the basic
+estimate to show that it is a compact smoothing
+operator.
+
+\shadowtext{Firstly, we need to define the proper Green's operator $G$ by
+Hilbert-space trick!}
+
+\subsubsection{Extending Sobolev $s$-norm given by $L^2$-norm on torus $T$ to
+vector bundles over manifolds}
+
+On a torus $T$ we define its Sobolev $s$-norm by $L^2$-norm
+\[  \sum_{[\alpha] \leqslant s} \int_T | D^{\alpha} \varphi |^2 \tmop{dx}, \]
+which now can be extended to vector bundles over manifolds so that the Sobolev
+lemma and Rellich lemma both remain valid.
+
+\begin{definition}[\shadowtext{Sobolev Space}]\label{def:Sobolevspace}
+  Fixed $1 \leqslant p \leqslant \infty$ and let $k$ be a nonzero integer.
+  $W^{k, p} (U)$ consists of all locally integrable functions $u \; : \, U
+  \longrightarrow \mathbb{R}$, such that for any multiindex $\alpha$ with $|
+  \alpha | \leqslant k$, there exits (weak derivative) $D^{\alpha} u$ in the
+  weak sense and $D^{\alpha} u \in L^p  (U)$.
+\end{definition}
+
+\begin{remark}
+  If $p = 2$, we can write
+  \[ H^k  (U) \assign W^{k, 2} (U), \quad k = 0, 1, \cdots . \]
+  It is a {\shadowtext{{Hilbert space}}}, which is easy to verify that
+  $H^0  (U) = L^2  (U)$. In this article, we denote $H^k (U)$ by $H_k$.
+\end{remark}
+
+{\color[HTML]{B4005A}Suppose
+that $U \subset V \subset \mathbb{R}^n$ are open sets in $\mathbb{R}^n$ with
+each relatively compact in the next. Functions with compact support in $U$ may
+be considered as functions on a torus $T$!}\quad (*)
+
+{\color[HTML]{B4005A}\shadowtext{The global Sobolev $s$-norm of sections $f \in
+C^{\infty} (M, E)$}} is defined by
+\[ \|f\|_s^2 = \sum_{k \leqslant s} \int_M \| \text{} \nabla^k f\|_0^2 d x,
+\]
+where
+\[ \nabla^k f = \nabla (\nabla (\cdots (\nabla f) \cdots)) . \]
+Denote $\mathcal{H}_s (M, E)$ the completion of $C^{\infty} (M, E)$ in above
+norm. Since by (*), the global Sobolev norm induces a norm equivalent to the
+usual Sobolev norm on sections compactly supported in a neighborhood of a
+point, by using a partition of unity we may conclude that
+
+\begin{lemma}[{\color[HTML]{B4005A}\shadowtext{Global Sobolev Lemma}}]\label{lem:globalsobolevlem}
+  $\mathcal{H}_{s + [n / 2] + 1} (M, E) \subset C^s (M, E)$, the
+  sections of differentiability class $s$ on $M$, and
+  \[  \bigcap_s \texttt{\tmverbatim{}} \mathcal{H}_s (M, E) = C^{\infty} (M,
+     E) . \]
+\end{lemma}
+
+\begin{lemma}[{\color[HTML]{B4005A}\shadowtext{Global Rellich Lemma}}]\label{lem:globalrellichlem}
+  For $s > r$ the inclusion
+  \[  \mathcal{H}_s (M, E) \subset \mathcal{H}_r (M, E) \]
+  is a compact operator.
+\end{lemma}
+
+\subsubsection{ The basic estimate}
+
+\begin{theorem}[{\color[HTML]{B4005A}\shadowtext{Garding Inequality}}]\label{thm:garding}
+  For $\varphi \in A^{p, q} (M)$
+  \[ \| \varphi \|_1^2 \leqslant C\mathcal{D} (\varphi) \quad  (C > 0) . \]
+\end{theorem}
+\begin{lemma}[{\color[HTML]{B4005A}\shadowtext{Regularity Lemma I}}]\label{lem:rugularitylem}
+  Suppose that {\color[HTML]{800080}$\varphi \in \mathcal{H}_s^{p, q} (M)$},
+  and that {\color[HTML]{800080}$\psi \in \mathcal{H}_0^{p, q} (M)$ is a weak
+  solution} of the equation
+  \[ {\color[HTML]{800080}\Delta \psi = \varphi} \]
+  in the sense that
+  \[  (\psi, \Delta \eta) = (\varphi, \eta) \]
+  for all $\eta \in A^{p, q} (M)$. Then {\color[HTML]{800080}$\psi \in
+  \mathcal{H}_{s + 2}^{p, q} (M)$}.
+\end{lemma}
+
+If $\varphi \in \mathcal{H}_0^{p, q} (M)$ is an eigenfunction for $\Delta$,
+i.e. $\Delta \varphi = \lambda \varphi$ holds in the weak sense, where
+$\lambda$ is the eigenvalue relatively to $\varphi$. Then
+{\color[HTML]{B4005A}by Regularity Lemma, $\varphi \in
+\mathcal{H}_s^{p, q} (M)$ for all $s$} ($\Delta$ is a minus second order
+operator.). And by Global Sobolev
+Lemma, one know that {\color[HTML]{B4005A}any
+eigenfunctions for $\Delta$ is smooth.}
+
+{\color[HTML]{B4005A}Note that any eigenvalue $\lambda
+\geqslant 0$, and $\lambda = 0 \Longleftrightarrow \varphi$ is harmonic in the
+weak sense. But by the Regularity and} Sobolev lemmas any such weak
+harmonic form is smooth and harmonic in the usual sense.
+
+\begin{lemma}[The basic estimate lemma]\label{lem:basic-estimate}
+  Given $\varphi \in \mathcal{H}_0^{p, q} (M) $, there exists a unique $\psi
+  \in \mathcal{H}_1^{p, q} (M)$ such that
+  \[  (\varphi, \eta) =\mathcal{D} (\psi, \eta) = (\psi, (I + \Delta) \eta)
+  \]
+  for all $\eta \in A^{p, q} (M)$. The mapping
+  \[  \psi = T (\varphi) \]
+  from $\mathcal{H}_0^{p, q} (M)$ to $\mathcal{H}_1^{p, q} (M)$ is
+  {\color[HTML]{B4005A}{\shadowtext{{bounded}}}}, and therefore the
+  mapping
+  \[ T \; : \; \mathcal{H}_0^{p, q} (M) \longrightarrow
+     \mathcal{H}_0^{p, q} (M) \]
+  is {\color[HTML]{B4005A}{\shadowtext{{compact and self-disjoint}}}}.
+\end{lemma}
+
+
+
+According to {\color{purple}{\bf\itshape the spectral theorem for compact, self-adjoint operators}} there
+is a {\color{purple}{\bf\itshape Hilbert-space decomposition}}
+\[ \mathcal{H}_0^{p, q} (M) = \bigoplus_m E (\rho_m), \]
+where $\rho_m$ are the eigenvalues of $T$ and $E (\rho_m)$ are the
+finite-dimensional eigenspaces. Since $T$ is one-to-one,
+all $\rho_{m }\neq 0$; moreover, the equation
+\[ T \varphi = \rho_m \varphi \]
+is the same as
+\[  (\varphi, \eta) = (\rho_m \varphi, (I + \Delta) \eta) \quad  (\eta \in
+   A^{p, q} (M)), \]
+which implies that
+\[ \Delta \varphi = \left( \frac{1 - \rho_m}{\rho_m} \right) \varphi \]
+in the weak sense. It follows that the eigenspaces for $T$ and $\Delta$ are
+the same and are finite-dimensional vector spaces consisting of smooth forms.
+The eigenvalues $\lambda_m$ for $\Delta$ and $\rho_m$ for $T$ are related by
+\[ \rho_m=\frac{1}{1+\lambda_m}.\]
+
+Assume that 
+\[0=\lambda_0<\lambda_1<\cdots,\]
+where $\lambda_m\uparrow \infty, \rho_m\downarrow 0$ as $m\to\infty$. The harmonic space $\mathcal{H}^{p,q}(M)$ corresponds to $\lambda_0=0$.
+For $\varphi\in \mathcal{H}^{p,q}(M)^{\bot }$, we have
+\[\|\Delta\varphi\|_0\geqslant\lambda_1 \|\varphi\|_0\quad (\lambda_1>0).\]
+and if we define the Green's operator by 
+\[
+\begin{cases}
+  G=0, & \text{on } \mathcal{H}^{p,q}(M),\\ 
+    G\varphi=\frac{1}{\lambda_m}\varphi, &\varphi\in E\br{\frac{1}{1+\lambda_m}},\end{cases}\]
+then {\color{purple}\shadowtext{\bf\itshape$G$ is a compact, self-adjoint operator with spectral decomposition}}
+\[ \mathcal{H}^{p,q}(M)=\mathcal{H}^{p,q}(M)\oplus (\oplus_m E(\rho_m)),\]
+where 
+\[G\varphi=\left(\frac{\rho_m}{1-\rho_m}\right)\varphi.\]
+\prob[Summarization]{deepGreen}
+By \ref{lem:globalsobolevlem} and \ref{lem:globalrellichlem} we show that 
+
+
+
+% Bibliography
+\clearpage
+\pagestyle{\auxsettings}
+\printbibliography[heading=bibintoc]
+\end{document} 

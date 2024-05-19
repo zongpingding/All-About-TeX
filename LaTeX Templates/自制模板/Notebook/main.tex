@@ -1,0 +1,58 @@
+\documentclass[12pt]{article}
+\usepackage{Note}
+
+% some newcommand defined
+\newcommand{\om}{\ensuremath{\Omega}\,}
+\newcommand{\f}{\ensuremath{\sigma}-field\,}
+
+
+
+\begin{document}
+\titlepage[./Pic/Nine-pointCircle.pdf]{Note宏包使用指南}{Eureka}
+
+% 第零章
+\chapter{第一章}
+\sector{自定义的结构}
+
+主要就是自定义了一个sector计数器，还定义了部分的命令。
+定义了一个chapter命令，用于自动输出chapter结构和页面
+
+\sector{数学相关}
+\subsector{环境}
+目前只定义了一Definition环境，很简洁，自定义了这个环境中的中英文字体。具体的使用效果如下
+
+\begin{Definition}
+let \om be a non-empty set , A \f or  $\sigma$-Algebra \C{F} on \om is a family
+of subset of \om, such that\footnote[1]{These three as follows are Necessary and Sufficient condition(充分必要条件); 
+另外,sufficient condition: 充分条件; necessary conditio: 必要条件}: 
+\begin{enumerate}[(i)]
+    \item \im{\ns \in \C{F}}
+    \item \im{A \in \C{F} \Rightarrow A^c = \Omega\backslash A\in \C{F}}\mbox{(对取余封闭)}
+    \item \im{A_i,i = 1, 2, \cdots, \in \C{F} \Rightarrow \bigcup_{i=1}^\infty A_i  \in \C{F}}\mbox{(对可列并封闭)}
+\end{enumerate} 
+\end{Definition}
+
+\subsector{常用命令}
+\begin{verbatim}
+% 各种箭头
+\newcommand{\lr}{\ensuremath{\longrightarrow}}
+\newcommand{\equ}{\ensuremath{\Longleftrightarrow}\,}
+\newcommand{\sr}{\ensuremath{\longmapsto}}
+\newcommand{\lrr}{\ensuremath{\Longrightarrow}}
+
+% 数学字体和符号等
+\newcommand{\remark}{\noindent\ensuremath{\mathbf{Remark}}\hspace*{1em}}
+\newcommand{\emp}[1]{\noindent{\bf #1}}
+\newcommand{\im}[1]{\ensuremath{\displaystyle #1}}
+\newcommand{\dis}{\displaystyle}
+\newcommand{\scale}[2]{\scalebox{#1}[#1]{#2}}
+\newcommand{\C}[1]{\ensuremath{\mathcal{#1}}}
+\renewcommand{\S}[1]{\ensuremath{\mathscr{#1}}}
+\newcommand{\B}[1]{\ensuremath{\mathbb{#1}}}
+\newcommand{\F}[1]{\ensuremath{\mathbf{#1}}}
+\newcommand{\R}[1]{\ensuremath{\mathrm{#1}}}
+\newcommand{\ns}{\ensuremath{\varnothing}}
+\newcommand{\A}{\ensuremath{\forall}}
+\end{verbatim}
+
+\end{document}

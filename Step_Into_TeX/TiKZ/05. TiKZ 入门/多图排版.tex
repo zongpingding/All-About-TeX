@@ -1,0 +1,51 @@
+%% 1. 给每一个子图指定一个相对坐标
+%% 2. 使用scope分出三个区域。scope默认居中，所以需要平移一段距离--> xshift
+%% 3. 相当于每一个scope范围都是一个独立的坐标系统，都有一个独立的坐标原点
+
+\subsection{多图排版}
+
+\begin{tikzpicture}[>=stealth]
+%% 第一个区域
+\begin{scope}
+    \draw [->] (-1.5, 0) -- (1.5, 0)node [right] {$x$};
+    \draw [->] (0, -1.5) -- (0, 1.5)node [right] {$y$};
+    \draw (0, 0) circle(1);
+    \node at (-0.25, -0.25) {$O$};
+
+    %% 循环内部用{}不是(): 原因：LaTeX的宏替换机制{}内部是一个整体，不能分割。
+    \foreach \x/\xcorr in {+/{0.5, 0.5}, -/{-0.5, 0.5}, -/{-0.5, -0.5}, +/{0.5, -0.5}}
+    {
+        \node at (\xcorr) {$\x$};
+    }
+    \node at (0, -2) {$\cos\alpha$和$\sec\alpha$};
+\end{scope}
+
+%% 第二个区域
+\begin{scope}[xshift=6cm]
+    \draw [->] (-1.5, 0) -- (1.5, 0)node [right] {$x$};
+    \draw [->] (0, -1.5) -- (0, 1.5)node [right] {$y$};
+    \draw (0, 0) circle(1);
+    \node at (-0.25, -0.25) {$O$};
+
+    \foreach \x/\xcorr in {+/{0.5, 0.5}, +/{-0.5, 0.5}, -/{-0.5, -0.5}, -/{0.5, -0.5}}
+    {
+        \node at (\xcorr) {$\x$};
+    }
+    \node at (0, -2) {$\sin\alpha$和$\csc\alpha$};
+\end{scope}
+
+%% 第三个区域
+\begin{scope}[xshift=12cm]
+    \draw [->] (-1.5, 0) -- (1.5, 0)node [right] {$x$};
+    \draw [->] (0, -1.5) -- (0, 1.5)node [right] {$y$};
+    \draw (0, 0) circle(1);
+    \node at (-0.25, -0.25) {$O$};
+
+    \foreach \x/\xcorr in {+/{0.5, 0.5}, -/{-0.5, 0.5}, +/{-0.5, -0.5}, -/{0.5, -0.5}}
+    {
+        \node at (\xcorr) {$\x$};
+    }
+    \node at (0, -2) {$\tan\alpha$和$\cot\alpha$};
+\end{scope}
+
+\end{tikzpicture}

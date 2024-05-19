@@ -1,0 +1,30 @@
+% 保存编译信息到文件中
+\RequirePackage{filecontents}
+\begin{filecontents*}{\jobname.lol}
+\listfiles
+\end{filecontents*}
+
+
+\documentclass{article}
+\usepackage{ctex}
+\usepackage{listings}
+
+
+
+\title{Wsl编译windows中的tex文件}
+\begin{document}
+\maketitle
+
+\lstset{basicstyle=\ttfamily}
+\lstinputlisting[caption={File List},label={lst:filelist}]{\jobname.lol}
+
+
+\section{测试}
+
+使用 wsl 中的latex 编译windows 中的tex文件测试
+
+\section{结论}
+可以编译，但是由于跨了文件系统，所以编译速度很慢。
+没办法，I/O 太慢了。
+
+\end{document}

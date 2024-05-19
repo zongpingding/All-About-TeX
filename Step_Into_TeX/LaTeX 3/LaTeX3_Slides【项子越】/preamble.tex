@@ -1,0 +1,172 @@
+\usepackage{ctex}
+\usepackage{fontspec}
+\usepackage{tcolorbox}
+\usepackage{metalogo}
+\usepackage{tasks}
+\usepackage{etoolbox}
+\usepackage{expl3}
+\usepackage{unicode-math}
+\usepackage{minted}
+\usepackage{xparse}
+\usepackage{tikz}
+
+\tcbuselibrary{minted,listings,xparse}
+
+\usefonttheme{professionalfonts}
+\usefonttheme{serif}
+
+\setmonofont{IBMPlexMono-Regular}[
+    Path=../fonts/,
+    Extension=.ttf,
+    BoldFont=IBMPlexMono-Bold,
+    ItalicFont=IBMPlexMono-Italic,
+    BoldItalicFont=IBMPlexMono-BoldItalic
+]
+
+\setmainfont{Roboto-Regular}[
+    Path=../fonts/,
+    Extension=.ttf,
+    BoldFont=Roboto-Bold,
+    ItalicFont=Roboto-Italic,
+    BoldItalicFont=Roboto-BoldItalic
+]
+
+\setCJKmonofont{NotoSerifSC-Regular}[
+    Path=../fonts/,
+    Extension=.otf,
+    BoldFont=NotoSerifSC-Bold,
+    ItalicFont=NotoSerifSC-Regular
+]
+
+\setCJKmainfont{NotoSansSC-Regular}[
+    Path=../fonts/,
+    Extension=.otf,
+    BoldFont=NotoSansSC-Bold
+]
+
+\setmathfont{TeX Gyre Termes Math}
+
+\usetheme{AnnArbor}
+\usecolortheme{beaver}
+\setbeamertemplate{navigation symbols}{}
+
+\author[项子越]{项子越\\ {\scriptsize\ttfamily ziyue.alan.xiang@gmail.com}}
+\institute[]{\url{https://github.com/xziyue/latex3-chinese-video}}
+
+
+% use custom lexer in minted
+\newcommand{\pyltlexer}{../tex_lexer.py:Tex3Lexer -x}
+
+\newcommand{\codefontsize}{\fontsize{7}{9}}
+
+\newtcblisting{texcode}{
+    listing only,
+    listing engine=minted,
+    minted options={
+        fontsize=\codefontsize,
+        linenos,
+        autogobble,
+        breaklines,
+        numbersep=2mm,
+        obeytabs,
+        tabsize=2
+    },
+    minted language=\pyltlexer,
+    top=0pt,
+    bottom=0pt,
+    left=4mm,
+    colback=white,
+    boxrule=1pt
+}
+
+\newtcblisting{texcode*}{
+    listing engine=minted,
+    minted options={
+        fontsize=\codefontsize,
+        linenos,
+        autogobble,
+        breaklines,
+        numbersep=2mm,
+        obeytabs,
+        tabsize=2
+    },
+    minted language=\pyltlexer,
+    top=0pt,
+    bottom=0pt,
+    left=4mm,
+    colback=white,
+    boxrule=1pt
+}
+
+%\newtcblisting{texcode**}{
+%    listing engine=minted,
+%    minted options={
+%        fontsize=\codefontsize,
+%        linenos,
+%        autogobble,
+%        breaklines,
+%        numbersep=2mm,
+%        obeytabs,
+%        tabsize=2
+%    },
+%    minted language=\pyltlexer,
+%    top=0pt,
+%    bottom=0pt,
+%    left=4mm,
+%    colback=white,
+%    boxrule=1pt,
+%    listing side text
+%}
+
+
+
+\DeclareTCBListing{texcode**}{!o}{
+    listing engine=minted,
+    minted options={
+        fontsize=\codefontsize,
+        linenos,
+        autogobble,
+        breaklines,
+        numbersep=2mm,
+        obeytabs,
+        tabsize=2
+    },
+    minted language=\pyltlexer,
+    top=0pt,
+    bottom=0pt,
+    left=4mm,
+    colback=white,
+    boxrule=1pt,
+    listing side text,
+    IfValueTF={#1}{
+        righthand width=\dimexpr #1\linewidth \relax
+    }{}
+}
+
+
+\newtcblisting{progcode}[1]{
+    listing only,
+    listing engine=minted,
+    minted options={
+        fontsize=\codefontsize,
+        linenos,
+        autogobble,
+        breaklines,
+        numbersep=2mm,
+        obeytabs,
+        tabsize=2
+    },
+    minted language=#1,
+    top=0pt,
+    bottom=0pt,
+    left=4mm,
+    colback=white,
+    boxrule=1pt
+}
+
+\renewcommand{\theFancyVerbLine}{\ttfamily \textcolor[rgb]{0.2,0.2.,0.2}{\fontsize{5}{7} \oldstylenums{\arabic{FancyVerbLine}}}}
+
+\newmintinline[texinl]{\pyltlexer}{fontsize=\small}
+\newmintinline[textinl]{text}{fontsize=\small}
+
+

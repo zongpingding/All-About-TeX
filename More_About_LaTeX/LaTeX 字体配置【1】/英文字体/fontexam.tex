@@ -1,0 +1,109 @@
+\documentclass[12pt, a4paper, portrait]{article}
+\usepackage[lmargin=2cm,tmargin=2cm,bmargin=2cm,rmargin=2cm]{geometry}
+\usepackage{graphicx}
+\usepackage{ae} % virtual font of computer Modern for PDF
+
+% old style
+% times font
+\newcommand\timesfamily{\fontfamily{ptm} \selectfont}
+\DeclareTextFontCommand{\texttimes}{\timesfamily}
+
+% square serif (clarendon)
+% Concrete Roman
+\newcommand\concretefamily{\fontfamily{ccr} \selectfont}
+\DeclareTextFontCommand{\textconcrete}{\concretefamily}
+
+% Sans Serif
+% Helvetica
+\newcommand\helveticafamily{\fontfamily{phv} \selectfont}
+\DeclareTextFontCommand{\texthelvetica}{\helveticafamily}
+
+% Monoespacado (Typewriter)
+% Courier
+\newcommand\courierfamily{\fontfamily{pcr} \selectfont}
+\DeclareTextFontCommand{\textcourier}{\courierfamily}
+
+% manuscrito
+% Calligra
+\usepackage{calligra}
+
+% gothfamily of oldgerman is Gothic. Is hand written or decorative?
+
+% \usepackage{oldgerm}
+
+% decorativa
+% yinitial fonts: somente maisculo.
+\newcommand\yinitfamily{\usefont{U}{yinit}{m}{n}}
+\DeclareTextFontCommand{\textyinit}{\yinitfamily}
+
+\pagestyle{empty}
+\begin{document}
+
+\begin{center}
+  {\Huge \bfseries Font family}
+
+\
+
+\
+
+\
+
+{\Huge \bfseries Old Style}
+
+\
+
+\noindent \scalebox{4.5}{\timesfamily Times Roman}
+
+\
+
+{\Huge \bfseries Modern Style}
+
+\
+
+\noindent \scalebox{4.5}{\rmfamily C.\ Modern Roman}
+
+\
+
+{\Huge \bfseries Slab-Serif (Clarendun)}
+
+\
+
+\noindent \scalebox{4.5}{\concretefamily Concrete Roman}
+
+\
+
+{\Huge \bfseries Sans Serif}
+
+\
+
+\noindent \scalebox{4.5}{\helveticafamily Helvetica}
+
+\
+
+{\Huge \bfseries Mono Spaced (Typewriter)}
+
+\
+
+\noindent \scalebox{4.5}{\courierfamily Courier}
+
+\
+
+\
+
+{\Huge \bfseries Hnad Written}
+
+\
+
+\noindent \scalebox{4.5}{\calligra Calligra}
+
+
+{\Huge \bfseries Decorative}
+
+\
+
+% nota: yinit so dispoe de maiusculos
+\noindent \scalebox{4.0}{\yinitfamily YINIT}
+
+
+\end{center}
+\end{document}

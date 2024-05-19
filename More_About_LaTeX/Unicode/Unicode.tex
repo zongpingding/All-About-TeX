@@ -1,0 +1,46 @@
+\documentclass[12pt]{article}
+\PassOptionsToPackage{quiet}{fontspec}
+\usepackage[a4paper, total={6.5in, 10in}]{geometry}
+\usepackage{ctex}
+% \usepackage{unicode-math}
+\usepackage{amsmath,nath}
+
+
+
+\title{Unicode 使用指南}
+\author{Eureka}
+\date{\today}
+\begin{document}
+\maketitle
+\tableofcontents
+\clearpage
+
+
+\section{使用Unicode 编码键入文字}
+比如: 
+\begin{itemize}
+    \item \verb|\char"4E22| = \char"4E22
+    \item \verb|\char"5140|=\char"5140
+\end{itemize}
+
+
+
+\section{Unicode 输入数学符号}
+% \char"220F,    $\char"220F$
+% $\symbol{"12082}$
+% $$
+% \sin 2nx = 2n \cos x [\sin x \\
+% \qquad + \sum_{k = 1}^n (-4)^k
+% \frac{(n^2 - 1^2)(n^2 - 2^2) \dots (n^2 - k^2)}{(2k - 1)!}
+% \sin^{2k - 1} x]
+% $$.
+
+
+$$
+(1 + \frac xy)^2
+$$
+
+
+
+
+\end{document}

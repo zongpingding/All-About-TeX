@@ -1,0 +1,36 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{CmdAndEnv}
+
+%%%%%%%%%%%%%%%% 编写这个文件的原因 %%%%%%%%%%%%%%%
+% 由于第一次编写宏包的时候文件夹太混乱了，一堆的.sty文件也很混乱。
+% 于是编写这个文件用于测试
+% 导致在原来的Article.sty文件中定义任何的宏(如下)都不起作用：
+% 1. 引入任何的宏包
+% 2. 定义命令
+% 3. 设置\DeclareOption{}{}
+
+
+\RequirePackage{calligra}
+% 提供NewDocumentEnvironment等环境
+\RequirePackage{xparse}
+% 提供 \isempty 命令
+\RequirePackage{xifthen}
+% 使用xargs实现默认参数的选择性更改
+\RequirePackage{xargs}
+
+\NewDocumentCommand{\polarplott}{O{scale=1}O{black!50, domain=0:720}m}%
+    {%
+        \begin{tikzpicture}[#1]
+            \draw[#2, smooth, variable=\t, samples=300] 
+            plot ({\t}:{#3});
+        \end{tikzpicture}
+    }
+
+% 单独声明
+% 注意：不是DeclareOperation
+\DeclareOption{test}{%
+    \newcommand{\testcmd}{Hello world}
+}
+\ProcessOptions\relax
+
+

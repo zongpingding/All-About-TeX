@@ -1,0 +1,86 @@
+\documentclass[fontset=windows, 12pt]{article}
+\PassOptionsToPackage{quiet}{fontspec}
+\usepackage[a4paper, total={6.5in, 10in}]{geometry}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{ctex}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{fontspec}
+
+\newcommand{\Testsentence}[1]{Hello This is a sentence Cretaed By Font Who's is #1}
+
+% 1. Apalu Font
+\newfontfamily{\Apalu}[Path=./Apalu/]{Apalu-2.otf}
+\newfontfamily{\ApalU}[Path=./Apalu/]{Apalu-3.ttf}
+
+% 2. LeagueGothic Font
+\newfontfamily{\LeagueGothic}[Path=./LeagueGothic/]{LeagueGothic-Regular.ttf}
+
+% 3. Philosopher
+\newfontfamily{\Philosopher}[Path=./Philosopher/]{Philosopher-Regular.ttf}
+
+% 4. LibreSemiSansSSK
+\newfontfamily{\LibreSemiSansSSK}[Path=./LibreSemiSansSSK/]{LibreSemiSansSSK-Regular.ttf}
+
+% 5. Note-Script-Medium
+\newfontfamily{\NoteScriptMedium}[Path=./Note-Script-Medium/]{Note-Script-Medium-2.ttf}
+
+
+%  中文字体
+% 1. YuanYunMingTi
+\setCJKfamilyfont{YuanYunMingTi}[Path=./YuanYunMingTi/]{GenWanMinJP-Regular-4.ttf}
+
+
+\title{OnlineFont}
+\author{Eureka}
+\date{\today}
+\begin{document}
+\maketitle
+
+\section{英文的字体}
+\subsection{Apalu字体}
+
+    注意这款字体不能进行商用，自己私下用用就行了。
+    这两个Apalu字体差不多,主要就是otf和ttf的区别
+
+    {\Apalu \Testsentence{Alpau-2}}
+
+    {\ApalU \Testsentence{Apalu-3}}
+
+\subsection{LeagueGothic}
+    这个无衬线字体还是很经典的,可以免费商用。
+    拥有粗体，斜体，粗斜体
+
+    {\LeagueGothic \Testsentence{LeagueGothic}} 
+
+\subsection{Philosopher 字体}
+    Philosopher 也是一款免费开源的字体,这款字体是依据SIL Open Font License 1.1授权协议免费公开.
+    拥有粗体，斜体，粗斜体
+
+    {\Philosopher \Testsentence{Philosopher}}
+
+
+\subsection{LibreSemiSansSSK 字体}
+    这款字体不能进行商用，具有regular和Bold两种字体
+
+    {\LibreSemiSansSSK \Testsentence{LibreSemiSansSSK}}
+
+\subsection{Note-Script-Medium 字体}
+    一款看着很舒服的英文手写体，个人感觉比calligraphi字体好看，，但是还是不能够商用。
+    提供了一种字体。
+
+    {\NoteScriptMedium \Testsentence{Note-Script-Medium}}
+
+
+\section{免费开源的中文字体}
+\subsection{YuanYunMingTi 字体}
+    YuanYunMingTi这款字体看着版正，没别的
+
+    % {\YuanYunMingTi \Testsentence{YuanYunMingTi}}
+
+    {\CJKfamily{YuanYunMingTi} 这是一段测试中文字体效果的句子，这个字体是YuanYunMingTi}
+
+\end{document}

@@ -1,0 +1,128 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{ynt/global//global/global}
+    \entry{huybrechts2005complex}{book}{}
+      \name{author}{1}{}{%
+        {{hash=62ef5d71962e55d1e2757e1aeb5755c8}{%
+           family={Huybrechts},
+           familyi={H\bibinitperiod},
+           given={Daniel},
+           giveni={D\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{62ef5d71962e55d1e2757e1aeb5755c8}
+      \strng{fullhash}{62ef5d71962e55d1e2757e1aeb5755c8}
+      \strng{bibnamehash}{62ef5d71962e55d1e2757e1aeb5755c8}
+      \strng{authorbibnamehash}{62ef5d71962e55d1e2757e1aeb5755c8}
+      \strng{authornamehash}{62ef5d71962e55d1e2757e1aeb5755c8}
+      \strng{authorfullhash}{62ef5d71962e55d1e2757e1aeb5755c8}
+      \field{labelalpha}{Huy05}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Complex geometry: an introduction}
+      \field{volume}{78}
+      \field{year}{2005}
+      \true{nocite}
+    \endentry
+    \entry{Guan2015ASO}{article}{}
+      \name{author}{2}{}{%
+        {{hash=36e40b4452cc57621f3e0fe81d6fe1d0}{%
+           family={Guan},
+           familyi={G\bibinitperiod},
+           given={Qi'an},
+           giveni={Q\bibinitperiod}}}%
+        {{hash=b6a8f444f1453ccd6572bf428e36fc41}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Xiangyu},
+           giveni={X\bibinitperiod}}}%
+      }
+      \strng{namehash}{2813540313e13a4c4c3909385c3c3d4c}
+      \strng{fullhash}{2813540313e13a4c4c3909385c3c3d4c}
+      \strng{bibnamehash}{2813540313e13a4c4c3909385c3c3d4c}
+      \strng{authorbibnamehash}{2813540313e13a4c4c3909385c3c3d4c}
+      \strng{authornamehash}{2813540313e13a4c4c3909385c3c3d4c}
+      \strng{authorfullhash}{2813540313e13a4c4c3909385c3c3d4c}
+      \field{labelalpha}{GZ15}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Annals of Mathematics}
+      \field{title}{A solution of an $L^2$ extension problem with an optimal estimate and applications}
+      \field{volume}{181}
+      \field{year}{2015}
+      \field{pages}{1139\bibrangedash 1208}
+      \range{pages}{70}
+      \verb{urlraw}
+      \verb https://api.semanticscholar.org/CorpusID:264249609
+      \endverb
+      \verb{url}
+      \verb https://api.semanticscholar.org/CorpusID:264249609
+      \endverb
+    \endentry
+    \entry{huang2016logarithmic}{article}{}
+      \name{author}{4}{}{%
+        {{hash=a61ecf8f61ae39dc1bff395d51cb3e8e}{%
+           family={Huang},
+           familyi={H\bibinitperiod},
+           given={Chunle},
+           giveni={C\bibinitperiod}}}%
+        {{hash=2f1c2ebb3891f3563e1cc29b7372ee81}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Kefeng},
+           giveni={K\bibinitperiod}}}%
+        {{hash=f1a740efe3a7012d7ab2067086fbc59f}{%
+           family={Wan},
+           familyi={W\bibinitperiod},
+           given={Xueyuan},
+           giveni={X\bibinitperiod}}}%
+        {{hash=9c58e81c9a9d761b9219765e34b17913}{%
+           family={Yang},
+           familyi={Y\bibinitperiod},
+           given={Xiaokui},
+           giveni={X\bibinitperiod}}}%
+      }
+      \strng{namehash}{499f715903b23711069c2b799f93d56b}
+      \strng{fullhash}{80e8e405c055219ff07bf06009710358}
+      \strng{bibnamehash}{499f715903b23711069c2b799f93d56b}
+      \strng{authorbibnamehash}{499f715903b23711069c2b799f93d56b}
+      \strng{authornamehash}{499f715903b23711069c2b799f93d56b}
+      \strng{authorfullhash}{80e8e405c055219ff07bf06009710358}
+      \field{labelalpha}{Hua+16}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1611.07671}
+      \field{title}{Logarithmic vanishing theorems on compact Kähler manifolds I}
+      \field{year}{2016}
+      \true{nocite}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

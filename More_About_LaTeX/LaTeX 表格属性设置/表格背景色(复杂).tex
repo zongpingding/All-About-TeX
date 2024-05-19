@@ -1,0 +1,136 @@
+\documentclass[12pt]{article}
+\usepackage{textcomp,booktabs}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{colortbl}
+\definecolor{mygray}{gray}{.9}
+\definecolor{mypink}{rgb}{.99,.91,.95}
+\definecolor{mycyan}{cmyk}{.3,0,0,0}
+\parindent=0pt
+\parskip=3ex
+\begin{document}
+\centering
+
+\section*{SPECIFIC HEATS (20 \textcelsius\ AND 1 ATM)}
+\begin{tabular}{>{\sf }lll} %
+\toprule
+& \multicolumn{2}{c}{\bf Specific Heats} \\
+\cmidrule{2-3}
+& $c$ (J/kg$\cdot$K) & $C$ (J/mol$\cdot$K) \\
+\midrule
+Aluminum & 900 & 24.3 \\
+\rowcolor{mygray}
+Copper & 385 & 24.4 \\
+Gold & 130 & 25.6 \\
+\rowcolor{mygray}
+Steel/Iron & 450 & 25.0 \\
+Lead & 130 & 26.8 \\
+\rowcolor{mygray}
+Mercury & 140 & 28.0 \\
+Water & 4190 & 75.4 \\
+\rowcolor{mygray}
+Ice ($-$10 \textcelsius) & 2100 & 38 \\
+\bottomrule
+\end{tabular}
+
+\vspace{8ex} %
+\section*{SPECIFIC HEATS (20 \textcelsius\ AND 1 ATM)}
+\begin{tabular}{>{\columncolor{mypink}\sf }lll@{}}
+\toprule
+\rowcolor{white}
+& \multicolumn{2}{c}{\bf Specific Heats} \\
+\cmidrule{2-3}
+\rowcolor{white}
+& $c$ (J/kg$\cdot$K) & $C$ (J/mol$\cdot$K) \\
+\midrule
+Aluminum & 900 & 24.3 \\
+Copper & 385 & 24.4 \\
+Gold & 130 & 25.6 \\
+Steel/Iron & 450 & 25.0 \\
+Lead & 130 & 26.8 \\
+Mercury & 140 & 28.0 \\
+Water & 4190 & 75.4 \\
+Ice ($-$10 \textcelsius) & 2100 & 38 \\
+\bottomrule
+\end{tabular}
+
+
+\section*{SPECIFIC HEATS (20 \textcelsius\ AND 1 ATM)}
+\fboxsep=12pt
+\colorbox{mypink}{
+\begin{tabular}{@{}>{\sf }lll@{}}
+\toprule
+& \multicolumn{2}{c}{\bf Specific Heats} \\
+\cmidrule{2-3}
+& $c$ (J/kg$\cdot$K) & $C$ (J/mol$\cdot$K) \\
+\midrule
+Aluminum & 900 & 24.3 \\
+Copper & 385 & 24.4 \\
+Gold & 130 & 25.6 \\
+Steel/Iron & 450 & 25.0 \\
+Lead & 130 & 26.8 \\
+Mercury & 140 & 28.0 \\
+Water & 4190 & 75.4 \\
+Ice ($-$10 \textcelsius) & 2100 & 38 \\
+\bottomrule
+\end{tabular}}
+
+\vspace{8ex} %
+\section*{SPECIFIC HEATS (20 \textcelsius\ AND 1 ATM)}
+\begin{tabular}{@{}>{\sf }lll@{}}
+\toprule
+& \multicolumn{2}{c}{\bf Specific Heats} \\
+\cmidrule{2-3}
+& $c$ (J/kg$\cdot$K) & $C$ (J/mol$\cdot$K) \\
+\midrule
+Aluminum & 900 & 24.3 \\
+Copper & 385 & 24.4 \\
+Gold & 130 & 25.6 \\
+Steel/Iron & 450 & 25.0 \\
+Lead & 130 & 26.8 \\
+Mercury & 140 & 28.0 \\
+Water & \multicolumn{1}{>{\columncolor{mycyan}}l}{4190} & 75.4 \\
+Ice ($-$10 \textcelsius) & 2100 & 38 \\
+\bottomrule
+\end{tabular}
+
+\setlength{\extrarowheight}{2mm}
+\begin{tabular}{|l|c|c|c|c|c|c|c|}
+\hline
+Sydney & OG4G &Thu Oct 10 &Mon Oct 21 or 28 &11 or 18 days &999\\
+\rowcolor[gray]{0.5}
+& &Thu Oct 17 &Mon Oct 21 or 28 & 4 or 11 days &999\\
+&OG7A &Sun Oct 13 &Mon Oct 21 or 28 & 8 or 15 days &999\\
+\rowcolor[gray]{0.5}
+& &Sun Oct 20 &Mon Oct 28 & 8 days &999\\
+\hline
+\end{tabular}
+
+\setlength{\extrarowheight}{2mm}
+\setlength{\tabcolsep}{2mm}
+% \begin{tabular}{|l|
+% \>{\columncolor{yellow}}c|c|>{\columncolor{yellow}}c|c|
+% \>{\columncolor{red}\bfseries}c<{\textsc{GBP}}|}
+% \hline
+% \multicolumn{3}{>{\columncolor{red}}l}{\color{white}\textsf{LONDON}}
+% &\multicolumn{3}{>{\columncolor{red}}r}{\color{white}\textsf{Price}}
+% \\[1pt]
+% \hline
+% Sydney & OG4G &Thu Oct 10 &Mon Oct 21 or 28 &11 or 18 days &999\\
+% & &Thu Oct 17 &Mon Oct 21 or 28 & 4 or 11 days &999\\
+% & OG7A &Sun Oct 13 &Mon Oct 21 or 28 & 8 or 15 days &999\\
+% & &Sun Oct 20 &Mon Oct 28 & 8 days &999\\
+% \hline
+% \end{tabular}
+
+\setlength{\arrayrulewidth}{2pt}
+\arrayrulecolor{green}
+\begin{tabular}{|l|c|r|}
+\arrayrulecolor{black}\hline
+United Kingdom & London & Thames\\
+\arrayrulecolor{blue}\hline
+France & Paris & Seine \\
+\arrayrulecolor{black}\cline{1-1}
+\arrayrulecolor{red}\cline{2-3}
+Russia & Moscow & Moskva \\ \hline
+\end{tabular}
+\end{document}

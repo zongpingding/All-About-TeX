@@ -1,0 +1,7 @@
+-q
+-dNOPAUSE
+-sDEVICE=pbmraw
+-sOUTPUTFILE=tmpps1.pbm
+-r600x600
+tmp$$.ps
+quit.ps

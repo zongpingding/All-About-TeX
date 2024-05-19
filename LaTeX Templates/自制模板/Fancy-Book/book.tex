@@ -1,0 +1,69 @@
+\PassOptionsToPackage{quiet}{fontspec}
+\documentclass[zihao=-4, twoside]{ctexbook}
+\usepackage{stys/Fancybook}
+
+
+
+\begin{document}
+\title{书籍标题}
+\subtitle{副标题}
+\edition{版本号}
+\bookseries{书籍系列}
+\author{作者}
+\pressname{Springer} %出版社名称
+\presslogo{figures/Springer-logo.png} %出版社徽标
+\makecover
+\tableofcontents
+\newpage
+\foottheme{数学历史漫谈}
+\footimage{figures/newton.jpg}
+\foottext{爱情既是友谊的代名词，又是我们为共同的事业而奋斗的可靠保证，爱情是人生的良伴，你和心爱的女子同床共眠是因为共同的理想把两颗心紧紧系在一起。\hfill ------ 法拉第}
+\chapter{模板命令介绍}
+
+\newpage
+\foottheme{数学历史漫谈}  % 页脚主题
+\footimage{figures/faraday.jpg} %页脚图片
+\foottext{爱情既是友谊的代名词，又是我们为共同的事业而奋斗的可靠保证，爱情是人生的良伴.\hfill ------ 爱因斯坦} %页脚文字
+\section{标题}
+标题默认居中，subsection几乎不变。
+
+
+
+\subsection{数学环境测试}
+align环境
+\begin{align}
+  \sum_{i=1}^{+\infty}{\frac{1}{i^2}} = \frac{\pi^2}{6}
+\end{align}
+
+\subsection{练习}
+\exercise[\bccrayon]{练习应用} % 练习标题
+
+这个模板还定义了解答环境，相关的使用如下：
+
+\begin{verbatim}
+  \begin{solution}
+    这里是解答，
+    This is the Solution
+  \end{solution}
+\end{verbatim}
+
+\begin{solution}
+  这里是解答，This is the Solution:
+
+  \[
+    \forall x \in \mathcal{R}, \Rightarrow x \in \mathcal{C}  
+  \]
+\end{solution}
+
+
+\newpage
+\section{习题编写}
+\foottheme{第二页}
+\footimage{figures/newton.jpg}
+\foottext{这里是第二页}
+
+\examsection
+
+examsection小节用于编写习题，具体的效果还是比较理想的
+
+\end{document}

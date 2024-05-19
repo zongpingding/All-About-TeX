@@ -1,0 +1,16 @@
+import geoespace;
+currentprojection=orthographic(5,4,2);
+triple A,B,C,D,E;
+size(6cm,0);
+A=(0,0,0);
+triple[] p=pave(A,4,2,3);
+trace();
+nomme("$A$",A,ouest,blue);
+label("0",p[0],sud);
+label("1",p[1],nord);
+label("2",p[2],nord);
+label("3",p[3],sud);
+label("4",p[4],sud);
+label("5",p[5],nord);
+label("6",p[6],nord);
+label("7",p[7],sud);

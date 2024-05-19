@@ -1,0 +1,16 @@
+\documentclass[tikz]{standalone}
+
+\usepackage{mathpazo}
+\usepackage{tkz-fct}
+
+\begin{document}
+
+\begin{tikzpicture}[>=stealth']
+    \tkzInit[xmin=-20,xmax=30,
+             ymin=-350,ymax=50,
+             xstep=10,ystep=100]
+    \tkzAxeXY
+    \tkzFct[domain=-12:26,color=magenta,thick]{14*\x-\x**2}
+\end{tikzpicture}
+
+\end{document}

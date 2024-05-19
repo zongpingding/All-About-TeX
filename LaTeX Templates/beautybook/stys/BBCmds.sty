@@ -1,0 +1,330 @@
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+\ProvidesPackage{stys/BBCmds}[2023/04/29]
+\usepackage{rotating}
+\tikzset{>=Stealth}
+\setlist{nosep} % 取消所有列表默认距离
+
+
+
+
+%%%%%%%%        浮动环境设置       %%%%%%%%%%
+% 默认情况下, \LaTeX{} 要求每页的文字至少占据 20%,否则该页就只单独放置一个浮动环境,
+% 而这通常不是我们想要的, 我们将这个要求降低到 5%.
+\renewcommand*{\textfraction}{0.05}
+% 有时如果多个浮动环境连续放在一起,
+% 会将它们分在几个不同页,即使它们可在同一页放
+% 得下. 我们可以通过修改 |\topfraction| 和 |\bottomfraction| 分别设置顶端和底端的浮
+% 动环境的最大比例.
+\renewcommand*{\topfraction}{0.9}
+\renewcommand*{\bottomfraction}{0.8}
+% 有时\LaTeX{}会把一个浮动环境单独放在一页,
+% 我们要求这个环境至少要占据 85% 才能单独放在一页.
+% 注意:  |\floatpagefraction| 的数值必须小于 |\topfraction|.
+\renewcommand*{\floatpagefraction}{0.85}
+
+
+
+
+%%%%%%%%%%%%    关于图片 graphicx       %%%%%%%%%%
+% 如果图片没有指定后缀, 依次按下列顺序搜索
+\DeclareGraphicsExtensions{.pdf,.eps,.jpg,.png}
+% 设置图表搜索路径, 可以给图表文件夹取如下名字
+\graphicspath{{Inner_Pics/}{figure/}{pictures/}{picture/}{pic/}{pics/}{image/}{images/}}
+
+
+
+
+%%%%%%%%%%      字体设置        %%%%%%%%%%
+%% 如果没有安装这个包就把这个注释掉
+\usepackage[lite,subscriptcorrection,slantedGreek,nofontinfo]{mtpro2}
+\usepackage[physics]{stys/physicx}
+\usepackage{stys/Symbols}
+\usepackage{amsfonts}
+\DeclareFontFamily{U}{nxlmi}{}
+\DeclareFontSubstitution{U}{nxlmi}{m}{it}
+\DeclareFontShape{U}{nxlmi}{m}{it}{%
+    <-6.3>    nxlmi05
+    <6.3-8.6> nxlmi07
+    <8.6->    nxlmi0
+}{}
+\DeclareFontShape{U}{nxlmi}{b}{it}{%
+    <-6.3>    nxlbmi05
+    <6.3-8.6> nxlbmi07
+    <8.6->    nxlbmi0
+}{}
+% 重新声明偏导数符号
+\renewcommand{\partial}{{\text{\usefont{U}{nxlmi}{m}{it}\symbol{64}}\mspace{1mu}}}
+
+
+
+
+%%%%%%%%%%      一个introduction环境       %%%%%%%%%%
+\newenvironment{Introduction}{%
+\thispagestyle{empty}
+\begin{titlepage}
+\thispagestyle{empty}
+    \begin{center}
+    %% Print the bookseries
+    {\makeatletter
+    \ifdefvoid{\@bookseries}{}{\bigskip\normalfont\fontsize{20}{20}\selectfont\@bookseries}
+    \makeatother}
+
+        \bigskip
+        \bigskip
+
+    %% Print the title
+    {\makeatletter
+    \fontsize{35}{35}\rmfamily\bfseries\selectfont\@title
+    \makeatother}
+    
+    \bigskip
+    \bigskip
+    
+    \bigskip
+    \bigskip
+    \bigskip
+
+    %% Print the name of the author
+    {\makeatletter
+    \fontsize{25}{25}\rmfamily\selectfont\@author
+    \makeatother}
+    
+    \bigskip
+    \bigskip
+
+    \vfill
+    
+    \bigskip
+    \bigskip
+    
+    {\makeatletter
+    \fontsize{25}{25}\rmfamily\selectfont\@pressname
+    \makeatother}
+    \end{center}
+    
+    \end{titlepage}
+    % \let\cleardoublepage\clearpage
+
+    \thispagestyle{empty}
+    \begin{center}
+        {\fontsize{20}{20}\rmfamily\selectfont    内\hspace{1em}容\hspace{1em}简\hspace{1em}介}\\ 
+        \bigskip
+}{\end{center}}
+
+
+
+
+
+%%%%%%%%%%     数学常用的定理环境      %%%%%%%%%%
+\mynewtheorem{
+    defi={\textbf{定义}}[section]{interior style={left color=ReD!8,right color=ReD!5!CyaN!50}, borderline west={1.5mm}{0mm}{ReD}},
+    thm={\textbf{定理}}[section]{interior style={left color=CyaN!80!black!20,right color=CyaN!80!black!15!CyaN!50}, borderline west={1.5mm}{0mm}{CyaN!80!black}},
+    lem={\textbf{引理}}[section]{interior style={left color=BluE!8,right color=BluE!5!CyaN!50}, borderline west={1.5mm}{0mm}{BluE}},
+    prop={\textbf{命题}}[section]{interior style={left color=OrangE!8,right color=OrangE!5!CyaN!50}, borderline west={1.5mm}{0mm}{OrangE}},
+    exam={\textbf{题}}[chapter]{interior style={left color=DarkGreen!8,right color=DarkGreen!5!CyaN!50}, borderline west={1.5mm}{0mm}{DarkGreen}},
+    cor={\textbf{推论}}[chapter]{interior style={left color=violet!8,right color=violet!5!CyaN!50}, borderline west={1.5mm}{0mm}{violet}},
+}
+\newtheorem*{remark}{\textbf{注}}
+
+%% 用户接口区
+\definecolor{examback}{HTML}{e3e6e8}
+\makeatletter
+\mynewtcbtheorem{
+    % 这个 theorem 是环境名
+    theorem={
+        counter=tcbthm, 
+        the counter=\thesection.\arabic{tcbthm}, 
+        name=定理, % 它保存到 \theorem@name 里
+        thmcolor=purple5,
+        autoref name=\bfseries 定理, 
+        style={
+        arc=3pt,breakable,enhanced,interior style={top color=purple5!5 ,middle color=purple5!1!nuanbai, bottom color=nuanbai},boxrule=0pt,top=8mm,
+        fuzzy shadow={-0.6mm}{0.6mm}{0mm}{0.3mm}{white!50!gray},% 上
+        fuzzy shadow={0.6mm}{-0.6mm}{0mm}{0.3mm}{fill=white!40!gray},%下
+        opacityframe=0, opacityback=0.98,
+        fontupper=\itshape, step={tcbthm},
+        before pre=\smallskip, after app=\smallskip,
+        overlay unbroken=\my@theorem@overlay@unbroken{\theorem@name\ \thetcbthm}{\theorem@thmcolor},
+        overlay first=\my@theorem@overlay@first{\theorem@name\ \thetcbthm}{\theorem@thmcolor},
+        overlay last=\my@theorem@overlay@last{\theorem@thmcolor},
+        }
+    },
+    proposition={
+        counter=tcbprop, 
+        the counter=\thesection.\arabic{tcbprop}, 
+        autoref name=\bfseries 命题, 
+        style={
+        arc=3pt,breakable,enhanced,interior style={top color=DeepPink!5 ,middle color=DeepPink!1!nuanbai, bottom color=nuanbai},boxrule=0pt,top=8mm,
+        fuzzy shadow={-0.6mm}{0.6mm}{0mm}{0.3mm}{white!50!gray},% 上
+        fuzzy shadow={0.6mm}{-0.6mm}{0mm}{0.3mm}{fill=white!40!gray},%下
+        opacityframe=0, opacityback=0.98,
+        fontupper=\itshape, step={tcbprop},
+        before pre=\smallskip, after app=\smallskip,
+        overlay unbroken=\my@theorem@overlay@unbroken{命题\ \thetcbprop}{DeepPink},
+        overlay first=\my@theorem@overlay@first{命题\ \thetcbprop}{DeepPink},
+        overlay last=\my@theorem@overlay@last{DeepPink},
+        }
+    },
+    definition={
+        counter=tcbdefi, 
+        the counter=\thesection.\arabic{tcbdefi}, 
+        autoref name=\bfseries 定义, 
+        style={
+        arc=3pt,breakable,enhanced,interior style={top color=紫棠!5 ,middle color=紫棠!1!nuanbai, bottom color=nuanbai},boxrule=0pt,top=8mm,
+        fuzzy shadow={-0.6mm}{0.6mm}{0mm}{0.3mm}{white!50!gray},% 上
+        fuzzy shadow={0.6mm}{-0.6mm}{0mm}{0.3mm}{fill=white!40!gray},%下
+        opacityframe=0, opacityback=0.98,
+        fontupper=\itshape, step={tcbdefi},
+        before pre=\smallskip, after app=\smallskip,
+        overlay unbroken=\my@theorem@overlay@unbroken{定义\ \thetcbdefi}{紫棠},
+        overlay first=\my@theorem@overlay@first{定义\ \thetcbdefi}{紫棠},
+        overlay last=\my@theorem@overlay@last{紫棠},
+        }
+    },
+    lemma={
+        counter=tcblem,
+        the counter=\thesection.\arabic{tcblem},
+        name=引理, 
+        lemcolor=靛蓝, 
+        autoref name=\bfseries 引理,
+        style={
+        arc=0mm,breakable,enhanced,interior style={top color=靛蓝!5 ,middle color=靛蓝!1!nuanbai, bottom color=nuanbai},arc=3pt,boxrule=0pt,top=7mm,bottom=5mm,
+        fuzzy shadow={-0.6mm}{0.6mm}{0mm}{0.3mm}{white!50!gray},% 上
+        fuzzy shadow={0.6mm}{-0.6mm}{0mm}{0.3mm}{fill=white!40!gray},%下
+        opacityframe=0, opacityback=0.98,
+        fontupper=\normalsize,step={tcblem},
+        before pre=\smallskip, after app=\smallskip,
+        overlay unbroken=\my@lemma@overlay@unbroken{\lemma@name\ \thetcblem}{\lemma@lemcolor},
+        overlay first=\my@lemma@overlay@first{\lemma@name\ \thetcblem}{\lemma@lemcolor},
+        overlay last=\my@lemma@overlay@last{\lemma@lemcolor},
+        }
+    },
+    corollary={
+        counter=tcbcor,
+        the counter=\thesection.\arabic{tcbcor},
+        autoref name=\bfseries 推论,
+        style={
+        arc=0mm,breakable,enhanced,interior style={top color=茶色!5 ,middle color=茶色!1!nuanbai, bottom color=nuanbai},arc=3pt,boxrule=0pt,top=7mm,bottom=5mm,
+        fuzzy shadow={-0.6mm}{0.6mm}{0mm}{0.3mm}{white!50!gray},% 上
+        fuzzy shadow={0.6mm}{-0.6mm}{0mm}{0.3mm}{fill=white!40!gray},%下
+        opacityframe=0, opacityback=0.98,
+        fontupper=\normalsize,step={tcbcor},
+        before pre=\smallskip, after app=\smallskip,
+        overlay unbroken=\my@lemma@overlay@unbroken{推论\ \thetcbcor}{茶色},
+        overlay first=\my@lemma@overlay@first{推论\ \thetcbcor}{茶色},
+        overlay last=\my@lemma@overlay@last{茶色},
+        }
+    },
+    example={
+        counter=tcbexam,
+        the counter=\thesection.\arabic{tcbexam},
+        autoref name=\bfseries 例题,
+        style={
+        arc=0mm,breakable,enhanced,interior style={top color=黛绿!5 ,middle color=黛绿!1!nuanbai, bottom color=nuanbai},arc=3pt,boxrule=0pt,top=7mm,bottom=5mm,
+        fuzzy shadow={-0.6mm}{0.6mm}{0mm}{0.3mm}{white!50!gray},% 上
+        fuzzy shadow={0.6mm}{-0.6mm}{0mm}{0.3mm}{fill=white!40!gray},%下
+        opacityframe=0, opacityback=0.98,
+        fontupper=\normalsize,step={tcbexam},
+        before pre=\smallskip, after app=\smallskip,
+        overlay unbroken=\my@lemma@overlay@unbroken{例题\ \thetcbexam}{黛绿},
+        overlay first=\my@lemma@overlay@first{例题\ \thetcbexam}{黛绿},
+        overlay last=\my@lemma@overlay@last{黛绿},
+        }
+    },
+}
+\makeatother
+
+%% 一个attention 环境
+\newtcolorbox{attention}[2][]{%
+    enhanced,
+    before skip=2mm,after skip=2mm,
+    colback=black!5,colframe=black!50,boxrule=0.2mm,
+    attach boxed title to top left={xshift=1cm,yshift*=1mm-\tcboxedtitleheight},
+    varwidth boxed title*=-3cm,
+    boxed title style={frame code={
+        \path[fill=tcbcolback!30!black]
+            ([yshift=-1mm,xshift=-1mm]frame.north west)
+            arc[start angle=0,end angle=180,radius=1mm]
+            ([yshift=-1mm,xshift=1mm]frame.north east)
+            arc[start angle=180,end angle=0,radius=1mm];
+        \path[left color=tcbcolback!60!black,right color=tcbcolback!60!black,
+              middle color=tcbcolback!80!black]
+            ([xshift=-2mm]frame.north west) -- ([xshift=2mm]frame.north east)
+            [rounded corners=1mm]-- ([xshift=1mm,yshift=-1mm]frame.north east)
+            -- (frame.south east) -- (frame.south west)
+            -- ([xshift=-1mm,yshift=-1mm]frame.north west)
+            [sharp corners]-- cycle;
+    },interior engine=empty},
+    fonttitle=\bfseries,
+    title={#2},#1
+}
+
+\usepackage{lipsum}
+% \usetikzlibrary{fitting}
+\tcbuselibrary{fitting}
+\newtcboxfit{\sptab}[1]{%
+    blanker,
+    width=4cm,height=7cm,top=4pt,
+    watermark text=#1
+}
+
+%%% 一个很有轮廓的colorbox %%%
+\tcbuselibrary{vignette}
+
+
+%% 一个波浪线盒子
+% \usepackage{lipsum,multicol}
+\usetikzlibrary{decorations.pathmorphing}
+\tcbuselibrary{skins}
+\newtcolorbox{simbox}[1][]{%
+    tile,
+    colback=green!7,coltitle=blue!50!black,colbacktitle=blue!5,
+    center title,
+    toprule=1.25mm,bottomrule=1.25mm,
+    extras unbroken and first={
+        borderline north={0.25mm}{0.5mm}{blue,
+        decoration={zigzag,amplitude=0.5mm},decorate}
+    },
+    extras unbroken and last={%
+        borderline south={0.25mm}{0.5mm}{blue,
+        decoration={zigzag,amplitude=0.5mm},decorate}
+    },
+    #1
+}
+
+%% 一个警告盒子
+\newtcolorbox{warning}[1][]{%
+    enhanced,
+    before skip=2mm, after skip=3mm,
+    boxrule=0.4pt,left=5mm, right=2mm,top=1mm,bottom=1mm,
+    colback=yellow!50, colframe=yellow!20!black,
+    sharp corners,rounded corners=southeast,arc is angular,arc=3mm,
+    underlay={%
+        \path[fill=tcbcolback!80!black] ([yshift=3mm]interior.south east)--++(-0.4,-0.1)--++(0.1,-0.2);
+        \path[draw=tcbcolframe,shorten <=-0.05mm,shorten >=-0.05mm] ([yshift=3mm]interior.south east)--++(-0.4,-0.1)--++(0.1,-0.2);
+        \path[fill=yellow!50!black,draw=none] (interior.south west) rectangle node[white]{\Huge\bfseries !} ([xshift=4mm]interior.north west);
+    },
+    drop fuzzy shadow,#1
+}
+
+
+
+%%%%%%%%%%      参考文献,索引和封底页打印       %%%%%%%%%%
+\newcommand{\refandindex}[2][]{
+    % 打印参考文献
+    \normalem
+    \printbibliography[
+        heading=bibintoc,
+        title={参考文献}
+    ]
+    % 打印名词索引
+    \printindex
+    \thispagestyle{empty}           % 用于取消索引页的左右书签
+    % 设置封底图片
+    \bottomimage{Inner_Pics/#2}
+    % 封底上添加内容
+    \summary{%
+        #1      %  用于在本书的封底输入本书的一点总结
+    }
+    \makebottomcover
+}

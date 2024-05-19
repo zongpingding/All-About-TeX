@@ -1,0 +1,3 @@
+支持导出： svg， png
+
+命令格式： mmdc -i <input_file_name>.[mmd] -o <Export_file_name>.[png, svg]

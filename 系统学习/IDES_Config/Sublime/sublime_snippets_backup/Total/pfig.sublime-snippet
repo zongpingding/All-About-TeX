@@ -1,8 +1,0 @@
-<snippet>
-	<content><![CDATA[
-Fig.~\ref{fig:$1}
-]]></content>
-	<tabTrigger>pfig</tabTrigger>
-	<scope>text.tex.latex</scope>
-</snippet>
-

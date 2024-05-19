@@ -1,0 +1,275 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND THEMES
+%----------------------------------------------------------------------------------------
+\documentclass[14pt]{beamer}
+\setbeamertemplate{bibliography item}[text]
+\mode<presentation> 
+{
+\usetheme{Madrid}
+%\usefonttheme{structuresmallcapsserif} 
+%\usetheme{Berlin}
+%\usecolortheme{beaver}
+}
+\usepackage{graphicx} % Allows including images
+
+\logo{\includegraphics[height=0.5cm]{logo.png}}
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+\title[About Beamer] %optional
+{About the Beamer class in presentation making}
+
+\subtitle{A short story}
+
+\author[Arthur, Doe] % (optional, for multiple authors)
+{A.~B.~Arthur\inst{1} \and J.~Doe\inst{2}}
+
+\institute[VFU] % (optional)
+{
+  \inst{1}%
+  Faculty of Physics\\
+  Very Famous University
+  \and
+  \inst{2}%
+  Faculty of Chemistry\\
+  Very Famous University
+}
+
+\date[VLC 2020] % (optional)
+{Very Large Conference, April 2013}
+
+
+
+%----------------------------------------------------------------------------------------
+%	Highlight the title of the current section
+%----------------------------------------------------------------------------------------
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+
+
+\begin{document}
+
+% insert title page---------------------------
+\frame{\titlepage}
+
+
+%insert contents------------------------------
+\begin{frame}
+\frametitle{Table of Contents}
+
+\tableofcontents
+
+\end{frame}
+
+
+
+\section{Introduction}
+
+% insert a sample frame without animation--------------------------------
+\begin{frame}
+\frametitle{Sample frame title without animation}
+
+This is a text in second frame. For the sake of showing an example.
+
+\begin{itemize}
+ \item Text visible on slide 1
+ \item Text visible on slide 2
+ \item Text visible on slide 3 
+ \item Text visible on slide 4
+\end{itemize}
+
+\end{frame}
+
+
+\section{Related work}
+
+% insert a sample frame with animation 1 ----------------------------------
+\begin{frame}
+\frametitle{Sample frame title with animation}
+This is a text in second frame. For the sake of showing an example.
+
+\begin{itemize}
+ \item<1-> Text visible on slide 1
+ \item<2-> Text visible on slide 2
+ \item<3-> Text visible on slide 3 % pay attention to this line, you can omit the content by omit the '-'
+ \item<4-> Text visible on slide 4
+\end{itemize}
+
+\end{frame}
+
+
+
+% insert a sample frame with animation 2 -----------------------------------
+\begin{frame}
+\frametitle{Sample frame title with animation}
+ In this slide \pause
+
+ the text will be partially visible \pause
+
+ And finally everything will be there
+\end{frame}
+
+\section{Proposed method}
+% insert a sample frame with highlight -----------------------------------
+\begin{frame}
+\frametitle{Sample frame title}
+
+\colorbox{orange}{highlight}
+
+In this slide, some \textbf{important} text will be
+\alert{highlighted} because it's important.
+Please, don't \textcolor{green}{abuse} it. 
+
+\begin{block}{Remark}
+Sample text
+\end{block}
+
+\begin{alertblock}{Important theorem}
+Sample text in red box
+\end{alertblock}
+
+\begin{examples}
+Sample text in green box. The title of the block is ``Examples".
+\end{examples}
+
+\end{frame}
+
+
+\section{Experiments}
+% insert a sample frame with two columns --------------------------------
+
+\begin{frame}
+\frametitle{Two-column slide}
+
+\begin{columns}
+
+\column{0.3\textwidth}
+This is a text in first column.
+$$E=mc^2$$
+\begin{itemize}
+\item First item
+\item Second item
+\end{itemize}
+
+\column{0.3\textwidth}
+This text will be in the second column
+and on a second tought this is a nice looking
+layout in some cases.
+
+\column{0.3\textwidth}
+This text will be in the second column
+and on a second tought this is a nice looking
+layout in some cases.
+
+\end{columns}
+\end{frame}
+
+\section{Conclusion}
+
+% insert a sample frame with formula -----------------------------------
+\begin{frame}
+\frametitle{Sample frame with formula}
+
+In this slide, we insert an equation (\ref{E1}), which is the definition of $y$.
+
+\begin{equation}
+\label{E1}
+y=
+\begin{cases}
+\frac{1}{f(x)},\ f(x) \neq 0 \\
+f(x), \ f(x)=0
+\end{cases}
+\end{equation}
+
+\end{frame}
+
+
+
+% insert a sample frame with a figure -----------------------------------
+\begin{frame}
+\frametitle{Dataset}
+
+The dataset information is shown in Fig. \ref{dataset}.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{dataset.png}
+\caption{A picture downloaded from the Internet} 
+\label{dataset}
+\end{figure}
+
+\end{frame}
+
+
+% insert a sample frame with a table -----------------------------------
+\begin{frame}
+\frametitle{A sample frame with a table}
+
+The results are shown in Table \ref{T1}.
+
+\begin{table}[ht]
+\caption{A sample table}
+\label{T1}
+\centering
+\begin{tabular}{p{1.5cm}|p{1.5cm}|p{1.5cm}}
+\hline
+Metrics   &   M1 &	M2	\\
+\hline
+Accuracy  &  87\% &	88\%	\\
+Precision &  91\% &	90\%	\\
+Recall	  & 75\% &	77\%	\\
+\hline
+\end{tabular}
+\end{table}
+
+\end{frame}
+
+
+
+% insert a sample frame with citation --------------------------------
+\begin{frame}
+\frametitle{Literature review}
+You can cite a paper like this \cite{team2015common,eiram2013cvssv2,eiram2013}.
+\end{frame}
+
+
+% insert a reference frame before the 'thank you' frame ----------------------
+\begin{frame}
+\frametitle{References}
+
+\begin{thebibliography}{99} % Beamer does not support BibTeX so references must be inserted manually as below
+
+\bibitem{team2015common}
+Team, C.: Common vulnerability scoring system v3. 0: Specification document.
+  First. org  (2015)
+  
+\bibitem{eiram2013cvssv2}
+Eiram, C., Martin, B.: The cvssv2 shortcomings, faults, and failures
+  formulation. In: Technical report, Forum of Incident Response and Security
+  Teams (FIRST) (2013)
+  
+\bibitem{eiram2013}
+Eiram, C., Martin, B.: The cvssv2 shortcomings, faults, and failures
+  formulation. (2013)
+  
+
+\end{thebibliography}
+\end{frame}
+
+% Insert a thank your frame ------------------------------------------------
+\begin{frame}
+\Huge{\centerline{Thank you!}}
+\end{frame}
+
+% https://deic-web.uab.cat/~iblanes/beamer_gallery/index.html
+
+% https://www.latexstudio.net/
+
+\end{document}

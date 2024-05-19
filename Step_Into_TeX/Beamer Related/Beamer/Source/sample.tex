@@ -1,0 +1,42 @@
+% sample.tex
+\documentclass{beamer}
+\usetheme{default}
+\begin{document}
+
+\begin{frame}{A sample slide}
+
+\begin{theorem}[The Poincar\'e inequality]
+Suppose $\Omega\in\mathbf{R}^n$ is a bounded domain with smooth
+boundary.  Then there exists a $\lambda>0$, depending only on
+$\Omega$, such that for any function $f$ in the Sobolev space
+$H^1_0(\Omega)$ we have:
+
+\[
+  \int_\Omega |\nabla u|^2 \,dx \ge 
+  \lambda \int_\Omega |u|^2 \,dx .
+\]
+\end{theorem}
+
+Here is what \emph{itemized} and \emph{enumerated} lists look like:
+
+\begin{columns}
+  \begin{column}{0.45\textwidth}
+  \begin{itemize}
+    \item itemized item 1
+    \item itemized item 2
+    \item itemized item 3
+  \end{itemize}
+  \end{column}
+
+  \begin{column}{0.45\textwidth}
+  \begin{enumerate}
+    \item enumerated item 1
+    \item enumerated item 2
+    \item enumerated item 3
+  \end{enumerate}
+  \end{column}
+\end{columns}
+
+\end{frame}
+
+\end{document}

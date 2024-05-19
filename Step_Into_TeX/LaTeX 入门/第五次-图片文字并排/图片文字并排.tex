@@ -1,0 +1,45 @@
+\documentclass[fontset=windows]{article}
+\usepackage{ctex}
+\usepackage{wrapfig}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{mathtools}
+
+
+\begin{document}
+%	『h』当前位置。将图形放置在正文文本中给出该图形环境的地方。如果本页所剩的页面不够，这一参数将不起作用。
+%	『t』顶部。将图形放置在页面的顶部。
+%	『b』底部。将图形放置在页面的底部。
+%	『p』浮动页。将图形放置在一只允许有浮动对象的页面上。
+%	 第一种方式	
+	\begin{wrapfigure}{l}{0pt}
+		\centering
+		\includegraphics[scale=0.2]{C:/数学建模/微分方程建模/源码【微分方程建模】/Logistic模型.pdf}
+		\caption{左排的图片}
+	\end{wrapfigure}
+	Wikipedia began as a related project for Nupedia.Nupedia was a free English-language online encyclopedia project.
+	Nupedia's articles were written and owned by Bomis, Inc which was a web portal company. 
+	The main people of the company were Jimmy Wales, the guy 
+	% 第二种方式
+	
+	\vspace{8em}
+	\begin{minipage}{0.5\linewidth}
+		Wikipedia began as a related project for Nupedia. Nupedia was a free English-language online encyclopedia project.
+		Nupedia's articles were written and owned by Bomis, Inc which was a web portal company. 
+		The main people of the company were Jimmy Wales, the guy 
+	\end{minipage}
+	\hfill % \hfill 可以自动填充一定长度的空白	% 两个minipage之间不能空行
+	\begin{minipage}{0.5\linewidth}
+		\includegraphics[scale=0.2]{C:/数学建模/微分方程建模/源码【微分方程建模】/Logistic模型.pdf}
+		
+		右排的图片
+	\end{minipage}
+
+	$$\frac{x^2}{\lim_{x=1}^{\sum_{i=1}^{n}{f(\xi_i)}}}$$
+
+
+
+	
+\end{document}
+
+

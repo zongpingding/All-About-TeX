@@ -1,0 +1,31 @@
+\documentclass[12pt]{article}
+\usepackage{textcomp,booktabs}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{colortbl}
+
+
+\begin{document}
+\begin{tabular}{>{\columncolor{red}\sf }lll@{}}
+	Aluminum & 900 & 24.3 \\
+	Copper & 385 & 24.4 \\
+	Gold & 130 & 25.6 \\
+	Steel/Iron & 450 & 25.0 \\
+	Lead & 130 & 26.8 \\
+	Mercury & 140 & 28.0 \\
+	Water & 4190 & 75.4 \\
+	Ice ($-$10 \textcelsius) & 2100 & $a_{nn}$ \\
+\end{tabular}
+
+\vspace{5em}
+$
+\left(
+\begin{tabular}{>{\columncolor{red}}c>{\columncolor{green}}ccc}
+	$a_{11}$ & $a_{12}$ & $\cdots$ & $a_{1n}$ \\
+	$a_{21}$ & $a_{22}$ & $\cdots$ & $a_{2n}$ \\
+	$\vdots$ & $\vdots$ & $\vdots$ & $\vdots$  \\
+	$a_{n1}$ & $a_{n2}$ & $\cdots$ & $a_{nn}$ 
+\end{tabular}
+\right)
+$
+
+\end{document}

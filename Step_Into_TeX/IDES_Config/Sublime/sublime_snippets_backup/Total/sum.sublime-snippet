@@ -1,0 +1,8 @@
+<snippet>
+	<content><![CDATA[
+\sum_{$1}^{$2}{$3}
+]]></content>
+	<tabTrigger>s</tabTrigger>
+	<scope>text.tex.latex</scope>
+</snippet>
+

@@ -1,0 +1,135 @@
+\documentclass[fontset=windows, 12pt]{ctexart}
+\usepackage{ctex}
+\usepackage[all,pdf]{xy}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{pstricks}
+\usepackage{pst-plot, pst-node}
+\usepackage{pstricks-add}
+
+
+%% 只能够在Overleaf上编译通过。
+%% sublime编译时不报错，但是无法生成pdf
+
+\begin{document}
+	\tableofcontents
+	\section{绘制矩阵}
+	$$
+	\xymatrix{
+		a & b & a+b\\
+		1 & 2 & 3 \\
+	}
+	$$
+
+	\section{绘制箭头}
+	% u d l r-->上下左右
+	$$
+	\xymatrix{
+		a & b\ar[rd] & a+b\\% b指向右下
+		1 & 2 & 3\ar"1,1" % 3指向1.1
+		\ar "1,1";"2,2" % 从1.1指向2.2
+	}
+	$$
+
+	\section{箭头的上下标,间断插入符号(\^, \_, |)}
+	$$
+		\xymatrix{
+			A\ar[r]^{\alpha} & B\ar[d]_{\beta}\\
+			C\ar[ur]|{\Sigma} & D \\
+		}
+	$$
+
+	\section{hole的运用,@1缩小矩阵间距，嵌入行内}
+		$$
+		\xymatrix@1{A\ar[r]|\hole & B}\\
+		$$
+
+		$$
+		\xymatrix{
+				A\ar[rd]|\hole & B \\
+				C\ar[ur] & D \\
+			}
+		$$
+
+	\section{绘制标签}
+	\centering{
+			位置\\
+			（<:起点；>:中点）\\
+			（<<,>>，因子$\in(0,1)$）
+		}
+	$$
+	\xymatrix{
+		A \ar[r]^>>{f} & B\\
+		C \ar[r]_(0.2){\xi_i} & D
+	}
+	$$
+
+	\begin{equation}
+		\begin{gathered}
+			\xymatrix{
+				S \ar[r]^{f_s} \ar[d]_{\lambda} 
+				& T \ar[d]^{\bar\lambda}\\
+				S' \ar[r]_{f_{s'}} & T'\\
+			}	
+		\end{gathered}
+	\end{equation}
+
+	\subsection{@的作用}
+	指定样式：$\backslash$ar@\{\}
+	
+	\section{中文框}
+	$$
+		\xymatrix{
+			*++=[o][F]\txt{猫猫} \ar @{<->}[r] & 
+			*+[F]\txt{狗\\狗}
+			}
+	$$
+	\section{矩阵的旋转}
+	\begin{equation}
+		\begin{gathered}
+			\xymatrix@ru{
+				S \ar[r]^{f_s} \ar[d]_{\lambda} 
+				& T \ar[d]^{\bar\lambda}\\
+				S' \ar[r]_{f_{s'}} & T'\\
+			}	
+		\end{gathered}
+	\end{equation}
+
+	\section{基本的命令}
+	\subsection{直线命令}
+	直线1
+	%\psline(0, 0)(1, 1em)(1.5, 0)
+	直线2
+	\begin{pspicture}(1.5, 1em)
+		\psline(0, 0)(1, 1em)(1.5, 0)
+	\end{pspicture}
+
+	\section{绘制圆命令}
+	\psset{linewidth=0.4pt}
+	\begin{pspicture}(-1.2,-1.2)(1.2,1.2)
+		\psaxes[labels=none,ticks=none]
+		{->}(0,0)(-1.2,-1.2)(1.2,1.2) 	
+		\pscircle[linewidth=0.8pt](0,0){1} 
+	\end{pspicture}
+
+	\section{绘制实战}
+	\psset{linewidth=0.4pt}
+	\begin{pspicture}(-1.2,-1.2)(1.2,1.2)
+		\psaxes[labels=none,ticks=none]{->}(0,0)(-1.2,-1.2)(1.2,1.2) 
+		\pscircle[linewidth=0.8pt](0,0){1}
+		\pswedge[fillstyle=solid,fillcolor=gray,opacity=0.2]
+			(0,0){1}{0}{120}
+		\pswedge[fillstyle=solid,fillcolor=gray,opacity=0.5]
+			(0,0){0.3}{0}{120}
+		\uput[60](0.3;60){$120^\circ$}% 在扇形中间标注角度Apnode (1;120)
+		\pnode(1;120){P}
+		\pnode (P|0,0){PO} 
+		\ncline{-}{P}{PO}				%正弦线
+		\uput [120](P){$P$}
+		\uput [d](PO){$P_0$} 
+	\end{pspicture}
+
+\end{document}
+
+

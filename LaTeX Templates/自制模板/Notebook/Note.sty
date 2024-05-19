@@ -1,0 +1,151 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{Note}
+\PassOptionsToPackage{quiet}{fontspec}
+\RequirePackage{ctex}
+\RequirePackage[a4paper, total={6.5in, 10in}]{geometry}
+\RequirePackage{amsmath}
+\usepackage{sansmath}
+\RequirePackage{tikz, pgfplots}
+\usetikzlibrary{decorations.markings, positioning, decorations.pathreplacing,calligraphy,3d}
+% 使用positioning库可以实现node标签同时多个方向偏移指定
+\pgfplotsset{compat=1.17}
+\RequirePackage{xcolor}
+\RequirePackage{enumerate}
+\RequirePackage{float}
+\RequirePackage{mathrsfs}
+\RequirePackage{amssymb}
+\RequirePackage{booktabs}
+\RequirePackage{tcolorbox}
+\RequirePackage{varwidth}
+\tcbuselibrary{skins}
+\tcbuselibrary{hooks}
+\tcbuselibrary{raster}
+\RequirePackage{framed}
+
+% 自定义定理环境
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proof}{Proof}
+\newtheorem{definition}{Definition}
+
+
+% 一个字体声明
+\newfontfamily{\centaur}[Path=./Fonts/]{Centaur.otf}
+
+
+% 计数器
+\newcounter{chapter}
+\stepcounter{chapter}
+\newcommand{\theDefinition}{\thesector.\arabic{definition}}
+\newcounter{sector}
+\newcounter{subsector}
+
+
+\newcommand{\resetcount}{%
+    \setcounter{theorem}{0}
+    \setcounter{equation}{0}
+    \setcounter{definition}{0}
+    \setcounter{sector}{0}
+    \setcounter{subsector}{0}
+}
+
+% 章节和备注定制
+\let\ss\S     % 因为下面重命名了\S命令,为了保留原来的\S命令,把其复制到\ss命令
+
+% 封面制作
+\renewcommand{\titlepage}[3][]{%
+    \thispagestyle{empty}
+    \begin{center}
+        \includegraphics[width=1\linewidth]{#1}  
+    \end{center}
+    \vfill
+
+    \rule[-5pt]{8pt}{40pt}
+    \hspace*{1.5em}\scale{3.5}{{\sffamily #2}}
+
+    \vspace*{2em}
+    \hfill{\sffamily\color{gray}\huge Author:\;#3}
+    \vspace*{8em}
+
+    \newpage
+    \setcounter{page}{0}
+}
+
+% 章节制作
+\newcommand{\chapter}[1]{%
+    \newpage
+    \resetcount
+    \thispagestyle{empty}
+    \begin{tikzpicture}[overlay, remember picture]
+        \node[anchor=north east, xshift=0cm, yshift=-7cm]
+                            at (current page.north east)
+        {\color{gray} \sffamily \scale{4}{Chapter \Roman{chapter}}\hspace*{3em}};
+        \node[anchor=north east, xshift=0cm, yshift=-11cm]
+                            at (current page.north east)
+        {\color{gray} \sffamily \scale{2.5}{#1}\hspace*{3em}}; 
+    \end{tikzpicture}
+    \stepcounter{chapter}
+    \newpage
+}
+
+% 每一节样式
+\newcommand{\sector}[2][\thesector]{%
+    \newpage%
+    \stepcounter{sector}%
+    {\noindent\bfseries\scale{1.3}{\ss\,#1 #2}}\\%
+    \rule[.7em]{1\linewidth}{2pt}%
+    \setcounter{subsector}{0}%
+}
+% 每一个小节样式
+\newcommand{\subsector}[1]{%
+    \stepcounter{subsector}
+    \vspace*{.3em}%
+    {\noindent\bfseries\thesector.\thesubsector #1}\par%
+    \vspace*{.3em}%
+}
+
+
+\newenvironment{Definition}[1][]%
+    {%   
+        \stepcounter{definition}%
+        \begin{tcolorbox}[%
+            enhanced,
+            arc=3pt,
+            frame hidden,
+            % suppressfootnotes=true,
+            attach boxed title to top left={xshift=0pt, yshift=-1pt},%
+            % tile, title={sharp corners},%
+            title=Definition\;\theDefinition\; #1,
+            boxed title style={arc=1.5pt, frame hidden}%
+        ]%
+        % \sffamily                 % 中，英文字体设置
+        \centaur
+        % \sansmath                 % 数学字体设置
+        % \CJKfamily{zhsong}          % 中文字体设置
+        \fangsong
+    }%
+    {\end{tcolorbox}}
+
+
+
+% 各种箭头
+\newcommand{\lr}{\ensuremath{\longrightarrow}}
+\newcommand{\equ}{\ensuremath{\Longleftrightarrow}\,}
+\newcommand{\sr}{\ensuremath{\longmapsto}}
+\newcommand{\lrr}{\ensuremath{\Longrightarrow}}
+
+
+% 数学字体和符号等
+\newcommand{\remark}{\noindent\ensuremath{\mathbf{Remark}}\hspace*{1em}}
+\newcommand{\emp}[1]{\noindent{\bf #1}}
+\newcommand{\im}[1]{\ensuremath{\displaystyle #1}}
+\newcommand{\dis}{\displaystyle}
+\newcommand{\scale}[2]{\scalebox{#1}[#1]{#2}}
+\newcommand{\C}[1]{\ensuremath{\mathcal{#1}}}
+\renewcommand{\S}[1]{\ensuremath{\mathscr{#1}}}
+\newcommand{\B}[1]{\ensuremath{\mathbb{#1}}}
+\newcommand{\F}[1]{\ensuremath{\mathbf{#1}}}
+\newcommand{\R}[1]{\ensuremath{\mathrm{#1}}}
+\newcommand{\ns}{\ensuremath{\varnothing}}
+\newcommand{\A}{\ensuremath{\forall}}
+

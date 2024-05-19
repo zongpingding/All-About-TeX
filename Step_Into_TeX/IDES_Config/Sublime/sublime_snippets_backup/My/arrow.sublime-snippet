@@ -1,0 +1,18 @@
+<snippet>
+	<content><![CDATA[
+% 1. 短箭头
+\newcommand{\la}{\leftarrow}
+\newcommand{\La}{\Leftarrow}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\Ra}{\Rightarrow}
+
+% 2. 长箭头
+\newcommand{\lla}{\longleftarrow}
+\newcommand{\Lla}{\Longleftarrow}
+\newcommand{\lra}{\Longrightarrow}
+\newcommand{\Lra}{\Longrightarrow}
+]]></content>
+	<tabTrigger>arrow</tabTrigger>
+	<scope>text.tex.latex</scope>
+</snippet>
+

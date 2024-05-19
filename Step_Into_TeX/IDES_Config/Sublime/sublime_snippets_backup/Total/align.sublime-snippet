@@ -1,0 +1,11 @@
+<snippet>
+	<content><![CDATA[
+\begin{align}
+	$1\nonumber \\\\
+	$2\nonumber \\\\
+	$3\nonumber \\\\
+\end{align} 
+]]></content>
+	<tabTrigger>nalg</tabTrigger>
+	<scope>text.tex.latex</scope>
+</snippet>

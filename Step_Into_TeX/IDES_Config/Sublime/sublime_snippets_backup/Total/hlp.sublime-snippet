@@ -1,0 +1,11 @@
+<snippet>
+	<content><![CDATA[
+\hlp{$1}
+]]></content>
+	<tabTrigger>hlp</tabTrigger>
+	<scope>text.tex.latex</scope>
+</snippet>
+<!-- 
+\usepackage{soul, color}
+\newcommand{\hlp}[2][pink]{{\sethlcolor{#1}\hl{#2}}}
+-->

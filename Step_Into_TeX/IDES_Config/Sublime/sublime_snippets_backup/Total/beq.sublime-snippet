@@ -1,0 +1,11 @@
+<snippet>
+	<content><![CDATA[
+\begin{equation}
+$1
+\label{eq:${2:label}}
+\end{equation}
+]]></content>
+	<tabTrigger>beq</tabTrigger>
+	<scope>text.tex.latex</scope>
+</snippet>
+

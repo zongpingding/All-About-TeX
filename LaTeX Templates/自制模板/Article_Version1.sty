@@ -1,0 +1,448 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{Article}
+
+%%%%%%%%%%%%% 相关的宏包引入与初始化 %%%%%%%%%%%%%%%%%
+
+%% 1.默认的页面尺寸，可以注释掉
+\RequirePackage[a4paper, total={6.5in, 10in}]{geometry}
+
+%% 2.常用数学环境和字体
+% 数学环境和字体
+\RequirePackage{lmodern,mathtools,amsmath,amssymb}
+\RequirePackage{pifont}
+% 提供花体英文字母
+\RequirePackage{calligra}
+% 支持中文
+\RequirePackage{ctex}
+% 多行公式
+\RequirePackage{array}
+% 划线效果
+\RequirePackage{cancel}
+
+%% 3.图片，pdf插入相关
+\RequirePackage{float,graphicx}
+\RequirePackage{pdfpages}
+
+%% 4.tikz,pgf绘图的相关设置
+\RequirePackage{tikz,pgfplots}
+\usetikzlibrary{decorations.pathreplacing,calligraphy,3d}
+% tikz填充样式（只能在正文中引用）
+% \tcbuselibrary{theorems}
+% \tcbset{highlight math/.append style={left=0mm,right=0mm,top=0mm,bottom=0mm, colframe=white}}
+\pgfplotsset{compat=1.17}   
+
+%% 5.生成彩色盒子（xcolor必须放在tcolorbox之前）
+\RequirePackage{xcolor}
+\RequirePackage{tcolorbox,framed}
+\RequirePackage{fancybox}
+% 提供一个 adjustwidth 环境
+\RequirePackage[strict]{changepage}
+
+%% 6.自定义命令相关（不能使用）:单独复制到.tex文件中。
+% 提供NewDocumentEnvironment等环境
+\RequirePackage{xparse}
+% 提供 \isempty 命令
+\RequirePackage{xifthen}
+% 使用xargs实现默认参数的选择性更改
+\RequirePackage{xargs}
+
+%% 7.杂：抄录，目录，超链接等    
+\RequirePackage{listings}
+\RequirePackage[nottoc]{tocbibind}
+\RequirePackage[hidelinks]{hyperref}
+%% 防止产生:I found no \citation commands错误
+% \usepackage[backend=bibtex]{biblatex}
+
+
+%% 8.自定义颜色
+% 文本框颜色
+\definecolor{innercolor}{rgb}{0.95,0.95,1} 
+% 边界框颜色
+\definecolor{bordercolor}{RGB}{200, 0, 0} 
+% 常用颜色
+\definecolor{lightblue}{HTML}{6495ED}
+\definecolor{greenshade}{rgb}{0.90,0.99,0.91}   
+\definecolor{redshade}{rgb}{1.00,0.90,0.90}   
+\definecolor{brownshade}{rgb}{0.99,0.97,0.93}  
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% 背景知识 %%%%%%%%%%%%%%%%%%%%%%
+
+%% 1. 环境名首字母大写，对应的命令名小写
+%% 2. 自定义环境或者是命令多个参数时使用{}{}...{}的格式来传递参数,命令内部也用这种形式
+%% 3. LaTeX2e中允许其中一个参数有默认值,但是永远是用#1来引用的.
+%%    调用LaTeX中自定义命令时:默认参数是放在[]内部的,不是{}内部
+
+%% 页面编号
+%% 00. 暂时不可行
+% \setcounter{page}{1}
+% \pagenumbering{arabic}        % 设为阿拉伯数字
+% \pagenumbering{roman}         % 设为小写的罗马数字
+% 另外还有其他的页码编码方式:
+% alph: 小写字母
+% Alph: 大写字母
+% Roman: 大写罗马字母
+
+% 01. 设置计数器
+% \setcounter{page}{0}      % 设置页码从0开始
+
+% 02. 可行                 % 在目录之前用\frontmatter,目录和正文之间用\mainmatter。这样目录用的罗马数字，正文用阿拉伯数字且重新排序。
+% \mainmatter               % 用阿拉伯数字计数
+% \frontmatter              % 使用罗马数字计数
+
+% 03. 行距的设置方法
+% \\  : 一行空白
+% \\[]: 可以加入任意行距的空白
+
+
+%% 仅仅起到检测宏包是否正常的作用
+% 调用宏包时的可选项设置
+\DeclareOption{test}{%
+    \newcommand{\testcmd}{Hello world}
+}
+\ProcessOptions\relax
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 具体的自定义宏内容 %%%%%%%%%%%%%%%%%%%%%%%%
+
+%% 数学环境相关命令
+\newcommand\degree{^\circ}
+
+\newcommand{\Rm}[1]{\mathrm{#1}}
+
+\newcommand{\mathtext}[1]{\kaishu{\mbox{#1}}}
+
+\newcommand{\notice}[1]{
+    \hspace*{2em}\ensuremath{%
+        \textcolor{lightblue}{\cdots \cdots}}
+        \mathtext{\textcolor{lightblue}{#1}}}
+                
+\newcommand{\mycircled}[1]{%
+    \begin{tikzpicture}
+        \node[circle,
+            % fill = cyan!20, 
+            draw=black, 
+            inner sep=1pt] 
+            (node) at (0, -1ex) {\small{#1}};
+    \end{tikzpicture}}
+
+\newenvironment{QuoteEnv}[2][]
+    {\newcommand\Qauthor{#1}\newcommand\Qref{#2}\zihao{-5}\kaishu}
+    {\medskip\begin{flushright}\small ——~\Qauthor\
+    \emph{\Qref}\end{flushright}}
+
+\newenvironment{alg}[1][]
+    {\begin{math}\begin{aligned}{#1}}
+    {\end{aligned}\end{math}}
+
+%% 公式和文字背景色设置
+\newcommand{\bbf}[2]{%
+    \tcbhighmath[colback=#1]{#2}
+    }
+
+%% 注意：这个bbt命令只能够在文本环境中使用
+\newcommand{\bbt}[2]{%
+    \tcbhighmath[colback=#1]{\text{#2}}
+    }
+
+%% 迭代序列的简写
+\newcommand\fn[2][n]{%
+    \ensuremath{%
+        y=#2_1+ \cdots + #2_{#1}
+    }}
+
+%% inline Fumular with display math size
+\newcommand{\im}[1]{$\displaystyle{#1}$}
+
+
+%% 定义一个formal样式环境；#1参数代表内部颜色，#2代表左边竖条颜色
+%% 注意：行末需要把空格注释掉，不然画出来的方框会有空白竖线
+\newenvironment{formal}[2][innercolor]{%
+    \def\FrameCommand{%
+        \hspace{1pt}%
+        % 左侧颜色条细线的宽度
+        {\color{#2}\vrule width 2pt}%
+        % 文本距离左侧颜色条的边距
+        {\color{#1}\vrule width 4pt}%
+        \colorbox{#1}%
+    }%
+    \MakeFramed{\advance\hsize-\width\FrameRestore}%
+    \noindent\hspace{-4.55pt}% disable indenting first paragraph
+    \begin{adjustwidth}{}{7pt}%
+    \vspace{2pt}\vspace{2pt}%
+}
+{%
+    \vspace{2pt}\end{adjustwidth}\endMakeFramed%
+}
+%% 使用样例1:可选参数[]必须放在{}前面
+% \begin{formal}[green!30]{red}
+%     \foo{hello}\\
+%     \foo{Hello}{world}
+% \end{formal}
+
+%% 使用样例2
+% \begin{formal}{blue}
+%     \foo{hello}\\
+%     \foo{Hello}{world}
+% \end{formal}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%% 绘图相关 %%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%% 一. 普通二维函数绘制 %%%%%%%%%%
+%% plot须在tikzpicture环境中使用(设置这个命令主要是结合下面这个环境使用的)
+\newcommand{\plott}[3]
+    {%                
+        \draw[#1, domain=#2] plot(\x, {#3});
+    }
+
+%% 改写
+\NewDocumentCommand{\plot}{O{black, thick}mO{-3:3}}
+    {%   
+        \ifthenelse{\isempty{#1}}
+        {%
+            \draw[black, thick, domain=#3] plot(\x, {#2});
+        }{%
+            \draw[#1, domain=#3] plot(\x, {#2});
+        }             
+    }
+
+%% 加上默认参数项[]会报错
+%% 箭头样式在scope中设置，在draw[]中不起作用
+\newenvironment{Plot}[2]
+	{\begin{tikzpicture}[#1]
+    \begin{scope}[#2]
+        \draw[thick, ->] (-3,0) -- (3,0) node[below]{\(x\)};
+        \draw[thick, ->] (0,-3) -- (0,3) node[left]{\(y\)};        
+        \node at (0,0) [below left]{\(O\)};		
+    \end{scope}}
+	{\end{tikzpicture}}
+%% 使用样例
+% \begin{Plot}{scale=0.8}{>=stealth}
+% 	\plot{blue!40, thick}{-1:4}{\x*\x-2*\x-1}
+% 	\plot{red, thick}{0:pi}{3*sin(\x r)}
+% \end{Plot}
+
+%% 绘制一个标准坐标轴
+%% 注意：这里不能添加默认参数的选项， 会报错
+\newenvironment{TikAxis}[1]
+    {\begin{tikzpicture}[#1]
+        % 1. 标记重要的点
+        \coordinate (O) at (0, 0);
+        \coordinate (ymax) at (0, 6);
+        \coordinate (ymin) at (0, -1.3);
+        \coordinate (xmax) at (6, 0);
+        \coordinate (xmin) at (-1.3, 0);
+
+        % 2. 绘制基本的坐标轴
+        \draw[-stealth, thick] (ymin) -- (ymax);
+        \draw[-stealth, thick] (xmin) -- (xmax);
+        \node[blue, right=6pt, below] at (ymax) {$y$};
+        \node[blue, below=6pt, left] at (xmax) {$x$};
+
+        % 3. 给x, y轴加上刻度
+        \node[black, left=8pt, below] at (O) {$O$};
+        \draw[black] (0, 0.5) -- (0.05, 0.5);
+        \draw[black] (0.5, 0) -- ( 0.5, 0.05);
+        \foreach \loc/\x in
+            {-1/-1, 1/1, 2/2, 3/3, 4/4, 5/5}
+            {\node[blue, below] at (\loc, 0) {$\x$};
+            \draw[black, thick] (\loc, 0) -- (\loc, 0.1);
+            \draw[black] (\loc+0.5, 0) -- (\loc+0.5, 0.05);
+            } 
+        \foreach \loc/\y in
+            {-1/-1, 1/1, 2/2, 3/3, 4/4, 5/5}
+            {\node[blue, left] at (0, \loc) {$\y$};
+            \draw[black, thick] (0, \loc) -- (0.1, \loc);
+            \draw[black] (0, \loc+0.5) -- (0.05, \loc+0.5);
+            }
+    }
+    {\end{tikzpicture}}
+
+%% 使用样例
+% \begin{TikAxis}{scale=0.5}
+%     \plot[red, thick]{exp(-\x)*sin(2*\x)+ln(\x)*cos(\x)}[0.2:5]
+% \end{TikAxis}
+
+%%%%%%%%%% 三. 普通三维函数图形绘制 %%%%%%%%%%
+\newcommand{\plotzz}[5]{
+\begin{tikzpicture}[#1]
+    \begin{axis}[
+    	title = 我是title,
+    	hide axis,		%% 隐藏坐标轴
+    	colormap/cool,	%% 指定色系
+        % xlabel = $x$,
+        % ylabel = $f(x)$,
+        #4]
+        \addplot3[samples=50, domain=-5:5, #3]{#2};
+        \addlegendentry{#5}	%% 添加图例
+    \end{axis}
+\end{tikzpicture}}
+%% 使用样例
+% 绘制“帽子”形状的一个函数：\plotzz{}{sin(deg(sqrt(x^2+y^2)))/sqrt(x^2+y^2)}{surf}{}{图例}
+
+%% 改写
+\NewDocumentCommand{\plotz}{O{scale=1}mO{surf}}
+    {%
+    \ifthenelse{\isempty{#1}}
+    {%
+        \begin{tikzpicture}[scale=1]
+            \begin{axis}[
+                hide axis,		%% 隐藏坐标轴
+                colormap/cool,	%% 指定色系
+                % xlabel = $x$,
+                % ylabel = $f(x)$,
+                % title = 我是title,
+                ]
+                \addplot3[samples=50, domain=-5:5, #3]{#2};
+            \end{axis}
+        \end{tikzpicture}
+    }{%
+        \begin{tikzpicture}[#1]
+            \begin{axis}[
+                hide axis,		%% 隐藏坐标轴
+                colormap/cool,	%% 指定色系
+                % xlabel = $x$,
+                % ylabel = $f(x)$,
+                % title = 我是title,
+                ]
+                \addplot3[samples=50, domain=-5:5, #3]{#2};
+            \end{axis}
+        \end{tikzpicture}
+        }
+    }
+
+%% 使用样例
+% \plot{exp(-\x)*sin(2*\x)+ln(\x)*cos(\x)}[0:4]
+
+%%%%%%%%%%%%% 三. 参数方程绘图 %%%%%%%%%%
+
+%%%%%%%%% 1. 二维极坐标绘图 %%%%%%%%
+%% polarplot：#2传入的参数是角度
+\newcommand{\polarplott}[3]{
+	\begin{tikzpicture}[#1]
+		\draw[#2, smooth, variable=\t, samples=300] 
+		plot ({\t}:{#3});
+	\end{tikzpicture}}
+%% 使用样例
+% 绘制0:4pi的阿基米德螺旋线:    \polarplott{scale=0.5}{cyan, domain=0:1440}{0.01/pi*\t}
+% 绘制0:2pi四叶玫瑰线:         \polarplott{scale=2}{red, domain=0:720}{sin(2*\t)}
+
+%% 改写
+\NewDocumentCommand{\polarplot}{O{scale=1}O{black!80, domain=0:360}m}%
+    {%
+        \ifthenelse{\isempty{#1}}
+        {%
+            \begin{tikzpicture}[scale=1]
+                \draw[#2, smooth, variable=\t, samples=300] 
+                plot ({\t}:{#3});
+            \end{tikzpicture}
+        }{%
+            \begin{tikzpicture}[#1]
+                \draw[#2, smooth, variable=\t, samples=300] 
+                plot ({\t}:{#3});
+            \end{tikzpicture}
+        }
+    }
+%% 使用样例
+% \polarplot{sin(\t)}       
+% 注：不能理解为 #1 = #2 == -Novalue- != empty 
+% 此时的#1 -> scale=1; #2 -> black!80, domain=0:720
+% \polarplot[scale=0.5]{sin(\t)}
+% \polarplot[][red, thick]{sin(\t)}
+% 把#1设置为empty，覆盖掉原来的的默认参数scale=1,就可以执行\ifthenelse的true分支了
+
+
+
+%%%%%%%% 2. 二维参数方程绘图 %%%%%%%%
+%% 不要在plot后边加{},是用()
+%% LaTeX中带默认值的参数永远是#1来引用
+\newcommand{\paraplott}[4]{
+    \begin{tikzpicture}[#1]
+    \begin{axis}[trig format plots=rad, axis equal, #4]            %%  {#2:hide axis}, width=12cm, height=6cm
+    \addplot[samples=200, 
+        domain=-2*pi:2*pi,
+        variable=t, #3](#2);     %% 参数的传入格式{{#1},{#2}}
+    \end{axis}
+\end{tikzpicture}}
+%% 使用样例
+% 01. 绘制椭圆：\paraplott{scale=1}{{10*cos(t)}, {sin(t)}}{thick, color=blue}{}
+
+%% 改写
+\NewDocumentCommand{\paraplot}{O{scale=1}mO{0:2*pi}}
+    {%
+        \ifthenelse{\isempty{#1}}
+        {%
+            \begin{tikzpicture}[scale=1]
+                \begin{axis}[trig format plots=rad, axis equal]
+                \addplot[samples=200, 
+                    domain=#3,
+                    variable=t](#2);            %% 参数的传入格式{{#1},{#2}}
+                \end{axis}
+            \end{tikzpicture}
+        }{%
+            \begin{tikzpicture}[#1]
+                \begin{axis}[trig format plots=rad, axis equal]
+                \addplot[samples=200, 
+                    domain=#3,
+                    variable=t](#2);
+                \end{axis}
+            \end{tikzpicture}
+        }
+    }
+
+%% 使用样例
+% \paraplot{{3*cos(t)}, {sin(t)}}
+% \paraplot[scale=0.3]{{3*cos(t)}, {sin(t)}}
+% \paraplot[scale=0.3]{{3*cos(t)}, {sin(t)}}[0:1.5*pi]
+
+    
+%%%%%%%%% 3. 三维参数方程绘图 %%%%%%%%
+\newcommand{\paraplotzz}[4]{
+    \begin{tikzpicture}[#1]
+    \begin{axis}[#4]                %% view = 呈现的观察角度
+    \addplot3[samples=200, 
+        domain=-2*pi:2*pi,
+        variable=t,                 %% 指定自变量
+        samples y=0, #3](#2);       %% 参数的传入格式{{#1},{#2},{#3}}。samples y=0可以防止首尾相连
+    \end{axis}
+\end{tikzpicture}}
+%% 使用样例
+% \paraplotzz{scale=0.5} {{sin(deg(t))},{cos(deg(t))},{t}} {} {view = {60}{90}, hide axis}
+% \paraplotzz{scale=0.5} {{sin(deg(t))},{cos(deg(t))},{t}} {} {view = {90}{30}}
+% \paraplotzz{scale=0.5} {{sin(deg(t))},{cos(deg(t))},{t}} {thick, red} {view = {60}{30}, axis lines = center, }
+
+%% 改写
+%% 没有使用xargs参数，而是使用的NewDocumentCommand
+\NewDocumentCommand{\paraplotz}{O{scale=1}mO{0:2*pi}}
+    {%
+        \ifthenelse{\isempty{#1}}
+        {%
+            \begin{tikzpicture}[scale=1]
+                \begin{axis}[view = {60}{30}]                %% view = 呈现的观察角度
+                \addplot3[samples=200, 
+                    domain=#3,
+                    variable=t,                 %% 指定自变量
+                    samples y=0](#2,{t});       %% 参数的传入格式{{#1},{#2},{#3}}。samples y=0可以防止首尾相连
+                \end{axis}
+            \end{tikzpicture}
+        }{%
+            \begin{tikzpicture}[#1]
+                \begin{axis}[view = {60}{30}]                %% view = 呈现的观察角度
+                \addplot3[samples=200, 
+                    domain=#3,
+                    variable=t,                 %% 指定自变量
+                    samples y=0](#2,{t});       %% 参数的传入格式{{#1},{#2},{#3}}。samples y=0可以防止首尾相连
+                \end{axis}
+            \end{tikzpicture}
+        }
+    }
+
+%% 使用样例
+% \paraplotz{{sin(deg(t))}, {cos(deg(t))}}
+% \paraplotz[scale=0.3]{{sin(deg(t))}, {cos(deg(t))}}
+% \paraplotz[scale=0.5]{{sin(deg(t))}, {cos(deg(t))}}[-2*pi:2*pi]

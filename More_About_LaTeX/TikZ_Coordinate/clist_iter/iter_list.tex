@@ -1,0 +1,65 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper, total={6.5in, 10in}]{geometry}
+\usepackage{expl3, l3sys-shell}
+\usepackage{tikz}
+\usetikzlibrary{intersections}
+
+
+\begin{document}
+\ExplSyntaxOn
+% using clist \lis 
+\clist_new:N \lisa
+\clist_set:Nn \lisa {(1, 1); (2, 2); (3, 3)}
+\clist_item:Nn \lisa{-1}
+
+% using seq_set_split
+\par
+\seq_set_split:Nnn \lisb { ; } { (1, 1); (2, 2); (3, 3); (4, 4) }
+% \seq_item:Nn \lisb{1}, \seq_item:Nn \lisb{-1}
+\int_step_inline:nnnn {1}{1}{4}{
+    \seq_item:Nn \lisb{#1}
+}
+% use map_inline is convenient
+\par\seq_map_inline:Nn \lisb{
+    % \seq_item:Nn \lisb{#1}
+    #1
+}
+\par\seq_use:Nnnn \lisb{;}{;}{;}
+
+
+\newcommand{\test}[1]{
+    \seq_set_split:Nnn \lisc { ; }{#1}
+    The~ First~ is:\seq_item:Nn \lisc{1},The Second~ is:\seq_item:Nn \lisc{2}. 
+}
+\par\test{(1, 1); (2, 2); (3, 3); (4, 4)}
+
+
+\section{storage intersections}
+\begin{center}
+    \begin{tikzpicture}
+        \draw[orange, name~ path=line] (-2, -2) -- (1.8, 2) -- (1.8, -2.2);
+        \draw[green, name~ path=circle] (0, 0) circle (2);
+        % get the intersections(by don't get it by return value)
+        \path[name~ intersections={of=line~ and~ circle}];
+        \fill[red] (intersection-1) circle (1pt); 
+        \fill[blue] (intersection-2) circle (1pt); 
+
+    % get all intersections
+    % \path[name~ intersections={of=line1~ and~ line2}]; 
+    % put each intersection to seq 
+    \seq_set_split:Nnn \l__all_intersections_seq{;}{}
+    \int_step_inline:nnnn {1}{1}{5}{
+        \seq_put_right:Nn \l__all_intersections_seq{(intersection-#1)}
+    }
+    % show all intersections by \ShowPoint
+    % \node at (0, -3) {\seq_use:Nnnn \l__all_intersections_seq{}{;}{;}};
+    % \node at (0, -4) {\cs_meaning:N \l__all_intersections_seq};
+    % \node at (0, -1.5) {\seq_item:Nn \l__all_intersections_seq{1}};
+    \fill[blue] \seq_item:Nn \l__all_intersections_seq{2} circle(5pt);
+    % \ShowPoint[#1]{\seq_use:Nnnn \l__all_intersections_seq{;}{;}{;}}
+\end{tikzpicture}
+\end{center}
+
+
+\ExplSyntaxOff
+\end{document}

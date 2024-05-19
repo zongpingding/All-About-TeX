@@ -1,1 +1,0 @@
-1+x+\frac{x^2}{2}+\frac{x^3}{6}+\frac{x^4}{24}+\frac{x^5}{120}+O\left(x^6\right)

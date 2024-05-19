@@ -1,0 +1,328 @@
+\documentclass[aspectratio=169]{beamer}
+
+\input{../preamble.tex}
+
+\title{\LaTeX3教程一：简介}
+\date{2020年8月25日}
+
+\begin{document}
+
+\maketitle
+
+
+\section{\LaTeX3的目标}
+
+
+\begin{frame}[fragile]
+
+\begin{itemize}
+\item 提供类似现代编程语言的语法与命名
+\item 简化\LaTeX 的宏展开控制
+\item 标准化\LaTeX 各个功能的接口
+\end{itemize}
+\vspace*{1em}
+\begin{itemize}
+\item \LaTeX3并不是为一般用户而设计的：它是用来实现高级用户接口的一套底层方法。
+\end{itemize}
+
+\end{frame}
+
+
+\subsection{现代化的语法与命名}
+
+\begin{frame}[fragile]
+
+
+
+\begin{texcode}
+\def\FV@GetLine{\@noligs\expandafter\FV@CheckScan\FancyVerbGetLine}
+%% DG/SR modification end
+\begingroup
+\catcode`\^^M=\active%
+\gdef\FancyVerbGetLine#1^^M{%
+  \@nil%
+  \FV@CheckEnd{#1}%
+  \ifx\@tempa\FV@EnvironName%            % True if end is found
+    \ifx\@tempb\FV@@@CheckEnd\else\FV@BadEndError\fi%
+    \let\next\FV@EndScanning%
+  \else%
+    \def\FV@Line{#1}%
+    \def\next{\FV@PreProcessLine\FV@GetLine}%
+  \fi%
+  \next}%
+\endgroup
+\end{texcode}
+（节选自\textinl|fancyvrb|）
+
+\end{frame}
+
+\subsection{控制宏展开}
+
+\begin{frame}[fragile]
+\begin{columns}
+
+\begin{column}{0.5\linewidth}
+
+\begin{texcode*}
+\newcommand{\testcmda}{abc}
+\newcommand{\testcmdb}{def\testcmda}
+\par\testcmdb
+\renewcommand{\testcmda}{def}
+\par\testcmdb
+\end{texcode*}
+
+\end{column}
+
+\begin{column}{0.5\linewidth}
+
+\begin{progcode}{C++}
+string a("abc");
+
+string func_1(string *a){
+    // 如果原a的值发生改变，那么返回值也会改变
+    return "def" + *a;
+}
+
+string func_2(string a){
+    // 即使原a的值发生改变，返回值也不会改变
+    return "def" + a;
+}
+\end{progcode}
+
+\end{column}
+
+\end{columns}
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+
+\begin{texcode*}
+\par\uppercase{abcdefghi}
+\newcommand{\testcmda}{def}
+\par\uppercase{abc\testcmda ghi}
+\end{texcode*}
+
+\end{frame}
+
+
+\subsection{标准化接口}
+
+\begin{frame}[fragile]
+\begin{itemize}
+\item 整数
+\item 浮点数
+\item 布尔逻辑
+\item 凭据表（token list）
+\item 字符串
+\item 文件IO
+\end{itemize}
+\end{frame}
+
+\section{凭据表/字符串}
+
+\begin{frame}[fragile]
+
+我们键入\texttt{tex}文件中的所有内容都可视作凭据表。
+
+\vspace*{1em}
+
+\begin{columns}
+
+\begin{column}{0.3\linewidth}
+凭据表内的三类对象：
+\begin{itemize}
+\item 字符
+\item 命令
+\item 凭据表
+\end{itemize}
+\end{column}
+
+\begin{column}{0.7\linewidth}
+
+
+\texinl|{abc \def {abc\def} ghi}|
+
+\vspace*{2em}
+
+\textinl|{abc \def {abc\def} ghi}|
+
+
+\end{column}
+
+\end{columns}
+
+\end{frame}
+
+\section{\LaTeX3命名法}
+
+\begin{frame}[fragile]
+
+\LaTeX3命名法提倡将函数的来源以及参数类型、变量的类型编码到其名字内。
+
+\begin{itemize}
+\item 可以更方便地让用户区别命令与变量
+\item 可以避免不同宏包之间命令的冲突
+\item \LaTeX 并不拥有真正的类型系统，这样的命名方式可以让用户在编程时自行检查错误
+\item 只是一套指导意见，并不是强制性的要求
+\end{itemize}
+
+\end{frame}
+
+\subsection{变量命名法}
+
+\begin{frame}[fragile]
+\textinl|\<作用域>_<介绍>_<类型>| \quad \textinl|\<作用域>__<介绍>_<类型>|
+
+\vspace*{1em}
+
+{\footnotesize
+\begin{columns}
+\begin{column}{0.5\linewidth}
+作用域
+\begin{itemize}
+\item \texttt{l}：局部变量
+\item \texttt{g}：全局变量
+\item \texttt{c}：常量
+\end{itemize}
+
+\vspace*{1em}
+{\normalsize
+\texinl|\l_tmpa_tl|
+
+\texinl|\g_tmpa_int|
+
+\texinl|\c_left_brace_str|
+
+}
+\end{column}
+\begin{column}{0.5\linewidth}
+类型
+\begin{itemize}
+\item \texttt{tl}:凭据表
+\item \texttt{str}：字符串
+\item \texttt{int}：整型
+\item \texttt{fp}：浮点数
+\item \texttt{seq}：队列
+\item \texttt{dim}：尺度/长度
+\par\hspace{1cm}\vdots
+\end{itemize}
+\end{column}
+\end{columns}
+}
+
+
+\end{frame}
+
+
+\subsection{函数命名法}
+
+\begin{frame}[fragile]
+
+\textinl|\<模块>_<介绍>:<参数列表>| \quad \textinl|\__<模块>_<介绍>:<参数列表>|
+
+\vspace*{1em}
+常用的参数类型：
+
+{\footnotesize
+\begin{columns}
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\item \texttt{N}：接收一个命令，传递命令本身。
+\item \texttt{V}：与\texttt{N}类似，但是传递命令的值。
+\item \texttt{n}：接收一个凭据表。
+\item \texttt{o}：与\texttt{n}类似，但是对凭据表内的内容进行一次展开。
+\end{itemize}
+\end{column}
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\item \texttt{x}:与\texttt{n}类似,但是对凭据表内的内容进行递归展开。
+\item \texttt{T}/\texttt{F}：与\texttt{n}类似，用于判断语句中，根据判断结果执行\texttt{T}/\texttt{F}代码。
+\item \texttt{c}：接收一个凭据表，返回以其为名字的命令。
+\item \texttt{p}：参数列表（\textinl|#1#2|\ldots）
+\end{itemize}
+\end{column}
+\end{columns}
+}
+
+\vspace*{1em}
+
+\texinl|\tl_item:Nn|
+
+\texinl|\bool_if:nTF|
+
+\texinl|\tl_put_right:Nx|
+
+\end{frame}
+
+
+\section{使用\LaTeX3}
+
+\begin{frame}[fragile]
+
+\begin{columns}
+
+\begin{column}{0.5\linewidth}
+如何使用\LaTeX3？
+
+\begin{enumerate}
+\item \texinl|\usepackage{expl3}|
+\item 启用\LaTeX3语法：\texinl|\ExplSyntaxOn|
+\item 关闭\LaTeX3语法：\texinl|\ExplSyntaxOff|
+\end{enumerate}
+\end{column}
+
+\begin{column}{0.5\linewidth}
+最小示例
+
+\begin{texcode}
+\documentclass{article}
+\usepackage{expl3}
+\begin{document}
+\ExplSyntaxOn
+%LaTeX3代码
+\ExplSyntaxOff
+\end{document}
+\end{texcode}
+
+\end{column}
+
+\end{columns}
+
+\end{frame}
+
+\begin{frame}[fragile]
+
+关于\texinl|\ExplSyntaxOn|
+
+\begin{itemize}
+\item 所有空格及换行都会被忽略
+\item 下划线（\_）和冒号（:）等同于英文字母
+\end{itemize}
+
+\end{frame}
+
+\section{简单示例：阶乘}
+
+\begin{frame}[fragile]
+
+\begin{texcode*}
+\ExplSyntaxOn
+\cs_set:Npn \my_factorial:n #1 {
+    \int_set:Nn \l_tmpa_int {1}
+    \seq_clear:N \l_tmpa_seq
+    \int_step_inline:nn {#1} {
+        \seq_put_right:Nn \l_tmpa_seq {##1}
+        \int_set:Nn \l_tmpa_int {\l_tmpa_int * ##1}
+    }
+    $\seq_use:Nn \l_tmpa_seq {\times} = \int_use:N \l_tmpa_int$
+}
+\par\my_factorial:n {3}
+\par\my_factorial:n {7}
+\ExplSyntaxOff
+\end{texcode*}
+
+\end{frame}
+
+\end{document}

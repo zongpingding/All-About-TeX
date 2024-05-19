@@ -1,0 +1,48 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{shapes,calc,arrows,through,intersections}
+\begin{document}
+
+\definecolor{c1} {rgb} {0, 0.411, 0.706}
+\definecolor{c4} {rgb} {0.969, 0.659, 0.137}
+\begin{tikzpicture}[>=latex',every node/.style={scale=1},scale=1.2]
+\coordinate (a) at (120:4);
+\coordinate (b) at (210:4);
+\coordinate (c) at (-30:4);
+\coordinate (a1) at ($(b)!0.5!(c)$);
+\coordinate (b1) at ($(a)!0.5!(c)$);
+\coordinate (c1) at ($(a)!0.5!(b)$);
+\coordinate (a0) at ($(b)!(a)!(c)$);
+\coordinate (b0) at ($(a)!(b)!(c)$);
+\coordinate (c0) at ($(a)!(c)!(b)$);
+\coordinate (m1) at ($(a1)!0.5!(a0)$);
+\coordinate (m2) at ($(m1)!-3cm!-90:(a1)$);
+\coordinate (n1) at ($(b1)!0.5!(b0)$);
+\coordinate (n2) at ($(n1)!3cm!-90:(b1)$);
+\coordinate (o1) at (intersection of m1--m2 and n1--n2);
+\coordinate (h) at (intersection of a--a0 and b--b0);
+\node (circ2) at (o1) [draw,circle through=(a1)]{};
+\draw [thick,c1] (a) -- (b) -- (c) -- cycle;
+\draw [thick,c1] (a) -- (a0) (b) -- (b0) (c) -- (c0);
+\coordinate (a2) at (intersection 1 of circ2 and h--a);
+\coordinate (b2) at (intersection 1 of circ2 and h--b);
+\coordinate (c2) at (intersection 1 of circ2 and h--c);
+\draw [thick,c4] (0,0) circle (4) ;
+\draw [densely dotted] (b2) -- (c1) -- (b1) -- (c2) -- (b2) -- (a2) -- (c2) -- (a1) -- (b2) (b1) -- (a1) -- (c1) -- (a2) -- (b1);
+% \fill (o1) circle (0.05) node [below right] {$O_1$};
+\fill (0,0) circle (0.05) node [below right] {$O$};
+\fill (a) circle (0.05) node [above] {$A$};
+\fill (b) circle (0.05) node [below left] {$B$};
+\fill (c) circle (0.05) node [below right] {$C$};
+\fill (a1) circle (0.05) node [below ] {$A_1$};
+\fill (b1) circle (0.05) node [above right] {$B_1$};
+\fill (c1) circle (0.05) node [left] {$C_1$};
+\fill (a0) circle (0.05) node [below ] {$A_0$};
+\fill (b0) circle (0.05) node [above right] {$B_0$};
+\fill (c0) circle (0.05) node [left] {$C_0$};
+\fill (a2) circle (0.05) node [below right] {$A_2$};
+\fill (b2) circle (0.05) node [ right] {$B_2$};
+\fill (c2) circle (0.05) ++ (0.1,0) node [below ] {$C_2$};
+\fill (h) circle (0.05) ++ (-.1,0) node [below right] {$H$};
+\end{tikzpicture}
+\end{document}

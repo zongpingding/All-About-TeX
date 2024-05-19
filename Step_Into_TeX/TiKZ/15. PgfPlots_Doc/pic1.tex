@@ -1,0 +1,30 @@
+\documentclass{standalone}
+\PassOptionsToPackage{quiet}{fontspec}
+\usepackage[a4paper, total={6.5in, 10in}]{geometry}
+% \usepackage{ctex}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usetikzlibrary{positioning, decorations.markings, arrows.meta, patterns}
+\usepgfplotslibrary{colorbrewer,colormaps}
+\pgfplotsset{compat=1.17}
+
+
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[
+        view/h=60,
+        plot box ratio=1 1 1,
+        colormap={violet}{[1cm] rgb255(0cm)=(25,25,122)
+        color(1cm)=(white) rgb255(5cm)=(238,140,238)},
+        xlabel=$x$,
+        ylabel=$t$,
+        zlabel={$p(x,t)$},
+        shader=faceted,
+        title=Initial \texttt{plot box ratio},
+    ]
+    \addplot3 [surf,y domain=0.02:3.5,samples=81]
+        {1/(2*sqrt(pi*y)) * exp(0-x^2/y)};
+    % the '0' is a workaround for a bug in PGF 2.00
+    \end{axis}
+\end{tikzpicture}
+\end{document}

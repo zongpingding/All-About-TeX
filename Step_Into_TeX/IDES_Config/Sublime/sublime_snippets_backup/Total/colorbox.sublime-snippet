@@ -1,0 +1,9 @@
+<snippet>
+	<content><![CDATA[
+\begin{tcolorbox}[colback=${1:blue}!5!${2:white},colframe=${3:blue}!75!${4:black},title=$5]
+	
+\end{tcolorbox}
+]]></content>
+	<tabTrigger>colorbox</tabTrigger>
+	<scope>text.tex.latex</scope>
+</snippet>

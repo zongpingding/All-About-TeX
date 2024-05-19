@@ -1,0 +1,2 @@
+# 正反向搜索
+# "C:\Users\PC\AppData\Local\Programs\Microsoft VS Code\Code.exe" -g "%f:%l"

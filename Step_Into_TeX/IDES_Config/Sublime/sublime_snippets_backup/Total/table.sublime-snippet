@@ -1,0 +1,8 @@
+<snippet>
+	<content><![CDATA[
+Table~\ref{tbl:$1}
+]]></content>
+	<tabTrigger>table</tabTrigger>
+	<scope>text.tex.latex</scope>
+</snippet>
+

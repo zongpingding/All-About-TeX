@@ -1,0 +1,56 @@
+\documentclass[dvisvgm]{article}
+% 1.必须添加varwidth选项，不然就会报错
+\usepackage{geometry}
+\geometry{a4paper,left=1in,right=.3in,top=1in,bottom=1.2in}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=1.16}
+% 2.引用的tikz库
+% \usetikzlibrary {backgrounds, mindmap, shadows, calendar}
+% \usetikzlibrary{matrix, chains, trees, scopes}
+% \usetikzlibrary{positioning, calc, 3d}
+% \usetikzlibrary{decorations, arrows.meta, shadows}
+\usetikzlibrary {animations,views}
+
+
+\begin{document}
+The First Animation is as follows:
+\section{Animation 1}
+\tikz {
+    \draw [help lines] (-0.2,-0.2) grid (2.2,1.2);
+    \draw (1,.5) circle [radius=1mm];
+    \node :shift = {
+        along = {(0,0) circle[radius=5mm]} sloped,
+        0s="0", 2s=".25", begin on=click 
+    }at (1,.5) [fill = blue, opacity=.5, circle] {Click};
+}
+
+
+\section{Animation 2}
+The Second Animation is as follows:
+\tikz \node [
+    fill, text = white, animate = {
+        myself:fill = {0s = "red", 2s = "blue", begin on = click }
+    }
+] {Click me};
+
+\section{Animation 3}
+The Third Animation is as follows:
+\tikz \node :xskew = { 0s="0", 2s="45", begin on=click}
+[fill = blue!20, draw = blue, ultra thick, circle] {Click me!};
+
+\section{Animation 4}
+\tikz [very thick] {
+    \node (node) [fill = blue!20, draw = blue, very thick, circle] {Click me!};
+    \draw [green!50!black] (1.2,-0.8) rectangle (2.7,0.8);
+    \begin{scope}[view = {(0,0) (2,2) at (1.2,-0.8) (2.7,0.8)},
+    animate = {myself:view = {
+    begin on = {click, of=node},
+    0s = "{(0,0) (2,2)}",
+    2s = "{(1,1) (1.5,1.5)}" }}]
+    \draw [red] (10mm,10mm) rectangle (15mm,15mm);
+    \node at (10mm,10mm) [circle, fill=red, text=white, font=\tiny] {red};
+    \end{scope}
+}
+
+\end{document}

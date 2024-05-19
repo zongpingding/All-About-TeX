@@ -1,0 +1,108 @@
+\documentclass[fontset=windows]{article}
+\usepackage{ctex}
+\usepackage{color}
+
+
+% 定义新环境
+% 环境就相当于分组，在分组内部的最前面和最后面各有一条命令。
+% 例如 quote 环境 
+% 	\begin{quote}
+%		<内容〉
+% 	\end{quote}
+% 等价于
+% {
+%		\quote
+%			<内容>
+%		\endquote
+%	}
+% 定义格式
+% 
+% \newenvironment{<环境名称>}[<参数个数>][<首参数默认值>]{<环境前定义>}{<环境后定义>}
+% \renewenvironment{<环境名称>}[<参数个数>][<首参数默认值>]{<环境前定义>}{<环境后定义>}
+% \newenvironment{ch}{\begin{eqution}}\mbox{\end{equation}}
+% 一个定义新环境的例子 
+% 多行公式
+
+%  1.正确的例子
+% \newenvironment{specialtext}[1]%
+% 	{\newcommand \temp{#1}}%
+% 	{\textcolor{blue}{\textit{\temp}}\quad latex}%
+
+%  2.一个报错的例子[temp 和 tmep的区别]
+% \newenvironment{specialtext}[1]%
+% 	{\newcommand \tmep{#1}}%
+% 	{\textit{\temp}}%
+
+% 3.正确的例子
+% \newenvironment{Quotation}[1] 
+% 	{\newcommand \quotesource {#1} 
+% 	\begin{quotation}} 
+% 	{\par \hfill ————《\textit{\quotesource}》
+% 	\end{quotation}} 
+
+% \def 定义宏命令
+\def \sentence{this is a sentence}
+\def \change(#1, #2){#2 #1}
+% 有必要把#1加上{}，否则会被当成多个字符
+% 前后环境有什么区别？
+% 1.一般的公式环境有两个部分，所以我们常常把一个begin放在前，另一个end放在后
+% 2.定义环境时，千万不要中间有空行，否则会出错
+% 3.中间不能有任何的东西，只能为空
+% 4.创建的环境内不能有数学公式
+
+% \newcommand-定义命令
+% \newcommand<命令名称>[<参数个数>][<首参数默认值>]{<具体定义>}
+\newcommand\PRC{People's Republic of \emph{China}}
+% 这个命令就是一个宏
+% 而宏就是替换，只是你可以规定你替换什么内容罢了，是全部替换还是设置参数进行部分替换
+
+% 如果指定了参数的个数 (从 1 到 9 ), 则可以在宏的定义中使用参数。在〈具体定义〉中, 
+% 宏的参数依次编号, 用 #1, #2,..., #9 表示, 使用宏时它们【#1， #2等】会替换为参数的字符串, 例如:
+% 参数个数可以从1到9，使用时用#1，#2，#3，#4...#9
+\newcommand\loves[2]{#1 喜欢 #2}
+% 例如： \loves{猫}{鱼}；会把#1替换成猫，把#2替换成鱼。所以这句话就是“猫喜欢鱼”
+
+% newcommand的参数也可以有默认值
+%指定参数个数的同时指定了首个参数的默认值，那么这个命令的第一个参数就可以成为可选参数（要使用中括号指定）
+\newcommand\lovemore[3][喜欢]{#2#3#1}
+% 首个参数就是#2，所以#2默认为喜欢
+% 可以用新的可选参数覆盖原来的默认内容
+
+% 一些实例
+% 实例1
+% \newcommand\lovemore[3][喜欢]{#2#1#3}
+%  \lovemore[最爱]{猫儿}{鱼儿}
+% 结果：猫儿最爱鱼儿
+
+% 实例2
+%  \newcommand\lovemore[3][喜欢]{#2#3#1}
+%  \lovemore[最爱]{猫儿}{鱼儿}
+% 结果：猫儿鱼儿最爱
+% 总结：传参时：从#1，#2，……，#9
+% 			打印时：按照宏的替换内容打印。
+% 本来这句话就是： 最爱 猫儿 鱼儿。只是打印的时候按照位置形参的先后打印即#2->#3->#1
+% \renewcommand\abstractname{内容简介}  % \abstractname封装在abstarct环境中，是已经存在的命令。把默认的摘要的名字“摘要”换成了“内容简介”
+
+
+\begin{document}
+	% \loves{猫}{鱼}
+	% \lovemore[最爱]{猫儿}{鱼儿}
+
+	% \begin{specialtext}{hello}
+	% \end{specialtext}
+
+	\sentence
+	\change(左, 右)
+	% 空行之后是两段，不空行是一段
+	% \begin{Quotation}{易.乾}
+	% 	初九，潜龙勿用
+	% \end{Quotation}
+
+	%  {
+	% \textcolor{green}
+	%  {Hello}
+	%  }
+	%\begin{ch}
+	%	\sum_{i=1}^{中文}
+	%\end{ch}
+\end{document}

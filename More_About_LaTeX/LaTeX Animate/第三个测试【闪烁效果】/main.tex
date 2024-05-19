@@ -1,0 +1,18 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{animate}
+
+\newcommand{\myemph}[1]{%
+  \begin{animateinline}[autoplay, loop]{.5}
+  \emph{#1}
+  \newframe[1.5]
+  \relax
+  \end{animateinline}}
+
+
+
+\begin{document}
+
+  This is \myemph{important}!
+
+\end{document}

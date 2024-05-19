@@ -1,0 +1,44 @@
+\documentclass[fontset=windows, 12pt]{article}
+\usepackage{ctex}
+\usepackage{graphicx}
+\usepackage{float}
+
+
+\title{\LaTeX 中的浮动体}
+\author{Eureka}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+    \section{\LaTeX 中得图片插入}
+     
+    \begin{figure}[!htb]
+        \centering %注：centering的意思是让环境中的内容居中排版
+        \includegraphics[scale=0.1]{falling.jpg}
+        \caption{\LaTeX{} Picture Insert}
+    \end{figure}
+
+
+
+    \section{\LaTeX 中的表格}
+
+    \begin{table}[!htb]
+        \centering
+        \begin{tabular}{||l| c| c| c |r|}%对齐方式：左 中 右 用|产生表格竖线
+            \hline \hline
+            %\hline 用以产生横线
+            姓名&语文&数学&英语&体育\\%不同列之间用&连接，用\\结束本行
+            \hline
+            张三&78&56&45&100\\
+            \hline
+            李四&21&94&75&90\\
+            \hline
+            王五&48&96&45&77\\
+            \hline
+        \end{tabular}
+        \caption{考试成绩}
+    \end{table}
+
+\end{document}

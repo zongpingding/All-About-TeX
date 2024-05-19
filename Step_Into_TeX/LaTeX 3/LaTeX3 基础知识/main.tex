@@ -1,0 +1,364 @@
+\documentclass[fontset=windows]{article}
+\usepackage{expl3}
+\usepackage{My}
+\usepackage{framed}
+\title{\LaTeX 3 入门}
+\author{Eureka}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{\LaTeX3的相关主要组成}
+\begin{itemize}
+    \item 1. l3kernel:包含expl3的各个部分
+    \item 2. l3packages：提供设计层和文本标记层接口
+    \begin{itemize}
+        \item 2.1 l3keys2e
+        \item 2.2 xfp
+        \item 2.3 xfrac
+        \item 2.4 xparse
+        \item 2.5 xtemplate
+    \end{itemize}
+    \item 3. l3experimental:一些实验性的尝试，构建接口(不如上一个稳定)
+    \item 4. l3backend:提供与后端（底层驱动）的交互代码。处理颜色，绘图， PDF。目前支持的驱动
+    \begin{itemize}
+        \item 4.1 dvipdffmx
+        \item 4.2 dvips
+        \item 4.3 dvisvgm
+        \item 4.4 xdvipdfmx
+        \item 4.5 PDF模式(pdflatex和LuaTeX)
+    \end{itemize}
+    \item 5. l3build:\LaTeX3的构建系统
+\end{itemize}
+
+\section{\LaTeX3的尝试}
+\subsection{基础知识铺垫}
+\textbf{函数与变量}:在\LaTeX3中函数和变量都是以$\backslash{}$开头
+\textbf{函数}
+\begin{itemize}
+    \item 1. 函数可以吃掉一些参数，并进行相关的操作
+    \item 2. 函数要么是可以被展开的，要么就是可以被执行的
+\end{itemize}
+
+\textbf{变量}\par 
+\begin{itemize}
+    \item 变量可以用来存储数据
+\end{itemize}
+
+\textbf{定义的方法}
+
+\subsection{ReMark:什么是token?}
+
+最开始我也挺奇怪的，为什么有这个token这种说法。因为我取网上查看了这个单词的翻译
+然而网上最合理的翻译就是：{\ttfamily 象征，标志，记号}。是不是感觉这个翻译听了都头疼，感觉看了更加的不知道token
+是一个啥玩意了？下面我们就展示 D E K 在它的 tex 源码中给的定义：
+
+{
+\ttfamily A TEX token is either a character or a control sequence ...
+}
+
+也就是说token其实就是一个单独的{\bf 字符}，（a, A, \#, 1, \^, \&, ...）;又或者是一个单独的控制序列（以 \textbackslash 开头的命令）
+
+下面再来看一下文档中对于 {\bf token list} 的定义：
+
+\texttt{ A token list is a singly linked list of one-word nodes in mem, where each word contains a token
+and a link. Macro definitions, output-routine definitions, marks, \textbackslash   write texts, and a few other things are
+remembered by TEX in the form of token lists, usually preceded by a node with a reference count in its
+token ref count field. The token stored in location p is called info(p).}
+
+不严谨的说，我们就可以直接的把 token list 看作由 \{\} 包裹的一系列的 token 的集合
+
+其实这个 token 真的不是那么好直译的，但是项子越老师把它译作了 {\bf 凭据}，对应的 token list 就是{\bf 凭据表}。
+感觉这个翻译还是蛮好的。
+
+\subsection{基本数据类型}
+命令定义格式:
+\begin{verbatim}
+    \<module>_<description>:<arg-spec>
+\end{verbatim}
+\begin{itemize}
+    \item 1. module: 模块名
+    \item 2. description：描述
+    \item 3. arg-spec：指定的{\bf 参数类型}
+    \begin{itemize}
+        \item 3.1 n:接收一个凭据表【一组被\{\}包围的记号】
+        \item 3.2 x:与 n 类似, 但是对凭据表内的内容进行递归展开。
+        \item 3.3 N:接收一个命令，传递命令本身
+        \item 3.4 V:与 N 类似，但是传递命令的值
+        \item 3.5 p:原始的\TeX 的形参指定(就是原来\LaTeX2 $\varepsilon$中使用 $\backslash$ def时的\#1, \#2)
+        \item 3.4 T/F:n的特殊情形，提供条件判断分支语句
+    \end{itemize}
+\end{itemize}
+
+\textbf{注意}\par 
+n/x 与 N/V 的区别涉及到宏展开的细节问题，后面会讨论。
+
+\textbf{开启\LaTeX3编程接口}
+\begin{itemize}
+    \item 1. 在\verb!\ExplSyntaxOn ** \ExplSyntaxOff!中间的即可以使用\LaTeX3语法
+    \item 2. 由于硬空格,下划线\verb!~!,\verb!_!和冒号\verb!:!被转义了。
+    \item 3. 可以分别使用\verb!\~!,\verb!\c_math_subscript_token!和\verb!\c_colon_str!来替代
+\end{itemize}
+
+
+% 没有expl3这个环境
+% \begin{expl3}
+% \end{expl3}
+    
+\ExplSyntaxOn
+% \subsection{函数}
+% 声明函数\par
+% \cs_new:Npn \my_fun: #1 {Hello #1}
+% 使用函数\par 
+% \my_fun("Tomz")    
+
+\subsection{变量}
+\vspace*{2em}
+变量(整形和浮点型用法相同， 改为fp_new:N即可)\par 
+声明一个整形变量(var):~~\int_new:N \var  \verb !\int_new:N \var! \par
+变量var的赋值:\hspace*{4em}\int_set:Nn \var {2}    \verb !\int_set:Nn \var {2} ! \par
+使用变量:\int_use:N \var   \hspace*{6.5em}\verb !\int_use:N \var!\par
+输出值:\int_eval:n {\var*1000} \hspace*{6em}\verb!\int_eval:n {\var*1000}!
+
+\par 
+\noindent 注：\verb!_new!:声明一个变量 \hspace*{4em} \verb!_set!:变量的赋值
+\par 
+\verb |_use|:使用变量的值 \hspace*{4em}\verb|_eval|:计算表达式的值
+
+\subsection{函数}
+
+函数的是以一个命令：{\verb |\cs_set:Npn|} 来声明的,下面就是一个示例：
+
+\par 
+\begin{framed}
+\verb|\|cs_set:\textcolor{blue}{Npn} ~~\verb |\|my_function:nn ~~\verb |#1#2| ~~\{\\
+    \hspace*{4em}两个数的和为: \verb |\|int_eval:n ~~\verb |{#1 + #2}|\\
+\hspace*{2em}\}\\
+\hspace*{2em}函数的调用\\
+\hspace*{2em}\verb |\|my_function:nn ~~\{1\}\{2\}
+\end{framed}
+\par
+\bigskip
+\textbf{定义的解释说明}
+\par 
+在这里我定义了一个用于计算两个整数和的函数 my_function，它接受两个整数，然后输出这两个整数的和。其中蓝色部分各个参数的对应关系如下：
+\par 
+
+N ~~$\rightarrow$~~ \verb |\my_function:nn|\par
+p ~~$\rightarrow$~~ \verb |#1#2|\par 
+n ~~$\rightarrow$~~ \verb |{**}|(后面大括号中的全部内容【凭据表】)
+
+\ExplSyntaxOff 
+
+\ExplSyntaxOn
+\cs_set:Npn \my_function:nn #1#2{
+    两个数的和为:\int_eval:n {#1+#2}
+}
+\my_function:nn {1}{2}
+\ExplSyntaxOff
+
+\textbf{Remark}
+
+同一个函数根据{\bf 参数类型}的不同，可以产生不同的{\bf 变体}。具体的每一函数可以接受的参数类型可以参见文档：interface3, 只需要使用如下的命令即可：
+
+\verb|texdoc interface3|
+
+
+\subsection{变量和函数的定义和使用方式的反思}
+个人的感觉是，由于在 \LaTeX 3中没有类似其他语言中{\bf 类型系统}的概念，就导致你声明的所有变量本质上都是一个token。所以你在使用这个变量的时候就必须要说明你的变量的类型。
+对于变量的操作也一样，例如你要给变量赋值，你就必须说明你这个变量的类型还必须使用与之相匹配的赋值函数(int\_set, fp\_set)。
+函数也类似，不同的是，你在使用函数的时候必须要声明传入的参数的 ``类型''（n， x，N， V等），然后一个类型对应一个实际的输入参数，一个不能多，一个也不能少。
+所以就有了命名规范这么一说，就是说把你的变量的作用域，类型，变量名全部写入变量名中。
+
+LATEX3 命名法提倡将函数的来源以及参数类型、变量的类型编码到其名字内。
+\begin{itemize}
+    \item 可以更方便地让用户区别命令与变量
+    \item 可以避免不同宏包之间命令的冲突
+    \item LATEX 并不拥有真正的类型系统，这样的命名方式可以让用户在编程时自行检查错误
+    \item 只是一套指导意见，并不是强制性的要求
+\end{itemize}
+
+
+
+
+\ExplSyntaxOn
+\subsection{自带的库函数}
+先定义几个变量:\par 
+\int_new:N \var_a  \verb!\int_new:N \var_a!\par
+\int_new:N \var_b  \verb!\int_new:N \var_b!\par 
+\int_set:Nn \var_a {5}  \verb!\int_set:Nn \var_a {5}!\par
+% 检验可不可以赋值和变量的创建同时进行
+% \int_set:Nn \Test {1} 
+% 不可以同时进行
+
+取模函数\par 
+\int_set:Nn \var_b {\int_mod:nn {\var_a}{3}} \verb!\int_set:Nn \var_b {\int_mod:nn {\var_a}{3}}!\par 
+\verb!\vara_b! = \int_use:N \var_b\par 
+
+\vspace*{2em}
+最值函数\par 
+$\max\{var_a, var_b\}$ = \int_min:nn {\var_a} {\var_b} \hspace*{2em} \verb!\int_min:nn {\var_a} {\var_b}!\par 
+$\min\{var_a, var_b\}$ = \int_max:nn {\var_a} {\var_b} \hspace*{2em} \verb!\int_max:nn {\var_a} {\var_b}!\par 
+
+\vspace*{2em}
+自增自减函数\par 
+a自增的结果:$a++$= \int_incr:N \var_a \int_use:N \var_a \hspace*{2em} \verb!\int_incr:N \var_a \int_use:N \var_a! \par 
+a自减的结果:$a--$= \int_decr:N \var_a \int_use:N \var_a \hspace*{2em} \verb!\int_decr:N \var_a \int_use:N \var_a! \par
+
+\vspace*{2em}
+随机数函数\par
+产生$1-n$随机数：\int_rand:n {20} \hspace*{2em} \verb!\int_rand:n {20}! \par
+产生$m-n$随机数：\int_rand:nn {34}{89} \hspace*{1.5em} \verb!\int_rand:n {34}{89}!\par 
+
+注意：\verb *\int_eval*仅支持$+,-,\times,\backslash$,但是\verb!\fp_eval:n!还支持三目运算符\par 
+使用样例:\par 
+\fp_eval:n {1+2>4?10:20} \hspace*{2em} \verb!\fp_eval:n {1+2>4?10:20}! \par 
+
+\vspace*{2em}
+数学函数\par 
+exp(), $\sin, \cos, acos, atand, \cdots$\par
+\fp_new:N \var_c 
+\fp_set:Nn \var_c {\c_pi_fp}
+% \c_pi_fp表示pi
+计算$e^{\pi}$=\fp_eval:n {exp(\var_c)} \hspace*{7.5em}\verb!\fp_eval:n {exp(\var_c)}!\par 
+计算$\arcsin(\frac{\pi}{10})$ = \fp_eval:n {acos(\var_c/10)} \hspace*{4em} \verb |\fp_eval:n {acos(\var_c/10)}|
+
+\vspace*{2em}
+\subsection{字符串}
+创建字符串：\str_new:N \str_test \hspace*{2em} \verb!\str_new:N \str_test!\par 
+字符串初始化：\str_set:Nn \str_test {"你好Hello!@t#&*LaTeX} \hspace*{1em} \verb .\str_set:Nn \str_test {"你好Hello!@#&*LaTeX} .\par 
+显示字符串: \hspace*{2.5em} \str_test  \hspace*{2em} \verb!\str_test!\par 
+
+\vspace*{1em}
+字符串操作函数\par 
+\str_put_left:Nn \str_test {这部分内容在左边}
+\str_test \par 
+
+索引操作(和Python类似)\par 
+str_test[2] = \str_item:Nn \str_test {2} \hspace*{2.5em} \verb!\str_item:Nn \str_test {2}!\par
+str_test[2,-3] = \str_range:Nnn \str_test {-5}{-3} \hspace*{1em} \verb!\str_range:Nnn \str_test {2}{-3}!\par 
+
+\subsection{序列}
+序列(类似数组)：有tl(token list), clist(Comma separete lists), seq(推荐使用)\par 
+1. 声明(创建一个空的序列lis):\seq_new:N \lis \hspace*{2em} \verb!\seq_new:N \lis!\par 
+2. 使用set创建初始化序列:\seq_set_split:Nnn \lis_b {,} {a, {ef}, 你好} \hspace*{2em} \verb!\seq_set_split:Nnn \lis_b {,} {a, {ef}, 你好}!\par 
+3. 显示序列:lis_b = \seq_use:Nn \lis_b {} \hspace*{2em} \verb!\seq_use:Nn \lis!\par 
+4. 访问特定元素: $lis_b[2]$=\seq_item:Nn \lis_b {2} \hspace*{2em} \verb!\seq_item:Nn \lis_b {1}!\par 
+
+
+\section{流程控制}
+\subsection{if语句}
+if判断语句本质上是判断布尔表达式的真假，在\LaTeX3中我们使用将bool表达式转化为布尔值的Predicate函数 
+.在\LaTeX3中一般的数据类型都实现了各自的Predicate，甚至是自己的条件判断函数。我们在这里仅仅只有是用到比较灵活的api\par 
+\centerline{\textbf{-bool_if:nTF + Predicates}} 
+调用格式：\par
+\hspace*{4em}{\verb *\bool_if:nTF{<bolean expression>} {<true code>} {<false code>}*}\par
+
+一个具体的例子\par
+\str_set:Nn \str_d {LaTeX3}
+\bool_if:nTF{
+    !\int_compare_p:n {4<=3<=2} || \str_if_eq_p:nn {latex2} {\str_d}
+}{
+    \str_uppercase:f{\str_d}
+    % 为真就转为大写
+}{
+    \str_lowercase:f{\str_d}
+    % 为假就转为小写
+}
+
+\newpage
+\subsection{for循环} 
+调用格式：\par 
+\hspace*{4em}\verb |\int_step_function:nN {<integer>} {\do_somthing}|\par
+使用样例：\par 
+\vspace*{2em}
+\parbox[l][10em][l]{0.3\linewidth}{
+\int_step_inline:nnnn {10}{2}{20}{
+    {\par This~is~#1}
+}}
+\hfill
+\parbox[l][10em][l]{0.5\linewidth}{
+\textbackslash int_step_inline:nnnn~~ \{10\}\{2\}\{20\}\{\\
+\hspace*{4em}\{\textbackslash par~This~is~\#1\}\\
+\}
+}
+
+\vspace*{2em}
+
+\section{一些绘图例子}
+
+下面这个绘图例子就充分的发挥了 latex 3 的优势：循环判断。尽管原始的tikz中已经了相关的宏能够实现类似的功能，但是实现起来绝对没有 latex 3优雅。
+\par 
+% \begin{tikzpicture}
+%     \draw[red,thick] (0, 0) circle (5pt);
+%     \int_step_inline:nnnn {0}{90}{180}{
+%         \node[minimum~width=1.5mm, fill=blue,
+%         draw=none, circle, inner~sep=0pt](A) at 
+%         (\fp_eval:n {sin(#1)}, 
+%          \fp_eval:n {cos(#1)}) 
+%         {}; 
+%     }
+%     \node[red, circle](B) at (0, 0){};
+% \end{tikzpicture}
+
+\vspace*{2em}
+\begin{figure}[!htb]
+    \centering
+    \begin{tikzpicture}
+        \int_step_inline:nnn {0} {17}{
+            \fp_set:Nn \l_tmpa_fp {20 * (#1) *\c_one_degree_fp}
+            \node[minimum~width=1.5mm, fill=blue,
+                draw=none, circle, inner~sep=0pt] at
+            (\fp_eval:n {cos(\l_tmpa_fp)},
+             \fp_eval:n {sin(\l_tmpa_fp)}) {};
+        }
+    \end{tikzpicture}  
+\end{figure}
+
+
+\vspace*{2em}
+\seq_set_split:Nnn \g_my_color_seq {,} {red,cyan,green,brown,orange,purple}
+\begin{figure}[!htb]
+    \centering
+    \subfloat[Rotate~$60^\circ$]{
+        \begin{tikzpicture}[scale=0.6]
+            \fp_step_inline:nnnn {1}{1}{360}{
+                \draw [\seq_item:Nn \g_my_color_seq {\int_mod:nn{#1}{6}+1}] 
+                      (\int_mod:nn{#1-1}{6}*60+#1 \c_colon_str \fp_eval:n{(#1-1)/60}) -- 
+                      (\int_mod:nn{#1}{6}*60+#1 \c_colon_str #1/60);
+            }
+        \end{tikzpicture}
+    }
+    \subfloat[Rotate~$30^\circ$]{
+        \begin{tikzpicture}[scale=0.6]
+            \fp_step_variable:nnnNn {1}{1}{360}{\i}{
+                \draw [
+                    \int_case:nn {\int_mod:nn{\i}{6}}
+                    {
+                        {0} {magenta}
+                        {1} {lime}
+                        {2} {olive}
+                        {3} {orange}
+                        {4} {pink}
+                        {5} {violet}
+                    } 
+                ] 
+                      (\int_mod:nn{\i-1}{6}*30+\i \c_colon_str \fp_eval:n{(\i-1)/60}) -- 
+                      (\int_mod:nn{\i}{6}*30+\i \c_colon_str \i/60);
+            }
+        \end{tikzpicture}
+    }
+\end{figure}
+
+\ExplSyntaxOff
+
+
+\newpage
+\section{最后反思}
+目前感觉latex 3 最大的用处就是能够大幅度的简化我们绘制tikz的难度，要是叫我在正文中使用latex 3， 我觉得并不是那么的方便。
+
+
+\end{document}
