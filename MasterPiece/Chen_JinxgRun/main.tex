@@ -1,0 +1,234 @@
+\documentclass{article}
+\usepackage[top=2.5cm, bottom=2.5cm, left=3cm, right=3cm]{geometry}
+\PassOptionsToPackage{quiet}{fontspec}
+\usepackage[12pt]{ctex}
+\usepackage{framed}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{amsthm}
+\usepackage{zhnumber}
+\usepackage{titlesec}
+\newfontfamily{\russia}[Path=./Fonts/cmu/]{cmunrm.ttf}[
+    BoldFont=cmunbx.ttf,
+    ItalicFont=cmunbi.ttf
+]
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks = true,
+    urlcolor   = black,
+    linkcolor  = black,
+    citecolor  = black,
+}
+
+
+% 章节格式
+\renewcommand{\thesection}{\zhnum{section}}
+\renewcommand{\thesubsection}{}
+\titleformat{\section}{\Large\centering\bfseries}{\thesection.~}{0pt}{}{}
+\titleformat{\subsection}[runin]{\bfseries}{}{0pt}{}{}
+% \newtheoremstyle{lemma}
+%     {2pt}{2pt}{}
+%     {0pt}{\bfseries}{}
+%     {.25em}{\thmname{#1}~\arabic{subsection}.}
+% \theoremstyle{lemma}
+% \newtheorem{lemma}{引理}[section]
+
+% command
+\newcommand{\floor}[1]{\lfloor#1\rfloor}
+\newcommand{\ee}{\mathrm{e}}
+\newcommand{\dd}{\;\mathrm{d}}
+\renewcommand{\proof}{\par \textbf{证}.~}
+
+
+
+\title{大偶数表为一个素数及一个不超过二个素数的乘积之和}
+\author{陈景润}
+\date{{\small(中国科学院数学研究所)}}
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+% 摘要
+\begin{abstract}
+    本文的目的在于用筛法证明了每一充分大的偶数是一个素数及一个不超过两个素数乘积之和.
+    
+    关于孪生素数问题亦得到类似的结果.
+\end{abstract}
+% 目录
+\begin{center}
+    \tableofcontents
+\end{center}
+\setcounter{page}{0}
+\newpage
+
+\section{引言}
+把命题“每一个充分大的偶数都能表示为一个素数及一个不超过$a$个素数的乘积之和”简记为 $(1, a)$.
+
+不少数学工作者改进了筛法及素数分布的某些结果，并用以改善$(1,a)$.现在我们将$(1, a)$发展历史简述如下：
+\begin{itemize}
+    \item $(1, c)$ --- Renyi
+    \item $(1, 5)$ --- 潘承洞, {\russia Барбан}
+    \item $(1, 4)$ --- 王元,潘承洞, {\russia Барбан}
+    \item $(1, 3)$ --- {\russia Бухщтаб, Виноградов}, Bombieri
+\end{itemize}
+
+在文献[10]中我们给出了$(1,2)$的证明提要. 命 $p_x(1, 2)$为适合下列条件的素数 $p$的个数:
+\begin{align*}
+    x - p = p_1 \text{\quad 或 \quad} x - p = p_2p_3
+\end{align*}
+其中 $p_1, p_2, p_3$都是素数.用$x$表示一充分大的偶数.命 
+\begin{align*}
+    C_x = \prod_{\substack{p|x\\p>2}} \frac{p-1}{p-2}\prod_{p>2}(1-\frac{1}{(p-1)^2})
+\end{align*} 
+对于任给定的偶数 $h$ 及充分大的 $x$, 用 $x_k(1, 2)$表示满足下面条件的素数 $p$的个数:
+\begin{align*}
+    p\le x, \qquad p+h = p_1\quad \text{ 或 }\quad  p+h =p_2p_3
+\end{align*}
+其中 $p_1, p_2, p_3$都是素数. 
+
+本文的目的在于证明并改进作者在文献[10]内所提及的全部结果,现在详细叙述如下.
+\begin{itemize}
+    \item \textbf{定理1.} ~ $(1,2)$及 $p_x(1, 2)\ge \frac{0.67xC_x}{(\log x)^2}$
+    \item \textbf{定理2.} ~ 对于任意的偶数 $h$,都存在无限多的素数 $p$，使得 $p+h$的素因子的个数不超过两个及
+        $x_h(1, 2) \ge \frac{0.67xC_x}{(\log x)^2}$
+\end{itemize}
+
+在证明定理1时，主要用到了本文中的引理8和引理9.在证明引理8时，我们使用较为
+简单的数字计算方法；而证明引理9时，我们使用了Bombieri定理及Richert中的一个结
+果.
+
+
+\section{几个引理}
+\subsection{引理1}
+假设 $y\ge 0$, 而 $[\log x]$ 表示 $\log x$的整数部分, $x>1$, 
+\begin{align*}
+    \Phi(y) = \frac{1}{2\pi i}\int_{2-i^\infty}^{2+i^\infty}\frac{y^{\omega}\dd\omega}{\omega\left(1+\frac{\omega}{(\log x)^{1.1}}\right)^{[\log x]+1}}
+\end{align*}
+显见,当 $y\le 1$时,有 $\Phi(y) = 0$. 对于所有的 $y\ge 0$，则 $\Phi(y)$是一个非减函数. 当 $\log x\ge 10^4$ 及 
+$y\ge 2\ee^{2(\log x)^{0.1}}$时，则有:
+\begin{align*}
+    1 - x^{-0.1} \le \Phi(y) \le 1
+\end{align*}
+
+\proof 我们先来证明 
+\begin{align}
+    \frac{\partial^r}{\partial\omega^r}\left(\frac{y^\omega}\omega\right)=\left(\frac{y^\omega}\omega\right)\left\{(\log y)^r+\sum_{i=1}^r\frac{(-1)^ir\cdots(r-i+1)(\log y)^{r-i}}{\omega^i}\right\}
+\end{align}
+成立. 显见, (1)式当 $r=1$和 $r=2$时都成立. 现在假定(1)式对于 $r=2,\cdots,s$时都成立，而证明对于 $S+1$也成立. 由于
+\begin{align*}
+    \frac{\partial^{s+1}}{\partial\omega^{s+1}}\left(\frac{y^w}\omega\right)
+    & = \frac\partial{\partial\omega}\left\{y^w\left(\frac{(\log y)^s}\omega+\sum_{i=1}^s\frac{(-1)^iS\cdots(S-i+1)(\log y)^{s-i}}{\omega^{i+1}}\right)\right\} \\
+    & = y^{\omega}\bigg\{
+        \frac{(\log y)^{s+1}}{\omega}
+        + \sum_{i=1}^{s}\frac{(-1)^{i}S\cdots(S-i+1)(\log y)^{s+1-i}}{\omega^{i+1}} \\
+    &\qquad -\frac{(\log y)^{s}}{\omega^{2}}
+        + \sum_{i=1}^s\frac{(-1)^{i+1}S\cdots(S-i+1)(i+1)(\log y)^{s-i}}{(i)^{t+2}} 
+        \bigg\} \\
+    & = \left(\frac{y^\omega}\omega\right)
+        \bigg\{
+        (\log y)^{s+1} - \frac{(S+1)(\log y)^s}\omega+\frac{(-1)^{s+1}(S+1)!}{\omega^{s+1}} \\
+    &\qquad + \sum_{i=2}^s \left(\frac{(-1)^sS\cdots(S-i+1)(\log y)^{s+1-i}}{\omega^i} + \frac{(-1)^{\prime}S\cdots(S+2-i)i(\log y)^{s+1-i}}{\omega^i}\right)
+        \bigg\} \\
+    & = \left(\frac{y^\omega}\omega\right)\left\{(\log y)^{S+1} + \sum_{i=1}^{S+1}\frac{(-1)^i(S+1)\cdots(S+1-i+1)(\log y)^{s+1-i}}{\omega^i} \right\}
+\end{align*}
+故(1)式成立. 又当 $y\ge 1$时,我们有
+\begin{align*}
+    \Phi(y)
+    & = 1+\left\{\frac{(\log x)^{1.1+1.1[\log x]}}{[\log x]!}\right\}\left\{\frac{\partial^{[\log x]}}{\partial\omega^{[\log x]}}\left(\frac{y^{\omega}}{\omega}\right)\right\}_{\omega=-(\log x)^{1.1}}  \\
+    & = 1-e^{-(\log x)^{1.1}(\log y)}\sum_{\nu=0}^{[\log x]}\frac{\{(\log x)^{1.1}(\log y)\}^{\nu}}{\nu!} \\
+    & = \left\{\frac{1}{\left[\log x\right]!}\right\}\int_{0}^{(\log x)!^{-1}(\log y)}e^{-\lambda}\lambda^{[\log x]}\dd\lambda
+\end{align*}
+因为 $0\le y\le 1$时,$\Phi(y)=0$.故由上式得到: 当$y\ge 0$时,则 $\Phi(y)$是一个非减函数. 又当 $y\ge \ee^{2(\log x)^{-1.0}}$时，有
+\begin{align*}
+    0 < 1-\Phi(y)
+    & = \left\{\frac{1}{[\log x]!}\right\}\int_{(\log x)^{1.1}(\log y)}^{\infty}e^{-\lambda}\lambda^{[\log x]}\dd\lambda \\
+    & = \left\{\frac{1}{[\log x]!}\right\}\int_{2[\log x]}^{\infty}e^{-\lambda}\lambda^{[\log x]}\dd\lambda \\
+    & = \left\{\frac{\left(\left[\log x\right]\right)^{1+\left[\log x\right]}}{\left[\log x\right]!}\right\}
+        \cdot \int_{2}^{\infty}e^{-\lambda[\log x]}\lambda^{[\log x]}\dd\lambda \\
+    & = \left\{\ee^{-[\log x]}\frac{\left(\left[\log x\right]\right)^{1+\left[\log x\right]}}{\left[\log x\right]!}\right\}
+        \cdot \int_{1}^{\infty}e^{-\lambda[\log x]}(1+\lambda)^{[\log x]}\dd\lambda \\
+    & \le x^{-0.1}
+\end{align*}
+其中用到 $\log x\ge 10^4$ 及当 $\lambda\ge 1$时，有 $\ee^{\log(1+\lambda)}\le \ee^{\lambda\log 2}$.
+
+
+
+\subsection{引理2}
+令 $\ee(\alpha) = \ee^{2\pi i}\alpha, S(\alpha) = \sum_{n=M+1}^{M+N}{a_n\ee(n\alpha)}, Z = \sum_{n=M+1}^{M+N}{|a_n|^2}$,
+其中 $a_n$是任意的实数. 我们用 $\sum_{\chi_q}^{*}$来表示和式之中经过且只经过 $q$模的所有原特征,则有
+\begin{align}
+    & \sum_{q\leq x}\frac{q}{\varphi(q)}\sum_{x_{q}}^{*}\Big|\sum_{n=M+1}^{M+N}a_{n}\chi_{q}(n)\Big|^{2}\le (X^{2}+\pi N)\sum_{n=M+1}^{M+N}\Big|u_{n}\Big|^{2} \\
+    & \sum_{D<q\leq Q}\frac{1}{\varphi(q)}\sum_{x_{q}}^{*}\Big|\sum_{n=M+1}^{M+N}a_{n}\chi_{q}(n)\Big|^{2}\ll\Big(Q+\frac{N}{D}\Big)\sum_{n=M+1}^{M+N}|a_{n}|^{2}
+\end{align}
+
+
+
+
+
+
+
+\subsection{引理3}
+当 $S=\sigma+it$和 $\sigma\ge \frac12$时，则有
+\[
+    \sum_{q\le Q}\sum_{x_{q}}^{*}\mid L(s,\chi_{q})\mid^{4}\ll Q^{2}\mid S\mid^{2}(\log Q)^{4} 
+\]
+
+
+
+\subsection{引理4}
+当 $k$ 是无平方因子的奇数，而 $m\neq 1$时，我们有
+\[
+    \left|\sum_{x_k}^*\chi_k(m)\right|\le\left|(m-1,k)\right|   
+\]
+
+
+
+\subsection{引理5}
+设 $x$ 是偶数， 则有 
+\[
+    \Omega \le \frac{M_1 + M_2}{1-e} + O(\frac{x}{(\log x)^{2.01}})    
+\]
+
+\subsection{引理6}
+我们有 
+\[
+    M_2 \ll \frac{x}{(\log x)^{2.01}} 
+\]
+
+\subsection{引理7}
+对于大偶数 $x$, 我们有
+\[
+    M_1 \le \left\{\frac{(8+24\varepsilon)xC_x}{\log x}\right\}
+        \left\{\sum_{x^{1/10}<p_1\le x^{1/3}<p_2\le (\frac{x}{p_1}^{1/2})}^{}{\frac{1}{p_1p_2\log\frac{x}{p_1p_2}}}\right\}
+\]
+其中 $\displaystyle C_x = \prod_{\stackrel{p|x}{p>2}}\frac{p-1}{p-2}\prod_{p>2}\left(1-\frac{1}{(p-1)^2}\right)$
+
+
+\subsection{引理8}
+设$x$是大偶数，则有
+\[
+    \Omega \le \frac{3.9404xC_x}{(\log x)^2}    
+\]
+
+\subsection{引理9}
+设$x$是大偶数，则有 
+\[
+    P_x(x, x^{1/10}) - (\frac12) \sum_{x^{1/10}<p\le x^{1/3}}^{}{P_x(x, p, x^{1/10})} 
+    \ge \frac{2.6408xC_x}{(\log x)^2}   
+\]
+其中 $\displaystyle C_x = \prod_{\stackrel{p|x}{p>2}}\frac{p-1}{p-2}\prod_{p>2}\left(1-\frac{1}{(p-1)^2}\right)$
+
+
+
+\section{结果}
+显见，我们有
+\begin{align}
+    p_x(1, 2) \ge p_x(x, x^{1/10}) - (\frac12)\sum_{x^{1/10}<p\le x^{1/3}}^{}{p_x(x, p, x^{1/10})} - \frac{\Omega}{2} -x^{0.91}
+\end{align}
+
+由(28)式,引理8和引理9,即得到定理1
+\[
+    (1, 2)\quad \text{ 或 }\quad  P_x(1, 2)\ge \frac{0.67xC_x}{(\log x)^2}   
+\]
+的证明. 完全类似的方法可得到定理2的证明.
+
+\end{document}
