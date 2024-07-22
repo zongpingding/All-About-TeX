@@ -1,0 +1,169 @@
+\ProvidesExplFile{ztikzmodule.python.tex}{2024/06/15}{1.0.0}{python~module~for~ztikz}
+
+
+
+
+
+% ----------------------------------------------
+%                    set up                
+% ---------------------------------------------
+% writing scripts
+\RequirePackage{xsimverb}
+\ExplSyntaxOff
+\begingroup\newif\ifpyscript
+\IfFileExists{./ztikz_output/scripts/sympy_script.py}{}{\pyscripttrue}
+\ifpyscript
+\ztikzMkdir{ztikz_output/scripts/}
+\begin{filecontents}[noheader]{ztikz_output/scripts/python_script.py}
+from numpy import *
+from scipy import *
+
+
+# ==> echo to file
+Float_res = 2**10
+
+# ==> write output
+filename = "./ztikz_output/python_data/PyFloat.out"
+with open(filename, 'w') as file: 
+    file.write(str(Float_res)+"\n")
+\end{filecontents}
+  
+\begin{filecontents}[noheader]{ztikz_output/scripts/sympy_script.py}
+from sympy import *
+
+
+# ==> symbols declearation
+x, y, z, u, v, t = symbols('x y z u v t') 
+
+# ==> echo to file
+F_res = integrate(sin(x)/x, (x, -oo, oo))
+
+# ==> write output
+filename = './ztikz_output/python_data/sympy.out'
+with open(filename, 'w') as file: 
+    file.write(latex(F_res)+"\n")
+\end{filecontents}
+\fi\endgroup
+\ExplSyntaxOn
+
+% set path
+\ztikzMkdir{ztikz_output/python_data/}
+\tl_const:Nn \g__ztikz_python_path_tl   {ztikz_output/python_data} 
+\ior_new:N \g__file_read_ior
+\tl_new:N  \g__file_content_tl
+
+% index of python picture
+\int_new:N   \g__sympy_index_int
+\int_new:N   \g__python_picture_index_int
+\int_gadd:Nn \g__python_picture_index_int {1}
+
+
+
+
+
+% ----------------------------------------------
+%                 core functions                
+% ---------------------------------------------
+\cs_generate_variant:Nn \xsim_file_write_start:nn {nx}
+\cs_generate_variant:Nn \sys_shell_mv:nn {xx}
+% ==> python-matplotlib
+\NewDocumentEnvironment{pyfig}{ O{width=.75\linewidth}m }{
+  \newcommand{\pyfile}{#2}
+  \xsim_file_write_start:nx {\c_true_bool}{\g__ztikz_python_path_tl/#2}
+  }{ 
+  \xsim_file_write_stop:   
+  % check if hash changed
+  \ztikz_hash_if_change_cs:x {\g__ztikz_python_path_tl/\pyfile}   
+  \bool_if:NTF \g__hash_change_bool {
+    % add save figure to source
+    \sys_if_platform_windows:TF {
+      \exp_args:Nx \sys_shell_now:n {
+        echo~ plt.savefig('\g__ztikz_python_path_tl/\pyfile.pdf')~ >>~ \g__ztikz_python_path_tl/\pyfile
+      }
+    }{
+      \exp_args:Nx \sys_shell_now:n {
+        echo~ "plt.savefig('\g__ztikz_python_path_tl/\pyfile.pdf')"~ >>~ \g__ztikz_python_path_tl/\pyfile
+      }
+    }
+    % excute python source
+    \exp_args:Nx \sys_shell_now:n {python~ \g__ztikz_python_path_tl/\pyfile} 
+    \includegraphics[#1]{\g__ztikz_python_path_tl/\pyfile.pdf}
+    \typeout{Writing~ 'pyfig'~environment~source~to~\tl_use:N \g__ztikz_python_path_tl/\pyfile}
+  }{
+    \includegraphics[#1]{\g__ztikz_python_path_tl/\pyfile.pdf}
+    \typeout{skip~recompile~by~python,~using~the~cache~picture~\int_use:N \g__python_picture_index_int}
+  }
+  % step picture index
+  \int_gadd:Nn \g__python_picture_index_int {1}
+}
+
+% read from external file 
+\cs_new_protected:Npn \zlatex_Readlines_cs:nn #1#2 {
+  \ior_open:Nn \g__file_read_ior {#2}
+  \str_case:nnF {#1}{
+    {raw}{
+      \ior_get:NN \g__file_read_ior \g__file_content_tl
+    }
+    {str}{
+      \ior_str_get:NN \g__file_read_ior \g__file_content_tl
+    }
+  }{}
+  \tl_use:N \g__file_content_tl
+}
+\cs_generate_variant:Nn \zlatex_Readlines_cs:nn {xx}
+
+% ==> 1-line python command
+\NewDocumentCommand\py{O{raw}m}{
+  % sympy source write
+  \sys_shell_now:x {sed~ -i~ "6s|Float_res~ =~ .*|Float_res~ =~ \tl_to_str:n {#2}|"~ \g__ztikz_scripts_path_tl/python_script.py}
+  % calculation
+  \typeout{using~python~float~module~calculating...}
+  \sys_shell_now:x {python~ \g__ztikz_scripts_path_tl/python_script.py}
+  % using \ior_get: 
+  \zlatex_Readlines_cs:xx {#1}{\g__ztikz_python_path_tl/PyFloat.out}
+  % ---> cause bug that can't write ToC to file
+  % \iow_close:N \g__file_read_ior
+}
+
+% ==> python-sympy
+\NewDocumentCommand\sympy{m}{
+  % step sympy result index
+  \int_gadd:Nn \g__sympy_index_int {1}  
+  \tl_set:Nx \l__current_sympy_index_tl {\int_use:N \g__sympy_index_int}
+  % sympy source write
+  \sys_shell_now:x {sed~ -i~ "8s|F_res~ =~ .*|F_res~ =~  #1|"~ \g__ztikz_scripts_path_tl/sympy_script.py}
+  % check hash
+  \ztikz_hash_if_change_cs:x {\g__ztikz_scripts_path_tl/sympy_script.py}
+  \bool_if:NTF \g__hash_change_bool {
+    \sys_shell_now:x {python~ \g__ztikz_scripts_path_tl/sympy_script.py}
+    \sys_shell_mv:xx
+      {\g__ztikz_python_path_tl/sympy.out}
+      {\g__ztikz_python_path_tl/sympy_\int_use:N \g__sympy_index_int .out}
+    \typeout{using~python~sympy~calculating~question~\l__current_sympy_index_tl ...}
+    \exp_args:Nx \input{\g__ztikz_python_path_tl/sympy_\l__current_sympy_index_tl.out}
+  }{
+    \exp_args:Nx \input{\g__ztikz_python_path_tl/sympy_\l__current_sympy_index_tl.out}
+    \typeout{skip~recompile,~using~the~cache~sympy~result~\l__current_sympy_index_tl}
+  }
+}
+
+% ==> python-code-env
+\NewDocumentEnvironment{pycode}{ m }{
+  \newcommand{\pyfile}{#1}
+  \xsim_file_write_start:nx {\c_true_bool}{\g__ztikz_python_path_tl/#1}
+  }{ 
+  \xsim_file_write_stop: 
+  % check if hash changed
+  \ztikz_hash_if_change_cs:x {\g__ztikz_python_path_tl/\pyfile}   
+  \bool_if:NTF \g__hash_change_bool {
+    % excute python source
+    \exp_args:Nx \sys_shell_now:n {python~ \g__ztikz_python_path_tl/\pyfile} 
+    \input{\g__ztikz_python_path_tl/\pyfile.out}
+    \typeout{Writing~ 'pycode'~environment~source~to~\tl_use:N \g__ztikz_python_path_tl/\pyfile}
+  }{
+    \input{\g__ztikz_python_path_tl/\pyfile.out}
+    \typeout{skip~recompile~by~python,~using~the~cache~pycode~result~\int_use:N \g__python_picture_index_int}
+  }
+  % step picture index
+  \int_gadd:Nn \g__python_picture_index_int {1}  
+}
