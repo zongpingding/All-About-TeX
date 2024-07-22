@@ -1,9 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\RequirePackage{expl3}
-\ProvidesExplPackage{ztikz}{2024/04/16}{0.5}{plot package}
-
-
-
+\ProvidesExplPackage{ztikz}{2024/06/12}{1.0.0}{A~pre-release~diagram~plot~package}
 
 
 % ----------------------------------------------------------------------
@@ -11,156 +7,20 @@
 % ----------------------------------------------------------------------
 \RequirePackage{l3sys-shell}
 \NewDocumentCommand\ztikzMkdir{m}{ \sys_shell_mkdir:n {#1} }
-\ExplSyntaxOff
-\begingroup\newif\ifztikz
-\IfFileExists{./ztikz_output/scripts/sympy_script.py}{}{\ztikztrue}
-\ifztikz
-% create folders and hash file
 \ztikzMkdir{ztikz_output/}
-\ztikzMkdir{ztikz_output/gnuplot_data/}
-\ztikzMkdir{ztikz_output/python_data/}
-\ztikzMkdir{ztikz_output/scripts/}
-\ztikzMkdir{ztikz_output/tikz_data/}
-\ztikzMkdir{ztikz_output/mma_data/}
-\immediate\write18 {touch ztikz_output/ztikz.hash}
-
-% writing source code
-\begin{filecontents}[noheader]{./ztikz_output/scripts/python_script.py}
-from numpy import *
-from scipy import *
-
-
-# ==> echo to file
-Float_res = 2**10
-
-# ==> write output
-filename = "./ztikz_output/python_data/PyFloat.out"
-with open(filename, 'w') as file: 
-    file.write(str(Float_res)+"\n")
-\end{filecontents}
-
-\begin{filecontents}[noheader]{./ztikz_output/scripts/sympy_script.py}
-from sympy import *
-
-
-# ==> symbols declearation
-x, y, z, u, v, t = symbols('x y z u v t') 
-
-# ==> echo to file
-F_res = integrate(sin(x)/x, (x, -oo, oo))
-
-# ==> write output
-filename = './ztikz_output/python_data/sympy.out'
-with open(filename, 'w') as file: 
-    file.write(latex(F_res)+"\n")
-\end{filecontents}
-
-\begin{filecontents}[noheader]{./ztikz_output/scripts/plot.gp}
-set table "./ztikz_output/gnuplot_data/gnu_data.table"
-set format "%.5f"
-set samples 100
-
-
-# ==> specific a 2d function
-f(x) = x
-set xr [-6:-1]
-plot f(x)
-\end{filecontents}
-
-\begin{filecontents}[noheader]{./ztikz_output/scripts/contour_plot.gp}
-set table "./ztikz_output/gnuplot_data/gnu_data.table"
-set samples 100,100
-set isosamples 100,100
-set format "%.5f"
-set cont base
-set cntrparam levels discrete 0,0
-unset surface
-
-
-# ==> contour plot a function
-set xr [-4:4]
-set yr [*:*]
-set zr [*:*]
-f(x, y) = y-3*sin(1/x)
-splot f(x,y)
-\end{filecontents}
-
-\begin{filecontents}[noheader]{./ztikz_output/scripts/param_plot.gp}
-set table "./ztikz_output/gnuplot_data/gnu_data.table"
-set format "%.5f"
-set samples 100
-set parametric
-
-
-# ==> specific a parametric function
-set trange [0:2*pi]
-plot sin(t), cos(t)  
-\end{filecontents}
-
-\begin{filecontents}[noheader]{./ztikz_output/scripts/polar_plot.gp}
-set table "./ztikz_output/gnuplot_data/gnu_data.table"
-set format "%.5f"
-set samples 100
-set polar
-
-
-# ==> polar plot, default varible name 't'
-set trange [0:12*pi]
-plot t
-\end{filecontents}
-\fi\endgroup
-\ExplSyntaxOn
-
-
-
-
-
-% ----------------------------------------------------------------------
-%                           ztikz config 
-% ----------------------------------------------------------------------
-% data or picture path
-\tl_const:Nn \g__ztikz_gnu_path_tl      {./ztikz_output/gnuplot_data} 
-\tl_const:Nn \g__ztikz_python_path_tl   {./ztikz_output/python_data} 
-\tl_const:Nn \g__ztikz_scripts_path_tl  {./ztikz_output/scripts}
-\tl_const:Nn \g__ztikz_tikz_path_tl     {./ztikz_output/tikz_data}
-\tl_const:Nn \g__ztikz_mma_path_tl      {./ztikz_output/mma_data}
-
-% index of output data by gnuplot
-\int_new:N   \g__gnu_data_index_int
-\int_new:N   \g__sympy_index_int
-\int_new:N   \g__picture_index_int
-\int_new:N   \g__mma_index_int
-\int_new:N   \g__tikz_env_index_int
-\int_gadd:Nn \g__mma_index_int {1}
-
-% bool to control \PlotPrecise cmd
-\bool_new:N \g__plot_precise_bool
-\bool_new:N \g__contour_precise_bool
-\bool_new:N \g__param_precise_bool
-\bool_new:N \g__polar_precise_bool
-\bool_new:N \g__hash_change_bool
-\bool_gset_true:N \g__hash_change_bool
-
-% io read/write interface
-\ior_new:N \g__file_read_ior
-\tl_new:N  \g__file_content_tl
-
-
-
+\tl_const:Nn \g__ztikz_scripts_path_tl  {ztikz_output/scripts}
 
 
 % ----------------------------------------------------------------------
 %                            basic packages
 % ----------------------------------------------------------------------
-\RequirePackage{xparse}
-\RequirePackage{xsimverb}
 \RequirePackage{tikz}
 \RequirePackage{etoolbox}
 \patchcmd{\pgfutil@InputIfFileExists}{\input #1}{%
-    \@pushfilename
-    \xdef\@currname{#1}%
-    \input #1 %
-    \@popfilename
+  \@pushfilename
+  \xdef\@currname{#1}%
+  \input #1 %
+  \@popfilename
 }{}{}
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{intersections}
@@ -171,214 +31,111 @@ plot t
 % for shade curve
 \usetikzlibrary{decorations.markings}
 \usetikzlibrary{fadings}
-% get tikz environment's index
-\pretocmd{\tikzpicture}{
-    \int_gincr:N \g__tikz_env_index_int
-    \int_gset:Nn \g__gnu_data_index_int {0}
-}{}{}
-\NewDocumentCommand{\currentTikzIndex}{}{\int_use:N \g__tikz_env_index_int}
 
 
-% set options
-\cs_new_protected:Npn \ztikz_define_option:n
-    { \keys_define:nn { ztikz / option } }
-
-\ztikz_define_option:n {
-    external    .bool_set:N = \l__ztikz_external_bool,
-    external    .initial:n  = { true },
+% ----------------------------------------------------------------------
+%                        load module interface
+% ----------------------------------------------------------------------
+\cs_new_nopar:Npn \g__ztikz_load_module:n #1 {
+  \clist_map_inline:nn {#1} {
+    \file_if_exist_input:nF {modules/ztikzmodule.##1.tex} {}
+  }
 }
-\ProcessKeysOptions {ztikz / option}
-
-\bool_if:NT \l__ztikz_external_bool {
-    \usetikzlibrary{external}
-    % fixed confilct to 'pdfpages':https://github.com/tuna/thuthesis/issues/693
-    \tikzexternalize[prefix=ztikz_output/tikz_data/]
+\NewDocumentCommand\ztikzLoadModule{m}{
+  \g__ztikz_load_module:n {#1}\ExplSyntaxOff
 }
-
-
-
 
 
 % ----------------------------------------------------------------------
 %                          ztikz's cache mechanism 
 % ----------------------------------------------------------------------
-% generate md5 hash (history) of a file
-\ior_new:N \g__ztikz_file_ior
-\seq_new:N \g__ztikz_file_hash_seq
-\cs_new_protected:Nn \ztikz_file_read_lines_cs:n {
-    \ior_open:Nn \g__ztikz_file_ior {#1}
-    \seq_gclear:N \g__ztikz_file_hash_seq
-    \ior_str_map_inline:Nn \g__ztikz_file_ior
-      {
-        \seq_gput_right:Nx \g__ztikz_file_hash_seq
-          { \tl_trim_spaces:n {##1} }
-      }
-    \ior_close:N \g__ztikz_file_ior
-}
-\cs_generate_variant:Nn \ztikz_file_read_lines_cs:n { e }
-
-% check if code changed (compare hash value of source code)
-\seq_new:N \l__ztikz_hash_seq
-\cs_new_protected:Npn \ztikz_hash_if_change_cs:n #1 {
-    % Param: #1 -> file name of source code
-    % read from hash list and remove duplicate item
-    \ztikz_file_read_lines_cs:e { ./ztikz_output/ztikz.hash }
-    \seq_gremove_duplicates:N \g__ztikz_file_hash_seq
-    % check if in
-    \file_get_mdfive_hash:nN {#1} \l__ztikz_hash_seq
-    \typeout{current~hash~is~\l__ztikz_hash_seq}
-    \seq_if_in:NVTF \g__ztikz_file_hash_seq \l__ztikz_hash_seq {
-        \bool_gset_false:N \g__hash_change_bool
-    }{
-        \bool_gset_true:N \g__hash_change_bool
-        \typeout{current~hash~is~unique~-->~recorded}
-        \sys_shell_now:x { echo~ \l__ztikz_hash_seq >> ./ztikz_output/ztikz.hash}
-    }
+\cs_set_protected:Npn \ztikz_hash_if_change_cs:n #1 {
+  \bool_gset_true:N \g__hash_change_bool
 }
 \cs_generate_variant:Nn \ztikz_hash_if_change_cs:n { x }
-
-
-
 
 
 % ----------------------------------------------------------------------
 %                       coordinate basic components
 % ----------------------------------------------------------------------
-% ==> show point
+% ==> point
 \keys_define:nn { ztikz / point }{
-    type    .str_set:N  = \l__point_type_str,
-    type    .initial:n = { * },
-    radius  .dim_set:N = \l__point_radius_dim,
-    radius  .initial:n = { 1pt },
-    color   .tl_set:N  = \l__point_color_tl, 
-    color   .initial:n = { black },
-    opacity .tl_set:N  = \l__point_opacity_tl, 
-    opacity .initial:n = { 1 },
-    rotate  .fp_set:N  = \l__point_rotate_angle,
-    rotate  .initial:n = { 0 },  
+  type    .str_set:N  = \l__point_type_str,
+  type    .initial:n = { * },
+  radius  .dim_set:N = \l__point_radius_dim,
+  radius  .initial:n = { 1pt },
+  color   .tl_set:N  = \l__point_color_tl, 
+  color   .initial:n = { black },
+  opacity .tl_set:N  = \l__point_opacity_tl, 
+  opacity .initial:n = { 1 },
+  rotate  .fp_set:N  = \l__point_rotate_angle,
+  rotate  .initial:n = { 0 },  
 }
 \NewDocumentCommand\ShowPoint{ O{}mO{}O{} }{
-    \group_begin:
-    \exp_args:Nne \keys_set:nn { ztikz / point } { #1 }
-    \seq_set_split:Nnn \l__point_list_seq { ; }{#2}
-    \seq_set_split:Nnn \l__point_label_seq { ; }{#3}
-    \int_step_inline:nnnn {1}{1}{\seq_count:N \l__point_list_seq}{        
-        \draw plot [
-            only~ marks,
-            mark = \str_use:N \l__point_type_str, 
-            mark~ size = \dim_use:N \l__point_radius_dim,
-            mark~ options = {
-                rotate  = \fp_use:N \l__point_rotate_angle, 
-                opacity = \tl_use:N \l__point_opacity_tl, 
-                color   = \tl_use:N \l__point_color_tl,
-                ball~ color = \tl_use:N \l__point_color_tl,
-            }
-        ] coordinates{\seq_item:Nn \l__point_list_seq{##1}} node[#4]{\seq_item:Nn \l__point_label_seq{##1}};
-    }
-    \group_end:
+  \group_begin:
+  \exp_args:Nne \keys_set:nn { ztikz / point } { #1 }
+  \seq_set_split:Nnn \l__point_list_seq { ; }{#2}
+  \seq_set_split:Nnn \l__point_label_seq { ; }{#3}
+  \int_step_inline:nnnn {1}{1}{\seq_count:N \l__point_list_seq}{        
+    \draw plot [
+      only~ marks,
+      mark = \str_use:N \l__point_type_str, 
+      mark~ size = \dim_use:N \l__point_radius_dim,
+      mark~ options = {
+        rotate  = \fp_use:N \l__point_rotate_angle, 
+        opacity = \tl_use:N \l__point_opacity_tl, 
+        color   = \tl_use:N \l__point_color_tl,
+        ball~ color = \tl_use:N \l__point_color_tl,
+      }
+    ] coordinates{\seq_item:Nn \l__point_list_seq{##1}} node[#4]{\seq_item:Nn \l__point_label_seq{##1}};
+  }
+  \group_end:
 }
 
-% ==> polygon
-\keys_define:nn { ztikz / polygon }{
-    radius       .fp_set:N  = \l__polygon_radius_fp,
-    radius       .initial:n = { 1 },
-    edgeColor    .tl_set:N  = \l__polygon_edge_color_tl,
-    edgeColor    .initial:n = { black },
-    fillColor    .tl_set:N  = \l__polygon_fill_color_tl,
-    fillColor    .initial:n = { },
-    fillOpacity  .fp_set:N  = \l__polygon_fill_opacity_fp,
-    fillOpacity  .initial:n = { 0 },
-    rotate       .fp_set:N  = \l__polygon_rotate_angle,
-    rotate       .initial:n = { 0 },
-    shift        .tl_set:N  = \l__polygon_shift_tl,
-    shift        .initial:n = { (0,0) },
-    marker       .tl_set:N  = \l__polygon_marker_option_tl,
-    marker       .initial:n = { },
-}
-\tl_new:N \l__poly_path_tl
-\NewDocumentCommand\Polygon{ O{}m }{
-    \group_begin:
-    \keys_set:nn { ztikz / polygon } { #1 }
-    % strip '(' and ')'
-    \tl_replace_once:Nnn \l__polygon_shift_tl{(}{}
-    \tl_replace_once:Nnn \l__polygon_shift_tl{)}{}
-    \coordinate (mv) at (\tl_use:N \l__polygon_shift_tl);
-    % create polygon
-    \begin{scope}[shift=(mv), rotate=\fp_use:N \l__polygon_rotate_angle]
-    \int_step_inline:nnn {1}{#2}{
-        % draw edges
-        \fp_set:Nn \l_angle_fp {360/#2*##1*\c_one_degree_fp}
-        \fp_set:Nn \l_angle_next_fp {360/#2*(##1+1)*\c_one_degree_fp}
-        \draw[\tl_use:N \l__polygon_edge_color_tl] (\fp_eval:n {\l__polygon_radius_fp*cos(\l_angle_fp)},      \fp_eval:n {\l__polygon_radius_fp*sin(\l_angle_fp)})
-            --(\fp_eval:n {\l__polygon_radius_fp*cos(\l_angle_next_fp)}, \fp_eval:n {\l__polygon_radius_fp*sin(\l_angle_next_fp)});
-        % fill polygon path 
-        \int_compare:nNnTF {##1}<{#2}{
-            \tl_put_right:Nn \l__poly_path_tl {(p##1)--}
-        }{
-            \tl_put_right:Nn \l__poly_path_tl {(p##1)--cycle}
-        }
-        % mark coordinates
-        \coordinate (p##1) at (\fp_eval:n {\l__polygon_radius_fp*cos(\l_angle_fp)}, \fp_eval:n {\l__polygon_radius_fp*sin(\l_angle_fp)});
-    }
-    % fill polygon (none-color -> opacity=1; or opacity=.75)
-    \tl_if_empty:NTF \l__polygon_fill_color_tl {
-        \fp_set:Nn \l__polygon_fill_opacity_fp {0}
-    }{
-        \fp_set:Nn \l__polygon_fill_opacity_fp {.75}
-    }
-    \fill [\tl_use:N \l__polygon_fill_color_tl, fill~opacity=\fp_use:N \l__polygon_fill_opacity_fp] \l__poly_path_tl;
-    % show markers
-    \int_step_inline:nnn {1}{#2}{
-        \ShowPoint[\l__polygon_marker_option_tl]{(p##1)}
-    }
-    \end{scope} 
-    \group_end:
-}
-
-% ==> show grid
+% ==> grid
 \NewDocumentCommand\ShowGrid{ O{color=gray, very~ thin, step=1}m }{
-    \seq_set_split:Nnn \l__grid_param_ii_seq { ; }{#2}
-    \draw[#1] \seq_item:Nn \l__grid_param_ii_seq{1}  grid \seq_item:Nn \l__grid_param_ii_seq{2};
+  \seq_set_split:Nnn \l__grid_param_ii_seq { ; }{#2}
+  \draw[#1] \seq_item:Nn \l__grid_param_ii_seq{1}  grid \seq_item:Nn \l__grid_param_ii_seq{2};
 }
 
-% ==> show axis
+% ==> axis
 \keys_define:nn { ztikz / axis }{
-    % basic tick args
-    tickStart       .fp_set:N   = \l__start_fp,
-    tickStart       .initial:n  = { -5 },
-    tickEnd         .fp_set:N   = \l__end_fp,
-    tickEnd         .initial:n  = { 5 },
-    axisRotate      .fp_set:N   = \l__axis_rotate_angle,
-    axisRotate      .initial:n  = { 0 },
-    % tick dimension spec
-    mainStep        .fp_set:N   = \l__main_step_fp,
-    mainStep        .initial:n  = { 1.0 },
-    subStep         .fp_set:N   = \l__sub_step_fp,
-    subStep         .initial:n  = { 0.1 },
-    mainTickLabel   .tl_set:N   = \l__main_tick_label_tl,
-    mainTickLabel   .initial:n  = { \fp_use:N {\CurrentFp} },
-    tickLabelShift  .dim_set:N  = \l__tick_label_shift_dim,
-    tickLabelShift  .initial:n  = { 0pt },
-    mainTickLength  .dim_set:N  = \l__main_tick_length_dim,
-    mainTickLength  .initial:n  = { 4pt },
-    subTickLength   .dim_set:N  = \l__sub_tick_length_dim,
-    subTickLength   .initial:n  = { 2pt },
-    mainTickLabelPosition .tl_set:N  = \l__main_tick_label_position_tl,
-    mainTickLabelPosition .initial:n = { below },
-    % color spec
-    axisColor       .tl_set:N   = \l__axis_color_tl,
-    axisColor       .initial:n  = { black },
-    mainTickColor   .tl_set:N   = \l__main_tick_color_tl,
-    mainTickColor   .initial:n  = { black },
-    subTickColor    .tl_set:N   = \l__sub_tick_color_tl,
-    subTickColor    .initial:n  = { black },
-    mainTickLabelColor .tl_set:N  = \l__main_tick_label_color_tl,
-    mainTickLabelColor .initial:n = { black },
-    % tick cross type spec
-    tickStyle       .choice:,
-    tickStyle/cross .code:n     = \tl_set:Nn \l__tick_spec_tl { cross },
-    tickStyle/above .code:n     = \tl_set:Nn \l__tick_spec_tl { above },
-    tickStyle/below .code:n     = \tl_set:Nn \l__tick_spec_tl { below },
+  % basic tick args
+  tickStart       .fp_set:N   = \l__start_fp,
+  tickStart       .initial:n  = { -5 },
+  tickEnd         .fp_set:N   = \l__end_fp,
+  tickEnd         .initial:n  = { 5 },
+  axisRotate      .fp_set:N   = \l__axis_rotate_angle,
+  axisRotate      .initial:n  = { 0 },
+  % tick dimension spec
+  mainStep        .fp_set:N   = \l__main_step_fp,
+  mainStep        .initial:n  = { 1.0 },
+  subStep         .fp_set:N   = \l__sub_step_fp,
+  subStep         .initial:n  = { 0.1 },
+  mainTickLabel   .tl_set:N   = \l__main_tick_label_tl,
+  mainTickLabel   .initial:n  = { \fp_use:N {\CurrentFp} },
+  tickLabelShift  .dim_set:N  = \l__tick_label_shift_dim,
+  tickLabelShift  .initial:n  = { 0pt },
+  mainTickLength  .dim_set:N  = \l__main_tick_length_dim,
+  mainTickLength  .initial:n  = { 4pt },
+  subTickLength   .dim_set:N  = \l__sub_tick_length_dim,
+  subTickLength   .initial:n  = { 2pt },
+  mainTickLabelPosition .tl_set:N  = \l__main_tick_label_position_tl,
+  mainTickLabelPosition .initial:n = { below },
+  % color spec
+  axisColor       .tl_set:N   = \l__axis_color_tl,
+  axisColor       .initial:n  = { black },
+  mainTickColor   .tl_set:N   = \l__main_tick_color_tl,
+  mainTickColor   .initial:n  = { black },
+  subTickColor    .tl_set:N   = \l__sub_tick_color_tl,
+  subTickColor    .initial:n  = { black },
+  mainTickLabelColor .tl_set:N  = \l__main_tick_label_color_tl,
+  mainTickLabelColor .initial:n = { black },
+  % tick cross type spec
+  tickStyle       .choice:,
+  tickStyle/cross .code:n     = \tl_set:Nn \l__tick_spec_tl { cross },
+  tickStyle/above .code:n     = \tl_set:Nn \l__tick_spec_tl { above },
+  tickStyle/below .code:n     = \tl_set:Nn \l__tick_spec_tl { below },
 }
 % ticks style
 \tl_new:N  \l__tick_type_tl    % `main' or `sub'
@@ -388,666 +145,157 @@ plot t
 \tl_new:N  \l__node_text_tl
 % draw ticks (main or sub)
 \cs_new_protected:Npn \ztikz_draw_axis_ticks_cs:n #1 {
-    \str_case:NnT \l__tick_type_tl {
-        {main}{
-            \dim_set_eq:NN \l__tick_length_dim\l__main_tick_length_dim
-            \tl_set:NV \l__tick_color_tl\l__main_tick_color_tl
-            \tl_set:Nn \l__node_text_tl {\tl_use:N \l__main_tick_label_tl}
-        }
-        {sub}{
-            \dim_set_eq:NN \l__tick_length_dim\l__sub_tick_length_dim
-            \tl_set:NV \l__tick_color_tl \l__sub_tick_color_tl
-            \tl_set:Nn \l__node_text_tl {}
-        }
-    }{}
-    \str_case:VnT \l__tick_spec_tl {
-        {cross}{
-            \draw[\tl_use:N \l__tick_color_tl] 
-                (#1, 0)++(0, \dim_eval:n {\l__tick_length_dim/2}) -- ++(0, \dim_eval:n {-\l__tick_length_dim}) 
-                node[\tl_use:N \l__main_tick_label_position_tl] 
-                {\textcolor{\tl_use:N \l__main_tick_label_color_tl}{\tl_use:N \l__node_text_tl}};
-        }
-        {above}{
-            \draw[\tl_use:N \l__tick_color_tl] (#1, 0) -- ++(0, \dim_eval:n {\l__tick_length_dim/2}) 
-                node[\tl_use:N \l__main_tick_label_position_tl] 
-                {\textcolor{\tl_use:N \l__main_tick_label_color_tl}{\tl_use:N \l__node_text_tl}};
-        }
-        {below}{
-            \draw[\tl_use:N \l__tick_color_tl] (#1, 0) -- ++(0, \dim_eval:n {-\l__tick_length_dim/2}) 
-                node[\tl_use:N \l__main_tick_label_position_tl=\dim_use:N \l__tick_label_shift_dim] 
-                {\textcolor{\tl_use:N \l__main_tick_label_color_tl}{\tl_use:N \l__node_text_tl}};
-        }
-    }{}
+  \str_case:NnT \l__tick_type_tl {
+    {main}{
+      \dim_set_eq:NN \l__tick_length_dim\l__main_tick_length_dim
+      \tl_set:NV \l__tick_color_tl\l__main_tick_color_tl
+      \tl_set:Nn \l__node_text_tl {\tl_use:N \l__main_tick_label_tl}
+    }
+    {sub}{
+      \dim_set_eq:NN \l__tick_length_dim\l__sub_tick_length_dim
+      \tl_set:NV \l__tick_color_tl \l__sub_tick_color_tl
+      \tl_set:Nn \l__node_text_tl {}
+    }
+  }{}
+  \str_case:VnT \l__tick_spec_tl {
+    {cross}{
+      \draw[\tl_use:N \l__tick_color_tl] 
+        (#1, 0)++(0, \dim_eval:n {\l__tick_length_dim/2}) -- ++(0, \dim_eval:n {-\l__tick_length_dim}) 
+        node[\tl_use:N \l__main_tick_label_position_tl] 
+        {\textcolor{\tl_use:N \l__main_tick_label_color_tl}{\tl_use:N \l__node_text_tl}};
+    }
+    {above}{
+      \draw[\tl_use:N \l__tick_color_tl] (#1, 0) -- ++(0, \dim_eval:n {\l__tick_length_dim/2}) 
+        node[\tl_use:N \l__main_tick_label_position_tl] 
+        {\textcolor{\tl_use:N \l__main_tick_label_color_tl}{\tl_use:N \l__node_text_tl}};
+    }
+    {below}{
+      \draw[\tl_use:N \l__tick_color_tl] (#1, 0) -- ++(0, \dim_eval:n {-\l__tick_length_dim/2}) 
+        node[\tl_use:N \l__main_tick_label_position_tl=\dim_use:N \l__tick_label_shift_dim] 
+        {\textcolor{\tl_use:N \l__main_tick_label_color_tl}{\tl_use:N \l__node_text_tl}};
+    }
+  }{}
 } 
 % draw axis
 \int_new:N \l__substep_num_int
 \fp_new:N \CurrentFp
 \NewDocumentCommand\ShowAxis{O{}m}{
-        \group_begin:
-        \keys_set:nn { ztikz / axis } { #1 }
-        \seq_set_split:Nnn \l__points_seq { ; }{#2}
-        \begin{scope}[rotate=\fp_use:N \l__axis_rotate_angle]
-        \draw[->, \tl_use:N \l__axis_color_tl] \seq_item:Nn \l__points_seq{1} -- \seq_item:Nn \l__points_seq{2};
-        % draw ticks
-        \fp_step_inline:nnnn {\fp_eval:n {\l__start_fp}}{\fp_use:N \l__main_step_fp}{\fp_use:N \l__end_fp}{
-            % main ticks
-            \tl_set:Nn \l__tick_type_tl {main}
-            \fp_gset:Nn \CurrentFp {##1}
-            \ztikz_draw_axis_ticks_cs:n {##1}
-            % sub ticks
-            \tl_set:Nn \l__tick_type_tl {sub}
-            \int_set:Nn \l__substep_num_int {\fp_eval:n {floor(\l__main_step_fp/\l__sub_step_fp)}}
-            \fp_compare:nNnTF {##1}<{\fp_eval:n {floor(\l__end_fp)}}{
-                \fp_step_function:nnnN                 
-                    {\fp_eval:n {##1+\l__sub_step_fp}}
-                    {\fp_use:N \l__sub_step_fp}
-                    {\fp_eval:n {##1+\l__substep_num_int*\l__sub_step_fp}}
-                    \ztikz_draw_axis_ticks_cs:n
-            }{}
-        }
-        \end{scope}
-        \group_end:
+  \group_begin:
+  \keys_set:nn { ztikz / axis } { #1 }
+  \seq_set_split:Nnn \l__points_seq { ; }{#2}
+  \begin{scope}[rotate=\fp_use:N \l__axis_rotate_angle]
+  \draw[->, \tl_use:N \l__axis_color_tl] \seq_item:Nn \l__points_seq{1} -- \seq_item:Nn \l__points_seq{2};
+  % draw ticks
+  \fp_step_inline:nnnn {\fp_eval:n {\l__start_fp}}{\fp_use:N \l__main_step_fp}{\fp_use:N \l__end_fp}{
+    % main ticks
+    \tl_set:Nn \l__tick_type_tl {main}
+    \fp_gset:Nn \CurrentFp {##1}
+    \ztikz_draw_axis_ticks_cs:n {##1}
+    % sub ticks
+    \tl_set:Nn \l__tick_type_tl {sub}
+    \int_set:Nn \l__substep_num_int {\fp_eval:n {floor(\l__main_step_fp/\l__sub_step_fp)}}
+    \fp_compare:nNnTF {##1}<{\fp_eval:n {floor(\l__end_fp)}}{
+      \fp_step_function:nnnN                 
+        {\fp_eval:n {##1+\l__sub_step_fp}}
+        {\fp_use:N \l__sub_step_fp}
+        {\fp_eval:n {##1+\l__substep_num_int*\l__sub_step_fp}}
+        \ztikz_draw_axis_ticks_cs:n
+    }{}
+  }
+  \end{scope}
+  \group_end:
 }
 \NewDocumentCommand{\xAxis}{O{-2}O{8}}{
-    \ShowAxis[
-        tickStart=\fp_eval:n {#1+1}, tickEnd=\fp_eval:n {#2-0.75}, 
-        mainStep=1, subStep=.25, 
-        axisRotate=0, axisColor=black,
-        mainTickColor=black, subTickColor=black,
-        mainTickLength=10pt, subTickLength=5pt,
-        tickLabelShift=0pt, tickStyle=below, 
-        mainTickLabelPosition=below
-    ]{(#1, 0); (#2, 0)}
+  \ShowAxis[
+    tickStart=\fp_eval:n {#1+1}, tickEnd=\fp_eval:n {#2-0.75}, 
+    mainStep=1, subStep=.25, 
+    axisRotate=0, axisColor=black,
+    mainTickColor=black, subTickColor=black,
+    mainTickLength=10pt, subTickLength=5pt,
+    tickLabelShift=0pt, tickStyle=below, 
+    mainTickLabelPosition=below
+  ]{(#1, 0); (#2, 0)}
 }
 \NewDocumentCommand{\yAxis}{O{-2}O{8}}{
-    \ShowAxis[
-        tickStart=\fp_eval:n {#1+1}, tickEnd=\fp_eval:n {#2-0.75}, 
-        mainStep=1, subStep=.25, 
-        axisRotate=90, axisColor=black,
-        mainTickColor=black, subTickColor=black,
-        mainTickLength=10pt, subTickLength=5pt,
-        tickLabelShift=0pt, tickStyle=above, 
-        mainTickLabelPosition=left
-    ]{(#1, 0); (#2, 0)}
+  \ShowAxis[
+    tickStart=\fp_eval:n {#1+1}, tickEnd=\fp_eval:n {#2-0.75}, 
+    mainStep=1, subStep=.25, 
+    axisRotate=90, axisColor=black,
+    mainTickColor=black, subTickColor=black,
+    mainTickLength=10pt, subTickLength=5pt,
+    tickLabelShift=0pt, tickStyle=above, 
+    mainTickLabelPosition=left
+  ]{(#1, 0); (#2, 0)}
 }
 
-% ==> show intersection
+% ==> intersection
 \NewDocumentCommand\ShowIntersection{ omm }{
-    \seq_set_split:Nnn \l__intersection_num_seq { ; }{#2}
-    % get all intersections
-    \path[name~ intersections={of=\seq_item:Nn \l__intersection_num_seq{1}~ and~ \seq_item:Nn \l__intersection_num_seq{2}}]; 
-    % show all intersections by \ShowPoint
-    \int_step_inline:nnnn {1}{1}{#3}{
-        \ShowPoint[#1]{(intersection-##1)}
-    }
+  \seq_set_split:Nnn \l__intersection_num_seq { ; }{#2}
+  % get all intersections
+  \path[name~ intersections={of=\seq_item:Nn \l__intersection_num_seq{1}~ and~ \seq_item:Nn \l__intersection_num_seq{2}}]; 
+  % show all intersections by \ShowPoint
+  \int_step_inline:nnnn {1}{1}{#3}{
+    \ShowPoint[#1]{(intersection-##1)}
+  }
 }
-
-
-
 
 
 % ----------------------------------------------------------------------
-%                          precision of plot
+%                        basic geometry object
 % ----------------------------------------------------------------------
-% change precise of each plot type
-\NewDocumentCommand\PlotPrecise{ mO{once}m }{
-    \str_if_eq:nnTF {#2}{once}{
-        \bool_gset_true:c {g__#1_precise_bool}
-    }{\relax}
-    % check plot type
-    \str_case:nnF {#1}{
-        {plot}{
-            \sys_shell_now:x {sed~ -i~ "3s|set~ samples~ .*|set~ samples~ #3|"~             \g__ztikz_scripts_path_tl/plot.gp       }
-        }
-        {param}{
-            \sys_shell_now:x {sed~ -i~ "3s|set~ samples~ .*|set~ samples~ #3|"~             \g__ztikz_scripts_path_tl/param_plot.gp }
-        }
-        {polar}{
-            \sys_shell_now:x {sed~ -i~ "3s|set~ samples~ .*|set~ samples~ #3|"~             \g__ztikz_scripts_path_tl/polar_plot.gp }
-        }
-        {contour}{
-            \sys_shell_now:x {sed~ -i~ "2s|set~ samples~ .*|set~ samples~ #3,#3|"~          \g__ztikz_scripts_path_tl/contour_plot.gp}
-            \sys_shell_now:x {sed~ -i~ "3s|set~ isosamples~ .*|set~ isosamples~ #3,#3|"~    \g__ztikz_scripts_path_tl/contour_plot.gp}
-        }
+% ==> polygon
+\keys_define:nn { ztikz / polygon }{
+  radius       .fp_set:N  = \l__polygon_radius_fp,
+  radius       .initial:n = { 1 },
+  edgeColor    .tl_set:N  = \l__polygon_edge_color_tl,
+  edgeColor    .initial:n = { black },
+  fillColor    .tl_set:N  = \l__polygon_fill_color_tl,
+  fillColor    .initial:n = { },
+  fillOpacity  .fp_set:N  = \l__polygon_fill_opacity_fp,
+  fillOpacity  .initial:n = { 0 },
+  rotate       .fp_set:N  = \l__polygon_rotate_angle,
+  rotate       .initial:n = { 0 },
+  shift        .tl_set:N  = \l__polygon_shift_tl,
+  shift        .initial:n = { (0,0) },
+  marker       .tl_set:N  = \l__polygon_marker_option_tl,
+  marker       .initial:n = { },
+}
+\tl_new:N \l__poly_path_tl
+\NewDocumentCommand\Polygon{ O{}m }{
+  \group_begin:
+  \keys_set:nn { ztikz / polygon } { #1 }
+  % strip '(' and ')'
+  \tl_replace_once:Nnn \l__polygon_shift_tl{(}{}
+  \tl_replace_once:Nnn \l__polygon_shift_tl{)}{}
+  \coordinate (mv) at (\tl_use:N \l__polygon_shift_tl);
+  % create polygon
+  \begin{scope}[shift=(mv), rotate=\fp_use:N \l__polygon_rotate_angle]
+  \int_step_inline:nnn {1}{#2}{
+    % draw edges
+    \fp_set:Nn \l_angle_fp {360/#2*##1*\c_one_degree_fp}
+    \fp_set:Nn \l_angle_next_fp {360/#2*(##1+1)*\c_one_degree_fp}
+    \draw[\tl_use:N \l__polygon_edge_color_tl] (\fp_eval:n {\l__polygon_radius_fp*cos(\l_angle_fp)}, \fp_eval:n {\l__polygon_radius_fp*sin(\l_angle_fp)})
+      --(\fp_eval:n {\l__polygon_radius_fp*cos(\l_angle_next_fp)}, \fp_eval:n {\l__polygon_radius_fp*sin(\l_angle_next_fp)});
+    % fill polygon path 
+    \int_compare:nNnTF {##1}<{#2}{
+      \tl_put_right:Nn \l__poly_path_tl {(p##1)--}
     }{
-        \msg_new:nnn {ztikz}{ztikz-plot-type}{plot~type~support~is:~'plot',~'param',~'polar',~'contour'}
-        \msg_error:nn {ztikz}{ztikz-plot-type}
+      \tl_put_right:Nn \l__poly_path_tl {(p##1)--cycle}
     }
+    % mark coordinates
+    \coordinate (p##1) at (\fp_eval:n {\l__polygon_radius_fp*cos(\l_angle_fp)}, \fp_eval:n {\l__polygon_radius_fp*sin(\l_angle_fp)});
+  }
+  % fill polygon (none-color -> opacity=1; or opacity=.75)
+  \tl_if_empty:NTF \l__polygon_fill_color_tl {
+    \fp_set:Nn \l__polygon_fill_opacity_fp {0}
+  }{
+    \fp_set:Nn \l__polygon_fill_opacity_fp {.75}
+  }
+  \fill [\tl_use:N \l__polygon_fill_color_tl, fill~opacity=\fp_use:N \l__polygon_fill_opacity_fp] \l__poly_path_tl;
+  % show markers
+  \int_step_inline:nnn {1}{#2}{
+    \ShowPoint[\l__polygon_marker_option_tl]{(p##1)}
+  }
+  \end{scope} 
+  \group_end:
 }
-
-
-
-
-
-% ----------------------------------------------------------------------
-%                           2d function plot
-% ----------------------------------------------------------------------
-% escape shell commands 
-\cs_generate_variant:Nn \sys_shell_mv:nn {xx}
-\cs_generate_variant:Nn \sys_shell_now:n {x}
-
-% gnu data reference
-\NewDocumentCommand\gnudata{m}{
-    \tl_use:N \g__ztikz_gnu_path_tl/gnu_data_ \int_use:N \g__tikz_env_index_int _#1.table
-}
-
-% gnuplot data rename, plot and precise reset
-\cs_new_protected:Npn \ztikz_gnu_data_plot_cs:nnn #1#2#3 {
-    % rename data file
-    \int_gadd:Nn \g__gnu_data_index_int {1}
-    \tl_set:Nx \l__gnu_data_new_name_tl {
-        gnu_data_\int_use:N \g__tikz_env_index_int _
-        \int_use:N \g__gnu_data_index_int.table
-    }
-    \tl_set:Nx \l__gnu_data_full_path_tl {\g__ztikz_gnu_path_tl/\l__gnu_data_new_name_tl}
-    \sys_shell_mv:xx {\g__ztikz_gnu_path_tl/gnu_data.table}
-                     {\l__gnu_data_full_path_tl}
-    % plot data file
-    \tl_if_empty:nTF {#3}{
-        \draw[#2] plot[smooth] file {\l__gnu_data_full_path_tl};
-    }{
-        \group_begin:
-        \keys_set:nn { ztikz / point } { #3 }
-        \draw[#2] plot [
-            mark = \str_use:N \l__point_type_str, 
-            mark~ size = \dim_use:N \l__point_radius_dim,
-            mark~ options = {
-                rotate  = \fp_use:N \l__point_rotate_angle, 
-                opacity = \tl_use:N \l__point_opacity_tl, 
-                color   = \tl_use:N \l__point_color_tl,
-                ball~ color = \tl_use:N \l__point_color_tl,
-            }
-        ] file {\l__gnu_data_full_path_tl};
-        \group_end:
-    }
-    % reset precise (default 300 for plot precise)
-    \bool_if:cTF {g__#1_precise_bool}{
-        \PlotPrecise{#1}{100}
-    }{\relax}
-}
-
-% ==> simple 2d function
-\NewDocumentCommand\Plot{ O{-5:5}O{color=black}O{}m }{
-    % sed gnuplot scripts
-    \sys_shell_now:x {sed~ -i~ "8s|set~ xr~ .*|set~ xr~ [#1]|"~ \g__ztikz_scripts_path_tl/plot.gp}
-    \sys_shell_now:x {sed~ -i~ "7s|f(x)~ =~ .*|f(x)~ =~ #4|"  ~ \g__ztikz_scripts_path_tl/plot.gp}
-    \sys_shell_now:x {gnuplot~                                  \g__ztikz_scripts_path_tl/plot.gp}
-    % plot data, reset precise
-    \ztikz_gnu_data_plot_cs:nnn {plot}{#2}{#3}
-}
-
-% ==> implicit 2d function
-\NewDocumentCommand\ContourPlot{ O{-5:5; -5:5}O{color=black}O{}m }{
-	% split the first param
-    \seq_set_split:Nnn \l__plot_domain_seq { ; }{#1}
-    \tl_set:Nn \l__y_domain_tl {\seq_item:Nn \l__plot_domain_seq{2}}
-    \exp_args:Nx \tl_if_blank:nTF {\seq_item:Nn \l__plot_domain_seq{2}}{
-        \tl_set:Nn \l__y_domain_tl {*:*}
-    }{
-        \tl_set:Nn \l__y_domain_tl {\seq_item:Nn \l__plot_domain_seq{2}}
-    }
-    % sed gnuplot scripts
-    \sys_shell_now:x {sed~ -i~ "11s|set~ xr~ .*|set~ xr~ [\seq_item:Nn \l__plot_domain_seq{1}]|"~ \g__ztikz_scripts_path_tl/contour_plot.gp}
-    \sys_shell_now:x {sed~ -i~ "12s|set~ yr~ .*|set~ yr~ [\tl_use:N \l__y_domain_tl]|"~           \g__ztikz_scripts_path_tl/contour_plot.gp}
-    \sys_shell_now:x {sed~ -i~ "14s|f(x,~ y)~ =~ .*|f(x,~ y)~ =~ #4|"~                            \g__ztikz_scripts_path_tl/contour_plot.gp}
-    \sys_shell_now:x {gnuplot~                                                                    \g__ztikz_scripts_path_tl/contour_plot.gp}
-    % plot data, reset precise
-    \ztikz_gnu_data_plot_cs:nnn {contour}{#2}{#3}
-}
-
-% ==> parametric 2d function
-\NewDocumentCommand\ParamPlot{ O{0:2*pi}O{color=black}O{}m }{
-    % sed gnuplot scripts
-    \sys_shell_now:x {sed~ -i~ "8s|set~ trange~ .*|set~ trange~ [#1]|"~     \g__ztikz_scripts_path_tl/param_plot.gp}
-    \sys_shell_now:x {sed~ -i~ "9s|plot~ .*|plot~ #4|"~                     \g__ztikz_scripts_path_tl/param_plot.gp}
-    \sys_shell_now:x {gnuplot~                                              \g__ztikz_scripts_path_tl/param_plot.gp}
-    % plot data, reset precise
-    \ztikz_gnu_data_plot_cs:nnn {param}{#2}{#3}
-}
-
-% ==> polar 2d function
-\NewDocumentCommand\PolarPlot{ O{0:2*pi}O{color=black}O{}m }{
-    % sed gnuplot scripts
-    \sys_shell_now:x {sed~ -i~ "8s|set~ trange~ .*|set~ trange~ [#1]|"~     \g__ztikz_scripts_path_tl/polar_plot.gp}
-    \sys_shell_now:x {sed~ -i~ "9s|plot~ .*|plot~ #4|"~                     \g__ztikz_scripts_path_tl/polar_plot.gp}
-    \sys_shell_now:x {gnuplot~                                              \g__ztikz_scripts_path_tl/polar_plot.gp}
-    % plot data, reset precise
-    \ztikz_gnu_data_plot_cs:nnn {polar}{#2}{#3}
-}
-
-% ==> statistic plot function
-\cs_new_protected:Npn \ztikz_statistic_plot_cs:nnnn #1#2#3#4 {
-    \tl_if_empty:nTF {#3}{
-        \draw[#2] plot[#1] file {#4};
-    }{
-        \group_begin:
-        \keys_set:nn { ztikz / point } { #3 }
-        \draw[#2] plot [
-            % stairs options
-            #1,
-            % marker options
-            mark = \str_use:N \l__point_type_str, 
-            mark~ size = \dim_use:N \l__point_radius_dim,
-            mark~ options = {
-                rotate  = \fp_use:N \l__point_rotate_angle, 
-                opacity = \tl_use:N \l__point_opacity_tl, 
-                color   = \tl_use:N \l__point_color_tl,
-                ball~ color = \tl_use:N \l__point_color_tl,
-            }
-        ] file {#4};
-        \group_end:
-    }
-}
-\cs_generate_variant:Nn \ztikz_statistic_plot_cs:nnnn {xnnn}
-
-\tl_new:N \l__tempa_tl
-\tl_new:N \l__tempb_tl
-\seq_new:N \l__statistic_option_tl
-% 1. \ListPlot --> set opcity=0 in the above Plot commands
-% 2. stairs plot
-\NewDocumentCommand\StairsPlot{ O{plot-left;jump-left}O{color=black}O{}m }{
-    \seq_set_split:Nnn \l__statistic_option_tl { ; }{#1}
-    \str_case:enF {\seq_item:Nn \l__statistic_option_tl{1}}{
-        {plot-left}{\tl_set:Nn \l__tempa_tl {const~plot~mark~left}}
-        {plot-right}{\tl_set:Nn \l__tempa_tl {const~plot~mark~right}}
-        {plot-mid}{\tl_set:Nn \l__tempa_tl {const~plot~mark~mid}}
-        {}{\tl_set:Nn \l__tempa_tl {}}
-    }{ 
-        \msg_new:nnn {ztikz}{ztikz-stairs-plot}{current~stairs~plot~type~is:~'#1'~,~ invalide}
-        \msg_error:nn {ztikz}{ztikz-stairs-plot}
-    }
-    \str_case:enF {\seq_item:Nn \l__statistic_option_tl{2}}{
-        {jump-left}{\tl_set:Nn \l__tempb_tl {jump~mark~left}}
-        {jump-right}{\tl_set:Nn \l__tempb_tl {jump~mark~right}}
-        {jump-mid}{\tl_set:Nn \l__tempb_tl {jump~mark~mid}}
-        {}{\tl_set:Nn \l__tempb_tl {}}
-    }{ 
-        \msg_new:nnn {ztikz}{ztikz-stairs-plot}{current~stairs~jump~type~is:~'#1'~,~ invalide}
-        \msg_error:nn {ztikz}{ztikz-stairs-plot}
-    }
-    \ztikz_statistic_plot_cs:xnnn {\l__tempa_tl,\l__tempb_tl}{#2}{#3}{#4}
-}
-% 3. stem plot
-\NewDocumentCommand\StemPlot{ O{x}O{color=black}O{}m }{
-    \str_case:enF {#1}{
-        {x}{\tl_set:Nn \l__tempa_tl {ycomb}}
-        {y}{\tl_set:Nn \l__tempa_tl {xcomb}}
-        {o}{\tl_set:Nn \l__tempa_tl {polar~ comb}}
-        {}{\tl_set:Nn \l__tempa_tl  {ycomb}}
-    }{ 
-        \msg_new:nnn {ztikz}{ztikz-stem-plot}{current~stem~plot~type~is:~'#1'~,~ invalide}
-        \msg_error:nn {ztikz}{ztikz-stem-plot}
-    }
-    \ztikz_statistic_plot_cs:xnnn {\l__tempa_tl}{#2}{#3}{#4}
-}
-% 4. bar plot
-\NewDocumentCommand\BarPlot{ O{ybar}O{color=black}O{}m }{
-    \str_case:enF {#1}{
-        {x}{\tl_set:Nn \l__tempa_tl {ybar}}
-        {y}{\tl_set:Nn \l__tempa_tl {xbar}}
-        {xc}{\tl_set:Nn \l__tempa_tl {ybar~ interval}}
-        {yc}{\tl_set:Nn \l__tempa_tl {xbar~ interval}}
-        {}{\tl_set:Nn \l__tempa_tl  {ybar}}
-    }{ 
-        \msg_new:nnn {ztikz}{ztikz-bar-plot}{current~bar~plot~type~is:~'#1'~,~ invalide}
-        \msg_error:nn {ztikz}{ztikz-bar-plot}
-    }
-    \ztikz_statistic_plot_cs:xnnn {\l__tempa_tl}{#2}{#3}{#4}
-}
-% 5. shade plot
-\NewDocumentCommand\ShadePlot{ O{defaultMode}O{2pt}m }{
-    \path [shading=#1, shading~ path={draw=transparent!0, line~ width=#2}] plot file {#3};
-}
-
-% ==> shade curve draw
-\ExplSyntaxOff
-% -----------------------------------------------------------------------------------------------
-% https://tex.stackexchange.com/questions/497977/tikz-draw-multicolor-curve-with-smooth-gradient
-% -----------------------------------------------------------------------------------------------
-\newif\iftikz@shading@path
-\tikzset {
-    fading xsep/.store in=\pgfpathfadingxsep,
-    fading ysep/.store in=\pgfpathfadingysep,
-    fading sep/.style={fading xsep=#1, fading ysep=#1},
-    fading sep=0.0cm,
-    shading path/.code= {
-        % Prevent this stuff happning recursively.
-        \iftikz@shading@path
-        \else
-            \tikz@shading@pathtrue
-            % \tikz@addmode installs the `modes' (e.g., fill, draw, shade) 
-            % to be applied to the path. It isn't usualy for doing more
-            % changes to the path's construction.
-            \tikz@addmode{
-                \pgfgetpath\pgf@currentfadingpath%
-                % Get the boudning box of the current path size including the fading sep
-                \pgfextract@process\pgf@fadingpath@southwest{\pgfpointadd{\pgfqpoint{\pgf@pathminx}{\pgf@pathminy}}
-                    {\pgfpoint{-\pgfpathfadingxsep}{-\pgfpathfadingysep}}}%
-                \pgfextract@process\pgf@fadingpath@northeast{\pgfpointadd{\pgfqpoint{\pgf@pathmaxx}{\pgf@pathmaxy}}
-                    {\pgfpoint{\pgfpathfadingxsep}{\pgfpathfadingysep}}}
-                % Clear the path
-                \pgfsetpath\pgfutil@empty%                         
-                % Interrupt the path and picture to create a fading.
-                \pgfinterruptpath
-                \pgfinterruptpicture
-                \begin{tikzfadingfrompicture}[name=.]
-                    \path [shade=none, fill=none, #1] \pgfextra {
-                        % Set the softpath. Any transformations in #1 will have no effect.
-                        % This will *not* update the bounding box...
-                        \pgfsetpath\pgf@currentfadingpath
-                        % ...so it is done manually.
-                        \pgf@fadingpath@southwest
-                        \expandafter\pgf@protocolsizes{\the\pgf@x}{\the\pgf@y}%
-                        \pgf@fadingpath@northeast%
-                        \expandafter\pgf@protocolsizes{\the\pgf@x}{\the\pgf@y}%
-                    };
-                    % Now get the bounding of the picture.
-                    \xdef\pgf@fadingboundingbox@southwest{\noexpand\pgfqpoint{\the\pgf@picminx}{\the\pgf@picminy}}%
-                    \xdef\pgf@fadingboundingbox@northeast{\noexpand\pgfqpoint{\the\pgf@picmaxx}{\the\pgf@picmaxy}}%
-                \end{tikzfadingfrompicture}
-                \endpgfinterruptpicture
-                \endpgfinterruptpath
-                % Install a rectangle that covers the shaded/faded path picture.                                
-                \pgfpathrectanglecorners{\pgf@fadingboundingbox@southwest}{\pgf@fadingboundingbox@northeast}
-                % Make the fading happen.
-                \def\tikz@path@fading{.}
-                \tikz@mode@fade@pathtrue
-                \tikz@fade@adjustfalse%10p
-                % Shift the fading to the mid point of the rectangle
-                \pgfpointscale{0.5}{\pgfpointadd{\pgf@fadingboundingbox@southwest}{\pgf@fadingboundingbox@northeast}}
-                \edef\tikz@fade@transform{shift={(\the\pgf@x,\the\pgf@y)}}
-            }
-        \fi
-    }
-}
-\def\ztikzShadeMode#1#2#3{
-    \pgfutil@tempcnta=0\relax
-    \pgfutil@for\pgf@tmp:={#3}\do{\advance\pgfutil@tempcnta by1}
-    \ifnum\pgfutil@tempcnta=1\relax
-        \edef\pgf@spec{color(0)=(#3);color(100)=(#3)}
-    \else
-        \pgfmathparse{50/(\pgfutil@tempcnta-1)}\let\pgf@step=\pgfmathresult
-        \pgfutil@tempcntb=1\relax
-        \pgfutil@for\pgf@tmp:={#3}\do{
-            \ifnum\pgfutil@tempcntb=1\relax
-            \edef\pgf@spec{color(0)=(\pgf@tmp);color(25)=(\pgf@tmp)}
-            \else
-            \ifnum\pgfutil@tempcntb<\pgfutil@tempcnta\relax
-            \pgfmathparse{25+\pgf@step/4+(\pgfutil@tempcntb-1)*\pgf@step}
-            \edef\pgf@spec{\pgf@spec;color(\pgfmathresult)=(\pgf@tmp)}
-            \else
-            \edef\pgf@spec{\pgf@spec;color(75)=(\pgf@tmp);color(100)=(\pgf@tmp)}
-            \fi
-            \fi
-            \advance\pgfutil@tempcntb by1\relax
-        }
-    \fi
-    \csname pgfdeclare#2shading\endcsname{#1}{100}\pgf@spec
-}
-\ztikzShadeMode{defaultMode}{horizontal}{white,black}
-\ExplSyntaxOn
-
-
-
-
-
-% ----------------------------------------------------------------------
-%                           3d function plot
-% ----------------------------------------------------------------------
-
-
-
-
-
-% ----------------------------------------------------------------------
-%                          Interactive with Python
-% ----------------------------------------------------------------------
-\cs_generate_variant:Nn \xsim_file_write_start:nn {nx}
-\cs_generate_variant:Nn \sys_shell_mv:nn {xx}
-% ==> python-matplotlib
-\NewDocumentEnvironment{pyfig}{ O{width=.75\linewidth}m }{
-    \newcommand{\pyfile}{#2}
-    \xsim_file_write_start:nx {\c_true_bool}{\g__ztikz_python_path_tl/#2}
-    }{ 
-    \xsim_file_write_stop:
-    % step picture index
-    \int_gadd:Nn \g__picture_index_int {1}   
-    % check if hash changed
-    \ztikz_hash_if_change_cs:x {\g__ztikz_python_path_tl/\pyfile}   
-    \bool_if:NTF \g__hash_change_bool {
-        % add save figure to source
-        \sys_if_platform_windows:TF {
-            \exp_args:Nx \sys_shell_now:n {
-                echo~ plt.savefig('\g__ztikz_python_path_tl/\pyfile.pdf')~ >>~ \g__ztikz_python_path_tl/\pyfile
-            }
-        }{
-            \exp_args:Nx \sys_shell_now:n {
-                echo~ "plt.savefig('\g__ztikz_python_path_tl/\pyfile.pdf')"~ >>~ \g__ztikz_python_path_tl/\pyfile
-            }
-        }
-        % excute python source
-        \exp_args:Nx \sys_shell_now:n {python~ \g__ztikz_python_path_tl/\pyfile} 
-        \includegraphics[#1]{\g__ztikz_python_path_tl/\pyfile.pdf}
-        \typeout{Writing~ 'pyfig'~environment~source~to~\tl_use:N \g__ztikz_python_path_tl/\pyfile}
-    }{
-        \includegraphics[#1]{\g__ztikz_python_path_tl/\pyfile.pdf}
-        \typeout{skip~recompile~by~python,~using~the~cache~picture~\int_use:N \g__picture_index_int}
-    }
-}
-
-% read from external file 
-\cs_new_protected:Npn \zlatex_Readlines_cs:nn #1#2 {
-    \ior_open:Nn \g__file_read_ior {#2}
-    \str_case:nnF {#1}{
-        {raw}{
-            \ior_get:NN \g__file_read_ior \g__file_content_tl
-        }
-        {str}{
-            \ior_str_get:NN \g__file_read_ior \g__file_content_tl
-        }
-    }{}
-    \tl_use:N \g__file_content_tl
-}
-\cs_generate_variant:Nn \zlatex_Readlines_cs:nn {xx}
-
-% ==> 1-line python command
-\NewDocumentCommand\py{O{raw}m}{
-    % sympy source write
-    \sys_shell_now:x {sed~ -i~ "6s|Float_res~ =~ .*|Float_res~ =~ \tl_to_str:n {#2}|"~ \g__ztikz_scripts_path_tl/python_script.py}
-    % calculation
-    \typeout{using~python~float~module~calculating...}
-    \sys_shell_now:x {python~ \g__ztikz_scripts_path_tl/python_script.py}
-    % using \ior_get: 
-    \zlatex_Readlines_cs:xx {#1}{\g__ztikz_python_path_tl/PyFloat.out}
-    % ---> cause bug that can't write ToC to file
-    % \iow_close:N \g__file_read_ior
-}
-
-% ==> python-sympy
-\NewDocumentCommand\sympy{m}{
-    % step sympy result index
-    \int_gadd:Nn \g__sympy_index_int {1}  
-    \tl_set:Nx \l__current_sympy_index_tl {\int_use:N \g__sympy_index_int}
-    % sympy source write
-    \sys_shell_now:x {sed~ -i~ "8s|F_res~ =~ .*|F_res~ =~  #1|"~ \g__ztikz_scripts_path_tl/sympy_script.py}
-    % check hash
-    \ztikz_hash_if_change_cs:x {\g__ztikz_scripts_path_tl/sympy_script.py}
-    \bool_if:NTF \g__hash_change_bool {
-        \sys_shell_now:x {python~ \g__ztikz_scripts_path_tl/sympy_script.py}
-        \sys_shell_mv:xx
-            {\g__ztikz_python_path_tl/sympy.out}
-            {\g__ztikz_python_path_tl/sympy_\int_use:N \g__sympy_index_int .out}
-        \typeout{using~python~sympy~calculating~question~\l__current_sympy_index_tl ...}
-        \exp_args:Nx \input{\g__ztikz_python_path_tl/sympy_\l__current_sympy_index_tl.out}
-    }{
-        \exp_args:Nx \input{\g__ztikz_python_path_tl/sympy_\l__current_sympy_index_tl.out}
-        \typeout{skip~recompile,~using~the~cache~sympy~result~\l__current_sympy_index_tl}
-    }
-}
-
-% ==> python-code-env
-\NewDocumentEnvironment{pycode}{ m }{
-    \newcommand{\pyfile}{#1}
-    \xsim_file_write_start:nx {\c_true_bool}{\g__ztikz_python_path_tl/#1}
-    }{ 
-    \xsim_file_write_stop:
-    % step picture index
-    \int_gadd:Nn \g__picture_index_int {1}   
-    % check if hash changed
-    \ztikz_hash_if_change_cs:x {\g__ztikz_python_path_tl/\pyfile}   
-    \bool_if:NTF \g__hash_change_bool {
-        % excute python source
-        \exp_args:Nx \sys_shell_now:n {python~ \g__ztikz_python_path_tl/\pyfile} 
-        \input{\g__ztikz_python_path_tl/\pyfile.out}
-        \typeout{Writing~ 'pycode'~environment~source~to~\tl_use:N \g__ztikz_python_path_tl/\pyfile}
-    }{
-        \input{\g__ztikz_python_path_tl/\pyfile.out}
-        \typeout{skip~recompile~by~python,~using~the~cache~pycode~result~\int_use:N \g__picture_index_int}
-    }
-}
-
-
-
-
-
-% ----------------------------------------------------------------------
-%                          Interactive with Mathematica
-% ----------------------------------------------------------------------
-% temp var for manipulate
-\tl_new:N \l__temp_arg_tl
-\tl_new:N \l__wolfram_temp_res_tl
-\ior_new:N \l__temp_io
-\seq_new:N \l__wolfram_temp_res_seq
-
-% macro storage the mma-result
-\NewDocumentCommand\wolframResult{O{raw}O{}}{
-    \tl_if_eq:nnTF {#1}{raw}{
-        \seq_use:Nnnn \l__wolfram_temp_res_seq {#2}{#2}{#2}
-    }{
-        \if_is_int:xTF {\int_eval:n {#1}}
-            {\seq_item:Nn \l__wolfram_temp_res_seq {#1}}
-            {}
-    }
-}
-
-% wolfram graphicx
-\NewDocumentEnvironment{wolframGraphics}{ O{width=.75\linewidth}m }{
-    \newcommand{\mmafile}{#2}
-    \xsim_file_write_start:nx {\c_true_bool}{\g__ztikz_mma_path_tl/#2}
-    }{ 
-    \xsim_file_write_stop:
-    % step picture index
-    \int_gadd:Nn \g__picture_index_int {1}   
-    % check if hash changed
-    \ztikz_hash_if_change_cs:x {\g__ztikz_mma_path_tl/\mmafile}   
-    \bool_if:NTF \g__hash_change_bool {
-        % excute mathematica script
-        \exp_args:Nx \sys_shell_now:n {wolframscript~ -script~ \g__ztikz_mma_path_tl/\mmafile} 
-        \includegraphics[#1]{\g__ztikz_mma_path_tl/\mmafile.pdf}
-        \typeout{Writing~ 'mmafig'~environment~source~to~\tl_use:N \g__ztikz_mma_path_tl/\mmafile}
-    }{
-        \includegraphics[#1]{\g__ztikz_mma_path_tl/\mmafile.pdf}
-        \typeout{skip~recompile~by~wolframscript,~using~the~cache~picture~\int_use:N \g__picture_index_int}
-    }
-}
-
-% input result of wolfram
-\cs_generate_variant:Nn \ior_open:Nn {Nx}
-\cs_new_protected:Nn \ztikz_wolfram_input_result_cs: {
-    % write export command
-    \iow_now:Nx \g_tmpa_iow {Export["\g__ztikz_mma_path_tl/mma_res_\int_use:N \g__mma_index_int.txt", TeXResult]}
-    \iow_close:N \g_tmpa_iow
-    % calculate and input
-    \ztikz_hash_if_change_cs:x {\g__ztikz_mma_path_tl/mma_calc_\int_use:N \g__mma_index_int.wls}   
-    \bool_if:NTF \g__hash_change_bool {
-        \sys_shell_now:x {wolframscript~ -script~ \g__ztikz_mma_path_tl/mma_calc_\int_use:N \g__mma_index_int.wls}
-        % \exp_args:Nx \input{\g__ztikz_mma_path_tl/mma_res_\int_use:N \g__mma_index_int.txt}
-        \typeout{using~wolframscript~calculating~question~\int_use:N \g__mma_index_int ...}
-    }{
-        % \exp_args:Nx \input{\g__ztikz_mma_path_tl/mma_res_\int_use:N \g__mma_index_int.txt}
-        \typeout{skip~recompile,~using~the~cache~wolframscript~result~\int_use:N \g__mma_index_int}
-    }
-    % split result to seq and storage result to a macro
-    \ior_open:Nx \l__temp_io {\g__ztikz_mma_path_tl/mma_res_\int_use:N \g__mma_index_int.txt}
-    \ior_get:NN  \l__temp_io \l__wolfram_temp_res_tl
-    \seq_set_split:NnV \l__wolfram_temp_res_seq{,}\l__wolfram_temp_res_tl
-    % step counter, add export command
-    \int_gadd:Nn \g__mma_index_int {1}  
-}
-
-% wolfram code
-\cs_generate_variant:Nn \iow_open:Nn {Nx}
-\NewDocumentCommand\wolfram{O{tex}m}{
-    % write mathamatica code
-    \iow_open:Nx \g_tmpa_iow {\g__ztikz_mma_path_tl/mma_calc_\int_use:N \g__mma_index_int.wls}
-    \str_case:nnF {#1}{
-        {tex} {
-            \iow_now:Nx \g_tmpa_iow { TeXResult = ToString[TeXForm[#2]]; }
-        }
-        {text} {
-            \iow_now:Nx \g_tmpa_iow { TeXResult = ToString[#2]; }
-        }
-    }{\relax}
-    % cache and input result
-    \ztikz_wolfram_input_result_cs:
-}
-
-% equation solve
-\NewDocumentCommand\wolframSolve{O{part}mO{}O{}}{
-    % prepend ',' to #4 if not empty
-    \tl_if_empty:nTF {#4}{
-        \tl_set:Nn \l__temp_arg_tl {}
-    }{
-        \tl_set:Nn \l__temp_arg_tl {,#4} 
-    }
-    % write mathamatica code
-    \iow_open:Nx \g_tmpa_iow {\g__ztikz_mma_path_tl/mma_calc_\int_use:N \g__mma_index_int.wls}
-    \str_case:nnF {#1}{
-        {part} {
-            \iow_now:Nx \g_tmpa_iow {
-                TeXResult = Row[Solve[#2, {#3} \l__temp_arg_tl]//Flatten, ","]/.{Rule -> Equal}//TeXForm//ToString;
-            }
-        }
-        {full} {
-            \iow_now:Nx \g_tmpa_iow {
-                TeXResult = Row[Solve[#2]//Flatten, ","]/.{Rule -> Equal}//TeXForm//ToString;
-            }
-        }
-    }{\relax}
-    % cache and input result
-    \ztikz_wolfram_input_result_cs:
-}
-
-% differential equation solve
-\NewDocumentCommand\wolframDSolve{O{part}mO{}O{}}{
-    % prepend ',' to #4 if not empty
-    \tl_if_empty:nTF {#4}{
-        \tl_set:Nn \l__temp_arg_tl {}
-    }{
-        \tl_set:Nn \l__temp_arg_tl {,#4} 
-    }
-    % write mathamatica code
-    \iow_open:Nx \g_tmpa_iow {\g__ztikz_mma_path_tl/mma_calc_\int_use:N \g__mma_index_int.wls}
-    \str_case:nnF {#1}{
-        {part} {
-            \iow_now:Nx \g_tmpa_iow {
-                TeXResult = Row[DSolve[#2, #3 \l__temp_arg_tl]//Flatten, ","]/.{Rule -> Equal}//TeXForm//ToString;
-            }
-        }
-        {full} {
-            \iow_now:Nx \g_tmpa_iow {
-                TeXResult = Row[DSolve[#2]//Flatten, ","]/.{Rule -> Equal}//TeXForm//ToString;
-            }
-        }
-    }{\relax}
-    % cache and input result
-    \ztikz_wolfram_input_result_cs:
-}
-
-% check if integer
-\prg_new_protected_conditional:Npnn \if_is_int:n #1 { T, F, TF }{
-    \regex_match:nnTF { ^[\+\-]?[\d]+$ } {#1} % $
-      { \prg_return_true: }
-      { \prg_return_false: }
-}
-\cs_generate_variant:Nn \if_is_int:nTF {xTF}
