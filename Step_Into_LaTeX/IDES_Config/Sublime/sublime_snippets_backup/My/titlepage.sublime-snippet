@@ -1,0 +1,20 @@
+<snippet>
+	<content><![CDATA[
+\begin{titlepage}
+	\centering
+	\vspace{0.2\textheight}  
+	{\huge $1}
+	\vspace{0.025\textheight}
+	\vspace{0.1\textheight}
+
+	{\Large ${2:ZongPingD}}
+	\vfill 
+	{\large \today}
+	\vspace{0.1\textheight} 
+\end{titlepage}
+\tableofcontents
+\newpage
+]]></content>
+	<tabTrigger>tp</tabTrigger>
+	<scope>text.tex.latex</scope>
+</snippet>

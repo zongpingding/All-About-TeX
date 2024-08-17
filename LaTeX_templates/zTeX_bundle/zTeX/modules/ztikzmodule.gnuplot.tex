@@ -1,0 +1,374 @@
+\ProvidesExplFile{ztikzmodule.gnuplot.tex}{2024/06/15}{1.0.0}{gnuplot~module~for~ztikz}
+
+
+
+
+
+% ----------------------------------------------
+%                     set up                
+% ----------------------------------------------
+% writing scripts
+\ExplSyntaxOff
+\begingroup\newif\ifgnuscript
+\IfFileExists{./ztikz_output/scripts/plot.gp}{}{\gnuscripttrue}
+\ifgnuscript
+\ztikzMkdir{ztikz_output/scripts/}
+\begin{filecontents}[noheader]{ztikz_output/scripts/plot.gp}
+set table "./ztikz_output/gnuplot_data/gnu_data.table"
+set format "%.5f"
+set samples 100
+
+
+# ==> specific a 2d function
+f(x) = x
+set xr [-6:-1]
+plot f(x)
+\end{filecontents}
+
+\begin{filecontents}[noheader]{ztikz_output/scripts/contour_plot.gp}
+set table "./ztikz_output/gnuplot_data/gnu_data.table"
+set samples 100,100
+set isosamples 100,100
+set format "%.5f"
+set cont base
+set cntrparam levels discrete 0,0
+unset surface
+
+
+# ==> contour plot a function
+set xr [-4:4]
+set yr [*:*]
+set zr [*:*]
+f(x, y) = y-3*sin(1/x)
+splot f(x,y)
+\end{filecontents}
+
+\begin{filecontents}[noheader]{ztikz_output/scripts/param_plot.gp}
+set table "./ztikz_output/gnuplot_data/gnu_data.table"
+set format "%.5f"
+set samples 100
+set parametric
+
+
+# ==> specific a parametric function
+set trange [0:2*pi]
+plot sin(t), cos(t)  
+\end{filecontents}
+
+\begin{filecontents}[noheader]{ztikz_output/scripts/polar_plot.gp}
+set table "./ztikz_output/gnuplot_data/gnu_data.table"
+set format "%.5f"
+set samples 100
+set polar
+
+
+# ==> polar plot, default varible name 't'
+set trange [0:12*pi]
+plot t
+\end{filecontents}
+
+\begin{filecontents}[noheader]{ztikz_output/scripts/plot_3d.gp}
+set terminal pdfcairo enhanced color size 8,8 font "Times New Roman, 16"
+set output "./ztikz_output/gnuplot_data/plot_3d.pdf"
+set isosamples 50
+
+
+# ==> label and legend
+set xlabel 'x'
+set ylabel 'y'
+set zlabel 'z'
+set view 75,336
+unset key
+set xyplane at 0
+set hidden3d
+
+
+# ==> color map
+set hidd front
+set palette rgbformulae 22,13,-31
+unset colorbox
+
+
+# ==> plot function
+set xr [-3:3]
+set yr [-3:3]
+splot x**2+y**2 with pm3d, -x**2-y**2+8 with lines
+unset out 
+\end{filecontents}
+\fi\endgroup
+\ExplSyntaxOn
+
+% set path
+\ztikzMkdir{ztikz_output/gnuplot_data/}
+\tl_const:Nn \g__ztikz_gnu_path_tl      {ztikz_output/gnuplot_data} 
+\int_new:N   \g__tikz_env_index_int
+\int_new:N   \g__gnu_data_index_int
+\int_new:N   \g__gnu_plotz_index_int
+\int_gadd:Nn \g__gnu_plotz_index_int {1}
+
+% gnuplot precise bool
+\bool_new:N \g__plot_precise_bool
+\bool_new:N \g__contour_precise_bool
+\bool_new:N \g__param_precise_bool
+\bool_new:N \g__polar_precise_bool
+
+% set index for each tikz env
+\pretocmd{\tikzpicture}{
+  \int_gincr:N \g__tikz_env_index_int
+  \int_gset:Nn \g__gnu_data_index_int {0}
+}{}{}
+\NewDocumentCommand{\currentTikzIndex}{}{\int_use:N \g__tikz_env_index_int}
+
+% change precise of each plot type
+\NewDocumentCommand\PlotPrecise{ mO{once}m }{
+  \str_if_eq:nnTF {#2}{once}{
+    \bool_gset_true:c {g__#1_precise_bool}
+  }{\relax}
+  % check plot type
+  \str_case:nnF {#1}{
+    {plot}{
+      \sys_shell_now:x {sed~ -i~ "3s|set~ samples~ .*|set~ samples~ #3|"~             \g__ztikz_scripts_path_tl/plot.gp       }
+    }
+    {param}{
+      \sys_shell_now:x {sed~ -i~ "3s|set~ samples~ .*|set~ samples~ #3|"~             \g__ztikz_scripts_path_tl/param_plot.gp }
+    }
+    {polar}{
+      \sys_shell_now:x {sed~ -i~ "3s|set~ samples~ .*|set~ samples~ #3|"~             \g__ztikz_scripts_path_tl/polar_plot.gp }
+    }
+    {contour}{
+      \sys_shell_now:x {sed~ -i~ "2s|set~ samples~ .*|set~ samples~ #3,#3|"~          \g__ztikz_scripts_path_tl/contour_plot.gp}
+      \sys_shell_now:x {sed~ -i~ "3s|set~ isosamples~ .*|set~ isosamples~ #3,#3|"~    \g__ztikz_scripts_path_tl/contour_plot.gp}
+    }
+  }{
+    \msg_new:nnn {ztikz}{ztikz-plot-type}{plot~type~support~is:~'plot',~'param',~'polar',~'contour'}
+    \msg_error:nn {ztikz}{ztikz-plot-type}
+  }
+}
+
+
+
+
+
+% ----------------------------------------------
+%               2d function plot                
+% ----------------------------------------------
+% escape shell commands 
+\cs_generate_variant:Nn \sys_shell_mv:nn {xx}
+\cs_generate_variant:Nn \sys_shell_now:n {x}
+
+% gnu data reference
+\NewDocumentCommand\gnudata{m}{
+  \tl_use:N \g__ztikz_gnu_path_tl/gnu_data_ \int_use:N \g__tikz_env_index_int _#1.table
+}
+
+% gnuplot data rename, plot and precise reset
+\cs_new_protected:Npn \ztikz_gnu_data_plot_cs:nnn #1#2#3 {
+  % rename data file
+  \int_gadd:Nn \g__gnu_data_index_int {1}
+  \tl_set:Nx \l__gnu_data_new_name_tl {
+    gnu_data_\int_use:N \g__tikz_env_index_int _
+    \int_use:N \g__gnu_data_index_int.table
+  }
+  \tl_set:Nx \l__gnu_data_full_path_tl {\g__ztikz_gnu_path_tl/\l__gnu_data_new_name_tl}
+  \sys_shell_mv:xx {\g__ztikz_gnu_path_tl/gnu_data.table}
+                  {\l__gnu_data_full_path_tl}
+  % plot data file
+  \tl_if_empty:nTF {#3}{
+    \draw[#2] plot[smooth] file {\l__gnu_data_full_path_tl};
+  }{
+    \group_begin:
+    \keys_set:nn { ztikz / point } { #3 }
+    \draw[#2] plot [
+      mark = \str_use:N \l__point_type_str, 
+      mark~ size = \dim_use:N \l__point_radius_dim,
+      mark~ options = {
+        rotate  = \fp_use:N \l__point_rotate_angle, 
+        opacity = \tl_use:N \l__point_opacity_tl, 
+        color   = \tl_use:N \l__point_color_tl,
+        ball~ color = \tl_use:N \l__point_color_tl,
+      }
+    ] file {\l__gnu_data_full_path_tl};
+    \group_end:
+  }
+  % reset precise (default 300 for plot precise)
+  \bool_if:cTF {g__#1_precise_bool}{
+    \PlotPrecise{#1}{100}
+  }{\relax}
+}
+
+% ==> simple 2d function
+\NewDocumentCommand\Plot{ O{-5:5}O{color=black}O{}m }{
+  % sed gnuplot scripts
+  \sys_shell_now:x {sed~ -i~ "8s|set~ xr~ .*|set~ xr~ [#1]|"~ \g__ztikz_scripts_path_tl/plot.gp}
+  \sys_shell_now:x {sed~ -i~ "7s|f(x)~ =~ .*|f(x)~ =~ #4|"  ~ \g__ztikz_scripts_path_tl/plot.gp}
+  \sys_shell_now:x {gnuplot~                                  \g__ztikz_scripts_path_tl/plot.gp}
+  % plot data, reset precise
+  \ztikz_gnu_data_plot_cs:nnn {plot}{#2}{#3}
+}
+
+% ==> implicit 2d function
+\NewDocumentCommand\ContourPlot{ O{-5:5; -5:5}O{color=black}O{}m }{
+	% split the first param
+  \seq_set_split:Nnn \l__plot_domain_seq { ; }{#1}
+  \tl_set:Nn \l__y_domain_tl {\seq_item:Nn \l__plot_domain_seq{2}}
+  \exp_args:Nx \tl_if_blank:nTF {\seq_item:Nn \l__plot_domain_seq{2}}{
+    \tl_set:Nn \l__y_domain_tl {*:*}
+  }{
+    \tl_set:Nn \l__y_domain_tl {\seq_item:Nn \l__plot_domain_seq{2}}
+  }
+  % sed gnuplot scripts
+  \sys_shell_now:x {sed~ -i~ "11s|set~ xr~ .*|set~ xr~ [\seq_item:Nn \l__plot_domain_seq{1}]|"~ \g__ztikz_scripts_path_tl/contour_plot.gp}
+  \sys_shell_now:x {sed~ -i~ "12s|set~ yr~ .*|set~ yr~ [\tl_use:N \l__y_domain_tl]|"~           \g__ztikz_scripts_path_tl/contour_plot.gp}
+  \sys_shell_now:x {sed~ -i~ "14s|f(x,~ y)~ =~ .*|f(x,~ y)~ =~ #4|"~                            \g__ztikz_scripts_path_tl/contour_plot.gp}
+  \sys_shell_now:x {gnuplot~                                                                    \g__ztikz_scripts_path_tl/contour_plot.gp}
+  % plot data, reset precise
+  \ztikz_gnu_data_plot_cs:nnn {contour}{#2}{#3}
+}
+
+% ==> parametric 2d function
+\NewDocumentCommand\ParamPlot{ O{0:2*pi}O{color=black}O{}m }{
+  % sed gnuplot scripts
+  \sys_shell_now:x {sed~ -i~ "8s|set~ trange~ .*|set~ trange~ [#1]|"~     \g__ztikz_scripts_path_tl/param_plot.gp}
+  \sys_shell_now:x {sed~ -i~ "9s|plot~ .*|plot~ #4|"~                     \g__ztikz_scripts_path_tl/param_plot.gp}
+  \sys_shell_now:x {gnuplot~                                              \g__ztikz_scripts_path_tl/param_plot.gp}
+  % plot data, reset precise
+  \ztikz_gnu_data_plot_cs:nnn {param}{#2}{#3}
+}
+
+% ==> polar 2d function
+\NewDocumentCommand\PolarPlot{ O{0:2*pi}O{color=black}O{}m }{
+  % sed gnuplot scripts
+  \sys_shell_now:x {sed~ -i~ "8s|set~ trange~ .*|set~ trange~ [#1]|"~     \g__ztikz_scripts_path_tl/polar_plot.gp}
+  \sys_shell_now:x {sed~ -i~ "9s|plot~ .*|plot~ #4|"~                     \g__ztikz_scripts_path_tl/polar_plot.gp}
+  \sys_shell_now:x {gnuplot~                                              \g__ztikz_scripts_path_tl/polar_plot.gp}
+  % plot data, reset precise
+  \ztikz_gnu_data_plot_cs:nnn {polar}{#2}{#3}
+}
+
+
+
+
+
+% ----------------------------------------------
+%               3d plot function                
+% ----------------------------------------------
+\cs_generate_variant:Nn \sys_shell_mv:nn {nx}
+\cs_generate_variant:Nn \seq_set_split:Nnn {Nnx}
+\keys_define:nn { ztikz/gnuplot/plotz }{
+  domain      .tl_set:N   = \l__ztikz_gnuplot_plotz_domain_tl,
+  domain      .initial:n  = {-5:5; -5:5},
+  palette     .tl_set:N   = \l__ztikz_gnuplot_plotz_palette_tl,
+  palette     .initial:n  = {rgbformulae~ 22,13,-31},
+  width       .dim_set:N  = \l__ztikz_gnuplot_plotz_width_dim,
+  width       .initial:n  = {0.75\linewidth},
+}
+\NewDocumentCommand\Plotz{ O{}m }{
+  \group_begin:
+  \keys_set:nn { ztikz/gnuplot/plotz } { #1 }
+	% split the first param
+  \seq_set_split:Nnx \l__plot_domain_seq { ; }{\l__ztikz_gnuplot_plotz_domain_tl}
+  \tl_set:Nn \l__y_domain_tl {\seq_item:Nn \l__plot_domain_seq{2}}
+  \exp_args:Nx \tl_if_blank:nTF {\seq_item:Nn \l__plot_domain_seq{2}}{
+    \tl_set:Nn \l__y_domain_tl {*:*}
+  }{
+    \tl_set:Nn \l__y_domain_tl {\seq_item:Nn \l__plot_domain_seq{2}}
+  }
+  % sed gnuplot scripts
+  \sys_shell_now:x {sed~ -i~ "18s|set~ palette~ .*|set~ palette~ \tl_use:N \l__ztikz_gnuplot_plotz_palette_tl|"~  \g__ztikz_scripts_path_tl/plot_3d.gp}
+  \sys_shell_now:x {sed~ -i~ "23s|set~ xr~ .*|set~ xr~ [\seq_item:Nn \l__plot_domain_seq{1}]|"~ \g__ztikz_scripts_path_tl/plot_3d.gp}
+  \sys_shell_now:x {sed~ -i~ "24s|set~ yr~ .*|set~ yr~ [\tl_use:N \l__y_domain_tl]|"~           \g__ztikz_scripts_path_tl/plot_3d.gp}
+  \sys_shell_now:x {sed~ -i~ "25s|splot~ .*|splot~ #2|"~                                        \g__ztikz_scripts_path_tl/plot_3d.gp}
+  \sys_shell_now:x {gnuplot~                                                                    \g__ztikz_scripts_path_tl/plot_3d.gp}
+  % include generate pdf
+  \tl_set:Nn \l_tmpa_tl {./ztikz_output/gnuplot_data/plot_3d_\int_use:N \g__gnu_plotz_index_int.pdf}
+  \sys_shell_mv:nx {./ztikz_output/gnuplot_data/plot_3d.pdf}{\l_tmpa_tl}
+  \includegraphics[width=\dim_use:N \l__ztikz_gnuplot_plotz_width_dim]{\l_tmpa_tl}
+  \int_gadd:Nn \g__gnu_plotz_index_int {1}
+  \group_end:
+}
+
+
+
+
+
+% ----------------------------------------------
+%               statistic plot function                
+% ----------------------------------------------
+\cs_new_protected:Npn \ztikz_statistic_plot_cs:nnnn #1#2#3#4 {
+  \tl_if_empty:nTF {#3}{
+    \draw[#2] plot[#1] file {#4};
+  }{
+    \group_begin:
+    \keys_set:nn { ztikz / point } { #3 }
+    \draw[#2] plot [
+      % stairs options
+      #1,
+      % marker options
+      mark = \str_use:N \l__point_type_str, 
+      mark~ size = \dim_use:N \l__point_radius_dim,
+      mark~ options = {
+        rotate  = \fp_use:N \l__point_rotate_angle, 
+        opacity = \tl_use:N \l__point_opacity_tl, 
+        color   = \tl_use:N \l__point_color_tl,
+        ball~ color = \tl_use:N \l__point_color_tl,
+      }
+    ] file {#4};
+    \group_end:
+  }
+}
+\cs_generate_variant:Nn \ztikz_statistic_plot_cs:nnnn {xnnn}
+
+\tl_new:N \l__tempa_tl
+\tl_new:N \l__tempb_tl
+\seq_new:N \l__statistic_option_tl
+% 1. \ListPlot --> set opcity=0 in the above Plot commands
+% 2. stairs plot
+\NewDocumentCommand\StairsPlot{ O{plot-left;jump-left}O{color=black}O{}m }{
+  \seq_set_split:Nnn \l__statistic_option_tl { ; }{#1}
+  \str_case:enF {\seq_item:Nn \l__statistic_option_tl{1}}{
+    {plot-left}{\tl_set:Nn \l__tempa_tl {const~plot~mark~left}}
+    {plot-right}{\tl_set:Nn \l__tempa_tl {const~plot~mark~right}}
+    {plot-mid}{\tl_set:Nn \l__tempa_tl {const~plot~mark~mid}}
+    {}{\tl_set:Nn \l__tempa_tl {}}
+  }{ 
+    \msg_new:nnn {ztikz}{ztikz-stairs-plot}{current~stairs~plot~type~is:~'#1'~,~ invalide}
+    \msg_error:nn {ztikz}{ztikz-stairs-plot}
+  }
+  \str_case:enF {\seq_item:Nn \l__statistic_option_tl{2}}{
+    {jump-left}{\tl_set:Nn \l__tempb_tl {jump~mark~left}}
+    {jump-right}{\tl_set:Nn \l__tempb_tl {jump~mark~right}}
+    {jump-mid}{\tl_set:Nn \l__tempb_tl {jump~mark~mid}}
+    {}{\tl_set:Nn \l__tempb_tl {}}
+  }{ 
+    \msg_new:nnn {ztikz}{ztikz-stairs-plot}{current~stairs~jump~type~is:~'#1'~,~ invalide}
+    \msg_error:nn {ztikz}{ztikz-stairs-plot}
+  }
+  \ztikz_statistic_plot_cs:xnnn {\l__tempa_tl,\l__tempb_tl}{#2}{#3}{#4}
+}
+% 3. stem plot
+\NewDocumentCommand\StemPlot{ O{x}O{color=black}O{}m }{
+  \str_case:enF {#1}{
+    {x}{\tl_set:Nn \l__tempa_tl {ycomb}}
+    {y}{\tl_set:Nn \l__tempa_tl {xcomb}}
+    {o}{\tl_set:Nn \l__tempa_tl {polar~ comb}}
+    {}{\tl_set:Nn \l__tempa_tl  {ycomb}}
+  }{ 
+    \msg_new:nnn {ztikz}{ztikz-stem-plot}{current~stem~plot~type~is:~'#1'~,~ invalide}
+    \msg_error:nn {ztikz}{ztikz-stem-plot}
+  }
+  \ztikz_statistic_plot_cs:xnnn {\l__tempa_tl}{#2}{#3}{#4}
+}
+% 4. bar plot
+\NewDocumentCommand\BarPlot{ O{ybar}O{color=black}O{}m }{
+  \str_case:enF {#1}{
+    {x}{\tl_set:Nn \l__tempa_tl {ybar}}
+    {y}{\tl_set:Nn \l__tempa_tl {xbar}}
+    {xc}{\tl_set:Nn \l__tempa_tl {ybar~ interval}}
+    {yc}{\tl_set:Nn \l__tempa_tl {xbar~ interval}}
+    {}{\tl_set:Nn \l__tempa_tl  {ybar}}
+  }{ 
+    \msg_new:nnn {ztikz}{ztikz-bar-plot}{current~bar~plot~type~is:~'#1'~,~ invalide}
+    \msg_error:nn {ztikz}{ztikz-bar-plot}
+  }
+  \ztikz_statistic_plot_cs:xnnn {\l__tempa_tl}{#2}{#3}{#4}
+}

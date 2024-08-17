@@ -1,0 +1,149 @@
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+\ProvidesPackage{stys/Fancybook}[2023/04/30]
+
+% \usepackage{ctex}
+\usepackage{stys/Titlepage}
+\usepackage[dvipsnames,svgnames,x11names,table]{xcolor}
+\definecolor{nuanbai}{HTML}{F5F5F5}
+\pagecolor{nuanbai!10}
+\usepackage{amsmath,amssymb}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage[left=2cm,right=2cm,top=.8cm,bottom=3.3cm]{geometry}
+\usepackage{xpatch}                         % 修正章节编号
+\usepackage[automark]{scrlayer-scrpage}     % 页面设置宏包,隶属于koma-script文档类
+\usepackage[explicit,clearempty,pagestyles,newparttoc]{titlesec}    % 章节设计宏包
+\usepackage{titletoc}                       % 目录设计宏包
+\setcounter{secnumdepth}{5}                 % 增加编号深度
+\setcounter{tocdepth}{2}                    % 增加目录深度
+\usepackage{hyperref}
+\usepackage{fontawesome5}
+\usepackage{tikz}
+\usetikzlibrary{calc,shadows}
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{breakable, skins,theorems}   % TcolorBox Library
+\usepackage{tabularx}
+\usepackage{lastpage}
+\usepackage{varwidth}
+\usepackage{ninecolors}
+\usepackage{colortbl}                       % 彩色表格
+\usepackage{tabularray}
+\usepackage{pgfornament}
+\usepackage{zhnumber}
+\usepackage{adjustbox}
+\RequirePackage{pgfplots}                   % 画图,页面样式设计核心包 ,提供\pgfonlayer命令以及下列图层指令
+\pgfplotsset{compat=1.18}
+\usepackage{graphicx}                       % 修正minipage顶部对齐问题
+
+
+%\definecolor{headstylecolor}{HTML}{}
+% Define the layers to be used in document.
+% *****************************************************
+\pgfdeclarelayer{background}                % 背景,底层
+\pgfdeclarelayer{foreground}                % 上层
+\pgfdeclarelayer{top}                       % 顶部
+\pgfdeclarelayer{bottom}                    % 底部
+\pgfsetlayers{bottom,background,main,foreground,top}
+%%%%============================================%%%%%
+\makeatletter
+\newcommand*\footimage[1]{\def\@footimage{#1}}
+\newcommand*\foottext[1]{\def\@foottext{#1}}
+\newcommand*\foottheme[1]{\def\@foottheme{#1}}
+
+\definecolor{qing}{HTML}{26A69A}
+\newcommand{\pageheadstyle}{%
+    \begin{tikzpicture}[remember picture,overlay]
+    \fill[qing!15] (current page.north west) rectangle ([yshift=-\headheight]current page.north east);
+    \coordinate (head decoration) at ([shift={(0,-.6\headheight)}]current page.north);
+    \makeatletter
+    \node[] at (head decoration) {\pgfornament[height=2cm,width=4cm,color=qing!20!black,opacity=0.5]{78}\hspace{.75\linewidth}\pgfornament[height=2cm,width=4cm,color=qing!20!black,symmetry=v,symmetry=h,opacity=0.5]{79}};
+    \makeatother
+    \node[text=black,font=\rmfamily\normalsize] at ([shift={(-.25\headheight,-.05\headheight)}]head decoration) {\begin{varwidth}{.75\linewidth}\ifodd\value{page}\rightmark\else\leftmark\fi\end{varwidth}};
+    \end{tikzpicture}
+}
+\ihead{}
+\ohead{}
+\setlength{\headheight}{50pt}
+\chead{\pageheadstyle}
+
+
+%%页脚
+\makeatletter
+\ifoot{}
+\cfoot{}
+\ofoot{\footstyle}
+\setlength\footheight{50pt}
+\newcommand{\footstyle}{%
+  \begin{tikzpicture}[remember picture,overlay]
+  \def\Backcolor{qing}
+    \fill[\Backcolor!25] 
+    ([xshift=0cm]current page.south west) rectangle ([yshift=3cm]current page.south east);
+    \fill[\Backcolor!50] ([xshift=0cm,yshift=1cm]current page.south west) --++(0,2) -- ++(2,0)--cycle;
+    \fill[\Backcolor!50] ([xshift=-2cm]current page.south east) -- ++(2,0) -- ++(0,2)--cycle;
+    \node[anchor=west] at ([shift={(0.2,1.5)}]current page.south west){\includegraphics[width=1.8cm,height=2.4cm]{\@footimage}};
+    \node[font=\upshape\bfseries,text=white,rectangle,rounded corners,fill=\Backcolor!50] at ([shift={(-0.5,0.5)}]current page.south east){\thepage};
+    \node[anchor=north west] at ([shift={(2.3,2.8)}]current page.south west)
+    {
+      \begin{minipage}{\dimeval{\paperwidth-4.5cm}}
+        \textcolor{\Backcolor!50}{\faBook}\hspace{.5em}\tikz[baseline]{\node[anchor=base,rounded corners=2.5pt,text=black,fill=\Backcolor!50,inner sep=.3mm]{\@foottheme};}\hspace{.5em}\@foottext
+      \end{minipage}
+    };
+  \end{tikzpicture}
+}
+\makeatother
+
+\newcommand{\examsection}{%
+\begin{tikzpicture}
+    \coordinate (head table) at ([xshift=.05\linewidth,yshift=-\headheight]current page.north);
+    \node at (head table) {%
+    \adjustbox{valign=t}{\begin{minipage}{.5\linewidth}
+    \begin{tcolorbox}[enhanced jigsaw,colframe=teal,colback=white,colbacktitle=black!2,arc=5pt,title=\centering\textcolor{black}{\textbf{第 \zhnumber{1} 周\quad $\bullet$ \quad 周 \zhnumber{1} }}]
+        \centering\sffamily\upshape 小数乘法
+    \end{tcolorbox}
+    \end{minipage}}\hspace*{2ex}\hfil
+    \adjustbox{valign=t}{\begin{minipage}{.5\linewidth}
+    \begin{tblr}{
+        row{odd} = {bg=azure8},row{even} = {bg=black!2},
+        row{1} = {bg=black!2, fg=black, font=\sffamily},|c|c|,rows = {abovesep=3pt,belowsep=3pt},
+        columns = {leftsep=5pt,rightsep=5pt},
+    }
+    \hline
+      用时:\quad~~ 分   & 答对题数 \\\hline
+      建议完成时间: 10 分钟  & \rule{1.5cm}{1pt} $/22$ \\\hline
+    \end{tblr}
+    \end{minipage}}}; 
+\end{tikzpicture}}
+
+\newcommand{\triangler}[2][teal]{
+\begin{tikzpicture}[remember picture]
+\def\x{#2}
+\filldraw[#1] (-\x,\x) -- (0,0) --(-\x,-\x)--cycle;
+\filldraw[#1] (0,\x) -- (\x,0) -- (0,-\x)--cycle;
+\filldraw[#1] (\x,\x) -- (2*\x,0) -- (\x,-\x)--cycle;
+\end{tikzpicture}}
+
+
+\newcommand{\nonumsection}[1]{
+\begin{tikzpicture}[remember picture,overlay]
+\fill[orange!30,rounded corners=2pt] (0,0) rectangle ($(0,0)+(.9\linewidth,1.2em)$);
+\node[font=\sffamily\Large] at (.45\linewidth,.6em) {#1};
+\end{tikzpicture}
+}
+\titleformat{name=\section,numberless}
+{\Large\sffamily}
+{}{1em}{\nonumsection{#1}}
+\titlespacing{\section}
+{0pc}{2ex plus .1ex minus .2ex}{1.5ex minus .1ex}
+
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{amsthm}
+\usepackage{bclogo}
+\newtheorem*{solution}{\textbf{解答:~}}
+\newcommand{\exercise}[2][\bcicosaedre]{\bigskip
+\begin{tikzpicture}[remember picture,overlay]
+\draw[line width=2pt,loosely dotted,teal] (0,0)--node[pos=0.4,rectangle,minimum height=1.5em,font=\sffamily\Large,text=black,fill=black!2,drop shadow={opacity=.3, shadow xshift=0.1cm},anchor=center,
+	inner sep=1.5mm,
+	anchor=west,] {$#1$  ~ #2} (\linewidth,0);
+\end{tikzpicture}\bigskip\smallskip
+}

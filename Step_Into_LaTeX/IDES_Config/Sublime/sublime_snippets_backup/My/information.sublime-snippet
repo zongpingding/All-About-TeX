@@ -1,0 +1,9 @@
+<snippet>
+	<content><![CDATA[
+\title{$1}
+\author{${2:zongpingD}}
+\date{\today}
+]]></content>
+	<tabTrigger>info</tabTrigger>
+	<scope>text.tex.latex</scope>
+</snippet>

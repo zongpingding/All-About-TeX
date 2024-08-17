@@ -1,0 +1,353 @@
+	% ======================================================================
+% ycbook-doc.tex
+% Copyright (c) Youssef Cherem <ycherem(at)gmail.com>, 2018
+%
+% This file is part of the ycbook LaTeX2e class.
+
+% This work may be distributed and/or modified under the conditions of
+% the LaTeX Project Public License, version 1.3c of the license.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3c or later is part of all distributions of LaTeX
+% version 2005/12/01 and of this work.
+%
+% This work has the LPPL maintenance status "author-maintained".
+% ======================================================================
+
+\documentclass[withmarginpar,titleauthor,11pt]{mwart}
+%\renewcommand{\sectsettings}{\sffamily\bfseries}
+\usepackage[english]{babel}
+\usepackage[dvipsnames,svgnames]{xcolor}
+\usepackage{fontspec}
+\setmainfont{Warnock Pro}[Numbers=OldStyle]
+\usepackage{FiraSans}
+\usepackage[scale=0.9,lf]{FiraMono}
+%\setmathrm{}
+%\setsansfont{Fira Sans Book}[BoldFont={FiraSans-Bold},BoldItalicFont={FiraSans-BoldItalic},Scale=.9] 
+%\setmonofont[Scale=0.8,Color=Teal]{Fira Mono}
+\usepackage{tikz}
+\usetikzlibrary{shapes,shadings,shadows,shapes.geometric,decorations,positioning,arrows,decorations.pathmorphing}
+\usepackage[framemethod=tikz]{mdframed}
+\surroundwithmdframed[linecolor=PaleTurquoise,skipabove=10pt,skipbelow=6pt, backgroundcolor=PaleTurquoise!30,roundcorner=6pt
+]{verbatim}%roundcorner=10pt,
+%MediumSeaGreen
+%OrangeRed
+
+\newmdenv[linecolor=MediumPurple,skipabove=10pt,skipbelow=6pt, backgroundcolor=SpringGreen,roundcorner=6pt
+]{resumo}
+
+\usepackage{hyperref}
+\usepackage{multicol}
+\usepackage{microtype}
+\frenchspacing 
+
+\hyphenation{Bring-hurst}
+
+\newcommand{\flor}{\fontspec{Minion Pro}}
+\newcommand{\folhadireita}{\fontspec{Minion Pro}}
+\newcommand{\duasondas}{\fontspec{Minion Pro}   }
+
+%%% Warnock Pro Ornaments 
+%
+\newcommand{\folhawarnock}{\fontspec{Warnock Pro}}
+\newcommand{\folhawarnockmetade}{\fontspec{Warnock Pro}}
+\newcommand{\folhawarnocklinhaum}{\fontspec{Warnock Pro}}
+\newcommand{\folhawarnocklinhadois}{\fontspec{Warnock Pro}}
+
+\newcommand{\carimboa}{\fontspec{Warnock Pro}}
+\newcommand{\carimbob}{\fontspec{Warnock Pro}}
+\newcommand{\carimboc}{\fontspec{Warnock Pro}}
+\newcommand{\carimbod}{\fontspec{Warnock Pro}}
+\newcommand{\carimboe}{\fontspec{Warnock Pro}}
+\newcommand{\carimbof}{\fontspec{Warnock Pro}}
+
+
+\newcommand{\estampa}{\fontspec{Warnock Pro}}
+\newcommand{\estampab}{\fontspec{Warnock Pro}}
+\newcommand{\estampac}{\fontspec{Warnock Pro}}
+
+
+
+
+
+
+
+\SetSectionFormatting{section}
+{24pt plus5pt minus2pt} %space before
+{\normalfont\centering\scshape\large\ifHeadingNumbered
+		\HeadingNumber.\enspace\fi
+		\HeadingText}
+{10pt plus3pt}%space after
+
+\SetSectionFormatting{subsection}
+{16pt plus4pt minus2pt}
+{\FormatHangHeading{\normalfont\itshape}}
+{6pt plus2pt}
+
+
+\usepackage[style=authoryear-icomp]{biblatex}
+\addbibresource{ycbook-bibliografia.bib}
+\DeclareFieldFormat{url}{\url{#1}}
+
+%\usepackage[justification=raggedright,font={sf},labelfont=bf]{caption}
+%\usepackage{picinpar}
+
+\setlength{\marginparwidth}{1.3in}
+
+
+\newcommand{\option}[1]{\marginpar{\footnotesize \texttt{#1}}}
+%\newcommand{\opt}[1]{<<\textit{#1}>>}
+\newcommand{\opt}[1]{\texttt{#1}}
+
+
+\title{\estrela{\textit{ycbook}}\tikz \node[inner sep=0pt,remember picture,overlay] at (-2,4){\includegraphics[height=3cm,width=0.4\textwidth,keepaspectratio]{icone}};\\
+		\tikz \node[left color=PineGreen,rectangle,remember picture, overlay,
+		rounded corners=3pt] at (0,0) {A versatile and simple book class};\\
+		\tikz \draw[teal,remember picture, overlay,thick] (-4.2,0.2) -- (4,0.2);%
+%\tikz \node[remember picture,overlay] at (7,5) {\florgrande};% 
+%
+}
+\author{\addfontfeatures{Style=Swash,Contextuals=Swash}\textit{Youssef Cherem}\\ \href{mailto:ycherem@gmail.com}{ycherem@gmail.com}}
+\date{\carimboa\ MMXVII \carimboa\\ \folhawarnocklinhaum% %
+}
+
+
+\usepackage%[headsepline]
+{scrlayer-scrpage}
+%\addtokomafont{headsepline}{\color{JungleGreen}} %yes, works on other classes as well
+\pagestyle{scrheadings}
+\clearscrheadfoot
+%\chead{}
+%\cehead{}
+\newcommand{\bola}{\tikz \node [top color=SpringGreen, shading angle=45,circle,drop shadow] at (0,0) {\thepage};}
+\cfoot*{\upshape\bfseries\large\addfontfeatures{Numbers=Lining}\bola}
+
+\newcommand{\estrela}[1]{\tikz \node [top color=SpringGreen,star,star points=7] at (0,0) {#1};}%,star point ratio=0.8 % shading angle=45,
+
+\usepackage{tcolorbox}
+\tcbuselibrary{skins}
+\newtcolorbox{caixa}{enhanced,
+	interior style={left color=SpringGreen,right color=Dandelion,shading angle=45},frame hidden,width=0.8\textwidth,center,drop shadow}
+
+
+
+\usepackage{lipsum}
+
+\usepackage[toc]{multitoc}
+\renewcommand*{\multicolumntoc}{2}
+%\setlength{\columnseprule}{1pt}
+
+
+
+\begin{document}
+	
+	\maketitle
+	
+	
+\thispagestyle{scrheadings}
+
+
+\begin{caixa}
+	This class is intended to be an interpretation of the \texttt{mwbk} class from Mar\-cin Wo\-li\'{n}s\-ki's \texttt{mwcls} classes. The \texttt{mwcls} class\-es are simple, yet powerful and customizable classes that allow the end user to customize the layout of headers, headings etc. They also have the benefit of being more economic in space than the most common \LaTeX\ classes, while keeping a clear appearance and a smooth flow.
+	%\lipsum[1-5]
+\end{caixa}
+
+\tableofcontents
+
+
+\section*{The reasons for this class}
+
+
+Although many usual \LaTeX\ packages and classes offer a wide array of solutions for text block and margin specifications, and although some of them, notably Koma-Script \parencite{koma-script} allow and facilitate the application of “classical” canons of page construction \parencite{tschichold_form_1991,bringhurst_elements_2013}, one may have several reasons to avoid this aesthetic solution. One reason is that these page construction methods were intended, obviously, for handwritten or printed material. Even assuming the material is to be printed, one reason to find an alternative is economic and environmental: the more paper you print, the more it will cost---both in terms of money and environmental impact. But the user also wishes to avoid a sloppy solution, squeezing as much content as possible onto the page just to save space. The compromise solution would be somewhat closer to what most commercial books look like---without jeopardizing legibility. In fact, it is rare to find a book that looks like it has been laid out according to the ``canons". That is one motive why I find the \texttt{mwcls} classes \parencite{mwcls} useful. Besides,  \texttt{mwcls} alternatives for basic classes (\texttt{mwart} for articles,  \texttt{mwrep} for reports and \texttt{mwbk} for books) allow the user to easily modify headings, being somewhat more flexible and providing a simpler interface than many classes. The goal was to provide a more user-friendly syntax for some common tweaks and more alternatives to the end-user. (As for the \texttt{mwart} class, I did not find anything to be changed---although the user might adapt some of the options presented in the \texttt{ycbook} class.)
+
+
+
+\section{Options for chapter and section}
+To add a rule below chapter and section titles, use \opt{chapterrule} and
+\opt{sectionrule}. Other sectional headings may be changed likewise:
+
+\option{chapterrule}
+\option{sectionrule}
+
+
+\begin{verbatim}
+	\SetSectionFormatting{section}
+	{24pt plus5pt minus2pt} %space before
+	{\large\textbf{\ifHeadingNumbered
+	\HeadingNumber.\enspace\fi
+	\HeadingText}\\\rule[10pt]{\hsize}{0.4pt}}
+	{10pt plus3pt}%space after
+\end{verbatim}
+
+Or this, if you want unnumbered headings to be centralized:
+
+\begin{verbatim}
+\SetSectionFormatting[breakbefore,wholewidth]{chapter}
+{12pt}
+{\ifHeadingNumbered\FormatBlockHeading{\bfseries\LARGE}
+\else \FormatBlockHeading{\centering\bfseries\LARGE}\fi}
+{24pt plus9pt}
+\end{verbatim}
+
+
+\option{chaptercentered}
+\option{chapterleft}
+\option{chapterright}
+
+Options \opt{chaptercentered}, \opt{chapterleft}, and \opt{chapterright} control chapter alignment.  
+
+Options \opt{nochaptercentered}, \opt{nochapterleft}, and \opt{nochapterright} control chapter alignment and exclude the name “Chapter” from the entry. The default, as in the \texttt{mwcls} classes, is \opt{chapterleft}. \option{nochaptercentered}
+\option{nochapterleft}
+\option{nochapterright}
+
+\option{nodots}
+If you don't want a dot after section numbers, you can invoke the option \verb|nodots|. This option does not by itself affect the page headings.
+
+
+\section{Page Styles}
+Several page styles are provided:
+
+\begin{verbatim}
+\pagestyle{headings}
+
+\pagestyle{myheadings}
+
+\pagestyle{headingsbeforeplain}
+
+\pagestyle{myheadingsbeforeplain}
+
+\pagestyle{uheadings} %for heading rules
+
+\pagestyle{myuheadings} %for heading rules
+\end{verbatim}
+
+The styles \verb+headingsbeforeplain+ and \verb+myheadingsbeforeplain+ have been added, in which an even empty page finishing a chapter takes the \verb|plain| style. The default option is \verb|headings|.
+
+
+\verb|\pagestyle{uheadings}| and \verb|\pagestyle{myuheadings}| may be used instead, defaulting to more usual parameters, and in which the header is separated by a thin line.
+
+All page styles have an option not to include the dot after the chapter/section number: just add \verb|nodots| to the name of the usual style:
+
+\begin{verbatim}
+\pagestyle{headingsnodot}
+
+\pagestyle{uheadingsnodot}
+
+\pagestyle{headingsbeforeplainnodot}
+ 
+\end{verbatim}
+
+And so on.
+
+
+This class is somewhat compatible with the \verb|scrlayer-scrpage| (formerly \verb|scrpage2|) for headers and footers:
+
+\begin{verbatim}
+\usepackage{scrlayer-scrpage}
+\clearpairofpagestyles
+\pagestyle{scrheadings}
+\ofoot{\pagemark}
+\chead{A centered heading}
+\end{verbatim}
+
+For additional information, see chapters 5 and 18 of the Koma-Script manual.
+
+\section{Table of contents styles}
+
+The \texttt{titletoc} package can be used to customize the table of contents. As a convenience, the commands \verb|\fancytoc| and \verb|\traditionaltoc| can be used in the preamble to create predefined TOC styles. More styles will be added in the future.
+
+
+%\section{Captions}
+%Captions have been redefined with the \verb|caption| package with the following parameters: \verb|justification=raggedright,font={sf},labelfont=bf|.
+%
+%\marginpar{\includegraphics[width=\marginparwidth]{apparition-fogg}
+%	\captionof{figure}{\texttt{L'apparition}, by Gustave Moreau, 1876--1877. Fogg Art Museum.}
+%	}
+
+
+
+\section{Footnotes and margin paragraphs}
+\option{sansserifnotes} The option \opt{sansserifnotes} changes all footnotes to sans serif.
+
+\option{nofootnoterule} The option \opt{nofootnoterule} removes the footnote rule that separates footnotes from the main text.
+
+\option{traditionalfootnote} The option \opt{traditionalfootnote} removes indentation of footnotes and also the wider space between the footnote mark and the footnote text.
+
+You can choose to turn all footnotes into margin notes with the \texttt{footmisc} package:
+
+\begin{verbatim}
+\usepackage[side,ragged,flushmargin]{footmisc}
+\end{verbatim}
+
+Margin paragraphs in two-side documents have been somewhat improved, but should not be overindulged. They don't work particularly well in smaller paper formats. 
+
+\section{Other footnote and header options}
+
+If you have ever imagined how to change the color of the header line or the footnote line, two commands are provided: \verb|\coloredheadline{}|\footnote{Colored header lines will only work with the page style \texttt{uheadings} activated.} and\linebreak \verb|\coloredfootline{}|:
+
+\begin{verbatim}
+\coloredheadline{JungleGreen}
+\coloredfootline{Dandelion}
+\pagestyle{uheadings}
+\end{verbatim}
+
+Be sure to issue the commands in the exact order as above.
+
+
+\section{Other options}
+All other options from the \texttt{mwcls} classes are available, e.g.:
+
+\begin{multicols}{2}
+
+\begin{itemize}
+\item \texttt{floatssmall}; 
+\item \texttt{floatsnormalsize}; 
+\item \texttt{sfheadings};
+\item \texttt{authortitle} (default); 
+\item \texttt{titleauthor}; 
+\item \verb|\renewcommand{\sectsettings}{}|; 
+\item \verb|\SetTOCIndents|, 
+\item \verb|indentfirst| and \verb|noindentfirst|, 
+\item \verb|wide|, for shorter margins, and
+\item font size and paper specifications (\texttt{12pt}, \texttt{a5paper}, etc.). 
+\end{itemize}
+\end{multicols}
+
+\section{Figures spreading over two pages}
+
+Thanks to Martin Scharrer,\footnote{\url{http://tex.stackexchange.com/a/23865/9424}} 
+ we also have \verb|\twopagepicture| (for numbered pictures) and \verb|\twopagepicturen| (for unnumbered pictures) to automatically split a picture on a spread (left and right pages). 
+
+It works thus: \verb|\twopagepicture{image place regarding the caption}|\\ \verb|{text width or page width}{image}{caption}|:
+
+\begin{itemize}
+	\item \verb|\twopagepicture{b}{l}{image}{Test}|: image below caption (“b”), same width as text (“l”);
+	\item \verb|\twopagepicture{t}{l}{image}{Test}|: image above caption (“t”), same width as text (“l”);
+	\item \verb|\twopagepicture{b}{p}{image}{Test}|: image below caption (“b”), same width as page (“p”), and 
+	\item \verb|\twopagepicture{t}{p}{image}{Test}|: image above caption (“t”), same width as page (“p”),
+\end{itemize}
+
+%\section{Implementation}
+%
+%
+%\lstinputlisting{ycbook.cls}
+
+%\marginpar{\texttt{\small This document was typeset with XXX}}
+
+\printbibliography
+
+\end{document}
+
+
+%removed	
+%, so you can do fun things like this to color your header line:
+%
+%
+%\begin{verbatim}
+%\usepackage[headsepline]{scrlayer-scrpage}
+%\addtokomafont{headsepline}{\color{JungleGreen}}
+%\usepackage[dvipsnames,svgnames,x11names]{xcolor}
+%\pagestyle{scrheadings}
+%\end{verbatim}
+%
+%And of course simpler things such as:

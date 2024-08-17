@@ -1,0 +1,98 @@
+\mode<presentation>
+
+\defbeamertemplate*{frametitle}{BetterIMTAtlantique}[1][]%
+{
+    \vskip-1pt 
+    \begin{beamercolorbox}[wd=\the\paperwidth,ht=1.2cm,sep=4pt]{frametitle}
+        \insertframetitle
+
+        \ifx\insertframesubtitle\empty
+            \vskip+1ex
+        \else
+            \usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle
+        \fi
+    \end{beamercolorbox}
+}
+
+
+\newcommand{\inserttoc}{
+    \insectionframetrue
+    
+    \begin{frame}[plain]%
+        \imtatableofcontents
+    \end{frame}
+    
+    \insectionframefalse
+}
+
+\if@enableSectionInterframe
+\AtBeginSection[]{{%
+    \insectionframetrue
+
+    \begin{frame}[plain]%
+        \sectionpage
+    \end{frame}
+    \insectionframefalse
+}}
+\fi
+
+\if@enableSubSectionInterframe
+\AtBeginSubsection[]{{%
+    \insectionframetrue
+
+    \begin{frame}[plain]%
+        \subsectionpage
+    \end{frame}
+    \insectionframefalse
+}}
+\fi
+
+\def\myinsertslidenumber{%
+    \pgfmathparse{int(\insertframeendpage-\insertframestartpage+1)}
+    \ifnum\pgfmathresult>2
+      \symbol{\numexpr96+\insertslidenumber}%
+    \fi
+}
+
+% header and footer
+\setbeamertemplate{headline}{}
+\setbeamertemplate{footline}{
+    \hbox to \paperwidth
+    {%
+        \begin{beamercolorbox}[wd = \paperwidth,
+                               ht = 2.25ex,
+                               dp = 1ex]
+                              {footline}
+
+                \hspace*{0.9cm}
+                \usebeamerfont{author in head/foot}
+                \insertshortauthor
+                \hfill
+                \usebeamerfont{title in head/foot}
+                \insertshorttitle
+                \hfill
+                \usebeamerfont{date in head/foot}
+                \insertshortdate
+                \hspace*{5em}
+                \hbox to 5em {\hfill\insertframenumber{}\myinsertslidenumber/\inserttotalframenumber}
+                \hspace*{.5cm}
+        \end{beamercolorbox}
+    }
+    \vskip0pt
+}
+
+\logo
+{
+    \begin{tikzpicture}[overlay,remember picture]
+        \pgfdeclareimage[interpolate=true, width=40pt]{imtatlantiquelogo}{logos/imtatlantiquelogo};
+        \node[right=0.1cm] at (current page.212) {\pgfuseimage{imtatlantiquelogo}};
+        \ifdefined\partnerlogo
+            \pgfdeclareimage[interpolate=true, width=40pt]{partnerlogo}{\partnerlogo};
+            \node[left=0.2cm] at (current page.328) {\pgfuseimage{partnerlogo}};
+        \fi
+    \end{tikzpicture}
+}
+
+
+
+\mode<all>

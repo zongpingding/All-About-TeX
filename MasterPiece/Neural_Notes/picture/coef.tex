@@ -1,0 +1,159 @@
+\documentclass[10pt,varwidth]{standalone}
+% \documentclass[12pt]{article}
+% 1.必须添加varwidth选项，不然就会报错
+\usepackage{ctex}
+\usepackage{geometry}
+\geometry{a3paper,left=1in,right=.3in,top=1in,bottom=1.2in}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=1.16}
+% 2.引用的tikz库
+\usetikzlibrary{matrix,chains,trees,scopes,decorations}
+\usetikzlibrary{arrows.meta,automata,positioning,shadows,3d}
+\usetikzlibrary {decorations.pathmorphing}
+\usetikzlibrary {backgrounds,mindmap,shadows}
+\usetikzlibrary {patterns, quotes}
+\usetikzlibrary {graphs,fadings}
+\usetikzlibrary {arrows,shapes.geometric}
+\usepgflibrary {shadings}
+
+
+
+\newcommand{\Vdots}[2]{%
+    \begin{scope}
+        \node[circle, fill, inner sep=1pt] (A) at (#1, #2+0.2) {};
+        \node[circle, fill, inner sep=1pt] (B) at (#1, #2) {};
+        \node[circle, fill, inner sep=1pt] (C) at (#1, #2-0.2) {};
+    \end{scope}
+}
+
+\tikzset{
+    >={Latex[length=6mm, width=2mm]}
+}
+
+
+
+
+
+
+
+\begin{document}
+
+\begin{center}
+% \noindent
+\begin{tikzpicture}
+    % 1.输入层
+    \draw[line width=1pt] (0, 5) rectangle (2, -5);
+    \foreach \y in {0, -4}{
+        \draw[line width=1pt, red](0.25, \y+0.5) rectangle (1.75, \y-0.5);
+    }
+    \draw[line width=1pt] (2.5, 5) rectangle (3, -5);
+    % \node at (2.75, 0) {\rotatebox{90}{$\cdots$}};
+    \foreach \y in {4, 0, -4}{
+        \draw[line width=1pt] (6, \y) circle (1);
+    }
+
+
+    % 2.假象层
+    \draw[line width=1pt] (9, 5) rectangle (11, -5);
+    \foreach \y in {4, 0, -4}{
+        \draw[line width=1pt, red] (9.25, \y+0.5) rectangle (10.75, \y-0.5);
+    }
+    \draw[line width=1pt, blue, dashed] (10.5, 6) rectangle (13.5, -6);
+    \foreach \y in {4, 0, -4}{
+        \draw[line width=1pt] (14, \y) circle (1);
+    }
+
+
+    % 3.输出训练层
+    \draw[line width=1pt] (18, 5) rectangle (20, -5);
+    \draw[line width=1pt, blue, dashed] (17, 6) rectangle (21, -6);
+    \foreach \y in {-4}{
+        \draw[line width=1pt, red](18.25, \y+0.5) rectangle (19.75, \y-0.5);
+    }
+    
+
+    % 误差项
+    \draw[line width=1pt, blue, dashed] (23, 6) rectangle (25, -6);
+ 
+
+    % 层的标记
+    \node at (1, 6.5) {$T:$训练数据层};
+    \node at (6, 6.5) {第$j$层};
+    \node at (10, 6.5) {假想层};
+    \node at (14, 6.5) {第$k$层};
+    \node at (19, 6.5) {$O:$输出训练层};
+    \node at (24, 6.5) {$E:$误差层};
+
+
+    % 节点标记
+    \node(A11) at (1, 4) {$t_1$};
+    \node(A21) at (1, 0) {$t_j$};
+    \node(A31) at (1, -4) {$t_k$};
+
+    \node(A1j) at (6, 4) {节点$1$};
+    \node(A2j) at (6, 0) {节点$j$};
+    \node(A3j) at (6, -4) {节点$k$};
+
+    \node(A1J) at (10, 4) {$i_1$}; 
+    \node(A2J) at (10, 0) {$i_j$}; 
+    \node(A3J) at (10, -4) {$i_k$}; 
+
+    \node(A1k) at (14, 4) {节点$1$};
+    \node(A2k) at (14, 0) {节点$j$};
+    \node(A3k) at (14, -4) {节点$k$};
+
+    \node(A3K) at (19, -4) {$O_k$};
+
+    \node(A1e) at (24, 4) {$e_1$};
+    \node(A2e) at (24, 0) {$e_j$};
+    \node(A3e) at (24, -4) {$e_k$};
+
+    \Vdots{2.75}{0}
+    % \Vdots{1}{-2}
+    % \Vdots{1}{2}
+    % \Vdots{6}{2}
+    % \Vdots{6}{-2}
+    \foreach \x in {1, 6, 10, 14, 19, 24}{
+        \Vdots{\x}{2}
+        \Vdots{\x}{-2}
+    }
+
+
+
+    % 箭头标注
+    \draw[->, thick] (A21) -- (A2j);
+    \draw[->, thick] (A31) -- (A3j);
+
+    \draw[->, thick] (A1j) -- (A1J);
+    \draw[->, thick] (A1j) -- (A3J);
+    \draw[->, thick] (A2j) -- node[pos=0.7,below=3pt]{$O_{j}$}(A3J);
+    \draw[->, very thick, blue] (A2j) -- node[pos=0.8,above=1pt]{$W_{j,k}$}(A3k);
+    \draw[->, thick] (A3j) -- (A2J);
+    \draw[->, thick] (A3j) -- (A3J);
+
+    \draw[->, thick] (A2J) -- node[midway,above=1pt]{sigmoid 1}(A2k);
+    \draw[->, thick] (A3J) -- node[midway,above=1pt]{sigmoid 2}(A3k);
+
+    \draw[->, thick] (A3k) -- (A3K);
+    \draw[->, thick] (A2k) -- (A2e);
+    \draw[->, thick] (A1k) -- (A1e);
+
+    \draw[->, thick] (A3K) -- (A3e);
+
+
+
+    % 图注说明
+    \draw[->, thick, blue] (12, -6) -- (12, -7);
+    \draw[->, thick, blue] (19, -6) -- (19, -7.5);
+    \node at (12, -8) {
+        \parbox{10em}{每一行都乘以对应的误差$e_k$,那么这一列就是{\bf 右边}的第一项}
+    };
+    \node at (19, -8) {
+        \parbox{10em}{这个输出就是等式{\bf 右边}的第二项}
+    };
+
+
+\end{tikzpicture}
+\end{center}
+\end{document}

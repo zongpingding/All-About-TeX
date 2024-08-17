@@ -1,0 +1,184 @@
+\documentclass{article}
+\usepackage{luacode}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{comment}
+
+
+% plot function
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% ==> way 1:tcolorbox
+\usepackage{xparse}
+\usepackage{minted}
+\usepackage{tcolorbox}
+\tcbuselibrary{listings, minted, breakable, skins}
+\tcbset{listing engine=minted}
+\definecolor{bg}{RGB}{242, 242, 242}
+\DeclareTCBListing{code}{!O{tex}}{
+  % ==> basic settings
+  enhanced,
+  breakable,
+  colback=bg, 
+  frame hidden, 
+  left=1mm, right=1mm,
+  top=0mm, bottom=0mm, 
+  %
+  % 
+  % ==> source and ouput
+  sidebyside, 
+  listing and text,
+  % listing only, 
+  % text and listing,
+  % listing outside text,
+  %
+  % 
+  % ==> minted options
+  minted language=#1, 
+  minted style=manni,
+  minted options = {  
+    autogobble,
+    tabsize=2,
+    breaklines=true, 
+    breakanywhere=true,
+    breakanywheresymbolpre=,
+    breaksymbolleft=,
+    fontsize=\footnotesize
+  }
+}
+
+
+% ==> way 2: 'tkzexample' package
+% \usepackage{tkzexample} 
+% \usepackage[protrusion = true,
+%             expansion, final,
+%             verbose = false, babel   = true]{microtype}
+% \DisableLigatures{encoding = T1, family = tt*}  
+% \colorlet{graphicbackground}{blue!10!white}
+% \colorlet{codebackground}{red!10}
+
+
+
+
+\title{Lua\TeX{}}
+\author{Eureka}
+\date{\today} 
+\begin{document}
+\maketitle
+
+
+% \begin{comment}
+\section{Lua\TeX{} Primitive}
+\begin{code}
+% run TeX command in Lua
+\newcommand{\texcmd}{some text}
+\directlua{
+  local var = "\texcmd"
+  tex.print(var)
+}
+\end{code}
+
+
+
+\section{Luacode package}
+\subsection{baisc uasge}
+
+\begin{code}
+\begin{luacode}
+  tex.sprint(math.random())
+\end{luacode}
+\end{code}
+
+
+% this code will work
+\begin{code}
+\begin{luacode*}
+  tex.print("\\begin{tabular}{|l|l|l|}")
+  tex.print("\\hline ")
+  tex.print("1 & a & Test A \\\\")
+  tex.print("2 & b & Test B \\\\")
+  tex.print("\\hline ")
+  tex.print("\\end{tabular}")
+\end{luacode*}
+\end{code}
+
+
+\subsection{define function}
+using luacode* because there are percentage signs
+\begin{code}
+% declare the sqrt function in Lua
+\begin{luacode*}
+  function compute_sqrt(v)
+    local s = math.sqrt(tonumber(v))
+    local s_f = math.floor(s)
+    local o
+    if (math.abs(s_f * s_f - v) < 1.0e-5) then
+        o = string.format("%.1f", s)
+    else
+        o = string.format("%.6f", s)
+    end
+    tex.print(o)
+  end
+\end{luacode*}
+
+% declare a wrapper in TeX
+\newcommand{\luasqrt}[1]{\directlua{compute_sqrt(#1)}}
+\luasqrt{2}
+\end{code}
+
+\section{LuaTEX for Plot}
+Consider function $f(x) = (\pi - x)/2$ in the interval $(0, 2\pi)$.
+
+\begin{code}
+\begin{luacode*}
+-- Fourier series
+function partial_sum(n,x)
+  partial = 0;
+  for k = 1, n, 1 do
+    partial = partial + math.sin(k*x)/k
+  end;
+  return partial
+end
+
+-- Code to write PGFplots data as coordinates
+function print_partial_sum(n,xMin,xMax,npoints,option)
+  local delta = (xMax-xMin)/(npoints-1)
+  local x = xMin
+  if option~=[[]] then
+    tex.sprint("\\addplot["..option.."] coordinates{")
+  else
+    tex.sprint("\\addplot coordinates{")
+  end
+  for i=1, npoints do
+    y = partial_sum(n,x)
+    tex.sprint("("..x..","..y..")")
+    x = x+delta
+  end
+  tex.sprint("}")
+end
+\end{luacode*}
+
+\newcommand\addLUADEDplot[5][]{%
+  \directlua{print_partial_sum(#2,#3,#4,#5,[[#1]])}%
+}
+
+
+\pgfplotsset{width=15cm, height=7cm}
+\begin{tikzpicture}[scale=.5]
+\begin{axis}[xmin=-0.2, xmax=31.6, ymin=-1.85, ymax=1.85,
+    xtick={0,5,10,15,20,25,30},
+    ytick={-1.5,-1.0,-0.5,0.5,1.0,1.5},
+    minor x tick num=4,
+    minor y tick num=4,
+    axis lines=middle,
+    axis line style={-}
+  ]
+  % SYNTAX: Partial sum 30, from x = 0 to 10*pi, sampled in 1000 points
+  \addLUADEDplot[color=blue,smooth]{30}{0}{10*math.pi}{1000};
+\end{axis}
+\end{tikzpicture}
+\end{code}
+% \end{comment}
+
+\end{document}

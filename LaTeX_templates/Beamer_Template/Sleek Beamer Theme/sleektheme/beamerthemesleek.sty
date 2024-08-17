@@ -1,0 +1,102 @@
+% Name           : beamerthemesleek.sty
+% Author         : Pedro Ferreira (up201806093@up.pt)
+% Version        : 1.0
+% Created on     : 12.08.2022
+% Last Edited on : 14.08.2022
+
+% Adapted from HSRM theme by Benjamin Weiss
+% Copyright      : Copyright (c) 2013-2014 by Benjamin Weiss. All rights reserved.
+% License        : This file may be distributed and/or modified under the
+%                  GNU Public License.
+% Description    : Beamer theme that complies with the corporate design of
+%                  the RheinMain University of Applied Sciences.
+%                   --> http://www.hs-rm.de
+
+\ProvidesPackage{beamerthemesleek}[2022/08/14]
+
+\usepackage{eso-pic}
+
+\newif\if@doSans
+\@doSansfalse
+\DeclareOption{noserifmath}{\@doSanstrue}
+\newif\if@doNoFlama
+\@doNoFlamafalse
+\DeclareOption{noflama}{\@doNoFlamatrue}
+\newif\if@doSectionPage
+\@doSectionPagefalse
+\DeclareOption{nosectionpages}{\@doSectionPagetrue}
+\ProcessOptions
+
+\mode<presentation>
+
+%---------------------------------------------------------------------
+% TOC
+%---------------------------------------------------------------------
+\useoutertheme[subsection=false,shadow]{miniframes}
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamertemplate{subsection in toc}[subsections numbered]
+
+%---------------------------------------------------------------------
+% custom commands
+%---------------------------------------------------------------------
+\newcommand{\rightTextArrow}{→}
+\newcommand{\quoted}[1]{‘#1’}
+\newcommand{\doublequoted}[1]{“#1”}
+
+%---------------------------------------------------------------------
+% Itemize
+%---------------------------------------------------------------------
+% \setbeamertemplate{itemize item}{\rightTextArrow}
+\setbeamertemplate{itemize item}{\bullet}
+\setbeamertemplate{itemize subitem}{\bullet}
+\setbeamertemplate{itemize subsubitem}{\bullet}
+
+\setlength{\parskip}{0.5em}
+
+%---------------------------------------------------------------------
+% Colors
+%---------------------------------------------------------------------
+\input{sleektheme/colors}
+
+%---------------------------------------------------------------------
+% Fonts
+%---------------------------------------------------------------------
+\input{sleektheme/fonts}
+
+%---------------------------------------------------------------------
+% Titlepage
+%---------------------------------------------------------------------
+\input{sleektheme/title_page}
+
+%---------------------------------------------------------------------
+% Sectionpages
+%---------------------------------------------------------------------
+\input{sleektheme/section_pages}
+
+%---------------------------------------------------------------------
+% Frametitle
+%---------------------------------------------------------------------
+\input{sleektheme/frame_title}
+
+%---------------------------------------------------------------------
+% Footline
+%---------------------------------------------------------------------
+\input{sleektheme/footline}
+
+%---------------------------------------------------------------------
+% Captions
+%---------------------------------------------------------------------
+\setbeamertemplate{caption label separator}{: }
+
+%---------------------------------------------------------------------
+% Blocks
+%---------------------------------------------------------------------
+\input{sleektheme/blocks}
+
+%---------------------------------------------------------------------
+% Images
+%---------------------------------------------------------------------
+\input{sleektheme/images}
+
+\mode
+<all>

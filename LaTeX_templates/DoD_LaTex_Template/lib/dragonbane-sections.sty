@@ -1,0 +1,70 @@
+\ExplSyntaxOn
+
+\newcommand{\DoDBulletGreen}{\item[\color{DoDGreen}\ding{70}]} 
+\newcommand{\DoDBulletRed}{\item[\color{red}\ding{70}]} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Special command for magic items, traps, and the like.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NewDocumentCommand {\DoDHeroicAbilityHeader} { m m m }
+  {
+    \subsubsection {#1}
+    \begin{itemize}
+      \DoDBulletGreen \textcolor{DoDGreen}{Requirement:} #2
+      \DoDBulletGreen \textcolor{DoDGreen}{Willpower~Points:}~#3
+    \end{itemize}
+  }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Special command for spells.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% #1 - Rank
+% #2 - Prerequisite
+% #3 - Requirement
+% #4 - Casting time
+% #5 - Range
+% #6 - Duration
+\NewDocumentCommand {\DoDSpellHeader} { m m m m m m m}
+  {
+    \subsubsection {#1}
+
+    \begin{itemize}
+      \DoDBulletGreen \textcolor{DoDGreen}{Rank:}~#2
+      \DoDBulletGreen \textcolor{DoDGreen}{Prerequisite}:~#3
+      \DoDBulletGreen \textcolor{DoDGreen}{Requirement:}~#4
+      \DoDBulletGreen \textcolor{DoDGreen}{Casting~Time:}~#5
+      \DoDBulletGreen \textcolor{DoDGreen}{Range:}~#6
+      \DoDBulletGreen \textcolor{DoDGreen}{Duration:}~#7
+    \end{itemize}
+  }
+
+\NewDocumentCommand {\DoDSkillHeader} { m m }
+  {
+    \subsubsection {#1~(\small #2)}
+  }
+
+  \NewDocumentCommand {\DoDSubArea} {m}
+  {
+    \refstepcounter {DndSubAreaCounter}
+    \label { \l__dnd_region_tl \l__dnd_sub_area_label_tl : #1 }
+
+    \tl_set:Nn \l_tmpa_tl { \l__dnd_region_tl \arabic {DndAreaCounter} \alph {DndSubAreaCounter} . ~ #1 }
+
+    \str_case_e:nn {\l__dnd_area_num_depth_tl}
+      {
+        {1} { \subsection    {\l_tmpa_tl} }
+        {2} { \subsubsection {\l_tmpa_tl} }
+        {3} { \paragraph     {\l_tmpa_tl} }
+        {4} { \subparagraph  {\l_tmpa_tl} }
+      }
+
+  }
+
+  \NewDocumentCommand {\DoDItalics} {m}
+  {
+    \begin {par}
+      \setlength{\parindent}{30pt}
+      \textit {#1}
+    \end {par}
+  }
+

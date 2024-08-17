@@ -1,0 +1,141 @@
+\ExplSyntaxOn
+
+\DeclareTColorBox {DoDMonsterBg} { O{} m }
+  {
+    enhanced,
+    opacityfill      =0,
+    frame~hidden,
+    before~skip      = 12pt plus 3pt minus 3pt,
+    boxrule          = 0pt,
+    breakable,
+    parbox           = false,
+    boxsep           = 2pt,
+    toptitle         = 8pt,
+    top              = 0pt,
+    right            = 2pt,
+    bottom           = 7pt,
+    sharp~corners,
+    oversize         = 0pt,
+    borderline~north = {3pt} {0pt}   {titlered},
+    borderline~north = {2pt} {0.5pt} {DoDGreen},
+    borderline~south = {3pt} {0pt}   {titlered},
+    borderline~south = {2pt} {0.5pt} {DoDGreen},
+    colback          = statblockbg,
+    colbacktitle     = statblockbg,
+    colframe         = titlered,
+    fonttitle        = \DndFontStatBlockTitle,
+    coltitle         = DoDGreen,
+    fontupper        = \DndFontStatBlockBody,
+    fontlower        = \DndFontStatBlockBody,
+    title            = {\centering\makebox[\linewidth][c]{#2}},
+    #1
+  }
+
+  \let\DoDMonster\DoDMonsterBg
+  \let\endDoDMonster\endDoDMonsterBg
+
+\NewDocumentCommand {\DoDMonsterType} {m}
+  {
+    \begin {par}
+      \setlength{\parindent}{30pt}
+      \textit {#1}
+    \end {par}
+  }
+
+  % Fancy DnD 5e stat block rule
+\NewDocumentCommand {\DoDMonsterLine} {}
+{
+  \par \vspace{-2pt} \noindent
+  \begin {tikzpicture}
+    \draw [ rulered, fill = rulered ] ( 0, 0 ) -- ( 0, 0.1 ) -- ( \linewidth, 0.05 );
+  \end {tikzpicture}
+  \par
+}
+
+% A description variant used to list creature attributes.
+\newlist {__dod_monster_attributes} {description} {1}
+\setlist [__dod_monster_attributes]
+  {
+    before   = \color {titlered},
+    labelsep = \l__dod_space_dim,
+    nosep,
+  }
+
+  % Only prints the item label if the value was supplied
+\cs_new_protected_nopar:Npn \__dod_if_monster_attribute:nn #1#2
+{
+  \tl_if_empty:NF {#1}
+    { \item [#2] #1 }
+}
+
+%% Monster basics
+\keys_define:nn { dod / monster / basics }
+{
+  ferocity .tl_set:N          = \l__ferocity_tl,
+  ferocity .initial:n         = 10,
+  ferocity .value_required:n  = true,
+  size .tl_set:N         = \l__speed_tl,
+  size .initial:n        = 30,
+  size .value_required:n = true,
+  movement .tl_set:N         = \l__movement_tl,
+  movement .initial:n        = 30, 
+  movement .value_required:n = true,
+  armour .tl_set:N         = \l__armour_tl,
+  armour .initial:n        = -, 
+  armour .value_required:n = false,
+  hitpoints .tl_set:N         = \l__hitpoints_tl,
+  hitpoints .initial:n        = 12,
+  hitpoints .value_required:n = true,
+}
+
+\cs_new_protected_nopar:Npn \__dod_monster_basics:
+{
+    \begin {__dod_monster_attributes}
+      \item [\ferocityname] \l__ferocity_tl
+      \item [\sizename]      \l__speed_tl
+      \item [\movementname]      \l__movement_tl
+      \item [\armourname]      \l__armour_tl
+      \item [\hitpointsname]      \l__hitpoints_tl
+    \end {__dod_monster_attributes}
+}
+
+\NewDocumentCommand {\DoDMonsterBasics} {o}
+{
+  \group_begin:
+    \keys_set:nn { dod / monster / basics } {#1}
+    \DndMonsterLine
+    \__dod_monster_basics:
+    \DndMonsterLine
+  \group_end:
+}
+
+\NewDocumentCommand {\DoDMonsterBasicsTable} {o}
+{
+  \group_begin:
+    \keys_set:nn { dod / monster / basics } {#1}
+    \begin{DndTable}[color=PhbTan]{XXX}
+        \\
+        \textbf{\ferocityname} \space \l__ferocity_tl & \textbf{\sizename} \space \l__speed_tl & \space\\
+        \textbf{\movementname}  \space \l__movement_tl & \textbf{\armourname}  \space \l__armour_tl & \textbf{\hitpointsname} \space  \l__hitpoints_tl 
+    \end{DndTable}
+  \group_end:
+}
+
+\NewDocumentCommand {\DoDMonsterAttackTable} {o}
+{
+  \group_begin:
+    \keys_set:nn { dod / monster / basics } {#1}
+    \begin{DndTable}[header=Monster Attack, color=PhbTan]{XX}
+        D6 & Attack\\
+        \ferocityname \space \l__ferocity_tl & \sizename \space \l__speed_tl\\
+        \movementname  \space \l__movement_tl & \armourname  \space \l__armour_tl
+    \end{DndTable}
+  \group_end:
+}
+
+% Inline header for monster actions - similar to a paragraph
+\NewDocumentCommand {\DoDMonsterAction} {m}
+  { \par \smallskip \noindent \textsl { \textbf {#1.} } }
+
+\NewDocumentCommand {\DoDMonsterAttack} {m m m}
+  { #1  & \textbf{#2!} \space #3 \\ }

@@ -1,0 +1,260 @@
+%%
+%% This is file `latexalpha2.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% latexalpha2.dtx  (with options: `package')
+%% 
+%% This is a generated file.
+%% 
+%% Copyright (C) 2019 by Yi Liu <me@yliu.io>
+%% 
+%% This file may be distributed and/or modified under the conditions of
+%% the LaTeX Project Public License, either version 1.3c of this license
+%% or (at your option) any later version. The latest version of this
+%% license is in:
+%% 
+%%    http://www.latex-project.org/lppl.txt
+%% 
+%% and version 1.3c or later is part of all distributions of LaTeX
+%% version 2006/05/20 or later.
+%% 
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{latexalpha2}
+  [2019/03/05 v1.1 latexalpha2]
+\RequirePackage{graphicx}
+\RequirePackage{amsmath}
+\RequirePackage{etoolbox}
+\RequirePackage{pdftexcmds}
+\RequirePackage{morewrites}
+\RequirePackage{ifxetex}
+
+\newbool{ifcache}
+\newbool{ifmathics}
+
+\DeclareOption{local}{\def\la@platform{-local}}
+\DeclareOption{cloud}{\def\la@platform{-cloud}}
+\DeclareOption{cache}{\booltrue{ifcache}}
+\DeclareOption{nocache}{\boolfalse{ifcache}}
+\DeclareOption{mathics}{\booltrue{ifmathics}}
+
+\ExecuteOptions{local,cache}
+\ProcessOptions\relax
+
+\begingroup
+  \makeatletter
+  \catcode`#=12
+  \catcode`&=12
+  \gdef\@hashchar{#}
+  \gdef\@ampchar{&}
+  \gdef\backslash{\@backslashchar}
+  \gdef\hash{\@hashchar}
+  \makeatother
+\endgroup
+
+\def\la@codetempfile{latexalpha2_code.tmp}
+\def\la@resulttempfile{}
+\def\la@currcodehash{}
+
+\newcommand{\la@cleancodetempfile}{\immediate\write18{rm -f \la@codetempfile}}
+\newcommand{\la@unknownoption}[2]{\PackageError{latexalpha2}{Unknown option '#2' for \@backslashchar #1}{}}
+
+\newcommand{\la@executewolfram}[1]{%
+  \IfFileExists{\la@resulttempfile}{%
+    \ifbool{ifcache}{\message{found cached output file \la@resulttempfile^^J}}{\la@executewolframcore{#1}}%
+  }{\la@executewolframcore{#1}}%
+}
+
+\newcommand{\la@executewolframcore}[1]{%
+  \notbool{ifmathics}{%
+    \def\la@wolframscript{wolframscript -file \la@codetempfile\space -print \ifblank{#1}{}{-format #1} \la@platform\space> \la@resulttempfile}%
+  }{%
+    \def\la@wolframscript{mathics \la@codetempfile\space> \la@resulttempfile}%
+  }%
+  \message{command: \la@wolframscript^^J}%
+  \immediate\write18{\la@wolframscript}%
+}
+
+\newcommand{\la@writecodefile}[2]{%
+  \message{------------ latexalpha2 -------------^^J}%
+  \message{\notbool{ifmathics}{wolfram}{mathics} code: #1^^J}%
+  \ifblank{#2}{}{\message{option: #2}}%
+  \gdef\la@currcodehash{\ifxetex\mdfivesum{#1#2}\else\pdfmdfivesum{#1#2}\fi}%
+  \gdef\la@resulttempfile{.latexalpha2_\la@currcodehash.out}%
+  \newwrite\tempfile%
+  \immediate\openout\tempfile=\la@codetempfile%
+  \immediate\write\tempfile{#1}%
+  \immediate\closeout\tempfile%
+}
+
+\newcommand{\la@notformathics}[1]{%
+  \ifbool{ifmathics}{\PackageError{latexalpha2}{\@backslashchar #1 is not available for the Mathics mode}{}}{}%
+}
+
+\def\la@texformat{tex}
+\def\la@textformat{text}
+\def\la@wolframformat{wolfram}
+\def\la@wolframtwoformat{wolfram2}
+\def\la@pdfformat{pdf}
+\def\la@pngformat{png}
+\def\la@jpgformat{jpg}
+
+\newcommand{\wolfram}[2][tex]{%
+  \def\la@currformat{#1}%
+  \la@cleancodetempfile%
+  \notbool{ifmathics}{%
+    \la@writecodefile{#2}{#1}%
+    \ifx \la@currformat \la@texformat \la@executewolfram{TeXForm} \else
+    \ifx \la@currformat \la@textformat \la@executewolfram{Text} \else
+    \ifx \la@currformat \la@wolframformat \la@executewolfram{} \else
+    \la@unknownoption{wolfram}{#1}
+    \fi\fi\fi
+  }{%
+    \ifx \la@currformat \la@texformat \la@writecodefile{Print[TeXForm[#2]]}{#1} \else
+    \ifx \la@currformat \la@wolframformat \la@writecodefile{Print[#2]}{#1} \else
+    \la@unknownoption{wolfram}{#1}
+    \fi\fi
+    \la@executewolfram{}
+  }
+  \input{\la@resulttempfile}%%
+  \la@cleancodetempfile%
+}
+
+\newcommand{\wolframalpha}[2][tex]{%
+  \la@notformathics{wolframalpha}%
+  \def\la@currformat{#1}%
+  \la@cleancodetempfile%
+  \la@writecodefile{WolframAlpha["#2","%
+    \ifx\la@currformat\la@textformat ShortAnswer\else
+    \ifx\la@currformat\la@wolframtwoformat Result\else
+    WolframResult\fi\fi
+    "]}{#1}%
+  \ifx \la@currformat \la@textformat \la@executewolfram{} \else
+  \ifx \la@currformat \la@wolframformat \la@executewolfram{} \else
+  \ifx \la@currformat \la@wolframtwoformat \la@executewolfram{} \else
+  \ifx \la@currformat \la@texformat \la@executewolfram{TeXForm} \else
+  \la@unknownoption{wolframalpha}{#1}
+  \fi\fi\fi\fi
+  \input{\la@resulttempfile}%
+  \la@cleancodetempfile%
+}
+
+\newcommand{\wolframgraphics}[3][pdf]{%
+  \def\la@currformat{#1}%
+  \la@cleancodetempfile%
+  \notbool{ifmathics}{%
+    \la@writecodefile{#2}{#1}%
+    \ifx \la@currformat \la@pdfformat \la@executewolfram{PDF} \else
+    \ifx \la@currformat \la@pngformat \la@executewolfram{PNG} \else
+    \ifx \la@currformat \la@jpgformat \la@executewolfram{JPEG} \else
+    \la@unknownoption{wolframgraphics}{#1}
+    \fi\fi\fi
+    \ifx \la@currformat \la@pdfformat \immediate\write18{cp\space\la@resulttempfile\space#3.pdf} \else
+    \ifx \la@currformat \la@pngformat \immediate\write18{cp\space\la@resulttempfile\space#3.png} \else
+    \ifx \la@currformat \la@jpgformat \immediate\write18{cp\space\la@resulttempfile\space#3.jpg} \else
+    \la@unknownoption{wolframgraphics}{#1}
+    \fi\fi\fi
+  }{%
+    \la@writecodefile{Print[TeXForm[#2]]}{asy}
+    \la@executewolfram{}
+    \immediate\write18{cp\space\la@resulttempfile\space#3.asy}
+  }
+}
+
+\newcommand{\wolframsolve}[2]{%
+  \la@cleancodetempfile%
+  \def\la@solvecode{"\@backslashchar\@backslashchar begin{flalign*}"<>StringJoin@@("\@ampchar"<>ToString[ToExpression["TeXForm"][#2]]<>"="<>ToString[ToExpression["TeXForm"][\@hashchar]]<>"\@backslashchar\@backslashchar\@backslashchar\@backslashchar"\@ampchar/@(#2/.Solve[#1, #2]))<>"\@backslashchar\@backslashchar end{flalign*}"}
+  \notbool{ifmathics}{%
+    \la@writecodefile{\la@solvecode}{}%
+    \la@executewolfram{Text}%
+  }{%
+    \la@writecodefile{Print[\la@solvecode]}{}%
+    \la@executewolfram{}%
+  }
+  \input{\la@resulttempfile}%
+  \la@cleancodetempfile%
+}
+
+\newcommand{\wolframdsolve}[3]{%
+  \la@cleancodetempfile%
+  \def\la@solvecode{"\@backslashchar\@backslashchar begin{flalign*}"<>StringJoin@@("\@ampchar"<>ToString[ToExpression["TeXForm"][#2]]<>"="<>ToString[ToExpression["TeXForm"][\@hashchar]]<>"\@backslashchar\@backslashchar\@backslashchar\@backslashchar"\@ampchar/@(#2/.DSolve[#1, #2, #3]))<>"\@backslashchar\@backslashchar end{flalign*}"}
+  \notbool{ifmathics}{%
+    \la@writecodefile{\la@solvecode}{}%
+    \la@executewolfram{Text}%
+  }{%
+    \la@writecodefile{Print[\la@solvecode]}{}%
+    \la@executewolfram{}%
+  }
+  \input{\la@resulttempfile}%
+  \la@cleancodetempfile%
+}
+
+\newcommand{\wolframtex}[2][tex]{%
+  \la@notformathics{wolframtex}%
+  \def\la@currformat{#1}%
+  \la@cleancodetempfile%
+  \la@writecodefile{ToExpression["\unexpanded{#2}", TeXForm]}{#1}%
+  \immediate\write18{sed -i '' 's/\@backslashchar\@backslashchar/\@backslashchar\@backslashchar\@backslashchar\@backslashchar/g' \la@codetempfile}%
+  \ifx \la@currformat \la@texformat \la@executewolfram{TeXForm} \else
+  \ifx \la@currformat \la@textformat \la@executewolfram{Text} \else
+  \ifx \la@currformat \la@wolframformat \la@executewolfram{} \else
+  \la@unknownoption{wolframtex}{#1}
+  \fi\fi\fi
+  \input{\la@resulttempfile}%
+  \la@cleancodetempfile%
+}
+
+\newcommand{\wolframanimation}[2]{%
+  \la@notformathics{wolframanimation}%
+  \la@cleancodetempfile%
+  \la@writecodefile{#1}{}%
+  \la@executewolfram{GIF}
+  \immediate\write18{cp\space\la@resulttempfile\space#2.gif}%
+  \immediate\write18{mkdir -p #2}%
+  \immediate\write18{convert -coalesce #2.gif #2/frame.png}%
+  \la@cleancodetempfile%
+}
+
+\newcommand{\wolframtable}[1]{%
+  \la@notformathics{wolframtable}%
+  \la@cleancodetempfile%
+  \def\la@tablecode{StringJoin@@((StringRiffle[("$"<>Slot[1]<>"$")\@ampchar/@ToString/@TeXForm/@(Slot[1]),"\space\@ampchar\space"]<>"\@backslashchar\@backslashchar\@backslashchar\@backslashchar")\@ampchar/@(#1))}%
+  \la@writecodefile{\la@tablecode}{}%
+  \la@executewolfram{Text}%
+  \la@cleancodetempfile%
+  \input{\la@resulttempfile}%
+}
+
+\AtBeginDocument{%
+  %^^A check if shell-escape is available
+  \ifcase\pdf@shellescape
+  \PackageError{latexalpha2}{Shell escape is not enabled, which is required to use latexalpha2}{}\or
+  \PackageInfo{latexalpha2}{Shell escape is successfully enabled}{}\or
+  \PackageError{latexalpha2}{Shell escape is not enabled, which is required to use latexalpha2}{}\fi
+
+  %^^A check if wolframscript or mathics is available
+  \immediate\write18{command -v \notbool{ifmathics}{wolframscript}{mathics}; echo $? > latexalpha2_check.tmp}%
+  \newread\wsreturncodefile%
+  \immediate\openin\wsreturncodefile=latexalpha2_check.tmp%
+  \readline\wsreturncodefile to \wsreturncode%
+  \immediate\closein\wsreturncodefile%
+  %^^A https://tex.stackexchange.com/a/26873
+  \def\instring#1#2{TT\fi\begingroup\edef\x{\endgroup\noexpand\in@{#1}{#2}}\x\ifin@}%
+  \notbool{ifmathics}{%
+    \if\instring{0}{\wsreturncode}
+    \PackageInfo{latexalpha2}{WolframScript is available}{}\else
+    \PackageError{latexalpha2}{WolframScript cannot be found, which is required to use latexalpha2}{}\fi
+  }{%
+    \if\instring{0}{\wsreturncode}
+    \PackageInfo{latexalpha2}{Mathics is available}{}\else
+    \PackageError{latexalpha2}{Mathics cannot be found, which is required to use the Mathics mode of latexalpha2}{}\fi
+  }
+}
+
+\AtEndDocument{%
+  \ifbool{ifcache}{}{\immediate\write18{rm -f .latexalpha2_*.out}}
+}
+\endinput
+%%
+%% End of file `latexalpha2.sty'.

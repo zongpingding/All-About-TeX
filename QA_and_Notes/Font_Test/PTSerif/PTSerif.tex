@@ -1,0 +1,30 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{PTSerif}
+\usepackage{amsmath}
+
+
+\begin{document}
+\section{Sketch}
+\[
+  \int \mathrm{e}^{2x}*\arctan\sqrt{\mathrm{e}^x-1}\;\mathrm{d}x
+\]
+
+then calculate the integral:
+\begin{align*}
+  &\int (t^2+1)^2*\arctan t\;\mathrm{d} \ln(t^2+1)\\
+    = & \int (t^2+1)^2* \arctan t* \frac{2t}{1+t^2}\;\mathrm{d}t\\
+    = & \int 2t*(t^2+1)*\arctan t\;\mathrm{d}t\\
+    = & \int \arctan t\;\mathrm{d}(2/4 t^4+t^2)\\
+    = & \arctan t* (1/2t^4+t^2) - \int (1/2t^4+t^2)*\frac{1}{t^2+1}\;\mathrm{d}t\\
+    = & \arctan t* (1/2t^4+t^2) - \int (1/2 +t^2/2) - \frac{1/2}{t^2+1}\;\mathrm{d}t\\
+    = & \arctan t* (1/2t^4+t^2) - 1/2*(t + 1/3t^3-\arctan\ t) \\
+    = & \arctan t* (1/2t^4+t^2+1/2) - 1/2*(t+1/3t^3 )
+\end{align*}
+
+Then we have:
+\[
+  \mathrm{LHS} = \frac{1}{6} \left(3 e^{2 x} \tan ^{-1}\left(\sqrt{e^x-1}\right)-\sqrt{e^x-1} \left(e^x+2\right)\right)
+\]
+
+\end{document}

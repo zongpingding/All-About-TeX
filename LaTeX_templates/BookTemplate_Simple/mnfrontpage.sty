@@ -1,0 +1,387 @@
+% Package for creating front pages
+% Implemented by Martin Helsø (martibhe@math.uio.no).
+% Version 2015-12-21.
+
+%% Identification part:
+
+\NeedsTeXFormat{LaTeX2e}[1994/12/01]
+
+\ProvidesClass{mnfrontpage}
+
+%% Standard headers:
+
+\DeclareOption{american} { \def \MNFP@lang {eng} }
+\DeclareOption{english}  { \def \MNFP@lang {eng} }
+\DeclareOption{UKenglish}{ \def \MNFP@lang {eng} }
+\DeclareOption{USenglish}{ \def \MNFP@lang {eng} }
+\DeclareOption{norsk}    { \def \MNFP@lang {bm}  }
+\DeclareOption{nynorsk}  { \def \MNFP@lang {nn}  }
+
+%% Department:
+
+\DeclareOption{MatNat}
+{ 
+    \def \MNFP@Dept {mn}  
+    \def \MNFP@nr   {1}    
+}
+\DeclareOption{FRM}
+{ 
+    \def \MNFP@Dept {frm}  
+    \def \MNFP@nr   {2}    
+}
+\DeclareOption{FYS}
+{ 
+    \def \MNFP@Dept {fys}  
+    \def \MNFP@nr   {3}    
+}
+\DeclareOption{IBV}
+{ 
+    \def \MNFP@Dept {ibv}  
+    \def \MNFP@nr   {4}    
+}
+\DeclareOption{GEO}
+{ 
+    \def \MNFP@Dept {geo}  
+    \def \MNFP@nr   {5}    
+}
+\DeclareOption{IFI}
+{ 
+    \def \MNFP@Dept {ifi}  
+    \def \MNFP@nr   {6}    
+}
+\DeclareOption{AST}
+{ 
+    \def \MNFP@Dept {ast}  
+    \def \MNFP@nr   {7}    
+}
+\DeclareOption{KJM}
+{ 
+    \def \MNFP@Dept {kjm}  
+    \def \MNFP@nr   {8}    
+}
+\DeclareOption{MAT}
+{ 
+    \def \MNFP@Dept {mat}  
+    \def \MNFP@nr   {9}    
+}
+
+%% Background: 
+
+\DeclareOption{1} { \def \MNFP@nr  {1} }
+\DeclareOption{2} { \def \MNFP@nr  {2} } 
+\DeclareOption{3} { \def \MNFP@nr  {3} } 
+\DeclareOption{4} { \def \MNFP@nr  {4} }
+\DeclareOption{5} { \def \MNFP@nr  {5} } 
+\DeclareOption{6} { \def \MNFP@nr  {6} } 
+\DeclareOption{7} { \def \MNFP@nr  {7} }
+\DeclareOption{8} { \def \MNFP@nr  {8} } 
+\DeclareOption{9} { \def \MNFP@nr  {9} } 
+\DeclareOption{10}{ \def \MNFP@nr {10} }
+
+%% Purpose of document:
+
+\DeclareOption{web}  
+{ 
+    \def \MNFP@indent { 0 mm}
+    \def \MNFP@type     {web}
+}
+\DeclareOption{print}
+{
+    \def \MNFP@indent { 0 mm}
+    \def \MNFP@type   {print}
+}
+\DeclareOption{bound}
+{ 
+    \def \MNFP@indent {11 mm}
+    \def \MNFP@type   {print}
+}
+
+
+%% Length of titles:
+
+\DeclareOption{OrdinaryTitle}
+{ 
+    \def \MNFP@title {Ordinary}
+    \def \MNFP@titlesize {\fontsize{32}{35pt}} 
+}
+\DeclareOption{LongTitle}
+{ 
+    \def \MNFP@title {Long}
+    \def \MNFP@titlesize {\fontsize{24}{27pt}}
+}
+\DeclareOption{ExtraLongTitle}
+{
+    \def \MNFP@title {ExtraLong} 
+    \def \MNFP@titlesize {\fontsize{17}{20pt}}
+}
+
+\DeclareOption{BlankPage}    { \def \MNFP@secondpage {blank}    }
+\DeclareOption{OnlyFrontpage}{ \def \MNFP@secondpage {}         }
+
+%% Masther's thesis
+
+\DeclareOption{compendium}{ \def \MNFP@thesis {} }
+\DeclareOption{master}    { \def \MNFP@thesis {thesis} }
+
+%% Standard options:
+
+\ExecuteOptions{english}
+\ExecuteOptions{MatNat}
+\ExecuteOptions{web}
+\ExecuteOptions{OrdinaryTitle}
+\ExecuteOptions{BlankPage}
+\ExecuteOptions{compendium}
+\ProcessOptions\relax
+
+%% Initial code:
+
+\RequirePackage[T1]{fontenc}
+\RequirePackage{calc}
+\RequirePackage{eso-pic}
+\RequirePackage{picture}
+\RequirePackage{xifthen}
+\RequirePackage{tikz}
+\RequirePackage{fix-cm}
+    
+\definecolor{bannergrey}{cmyk}{0, 0, 0, 0.3}
+
+%% The main command:
+
+\@ifclassloaded{memoir}
+{
+    \newcommand{\mnfrontpage}
+    {
+        \def \and {\leavevmode\unskip, }
+        \begin{titlingpage}
+            \AddToShipoutPictureBG*{\MNFP@print@background}
+            \AddToShipoutPictureFG*{\MNFP@print@title}
+            \null
+        \end{titlingpage}
+    }    
+}
+{
+    \newcommand{\mnfrontpage}
+    {
+        \def \and {\leavevmode\unskip, }
+        \begin{titlepage}
+            \AddToShipoutPictureBG*{\MNFP@print@background}
+            \AddToShipoutPictureFG*{\MNFP@print@title}
+            \null
+        \end{titlepage}
+        \ifthenelse{ \equal{\MNFP@secondpage}{blank} }
+        {
+            \MNFP@blankpage
+        }
+        {}
+    }
+}
+
+%% Additional commands:
+
+\newcommand{\subtitle}[1]{ \def \MNFP@subtitle{#1} }
+\subtitle{}
+
+\newcommand{\kind}[1]{ \def \MNFP@kind{#1} }
+\ifthenelse{ \equal{\MNFP@thesis}{thesis} }
+{
+    %% Define a suitable document kind, like "Master's Thesis, Spring 2016":
+    \kind
+    {
+        \csname MNFP@thesisname@\MNFP@lang\endcsname,~\MNFP@term~\MNFP@year
+    }
+}
+{
+    \kind{}
+}
+
+%% Include the title page background:
+
+\newcommand{\MNFP@print@background}
+{
+    \put(-3 bp, 0 bp)
+    {
+        \includegraphics
+            {mnfrontpage-images/mnfrontpage-bg-\MNFP@type-\MNFP@nr}
+    }
+    
+    \put(-3 mm, 142 mm)
+    {
+        \begin{tikzpicture}[scale = 1mm]
+            \filldraw[white, opacity = 0.8] 
+                (0, 2.5) rectangle (\paperwidth, 3.73);
+            \filldraw[white, opacity = 0.6] 
+                (0, 0) rectangle (\paperwidth, 2.5);
+            \filldraw[bannergrey, opacity = 0.7] 
+                (0, 0) rectangle (\paperwidth, 2.5);
+        \end{tikzpicture}
+    }
+    
+    \put(25 mm + \MNFP@indent, 25 mm)
+    {
+        \includegraphics[width = 27mm]
+            {mnfrontpage-images/mnfrontpage-apollon}
+    }
+    
+    \ifthenelse{ \equal{\MNFP@Dept}{mn} }
+    {
+        \put(22 mm + \MNFP@indent, 220 mm)
+        {
+            \includegraphics[scale = 0.5]
+                {mnfrontpage-images/mnfrontpage-logo-\MNFP@Dept-\MNFP@lang}
+        }
+    }
+    {
+        \put(19 mm + \MNFP@indent, 222 mm)
+        {
+            \includegraphics[scale = 0.6]
+                {mnfrontpage-images/mnfrontpage-logo-\MNFP@Dept-\MNFP@lang}
+        }
+    }
+}
+    
+%% Include the title, subtitle, author and date:
+
+\newcommand{\MNFP@print@title}
+{
+    {
+        \newlength{\MNFPtitlelength}
+        
+        \ifthenelse{ \equal{\MNFP@Dept}{mn} }
+        {
+            \def \MNFP@titlepos {41.5 mm}
+            \setlength{\MNFPtitlelength}
+                {\paperwidth - 22 mm - \MNFP@titlepos - \MNFP@indent} 
+        }
+        {
+            \def \MNFP@titlepos {42.4 mm}
+            \setlength{\MNFPtitlelength}
+                {\paperwidth - 19 mm - \MNFP@titlepos - \MNFP@indent} 
+        }
+        
+        \put(\MNFP@titlepos + \MNFP@indent, 141.5 mm)
+        {
+            \vbox to 7.15cm 
+            {
+                \hsize = \MNFPtitlelength
+                \raggedright
+                
+                % Redefinition of standard \LaTeX command because
+                % the font package 'bera' mangles it!
+                \ifthenelse{ \isundefined{\fveLaTeX} }{}
+                {
+                    \DeclareRobustCommand{\mn@LaTeX}
+                    {
+                        L\kern-.36em
+                        {
+                            \sbox\z@ T
+                            \vbox to\ht\z@
+                            {
+                                \hbox
+                                {
+                                    \check@mathfonts
+                                    \fontsize\sf@size\z@
+                                    \math@fontsfalse\selectfont
+                                    A
+                                }
+                                \vss
+                            }
+                        }
+                        \kern-.15em
+                        \TeX
+                    }
+                    \let \LaTeX = \mn@LaTeX
+                }
+                
+                \vfill                       
+                
+                \fontfamily{\MNFP@font}
+                \MNFP@titlesize
+                \selectfont 
+                \bfseries 
+                \@title
+                
+                \newlength{\MNFP@titlelength}
+                \settowidth{\MNFP@titlelength}{\@title}
+                
+                \ifthenelse
+                { 
+                    \equal{\MNFP@title}{Ordinary} 
+                    \AND 
+                    \lengthtest{\MNFP@titlelength < \hsize}
+                }
+                {
+                    \def \MNFP@skip{2.5 em}				
+                }
+                {
+                    \def \MNFP@skip{1.5 em}
+                }
+                
+                \vskip 0.5ex
+                
+                \normalfont
+                \fontfamily{\MNFP@font}
+                \fontsize{17}{20pt}
+                \selectfont
+                \MNFP@subtitle
+                
+                \vskip \MNFP@skip
+                
+                {
+                    \bfseries
+                    \ifdefined\authors
+                        \authors
+                    \else
+                        \@author
+                    \fi
+                }
+                \\[0.1ex] 
+                \MNFP@kind
+                
+                \vfill
+            }
+        }
+    }
+}
+
+
+%% Find the best font:
+
+\newcommand{\MNFP@font}{phv}         % Helvetica is always available, but use
+\IfFileExists{t1ua1.fd}{\renewcommand{\MNFP@font}{ua1}}{} % Arial if possible.
+
+%% Determine the term (as in "Spring 2016"):
+
+\newcounter{MNFP@cur@year}   
+\newcounter{MNFP@cur@month}
+\setcounter{MNFP@cur@year} { \the\year  }
+\setcounter{MNFP@cur@month}{ \the\month }
+
+\ifthenelse{ \theMNFP@cur@month < 7 }
+{
+    \newcommand{\MNFP@term@eng}{Spring}
+    \newcommand{\MNFP@term@bm} {v\aa ren}
+    \newcommand{\MNFP@term@nn} {v\aa ren}
+}
+{
+    \newcommand{\MNFP@term@eng}{Autumn}
+    \newcommand{\MNFP@term@bm} {h\o sten}
+    \newcommand{\MNFP@term@nn} {hausten}
+}
+    
+\newcommand{\MNFP@term}{ \csname MNFP@term@\MNFP@lang\endcsname }
+\newcommand{\MNFP@year}{ \arabic{MNFP@cur@year}               }
+
+%% Specify "Master's Thesis" in the correct language:
+
+\newcommand{\MNFP@thesisname@eng}{Master's Thesis}
+\newcommand{\MNFP@thesisname@bm} {Masteroppgave}
+\newcommand{\MNFP@thesisname@nn} {Masteroppg\aa ve}
+
+\newcommand{\MNFP@blankpage}
+{
+    \thispagestyle{empty}
+    \null
+    \newpage
+}
+
+\endinput

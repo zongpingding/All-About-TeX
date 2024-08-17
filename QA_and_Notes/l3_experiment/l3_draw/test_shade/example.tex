@@ -1,0 +1,104 @@
+\documentclass{standalone}
+\usepackage{l3draw}
+
+
+\begin{document}
+\ExplSyntaxOn
+% make function plot a function
+% style = {<unit>, <action>, <color>}, action = {stroke, shade, fill, clip}
+\cs_generate_variant:Nn \fp_step_inline:nnnn {eeen}
+\cs_set:Npn \function_plot:nnn #1#2#3 {
+  % => split arg
+  \args_split_cs:nn {#2}{domain}
+  \args_split_cs:nn {#3}{style}
+  % => draw function 
+  \draw_begin:
+    % normal part
+    \str_case:VnT \l__arg_style_ii {
+      {stroke}{\exp_args:Nx \color_stroke:n {\tl_use:N \l__arg_style_iii}}
+      {draw}{\exp_args:Nx \color_stroke:n {\tl_use:N \l__arg_style_iii}}
+      {fill}{\exp_args:Nx \color_fill:n {\tl_use:N \l__arg_style_iii}}
+      {clip}{\relax}
+    }{
+      % => start point
+      \tl_set:Nn \l_tmpa_tl {#1}
+      \tl_replace_all:Nne \l_tmpa_tl {x}{(\tl_use:N \l__arg_domain_i)}
+      \draw_path_moveto:n {\l__arg_domain_i\l__arg_style_i, \l_tmpa_tl\l__arg_style_i}
+      % loop to draw path
+      \fp_step_inline:eeen {\l__arg_domain_i}{\l__arg_domain_ii}{\l__arg_domain_iii}{
+          \tl_set:Nn \l_tmpa_tl {#1}
+          \tl_replace_all:Nnn \l_tmpa_tl {x}{(##1)}
+          \draw_path_lineto:n {##1 \l__arg_style_i, \l_tmpa_tl \l__arg_style_i}
+      }
+      \draw_path_use_clear:n {\l__arg_style_ii}
+    }
+    % shade plot part
+    \str_if_eq:VnT \l__arg_style_ii {shade}{
+      % start and end point for 'y-axis gradient'
+      \tl_if_eq:VnT \l__arg_style_v {y}{
+        \tl_if_exist:cF {l__start_tl}{
+          \tl_new:N \l__start_tl
+          \tl_new:N \l__end_tl
+        } 
+        \tl_set:Nx \l__start_tl {\l__arg_domain_iv}
+        \tl_set:Nx \l__end_tl {\l__arg_domain_v}
+      }
+      % loop to plot segements
+      \fp_step_inline:eeen {\l__arg_domain_i}{\l__arg_domain_ii}{\fp_eval:n {\l__arg_domain_iii-\l__arg_domain_ii}}{
+          \tl_set:Nn \l_tmpa_tl {#1}
+          \tl_set:Nn \l_tmpb_tl {#1}
+          \tl_replace_all:Nnn \l_tmpa_tl {x}{(##1)}
+          \tl_replace_all:Nnn \l_tmpb_tl {x}{(##1+\l__arg_domain_ii)}
+          \str_case:VnF \l__arg_style_v {
+            {x}{\color_gradient:xxx {
+                \fp_eval:n {(##1-\l__arg_domain_i)*(100/(\l__arg_domain_iii-\l__arg_domain_i))}
+              }{\l__arg_style_iii}{\l__arg_style_iv}}
+            {y}{\color_gradient:xxx {
+                \fp_eval:n {(\l_tmpa_tl-\l__start_tl)*(100/(\l__end_tl-\l__start_tl))}
+              }{\l__arg_style_iii}{\l__arg_style_iv}}
+          }{\relax}
+          \draw_path_moveto:n {##1 \l__arg_style_i, \l_tmpa_tl \l__arg_style_i}
+          \draw_path_lineto:n {(##1+\l__arg_domain_ii) \l__arg_style_i, \l_tmpb_tl \l__arg_style_i}
+          % \draw_cap_rectangle:
+          \draw_cap_round:
+          \draw_path_use_clear:n {draw}
+      }
+    }
+  \draw_end:
+}
+
+% args-split
+\cs_generate_variant:Nn \int_step_inline:nnn {nen}
+\cs_generate_variant:Nn \seq_set_split:Nnn {cnn}
+\cs_set:Npn \args_split_cs:nn #1#2 {
+  \seq_if_exist:cF {l_#2_seq}{
+    \seq_new:c {l_#2_seq}
+  }
+  \seq_set_split:cnn {l_#2_seq}{,}{#1}
+  \int_step_inline:nen {1}{\seq_count:c {l_#2_seq}}{
+    \tl_set:Nn \l_tmpa_tl {l__arg_#2_\int_to_roman:n{##1}}
+    \exp_args:Nfo \tl_if_exist:cF {\tl_use:N \l_tmpa_tl}{
+      \tl_new:c {\tl_use:N \l_tmpa_tl}
+    }
+    \tl_set:ce {\tl_use:N \l_tmpa_tl}{\seq_item:cn {l_#2_seq}{##1}}
+  }
+}
+
+% color gradient
+\cs_set:Npn \color_gradient:nnn #1#2#3 {
+  \fp_compare:nNnTF {#1}>{100}{
+    \exp_args:Nx \color_select:n {#2!\fp_eval:n{abs(#1)/(\l__arg_domain_v-\l__arg_domain_iv)}!#3} 
+  }{
+    \fp_compare:nNnTF {#1}<{0}{
+      \exp_args:Nx \color_select:n {#2!\fp_eval:n{abs(#1)/(\l__arg_domain_v-\l__arg_domain_iv)}!#3} 
+    }{\color_select:n {#2!#1!#3}}
+  }
+}
+\cs_generate_variant:Nn \color_gradient:nnn {xxx}
+
+
+\function_plot:nnn {sin(x)}{0, 0.02*\c_pi_fp, 2*\c_pi_fp, -1, 1}{cm, shade, blue, green, x}
+\function_plot:nnn {sin(x)}{0, 0.02*\c_pi_fp, 2*\c_pi_fp, -1, 1}{cm, shade, blue, green, y}
+
+
+\end{document}

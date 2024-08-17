@@ -1,0 +1,128 @@
+\ExplSyntaxOn
+
+\DeclareTColorBox {DoDNPCBg} { O{} m }
+  {
+    enhanced~jigsaw,
+    opacityfill      =0,
+    frame~hidden,
+    before~skip      = 12pt plus 3pt minus 3pt,
+    boxrule          = 0pt,
+    breakable,
+    enhanced,
+    parbox           = false,
+    boxsep           = 2pt,
+    toptitle         = 8pt,
+    top              = 0pt,
+    right            = 2pt,
+    bottom           = 7pt,
+    sharp~corners,
+    oversize         = 0pt,
+    borderline~north = {3pt} {0pt}   {titlered},
+    borderline~north = {2pt} {0.5pt} {DoDGreen},
+    borderline~south = {3pt} {0pt}   {titlered},
+    borderline~south = {2pt} {0.5pt} {DoDGreen},
+    colback          = statblockbg,
+    colbacktitle     = statblockbg,
+    colframe         = titlered,
+    fonttitle        = \DndFontStatBlockTitle,
+    coltitle         = DoDGreen,
+    fontupper        = \DndFontStatBlockBody,
+    fontlower        = \DndFontStatBlockBody,
+    title            = {\centering\makebox[\linewidth][c]{#2}},
+    #1
+  }
+
+  \let\DoDNPC\DoDNPCBg
+  \let\endDoDNPC\endDoDNPCBg
+
+\NewDocumentCommand {\DoDNPCType} {m}
+  {
+    \begin {par}
+      \setlength{\parindent}{30pt}
+      \textit {#1}
+    \end {par}
+  }
+
+% A description variant used to list creature attributes.
+\newlist {__dod_npc_attributes} {description} {1}
+\setlist [__dod_npc_attributes]
+  {
+    before   = \color {titlered},
+    labelsep = \l__dnd_space_dim,
+    nosep,
+  }
+
+  % Only prints the item label if the value was supplied
+\cs_new_protected_nopar:Npn \__dnd_if__attribute:nn #1#2
+{
+  \tl_if_empty:NF {#1}
+    { \item [#2] #1 }
+}
+
+%% NPC basics
+\keys_define:nn { dod / npc / basics }
+{
+  movement .tl_set:N         = \l__movement_tl,
+  movement .initial:n        = 30, 
+  movement .value_required:n = true,
+  dmgBonus .tl_set:N         = \l__dmgBonus_tl,
+  dmgBonus .initial:n        = -, 
+  dmgBonus .value_required:n = false,
+  armour .tl_set:N         = \l__armour_tl,
+  armour .initial:n        = -, 
+  armour .value_required:n = false,
+  hitpoints .tl_set:N         = \l__hitpoints_tl,
+  hitpoints .initial:n        = 12,
+  hitpoints .value_required:n = true,
+  willpoints .tl_set:N         = \l__willpoints_tl,
+  willpoints .initial:n        = 12,
+  willpoints .value_required:n = true,
+  skills .tl_set:N         = \l__skills_tl,
+  skills .initial:n        = 12,
+  skills .value_required:n = true,
+  abilities .tl_set:N         = \l__abilities_tl,
+  abilities .initial:n        = -,
+  abilities .value_required:n = false,
+  weapons .tl_set:N         = \l__weapons_tl,
+  weapons .initial:n        = 12,
+  weapons .value_required:n = false,
+}
+
+\NewDocumentCommand {\DoDNPCBasicsTable} { o }
+{
+  \group_begin:
+    \keys_set:nn { dod / npc / basics } {#1}
+    \begin{DndTable}[color=PhbTan]{ XXX}
+        \\
+        \textbf{\movementname}  \space \l__movement_tl & \textbf{\damagebonusname}  \space \l__dmgBonus_tl \\
+        \multicolumn{2}{l}{\textbf{\armourname} \space  \l__armour_tl}\\
+        \textbf{\hitpointsname} \space  \l__hitpoints_tl  & \textbf{\willpointsname} \space  \l__willpoints_tl \\
+        \multicolumn{2}{l}{\parbox{7.5cm}{\textbf{\skillname} \space  \l__skills_tl}}\\
+        \multicolumn{2}{l}{\textbf{\abilitiesname} \space  \l__abilities_tl}\\
+        \multicolumn{2}{l}{\parbox{7.5cm}{\textbf{\weaponsname} \space  \l__weapons_tl}}\\
+    \end{DndTable}
+  \group_end:
+}
+
+\NewDocumentCommand {\DoDNPCBasicsWideTable} { o }
+{
+  \group_begin:
+    \keys_set:nn { dod / npc / basics } {#1}
+    \begin{DndTable}[color=PhbTan]{ XXX}
+        \\
+        \textbf{\movementname}  \space \l__movement_tl & \textbf{\damagebonusname}  \space \l__dmgBonus_tl \\
+        \multicolumn{2}{l}{\textbf{\armourname} \space  \l__armour_tl}\\
+        \textbf{\hitpointsname} \space  \l__hitpoints_tl  & \textbf{\willpointsname} \space  \l__willpoints_tl \\
+        \multicolumn{2}{l}{\textbf{\skillname} \space  \l__skills_tl}\\
+        \multicolumn{2}{l}{\textbf{\abilitiesname} \space  \l__abilities_tl}\\
+        \multicolumn{2}{l}{\textbf{\weaponsname} \space  \l__weapons_tl}\\
+    \end{DndTable}
+  \group_end:
+}
+
+% Inline header for npc  actions - similar to a paragraph
+\NewDocumentCommand {\DoDNPCAction} {m}
+  { \par \smallskip \noindent \textsl { \textbf {#1.} } }
+
+\NewDocumentCommand {\DoDNPCWeapon} {m m m}
+  { \par #1 \space ( skill \space level \space  #2, \space damage \space  #3) }

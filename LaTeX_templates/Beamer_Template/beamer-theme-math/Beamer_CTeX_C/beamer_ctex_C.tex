@@ -1,0 +1,268 @@
+%
+% 使用 xelatex 编译
+%
+\documentclass[10pt,compress,t,noamsthm,notheorem,handout,table]{ctexbeamer}
+\useoutertheme[subsection=false]{miniframes}
+\setbeamercolor{separation line}{use=structure,bg=structure.fg!50!bg}
+\useinnertheme{circles}
+\usefonttheme[onlymath]{serif}
+\setbeamertemplate{navigation symbols}{}
+\setbeamersize{text margin left=0.5cm, text margin right=0.5cm}
+\setbeamerfont{frametitle}{size=\large}
+\definecolor{myfoot}{rgb}{0.5,0.2,0.5}
+\setbeamertemplate{footline}% 自定义页脚
+  { \leavevmode\mbox{%
+    \begin{beamercolorbox}[wd=.75\paperwidth,ht=2.25ex,dp=1ex,left]{myfootline}%
+        \rule{2em}{0pt}\color{myfoot}\ttfamily\scriptsize
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.25\paperwidth,ht=2.25ex,dp=1ex,right]{myfootline}%
+       {\color{myfoot}\ttfamily\scriptsize\insertframenumber{}/%
+        \inserttotalframenumber\hspace*{3ex}}
+    \end{beamercolorbox}}
+    \vskip0pt }
+
+%%%%% ===== 常用宏包 =======================================================
+\usepackage{amsmath,amssymb,amsfonts,bm}
+\usepackage{graphicx}
+  \graphicspath{{figures/}}
+  \definecolor{darkblue}{rgb}{0.1,0,0.85}
+  \hypersetup{pdfborder=001,colorlinks=true,linkcolor=darkblue,urlcolor=blue}
+\usepackage{bbding}
+
+%%%%% ===== 自定义列表 ======================================================
+\newcommand{\Bullet}{{\fontsize{6pt}{6pt}\selectfont\CircleSolid}}
+\newcommand{\Hand}{{\fontsize{8pt}{6pt}\selectfont\HandRight}}
+\newcommand{\zhu}{{\color{blue!40}\Bullet}}
+\newcommand{\zhuu}{{\color{red!80}\Hand}}
+\newcommand{\labeli}{\zhu}
+\newenvironment{myitem}
+  {\begin{list}{{\hfill\raisebox{0pt}{\labeli}}}{%
+    \setlength{\leftmargin}{1.2em}\labelwidth0.8em\labelsep.4em%
+    \itemsep1ex\parsep2pt\itemindent0pt\topsep0pt}}{\end{list}}
+\newenvironment{subitem}
+  {\begin{list}{{\hfill\raisebox{0pt}{\zhuu}}}{%
+    \setlength{\leftmargin}{1.2em}\labelwidth0.8em\labelsep.4em%
+    \itemsep0ex\parsep2pt\itemindent0pt\topsep0pt}}{\end{list}}
+\usepackage{colortbl}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usepackage[framemethod=tikz]{mdframed}
+
+%%%%% ===== 定理环境 ======================================================
+\usepackage[amsmath,thref,thmmarks,hyperref]{ntheorem}
+\theorempreskipamount1.2em  % spacing before the environment
+\theorempostskipamount0em % spacing after the environment
+%\theorempostwork{\noindent}
+\theoremstyle{nonumberplain}%{nonumberbreak}
+\theoremheaderfont{\color{blue}\upshape}
+%\theorembodyfont{\kaishu\color{black}}
+\theoremindent0em
+\theoremseparator{:\hspace{0.2em}}
+%\theoremnumbering{arabic}
+\colorlet{thmcolor}{gray!40}
+\newmdtheoremenv[linecolor=thmcolor,middlelinewidth=1pt,
+    roundcorner=3pt,backgroundcolor=white,%
+    innertopmargin=0.5em,innerbottommargin=0.5em,%
+    innerleftmargin=3pt,innerrightmargin=3pt,%
+    skipbelow=0.5em,skipabove=1em,%
+    splittopskip=\topskip,ntheorem]{theorem}%
+    {定理}
+\newmdtheoremenv[linecolor=thmcolor,middlelinewidth=0.5pt,
+    roundcorner=3pt,backgroundcolor=white,%
+    innertopmargin=0.5em,innerbottommargin=0.5em,%
+    innerleftmargin=3pt,innerrightmargin=3pt,%
+    skipbelow=0.5em,skipabove=1em,%
+    splittopskip=\topskip,ntheorem]{corollary}%
+    {推论}
+\newmdtheoremenv[linecolor=thmcolor,middlelinewidth=0.5pt,
+    roundcorner=3pt,backgroundcolor=white,%
+    innertopmargin=0.5em,innerbottommargin=0.5em,%
+    innerleftmargin=3pt,innerrightmargin=3pt,%
+    skipbelow=0.5em,skipabove=1em,%
+    splittopskip=\topskip,ntheorem]{lemma}%
+    {引理}
+%\newmdtheoremenv[linecolor=thmcolor,middlelinewidth=0.5pt,
+%    roundcorner=3pt,backgroundcolor=white,%
+%    innertopmargin=0.5em,innerbottommargin=0.5em,%
+%    innerleftmargin=3pt,innerrightmargin=3pt,%
+%    skipbelow=0.5em,skipabove=1em,%
+%    splittopskip=\topskip,ntheorem]{definition}%
+%    {定义}
+\newmdenv[innertopmargin=0pt,roundcorner=5pt,linewidth=2pt,
+    linecolor=gray!40,
+    innertopmargin=1.2em,innerleftmargin=1ex,innerrightmargin=1ex,
+    singleextra={
+      \node[anchor=west,xshift=1em,fill=gray!10,rounded corners=4pt,%
+       draw=green!50,line width=1pt]%
+       at (P-|O) {\ \color{blue} 定\ 义\ \mbox{}};
+    }]{definition}
+
+\theoremstyle{plain}
+\newmdtheoremenv[linecolor=thmcolor,middlelinewidth=0.5pt,
+    roundcorner=3pt,backgroundcolor=white,%
+    innertopmargin=0.5em,innerbottommargin=0.5em,%
+    innerleftmargin=3pt,innerrightmargin=3pt,%
+    skipbelow=0.5em,skipabove=1em,%
+    splittopskip=\topskip,ntheorem]{example}%
+    {例}
+
+\newenvironment{proof}[1][证明]%
+  {\par\noindent\normalfont{\hei\color{blue} #1.} \upshape}
+  {\mbox{}\hfill\scalebox{1.2}{\ensuremath{\Box}}\medskip}
+
+\linespread{1.3}
+\setlength{\parskip}{1ex}
+
+%%%%% ===== 自定义命令 =====================================================
+\newcommand{\bbm}{\begin{bmatrix}}
+\newcommand{\ebm}{\end{bmatrix}}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\renewcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Rn}{\mathbb{R}^{n\times n}}
+\newcommand{\IA}{\mathcal{A}}
+\newcommand{\IK}{\mathcal{K}}
+\newcommand{\IO}{\mathcal{O}}
+\newcommand{\lam}{\lambda}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\dis}{\displaystyle}
+\newcommand{\mycite}[1]{\textcolor{blue!50!white}{\upshape{#1}}}
+\newcommand{\Der}{\,\mathrm{D}}
+\newcommand{\der}{\,\mathrm{d}}
+%
+\newcommand{\myem}[1]{\textcolor{blue}{#1}}
+%
+
+\begin{document}
+
+\title[短标题]{学术报告标题\\ 长标题可以强制换行}
+% \subtitle{也可以有个副标题}
+
+\author[报告人姓名]{报告人姓名}
+
+\institute[Math.ECNU]{\zihao{5} 华东师范大学~数学系}
+
+\date[2016.05]{2016年5月}
+
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{内容提要}
+  \tableofcontents[hideallsubsections]
+\end{frame}
+
+\section{背景介绍}
+
+% 在每节前插入目录
+\AtBeginSection[]{\frame{\tableofcontents[currentsection,hideallsubsections]}}
+
+\begin{frame}
+  \frametitle{背景介绍}
+\begin{myitem}
+\item 考虑问题
+    $$ a^2+b^2=c^2.$$
+
+\bigskip
+\item 问题应用背景
+    \begin{subitem}
+        \item  xxxxx
+        \item  xxxx
+        \item  xxxxx
+        \item $\cdots\ \cdots$
+    \end{subitem}
+\end{myitem}
+\end{frame}
+
+\section{定义与定理}
+\begin{frame}{定义与定理}
+
+  \begin{definition}
+    这是连续的定义, 这是连续的定义, 这是连续的定义,
+    这是连续的定义, 这是连续的定义, 这是连续的定义,
+    这是连续的定义, 这是连续的定义, 这是连续的定义.
+  \end{definition}
+\end{frame}
+
+\begin{frame}{定义与定理 (续)}
+  \begin{theorem}[中值定理]
+    这是中值定理, 这是中值定理, 这是中值定理, 这是中值定理,
+    这是中值定理, 这是中值定理, 这是中值定理, 这是中值定理,
+    这是中值定理, 这是中值定理, 这是中值定理, 这是中值定理,
+    这是中值定理, 这是中值定理, 这是中值定理, 这是中值定理.
+  \end{theorem}
+\end{frame}
+
+\section{算法描述}
+\begin{frame}{算法描述}
+\begin{myitem}
+  \item 基本思想
+  \begin{subitem}
+    \item xxxxxx
+    \item xxxxxx
+  \end{subitem}
+  \bigskip
+
+  \item 主要优点
+  \begin{subitem}
+    \item  xxxx
+    \item  xxxxx
+  \end{subitem}
+\end{myitem}
+\end{frame}
+
+
+\begin{frame}{算法 1}
+
+  算法 1
+
+\end{frame}
+
+
+\section{数值实验}
+
+\begin{frame}{数值算例}
+
+\begin{center}
+{Numerical results for Example 1}\smallskip
+
+\begin{tabular}{ccccccccccc} \toprule
+    &&&\multicolumn{2}{c}{GMRES(C)}
+    &&\multicolumn{2}{c}{GMRES(L)}
+    &&\multicolumn{2}{c}{GMRES(P)} \\ \cmidrule{4-5}\cmidrule{7-8}\cmidrule{10-11}
+ $\theta$ & $N$ && Iter & CPU && Iter & CPU && Iter & CPU \\\hline
+  0.5
+ & $2^{11}$ &&  33&    0.04 &&  13&    0.02 &&  12&   0.01 \\
+ & $2^{12}$ &&  33&    0.12 &&  14&    0.04 &&  12&   0.03 \\
+ & $2^{13}$ &&  33&    0.26 &&  14&    0.09 &&  12&   0.08 \\
+ & $2^{14}$ &&  33&    0.53 &&  15&    0.19 &&  12&   0.15 \\ \midrule
+  0.8
+ & $2^{11}$ &&  33&    0.04 &&  13&    0.02 &&  12&   0.01 \\
+ & $2^{12}$ &&  33&    0.11 &&  14&    0.04 &&  12&   0.03 \\
+ & $2^{13}$ &&  33&    0.25 &&  15&    0.10 &&  12&   0.08 \\
+ & $2^{14}$ &&  33&    0.53 &&  16&    0.21 &&  12&   0.15 \\ \bottomrule
+\end{tabular}
+\end{center}
+
+\end{frame}
+
+\section{结论与展望}
+\begin{frame}{结论与展望}
+
+   这里是结论与展望 conclusion 和 remarks
+
+\end{frame}
+
+
+\begin{frame}[c,plain]
+\begin{center}
+\Huge\color{red}\heiti\bfseries 谢\quad 谢!
+
+  Thank you!
+\end{center}
+\end{frame}
+
+\end{document} 

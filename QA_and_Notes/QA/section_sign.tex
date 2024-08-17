@@ -1,0 +1,118 @@
+\documentclass[12pt]{ctexart}
+\usepackage[margin=2cm]{geometry}
+\usepackage{amsmath}
+\usepackage{lipsum}
+\usepackage{hyperref}
+
+
+\renewcommand{\thesection}{\S{}\arabic{section}}
+\makeatletter
+\@addtoreset{equation}{section}
+\renewcommand{\theequation}{\arabic{section}.\arabic{equation}}
+\makeatother
+
+
+\begin{document}
+    \section{The First Section}
+    这是一段乱糟糟的话\ref{eq:abc}.其中引用了一个公式.根据\eqref{eq:abc},我们可以知道这个世界的秘密是这样的:\lipsum[8]
+    \subsection{A subsection}
+        \begin{equation}
+            a^2+b^2=c^2
+        \end{equation}
+        \lipsum[1]
+        \begin{equation}
+            3^2+4^2=5^2
+        \end{equation}
+        \subsection{A subsection}
+        \begin{equation}
+            a^2+b^2=c^2
+        \end{equation}
+        \begin{equation}
+            3^2+4^2=5^2
+        \end{equation}
+        \subsection{A subsection}
+        \begin{equation}
+            a^2+b^2=c^2
+        \end{equation}
+    \section{The Second Section}
+    \begin{equation}
+        a^2+b^2=c^2
+    \end{equation}
+    \begin{equation}
+        3^2+4^2=5^2
+    \end{equation}
+    \lipsum[2]
+    \subsection{A subsection}
+    \begin{subequations}
+          \begin{equation}
+              a^2+b^2=c^2
+          \end{equation}
+          \begin{equation}
+              3^2+4^2=5^2
+          \end{equation}
+    \end{subequations}
+    \subsection{A subsection}
+    \begin{subequations}
+          \begin{equation}
+              a^2+b^2=c^2
+              \label{eq:abc}
+          \end{equation}
+    \end{subequations}
+    \lipsum[3]
+        \begin{equation}
+            \sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}
+        \end{equation}
+    \section{The Third Section}
+    \begin{equation}
+        \sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}
+    \end{equation}
+    下面尝试使用\verb|amsmath|宏包提供的包装公式环境\verb|subequations|实现.
+    \begin{subequations}
+        \begin{align}
+        \sum_{n=1}^{\infty} \frac{1}{n^2} &= \frac{\pi^1}{1111} \\
+        \sum_{n=1}^{\infty} \frac{1}{n^2} &= \frac{\pi^2}{2222} \\
+        \sum_{n=1}^{\infty} \frac{1}{n^2} &= \frac{\pi^3}{3333} \\
+        \sum_{n=1}^{\infty} \frac{1}{n^2} &= \frac{\pi^4}{4444}
+        \end{align}
+        \label{eq:mult-lines}
+    \end{subequations}
+
+    \begin{subequations}
+      \begin{align}
+        1 + 1 = 3 \\
+        2 + 2 = 5
+      \end{align}
+    \end{subequations}
+
+    \subsection{A subsection}
+    \begin{subequations}
+      \begin{align}
+        1 + 1 = 3 \\
+        2 + 2 = 5
+      \end{align}
+    \end{subequations}
+
+    本句交叉引用整个公式.生活就像海洋，只有意志坚强的人才能到达彼岸\eqref{eq:mult-lines}.
+
+    本句交叉引用子公式(what I mean is just like 3.2c).生活就像海洋，只有意志坚强的人才能到达彼岸.
+
+    \lipsum[4]
+
+    \begin{subequations}
+    \renewcommand{\theequation}{\theparentequation-\roman{equation}-\alph{equation}-以及公式\textbf{编号}\chinese{equation}}
+        \begin{align}
+        \sum_{n=1}^{\infty} \frac{1}{n^2} &= \frac{\pi^1}{1111} \\
+        \sum_{n=1}^{\infty} \frac{1}{n^2} &= \frac{\pi^2}{2222} \\
+        \sum_{n=1}^{\infty} \frac{1}{n^2} &= \frac{\pi^3}{3333} \\
+        \sum_{n=1}^{\infty} \frac{1}{n^2} &= \frac{\pi^4}{4444}
+        \end{align}
+        \label{eq:mult-lines-pro}
+    \end{subequations}
+
+    \lipsum[9]
+
+    \begin{equation}
+        \sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}
+    \end{equation}
+
+\end{document}

@@ -1,0 +1,49 @@
+% 生成最终的图象时把第一个文档类取消注释即可
+\documentclass[10pt,varwidth]{standalone}
+% \documentclass[12pt]{article}
+% 1.必须添加varwidth选项，不然就会报错
+\PassOptionsToPackage{quiet}{fontspec}
+\usepackage{ctex}
+\usepackage{geometry}
+% 必须要保证绘图的纸张足够的大
+\geometry{a2paper,left=1in,right=1in,top=1in,bottom=1in}
+\usepackage{xifthen}
+\usepackage{xfp}
+\usepackage{xcolor}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=1.16}
+% 2.引用的tikz库
+\usetikzlibrary {matrix, chains, trees, decorations}
+\usetikzlibrary {arrows.meta, automata,positioning}
+\usetikzlibrary {decorations.pathmorphing, calc}
+\usetikzlibrary {backgrounds, mindmap,shadows}
+\usetikzlibrary {patterns, quotes, 3d, shadows}
+\usetikzlibrary {graphs, fadings, scopes}
+\usetikzlibrary {arrows, shapes.geometric}
+\usepgflibrary {shadings}
+
+\tikzset{
+    >={Latex[length=4mm, width=1mm]}
+}
+
+
+\begin{document}
+\begin{tikzpicture}
+    % 1.点标记
+    \node[circle, fill=none, line width=1.5pt, inner sep=1, draw=green!70!orange](A11) at (0, 0) {$(0, 1)$};
+    \node[circle, fill=none, line width=1.5pt, inner sep=1, draw=orange!80](A12) at (0, -4) {$(0, 0)$};
+    \node[circle, fill=none, line width=1.5pt, inner sep=1, draw=orange!80](A21) at (4, 0) {$(1, 1)$};
+    \node[circle, fill=none, line width=1.5pt, inner sep=1, draw=green!70!orange](A22) at (4, -4) {$(1, 0)$};
+
+    % 2.基本框架
+    \draw[thick] (A11) -- (A12) -- (A22) -- (A21) -- (A11) -- cycle;
+    \draw[thick,dotted,blue!60] ($(0, -1.5) + (-1, 1)$) -- ($(2.5, -4) + (1, -1)$); 
+    \draw[thick,dotted,blue!60] ($(1.5, 0) + (-1, 1)$) -- ($(4, -2.5) + (1, -1)$);
+    \draw[<->, midway]  (\fpeval{4/3}, \fpeval{-8/3}) -- node[pos=0.5]{\tiny 划分线}(\fpeval{8/3}, \fpeval{-4/3});
+
+    % 3.图注
+    \path (A11) -- node[pos=.5, above] {\tiny 逻辑AND} (A21);
+
+\end{tikzpicture}
+\end{document}

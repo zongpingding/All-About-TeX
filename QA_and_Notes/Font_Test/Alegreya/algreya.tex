@@ -1,0 +1,36 @@
+\documentclass{article}
+\usepackage{Alegreya}
+\usepackage[T1]{fontenc}
+\usepackage{lipsum}
+
+
+\ExplSyntaxOn
+\newcommand{\test}[1][upshape]{
+  \subsection{#1}
+  \begingroup
+  \clist_map_inline:nn {#1} {
+    \csname ##1\endcsname\relax
+  }
+  \lipsum[1]\par
+  \endgroup
+  \vspace*{5em}
+}
+\ExplSyntaxOff
+
+
+\begin{document}
+\section{Basic one axis}
+\test
+\test[itshape]
+\test[scshape]
+\test[slshape]
+
+
+\newpage
+\section{NFSS -- multiaxis}
+\test[itshape, bfseries]
+
+\test[itshape, AlegreyaExtraBold]
+\test[sffamily, AlegreyaSansLight]
+
+\end{document}

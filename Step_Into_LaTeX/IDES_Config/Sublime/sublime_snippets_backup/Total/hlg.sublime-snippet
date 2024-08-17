@@ -1,0 +1,11 @@
+<snippet>
+	<content><![CDATA[
+\hlg{$1}
+]]></content>
+	<tabTrigger>hlg</tabTrigger>
+	<scope>text.tex.latex</scope>
+</snippet>
+<!-- 
+\usepackage{soul, color}
+\newcommand{\hlg}[2][green]{{\sethlcolor{#1}\hl{#2}}} 
+-->

@@ -1,0 +1,74 @@
+\documentclass[10pt,varwidth]{standalone}
+% 1.必须添加varwidth选项，不然就会报错
+% \usepackage{geometry}
+% \geometry{a4paper,left=1in,right=.3in,top=1in,bottom=1.2in}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=1.16}
+% 2.引用的tikz库
+\usetikzlibrary{matrix,chains,trees,scopes,decorations}
+\usetikzlibrary{arrows.meta,automata,positioning,shadows,3d}
+\usetikzlibrary {decorations.pathmorphing}
+\usetikzlibrary {backgrounds,mindmap,shadows}
+\usetikzlibrary {patterns, quotes}
+\usetikzlibrary {graphs,fadings}
+\usetikzlibrary {arrows,shapes.geometric}
+\usepgflibrary {shadings}
+
+\begin{document}
+    \tikzset{
+        ld/.style={level distance=#1},lw/.style={line width=#1},
+        level 1/.style={ld=4.5mm, trunk, lw=1ex ,sibling angle=60},
+        level 2/.style={ld=3.5mm, trunk!80!leaf a,lw=.8ex,sibling angle=56},
+        level 3/.style={ld=2.75mm,trunk!60!leaf a,lw=.6ex,sibling angle=52},
+        level 4/.style={ld=2mm, trunk!40!leaf a,lw=.4ex,sibling angle=48},
+        level 5/.style={ld=1mm, trunk!20!leaf a,lw=.3ex,sibling angle=44},
+        level 6/.style={ld=1.75mm,leaf a, lw=.2ex,sibling angle=40},
+    }
+    \pgfarrowsdeclare{leaf}{leaf}
+        {\pgfarrowsleftextend{-2pt} \pgfarrowsrightextend{1pt}}
+    {
+        \pgfpathmoveto{\pgfpoint{-2pt}{0pt}}
+        \pgfpatharc{150}{30}{1.8pt}
+        \pgfpatharc{-30}{-150}{1.8pt}
+        \pgfusepathqfill
+    }
+    \newcommand{\logo}[5]
+    {
+        \colorlet{border}{#1}
+        \colorlet{trunk}{#2}
+        \colorlet{leaf a}{#3}
+        \colorlet{leaf b}{#4}
+        \begin{tikzpicture}
+            \scriptsize\scshape
+            \draw[border,line width=1ex,yshift=.3cm,
+                yscale=1.45,xscale=1.05,looseness=1.42]
+            (1,0) to [out=90, in=0] (0,1) to [out=180,in=90] (-1,0)
+                to [out=-90,in=-180] (0,-1) to [out=0, in=-90] (1,0) -- cycle;
+            \coordinate (root) [grow cyclic,rotate=90]
+            child {
+                child [line cap=round] foreach \a in {0,1} {
+                    child foreach \b in {0,1} {
+                        child foreach \c in {0,1} {
+                            child foreach \d in {0,1} {
+                                child foreach \leafcolor in {leaf a,leaf b}
+                                    { edge from parent [color=\leafcolor,-#5] }
+                    } } }
+                } edge from parent [shorten >=-1pt,serif cm-,line cap=butt]
+            };
+            \node [align=center,below] at (0pt,-.5ex)
+            { \textcolor{border}{T}heoretical \\ \textcolor{border}{C}omputer \\
+            \textcolor{border}{S}cience };
+        \end{tikzpicture}
+    }
+
+    \begin{minipage}{\linewidth}
+        \logo{green!80!black}{green!25!black}{green}{green!80}{leaf}
+        \hspace*{1em}
+        \logo{green!50!black}{black}{green!80!black}{red!80!green}{leaf}
+        \hspace*{1em}
+        \logo{red!75!black}{red!25!black}{red!75!black}{orange}{leaf}
+        \hspace*{1em}
+        \logo{black!50}{black}{black!50}{black!25}{}
+    \end{minipage}
+\end{document}

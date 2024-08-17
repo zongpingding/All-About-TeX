@@ -1,0 +1,94 @@
+\documentclass[10pt,varwidth]{standalone}
+% 必须添加varwidth选项，不然就会报错
+\usepackage{geometry}
+\geometry{a4paper,total={6.5in, 10in},left=1in,right=1in,top=1in,bottom=1in}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{framed}
+\usepackage{tikz}
+\usepackage{tcolorbox}
+\usepackage{fontawesome5}
+\tcbuselibrary{skins}
+% 数学字体更换
+% \usepackage{cmbright}
+% \usepackage{ccfonts,eulervm}
+% \usepackage[math]{iwona}
+% \usepackage[math]{anttor}
+% \usepackage{kmath,kerkis}
+% \usepackage{fouriernc}
+% \usepackage{pxfonts}
+% \usepackage{mathpazo}
+% \usepackage{mathpple}
+% \usepackage[varg]{txfonts}
+% \usepackage{mbtimes}
+% \usepackage{arev}
+\usepackage[utopia]{mathdesign}
+% \usepackage[T1]{fontspec}
+\newcommand{\Fontname}{16.Utopia text with Math Design math}
+% 1.Computer Moder(Deafault Math Font)
+% 2.Cambridge Bright
+% 3.Euler math
+% 4.Concrete math 
+% 5.Iwona text and math
+% 6.Antykwa Toru\`nska text and math
+% 7.Kerkis text and math
+% 8.New Century Schoolbook with Fourier math
+% 9.New Century Schoolbook with pxfonts math 
+% 10.Palatino text with Pazo math
+% 11.Palatino text with Euler math
+% 12.Times text with txfonts math
+% 13.Times text with Symbol math
+% 14.Omega Serif text with Omega math
+% 15.Arev Sans text with Arev math
+% 16.Utopia text with Math Design math
+
+\newcommand{\abc}{%
+    $\mathrm{A} \Lambda \Delta \nabla \mathrm{B C D}%
+    \Sigma \mathrm{E F} \Gamma \mathrm{G H I J K L M N O}% 
+    \Theta \Omega \mho \mathrm{P} \Phi \Pi \Xi %
+    \mathrm{Q R S T U V W X Y} \Upsilon \Psi \mathrm{Z} $  $ \quad 1234567890 $%
+}
+\newcommand{\albe}{%
+    {$a\alpha b \beta c \partial d \delta e %
+    \epsilon \varepsilon f \zeta \xi g \gamma h \hbar \hslash \iota i \imath j \jmath k% 
+    \kappa \varkappa l \ell \lambda m n \eta \theta \vartheta o \sigma \varsigma \phi %
+    \varphi \wp p \rho \varrho q r s t \tau \pi u \mu \nu v \upsilon w \omega \varpi x %
+    \chi y \psi z$  $\infty \propto \emptyset \varnothing \mathrm{d}\eth \backepsilon$}%
+}
+
+
+\newtcbox{\mathfontname}{enhanced,nobeforeafter,tcbox raise base,boxrule=0.4pt,top=0mm,bottom=0mm,
+  right=0mm,left=4mm,arc=1pt,boxsep=2pt,before upper={\vphantom{dlg}},
+  colframe=green!50!black,coltext=green!25!black,colback=green!10!white,
+  overlay={\begin{tcbclipinterior}\fill[green!75!blue!50!white] (frame.south west)
+    rectangle node[text=white,font=\sffamily\bfseries\tiny,rotate=90] {Font} ([xshift=4mm]frame.north west);\end{tcbclipinterior}}}
+
+\newcommand{\pack}[2][]{\;\faLongArrowAltRight\;\textbackslash{\ttfamily usepackage[#1]\{#2\}}}
+\begin{document}
+\mathfontname{\Fontname\pack[utopia]{mathdesign}}    
+\begin{framed}
+    {\bfseries Theorem 1 (Residue Theorem).}
+    Let $f$ be analytic in the region $G$ except for the isolated singularities 
+    $a_1,a_2,\ldots,a_m$. If $\gamma$ is a closed rectifiable curve in $G$ which 
+    does not pass through any of the points $a_k$ and if $\gamma\approx 0$ in $G$ then
+    \[  
+        \frac{1}{2\pi i}\int_\gamma f = \sum_{k=1}^m n(\gamma;a_k) \text{Res}(f;a_k).
+    \]
+
+    {\bfseries Theorem 2 (Maximum Modulus).}
+    \emph{Let $G$ be a bounded open set in $\mathbb{C}$ and suppose that $f$ is a continuous function on $G^-$ which is analytic in $G$. Then}
+    \[
+        \max\{|f(z)|:z\in G^-\}=\max \{|f(z)|:z\in \partial G \}.
+    \]
+
+    \abc
+
+    \albe
+\end{framed}
+
+
+
+
+
+\end{document}

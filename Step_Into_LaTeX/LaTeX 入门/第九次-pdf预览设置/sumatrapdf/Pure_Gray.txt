@@ -1,0 +1,74 @@
+# For documentation, see https://www.sumatrapdfreader.org/settings/settings3-3-1.html
+
+MainWindowBackground = #2e3440
+EscToExit = false
+ReuseInstance = false
+UseSysColors = false
+RestoreSession = true
+TabWidth = 200
+
+FixedPageUI [
+	TextColor = #d8dee9
+	BackgroundColor = #2e3440
+	SelectionColor = #d8dee9
+	WindowMargin = 0 0 0 0
+	PageSpacing = 4 4
+	HideScrollbars = true
+]
+EbookUI [
+	FontName = Georgia
+	FontSize = 12.5
+	TextColor = #5f4b32
+	BackgroundColor = #fbf0d9
+	UseFixedPageUI = false
+]
+ComicBookUI [
+	WindowMargin = 0 0 0 0
+	PageSpacing = 4 4
+	CbxMangaMode = false
+]
+ChmUI [
+	UseFixedPageUI = false
+]
+ExternalViewers [
+]
+ShowMenubar = false
+ReloadModifiedDocuments = true
+FullPathInTitle = false
+ZoomLevels = 8.33 12.5 18 25 33.33 50 66.67 75 100 125 150 200 300 400 600 800 1000 1200 1600 2000 2400 3200 4800 6400
+ZoomIncrement = 0
+
+PrinterDefaults [
+	PrintScale = shrink
+]
+ForwardSearch [
+	HighlightOffset = 0
+	HighlightWidth = 15
+	HighlightColor = #6581ff
+	HighlightPermanent = false
+]
+Annotations [
+	HighlightColor = #ffff00
+]
+CustomScreenDPI = 0
+
+RememberStatePerDocument = true
+UiLanguage = cn
+ShowToolbar = false
+ShowFavorites = false
+AssociateSilently = false
+CheckForUpdates = false
+VersionToSkip = 3.4.6
+RememberOpenedFiles = true
+InverseSearchCmdLine = "C:\Users\PC\AppData\Local\Programs\Microsoft VS Code\Code.exe" -g "%f:%l"
+EnableTeXEnhancements = true
+DefaultDisplayMode = automatic
+DefaultZoom = fit page
+WindowState = 2
+WindowPos = 478 317 974 547
+ShowToc = true
+SidebarDx = 340
+TocDy = 0
+TreeFontSize = 0
+ShowStartPage = false
+UseTabs = true

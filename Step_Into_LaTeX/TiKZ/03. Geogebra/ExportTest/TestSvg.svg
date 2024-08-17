@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:latexdraw="http://latexdraw.sourceforge.net/namespaces/latexdraw" version="1.1" baseProfile="full">
+    <g>
+        <g latexdraw:type="square" id="id83555088">
+            <rect x="426.4545454545455" y="39.181818181818244" width="199.81818181818176" height="199.81818181818176" latexdraw:borderPos="outer" stroke-width="2.0" stroke="black" fill="#0099ff"/>
+        </g>
+        <g latexdraw:type="circle" id="id1800385470">
+            <circle cx="236.36363636363635" cy="145.45454545454544" r="89.9090909090909" latexdraw:borderPos="outer" stroke-width="2.0" stroke="black" fill="none"/>
+        </g>
+        <g latexdraw:type="triangle" id="id1336697286" latexdraw:points="236.36363636363635 54.54545454545453 381.8181818181818 54.54545454545453 381.8181818181818 181.8181818181818 381.8181818181818 181.8181818181818">
+            <polygon points="309.09090909090907,56.56101898252917 380.2995895592197,180.8181818181818 237.88222862259843,180.8181818181818" latexdraw:borderPos="outer" stroke-width="2.0" stroke="black" fill="none"/>
+        </g>
+        <g latexdraw:type="bezierCurve" id="id1597767558">
+            <path d="M 213.33333333333326 119.99999999999997 C 213.33333333333326 69.99999999999997 176.6666666666666 93.3333333333333 226.6666666666666 93.3333333333333 C 276.66666666666663 93.3333333333333 239.99999999999994 69.99999999999997 239.99999999999994 119.99999999999997 C 239.99999999999994 169.99999999999997 262.02200572599406 97.97799427400605 226.6666666666666 133.3333333333333 C 191.31132760733914 168.68867239266058 262.02200572599406 168.68867239266066 226.6666666666666 133.3333333333333 " stroke-width="2.0" stroke="black" fill="url(#linearGradient1597767558)" latexdraw:rotationAngle="0.0"/>
+        </g>
+        <g stroke-width="2.0" stroke="black" latexdraw:style="Axe" latexdraw:gridStart="0.0 0.0" latexdraw:gridEnd="2.0 2.0" latexdraw:origin="0.0 0.0" latexdraw:increment="1.0 1.0" latexdraw:distLabels="1.0 1.0" latexdraw:ticksSize="7.055555555555555" latexdraw:showOrigin="true" latexdraw:showTicks="all" latexdraw:showLabels="all" latexdraw:ticksStyle="Full" latexdraw:type="axe" id="id940673220">
+            <g latexdraw:type="joinedLines" id="id2015628512">
+                <polyline points="-133.3333333333333,186.6666666666666 -39.97916666666662,186.6666666666666 " stroke-width="2.0" stroke="black" latexdraw:rotationAngle="0.0" marker-end="url(#arrow1-2015628512)"/>
+            </g>
+            <g latexdraw:type="joinedLines" id="id2029371127">
+                <polyline points="-133.3333333333333,186.6666666666666 -133.3333333333333,93.31249999999993 " stroke-width="2.0" stroke="black" latexdraw:rotationAngle="0.0" marker-end="url(#arrow1-2029371127)"/>
+            </g>
+        </g>
+        <g id="id542171731" latexdraw:type="grid" latexdraw:XLabelsSouth="true" latexdraw:YLabelsWest="true" latexdraw:gridUnit="1.3777482756772543" latexdraw:gridEnd="2.0 2.0" latexdraw:gridStart="0.0 0.0" latexdraw:origin="0.0 0.0" transform="rotate(0.6812089732339967) translate(-1.2255433533849498 -2.708159255762837) translate(159.50313811435757 -32.83647144769097)">
+            <g stroke-width="0.7055555555555556" stroke="gray" stroke-linecap="round" latexdraw:type="subGrid" latexdraw:gridDots="0" latexdraw:subDiv="5.0">
+                <line x1="0.0" x2="0.0" y1="0.0" y2="-137.77482756772542"/>
+                <line x1="13.777482756772542" x2="13.777482756772542" y1="0.0" y2="-137.77482756772542"/>
+                <line x1="27.554965513545085" x2="27.554965513545085" y1="0.0" y2="-137.77482756772542"/>
+                <line x1="41.33244827031763" x2="41.33244827031763" y1="0.0" y2="-137.77482756772542"/>
+                <line x1="55.10993102709017" x2="55.10993102709017" y1="0.0" y2="-137.77482756772542"/>
+                <line x1="68.88741378386271" x2="68.88741378386271" y1="0.0" y2="-137.77482756772542"/>
+                <line x1="68.88741378386271" x2="68.88741378386271" y1="0.0" y2="-137.77482756772542"/>
+                <line x1="82.66489654063525" x2="82.66489654063525" y1="0.0" y2="-137.77482756772542"/>
+                <line x1="96.4423792974078" x2="96.4423792974078" y1="0.0" y2="-137.77482756772542"/>
+                <line x1="110.21986205418034" x2="110.21986205418034" y1="0.0" y2="-137.77482756772542"/>
+                <line x1="123.99734481095288" x2="123.99734481095288" y1="0.0" y2="-137.77482756772542"/>
+                <line x1="137.77482756772542" x2="137.77482756772542" y1="0.0" y2="-137.77482756772542"/>
+                <line x1="0.0" x2="137.77482756772542" y1="-0.0" y2="-0.0"/>
+                <line x1="0.0" x2="137.77482756772542" y1="-13.777482756772542" y2="-13.777482756772542"/>
+                <line x1="0.0" x2="137.77482756772542" y1="-27.554965513545085" y2="-27.554965513545085"/>
+                <line x1="0.0" x2="137.77482756772542" y1="-41.33244827031763" y2="-41.33244827031763"/>
+                <line x1="0.0" x2="137.77482756772542" y1="-55.10993102709017" y2="-55.10993102709017"/>
+                <line x1="0.0" x2="137.77482756772542" y1="-68.88741378386271" y2="-68.88741378386271"/>
+                <line x1="0.0" x2="137.77482756772542" y1="-68.88741378386271" y2="-68.88741378386271"/>
+                <line x1="0.0" x2="137.77482756772542" y1="-82.66489654063525" y2="-82.66489654063525"/>
+                <line x1="0.0" x2="137.77482756772542" y1="-96.4423792974078" y2="-96.4423792974078"/>
+                <line x1="0.0" x2="137.77482756772542" y1="-110.21986205418034" y2="-110.21986205418034"/>
+                <line x1="0.0" x2="137.77482756772542" y1="-123.99734481095288" y2="-123.99734481095288"/>
+                <line x1="0.0" x2="137.77482756772542" y1="-137.77482756772542" y2="-137.77482756772542"/>
+            </g>
+            <g stroke-width="1.4111111111111112" stroke="black" stroke-linecap="square" latexdraw:type="grid">
+                <line x1="0.0" x2="0.0" y1="0.0" y2="-137.77482756772542"/>
+                <line x1="68.88741378386271" x2="68.88741378386271" y1="0.0" y2="-137.77482756772542"/>
+                <line x1="137.77482756772542" x2="137.77482756772542" y1="0.0" y2="-137.77482756772542"/>
+                <line x1="0.0" x2="137.77482756772542" y1="-0.0" y2="-0.0"/>
+                <line x1="0.0" x2="137.77482756772542" y1="-68.88741378386271" y2="-68.88741378386271"/>
+                <line x1="0.0" x2="137.77482756772542" y1="-137.77482756772542" y2="-137.77482756772542"/>
+            </g>
+            <g font-size="10" stroke="black" latexdraw:type="text">
+                <text x="3" y="11">0</text>
+                <text x="72" y="11">1</text>
+                <text x="140" y="11">2</text>
+                <text x="-9" y="-140">2</text>
+                <text x="-9" y="-72">1</text>
+                <text x="-9" y="-3">0</text>
+            </g>
+        </g>
+    </g>
+    <defs>
+        <linearGradient id="linearGradient1597767558" x1="226.66667" y1="93.333336" x2="226.66667" y2="133.33333" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#0019f2"/>
+            <stop offset="0.9" stop-color="cyan"/>
+            <stop offset="1" stop-color="#0019f2"/>
+        </linearGradient>
+        <marker overflow="visible" orient="auto" id="arrow1-2015628512">
+            <path d="M 0.0 0.0 L -4.652083333333334 1.6614583333333335 L -4.652083333333334 0.0 L -4.652083333333334 -1.6614583333333335 z " latexdraw:arrSizeNum="2.0" fill="black"/>
+        </marker>
+        <marker overflow="visible" orient="auto" id="arrow1-2029371127">
+            <path d="M 0.0 0.0 L -4.652083333333334 1.6614583333333335 L -4.652083333333334 0.0 L -4.652083333333334 -1.6614583333333335 z " latexdraw:arrSizeNum="2.0" fill="black"/>
+        </marker>
+    </defs>
+    <metadata>
+        <latexdraw:metadata>
+            <latexdraw:latexIncludes/>
+            <latexdraw:displayXScale>false</latexdraw:displayXScale>
+            <latexdraw:displayYScale>false</latexdraw:displayYScale>
+            <latexdraw:unit>CM</latexdraw:unit>
+            <latexdraw:zoom>1.5000000000000004</latexdraw:zoom>
+            <latexdraw:magneticGridStyle>CUSTOMISED</latexdraw:magneticGridStyle>
+            <latexdraw:gridGap>20</latexdraw:gridGap>
+            <latexdraw:magneticGrid>true</latexdraw:magneticGrid>
+            <latexdraw:version>3.3.9</latexdraw:version>
+            <latexdraw:size>
+                <latexdraw:width>1554</latexdraw:width>
+                <latexdraw:height>882</latexdraw:height>
+            </latexdraw:size>
+            <latexdraw:position>
+                <latexdraw:x>0.0</latexdraw:x>
+                <latexdraw:y>0.0</latexdraw:y>
+            </latexdraw:position>
+        </latexdraw:metadata>
+    </metadata>
+</svg>

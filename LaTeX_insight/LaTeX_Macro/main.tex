@@ -1,0 +1,115 @@
+\documentclass[fontset=windows, 12pt]{article}
+\usepackage{Article}
+
+\title{\LaTeX 的内部宏}
+\author{Eureka}
+\date{\today}
+
+
+
+%% 定义宏的区域
+%% 1. 特殊的宏名
+\newcommand{\+}[1]{\ensuremath{\mathscr{#1}}}
+\newcommand{\2}[1]{\ensuremath{\mathbb{#1}}}
+
+
+\begin{document}
+\maketitle
+
+
+\begin{tformal}{分数的技巧}
+    \begin{verbatim}
+\frac{a}{b} = \frac ab
+    \end{verbatim}
+
+\noindent \textbf{实际演示：}\par 
+
+$\frac{1}{2}$ 和 $\frac12$
+\end{tformal}
+
+%% 特殊的宏名
+\begin{tformal}{特殊的宏名}
+\begin{verbatim}
+%% 命令的定义
+\newcommand{\+}[1]{\ensuremath{\mathscr{#1}}}
+\newcommand{\2}[1]{\ensuremath{\mathbb{#1}}}
+%% 命令的使用:
+% 样例一: \+A
+% 样例二: \+AB
+% 样例三: \2A
+% 样例四: \2AB
+\end{verbatim}
+
+
+$\bullet$  第一个演示效果: \+A. \\
+$\bullet$  第二个演示效果: \+AB. \\
+$\bullet$  第三个演示效果: \2A. \\
+$\bullet$  第四个演示效果: \2AB. \\
+\end{tformal}
+
+\newpage
+\centerline{\textbf{Macros2$\varepsilon$中的内容}}
+
+\section{Constants}
+\subsection{Number Constants}
+主要的相关内容, 他们主要和以下的几个命令相关
+\begin{itemize}
+    \item 1. \verb |\countdef|
+    \item 2. \verb |\chardef|
+    \item 3. \verb |\mathchardef|
+\end{itemize}
+几个例子
+\begin{tformal}{数字常数}
+    \makeatletter
+    \@ne $\ne$ @
+    \makeatother
+\end{tformal}
+
+\section{Variables}
+
+\section{Macros}
+
+\section{\TeX 是怎么产生的}
+
+\textbf{下面为一些尝试的命令}
+
+命令一：\verb |T\kern-0.2em\lower.25em\hbox{E}\kern-0.1em X|
+
+命令二：\verb |\ensuremath{\mathrm{L\kern-.325em{\scriptstyle{A}}\kern-.17em}}\TeX|
+
+% 命令三：L\kern-.325em\hbox{\check@mathfonts\fontsize\sf@size\z@\math@fontsfalse\selectfont A}\kern-.17em\TeX
+
+运行效果：T\kern-0.2em\lower.25em\hbox{E}\kern-0.1em X~~~~\ensuremath{\mathrm{L\kern-.325em{\scriptstyle{A}}\kern-.17em}}\TeX
+
+正如上面的代码所示，主要就是一个lower宏，使用+,-可以实现上下偏移。例如，我们把lower后面的
+正号变为 -时，E机会出现在上面, \LaTeX 中的A同理
+
+效果演示一：T\kern-0.1em\lower-.25em\hbox{E}\kern-0.1em X 
+
+效果演示二：L\kern-0.2em\lower0.3em\hbox{A}\kern-0.2emT\kern-0.1em\lower-.25em\hbox{E}\kern-0.1em X
+
+\clearpage
+下面展示原理：
+\begin{itemize}
+    \item 1. \textbackslash kern:  其中 -  表示向左移动
+    \item 2. \textbackslash lower: 其中 - 表示向上移动
+    \item 3. \textbackslash raise: 其中 - 表示向下移动
+    \item 4. \textbackslash hbox: 表示水平盒子
+\end{itemize}
+
+\begin{tformal}{\LaTeX 的原始命令}
+\begin{verbatim}
+\DeclareRobustCommand{\LaTeX}{L\kern-.36em%
+    {\sbox\z@ T%
+        \vbox to\ht\z@{\hbox{\check@mathfonts
+                            \fontsize\sf@size\z@
+                            \math@fontsfalse\selectfont
+                            A}%
+                    \vss}%
+    }%
+    \kern-.15em%
+    \TeX}
+\end{verbatim}
+\end{tformal}
+
+\end{document}

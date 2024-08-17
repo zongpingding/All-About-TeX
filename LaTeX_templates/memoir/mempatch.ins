@@ -1,0 +1,84 @@
+%% mempatch.ins
+%% Author: Peter Wilson (Herries Press) herries dot press at earthlink dot net
+%% Copyright 2001 --- 2010 Peter R. Wilson
+%% Copyright 2011 --- 2013 Lars Madsen
+%% Maintainer: Lars Madsen (daleif at math dot au dot dk)
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either
+%% version 1.3c of this license or (at your option) any 
+%% later version.
+%% The latest version of the license is in
+%%    http://www.latex-project.org/lppl.txt
+%% and version 1.3c or later is part of all distributions of
+%% LaTeX version 2008/05/04 or later.
+%%
+%% This work has the LPPL maintenance status "maintained".
+%%
+%% This work consists of the files listed in the README file.
+%%
+%% This file will generate fast loadable files and documentation
+%% driver files from the doc files in this work when run through
+%% LaTeX.
+%%
+%%
+%%
+%% --------------- start of docstrip commands ------------------
+%%
+\def\batchfile{mempatch.ins}
+\input docstrip.tex
+\preamble
+ 
+  Author: Peter Wilson (Herries Press) herries dot press at earthlink dot net
+  Copyright 2001 --- 2010 Peter R. Wilson
+  Copyright 2011 --- 2013 Peter R. Wilson
+  Copyright 2013 ---      Lars Madsen
+  Maintainer: Lars Madsen (daleif at math dot au dot dk)
+
+  This work may be distributed and/or modified under the
+  conditions of the LaTeX Project Public License, either
+  version 1.3 of this license or (at your option) any 
+  later version.
+  The latest version of the license is in
+     http://www.latex-project.org/lppl.txt
+  and version 1.3 or later is part of all distributions of
+  LaTeX version 2003/06/01 or later.
+ 
+  This work has the LPPL maintenance status "maintained".
+ 
+  This work consists of the files listed in the README file.
+
+\endpreamble
+
+\keepsilent
+
+%% \Msg{*** Generating the driver file ***}
+
+%% \generateFile{mempatch.drv}{t}{\from{mempatch.dtx}{driver}}
+
+\Msg{*** Generating the LaTeX2e package files ***}
+
+\generateFile{memhfixc.sty}{n}{\from{mempatch.dtx}{hyper}}
+%\generateFile{mempatch.sty}{t}{\from{mempatch.dtx}{patch}}
+
+\Msg{***********************************************************}
+\Msg{*}
+\Msg{* To finish the installation you have to move the following}
+\Msg{* files into a directory searched by LaTeX. See the FAQ}
+\Msg{* at https://texfaq.org/ for more on this.}
+\Msg{*}
+\Msg{* \space\space memhfixc.sty}
+%\Msg{* \space\space mempatch.sty}
+\Msg{*}
+\Msg{*}
+\Msg{* To produce the documented source run the files ending with}
+\Msg{* `.dtx' through LaTeX.}
+\Msg{* For an index process any name.idx file by:}
+\Msg{* \space\space\space\space makeindex -s gind.ist name}
+\Msg{* Process any name.glo file by:}
+\Msg{* \space\space\space\space makeindex -s gglo.ist -o name.gls name.glo}
+\Msg{*}
+\Msg{* Happy TeXing}
+\Msg{***********************************************************}
+
+\endinput

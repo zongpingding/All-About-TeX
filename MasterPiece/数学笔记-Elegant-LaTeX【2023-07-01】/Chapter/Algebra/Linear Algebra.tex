@@ -1,0 +1,145 @@
+\section{线性代数}
+\subsection{线性相关}
+
+$x^{2}$与$x|x|$在$C[-1,1]$是否线性相关?
+
+\begin{proof}
+
+    $c_{1} x^{2}+c_{2} x|x|=0 $, 
+    在 $[0,1]$上$c_{1}=1,c_{2}=-1$,
+    在 $[-1,0]$上$c_{1}=1,c_{2}=1$,
+    所以它们在$C[-1,1]$是线性相关的. 
+\end{proof}
+
+\subsection{矩阵转置} 
+\begin{align*}
+    R =\begin{bmatrix}
+        A\\
+        B
+    \end{bmatrix}
+    \Longrightarrow
+    R^T=\begin{bmatrix}
+        A^T\\
+        B^T
+    \end{bmatrix}^T 
+    = \left[A^T, B^T\right]
+\end{align*}
+
+\subsection{左行右列}
+其实可以看做是，行列式的最左边乘以一个运算，这个运算是第二行减去第一行的$A$倍。
+由此我们可以看出：分块矩阵也是符合左行右列的规则的。
+\begin{align*}
+    \left|
+        \begin{matrix}
+            E & O\\ 
+            -A & E
+        \end{matrix}
+    \right|
+    \cdot 
+    \left|
+        \begin{matrix}
+            E & B\\ 
+            A & E 
+        \end{matrix}
+    \right|
+    = \left|
+        \begin{matrix}
+            E & B \\ 
+            O & E - AB 
+        \end{matrix}
+    \right|
+\end{align*}
+
+\subsection{过渡矩阵}
+
+\[AX = BY\]
+
+因为$A\to B$的过度矩阵为$P = A^{-1}B$。
+举例：令前后的基为$\{\xi_1 = 4, \xi_1^{'} = 2\}$, 一个向量在变换前后的坐标分别为$b_1 = 5, b_1^{'} = 10$
+因为$4\times 5 = 2\times 10$,可以认为是基从$5\to10$,这个坐标变换就是$p^{-1} = \frac{1}{2}x$.所以我们可以知道基变换
+就是$P = 2x$
+
+\subsection{向量空间}
+比如 $\mathrm{A}$ 有特征值 $\lambda_i$, 对应的特征向量为 $\mathrm{p}_i$
+我把 $\mathrm{p}_i$ 正交化后的得到的正交基记为 $\xi_i$
+
+疑问一: 那么 $\xi_i$ 是对应于 $A$ 的特征值为 $\lambda_i$ 的特征向量吗? 
+
+疑问二：为什么$p_i$单位正交化后的$\xi_i$, 
+\begin{align*}
+    \xi 
+    & = \biggl(\xi_1,\, \xi_2,\, \xi_3,\, \cdots,\, \xi_i\biggr)
+      \Longrightarrow  A=\xi^T \operatorname{diag}\left(\lambda_1, \lambda_2, \cdots, \lambda_i\right) \xi
+\end{align*}
+
+\begin{proof}
+
+当 $\mathrm{A}$ 是对称实矩阵时, 只有当 $\lambda_i$ 为重根时才需要对求出的特征向量正交化, 且正交化后的向量仍然是原矩阵的特征向量。
+
+如 $\lambda_i$ 为二重根, 则有 $\mathrm{p}_1, \mathrm{p}_2$ 两个特征向量与之对应。
+正交化后即有，
+\begin{align*}
+    \xi_i=p_1, \xi_2=p_2-\frac{[p_1,\xi_1]}{[\xi_1,\xi_1]}\xi_1=p_2-kp_1
+\end{align*}
+
+故 
+\begin{align*}
+    A \xi_2
+    & = A\left(\mathrm{p}_2-k p_1\right)=A p_2-k A p_1 \\
+    & =\lambda_i p_2-k \lambda_i p_2 = \lambda_i\left(\mathrm{p}_2-k p_1\right)
+\end{align*}
+当 $A$ 不是对称矩阵时, 正交化后的向量就不是原矩阵的特征向量.至于为何是这样的结构, 记住!
+\end{proof}
+
+\subsection{线性空间相关问题}
+线性空间V上的所有线性变换所组成的线性空间$\tau$。那么$\tau$里边的所有元素
+对V中的所有元素所用后还在V中吗？
+
+怎么求线性空间的零元素？
+
+\subsection{特征值问题}
+\begin{theorem}[特征值的性质]
+\begin{align}
+    \prod_{i=1}^n \lambda_i=|A|\hspace*{0.3\linewidth}\sum_{i=1}^n a_{i i}=\sum_{i=1}^n \lambda_i
+\end{align}
+\end{theorem}
+
+\begin{proof}
+
+    \num{1} 从特征多项式考虑:若关于矩阵A的特征多项式 $f(\lambda)$ 有根:
+    $\lambda_1, \lambda_2, \cdots, \lambda_n$.(可能有重根，但是不影响)
+
+    那么根据代数学基本定理可以知道, 若关于矩阵A的特征多项式可以分解为:
+    \begin{align*}
+        |\lambda E - A|&=f(\lambda)=\left(\lambda-\lambda_1\right)\left(\lambda-\lambda_2\right) \cdots\left(\lambda-\lambda_n\right)
+    \end{align*}
+
+    当 $\lambda=0$ 时, 即有 
+    \[
+        |-1\cdot A|=(-1)^n|A|=(-1)^n \prod_{i=1}^n \lambda_i \Longrightarrow \prod_{i=1}^n \lambda_i=|A|
+    \]
+    第一个式子我们就得到了, 同时也可以得到
+    \[
+        LHS = \lambda^n+\left[-\sum_{i=1}^n \lambda_i\right] \lambda^{n-1}+\cdots
+    \]
+    
+    \num{2} 从行列式的展开式来考虑: 
+    \begin{align*}
+        |\lambda E - A|
+        & = \begin{bmatrix}
+                \lambda-a_{11} &  \cdots & \cdots & -a_{n1}\\
+                \cdots & \lambda-a_{22} & \cdots & \cdots\\
+                \cdots\\
+                -a_{nn}  &  \cdots  & \cdots & \lambda-a_{nn}\\
+        \end{bmatrix}
+        = \left[(\lambda-a_{11})(\lambda-a_{22})\cdots(\lambda-a_{nn})\right]+\cdots\\
+        & = \lambda^n + \left[-\sum_{i=1}^{n} {a_{i i}} \right]\lambda^{n-1}+\cdots
+    \end{align*}
+    上边只展开一部分的原因：$\lambda^n, \lambda^{n-1}$ 只会出现在主对角线的那个式子中, 即
+    \ensuremath{\displaystyle \prod_{i=1}^{n}{(\lambda-a_{ii})}\makebox[2em][l]{\kaishu \zihao{8}\textcolor{red}{主对角线}}}
+    中，故有
+    \[
+        \sum_{i=1}^n a_{i i}=\sum_{i=1}^n \lambda_i
+    \]
+\end{proof}
+

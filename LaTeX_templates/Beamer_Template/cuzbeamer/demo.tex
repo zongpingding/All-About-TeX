@@ -1,0 +1,313 @@
+\documentclass[algorithm,pgfplots]{cuzbeamer}
+
+\usepackage[scale=2]{ccicons}
+
+\begin{document}
+    \input{initialization.tex}
+    \maketitle
+
+    \begin{standout}[第X章]
+        章节名称\\
+        Chapter Name
+    \end{standout}
+
+    \begin{frame}{大纲}
+        \setbeamertemplate{section in toc}[sections numbered]
+        \tableofcontents
+    \end{frame}
+
+    \section{简介/前情回顾}
+
+    \begin{frame}
+        \begin{block}{引用}
+            \begin{leftbar}
+                “不应当急于求成，应当去熟悉自己的研究对象，锲而不舍，时间会成全一切。凡事开始最难，然而更难的是何以善终。”\par
+                \raggedleft ------莎士比亚
+            \end{leftbar}
+            \begin{leftbar}
+                “其实地上本没有路，走的人多了，也便成了路。”\par
+                \raggedleft ------鲁迅
+            \end{leftbar}
+            \begin{leftbar}
+                “这个世界是通的。”\par
+                \raggedleft ------无名禅师
+            \end{leftbar}
+        \end{block}
+    \end{frame}
+
+    \section{进入正题}
+
+    \begin{frame}
+        \begin{columns}[T,onlytextwidth]
+            \column{0.33\textwidth}
+            \begin{block}{普通标题}
+                \begin{itemize}
+                    \item 普通内容
+                    \item 普通内容
+                    \item 普通内容
+                \end{itemize}
+            \end{block}
+            \metroset{block=fill}
+            \begin{block}{普通标题}
+                \begin{itemize}
+                    \item 普通内容
+                    \item 普通内容
+                    \item 普通内容
+                \end{itemize}
+            \end{block}
+            \column{0.33\textwidth}
+            \begin{alertblock}{警告标题}
+                \begin{enumerate}
+                    \item 警告内容
+                    \item 警告内容
+                    \item 警告内容
+                \end{enumerate}
+            \end{alertblock}
+            \metroset{block=fill}
+            \begin{alertblock}{警告标题}
+                \begin{enumerate}
+                    \item 警告内容
+                    \item 警告内容
+                    \item 警告内容
+                \end{enumerate}
+            \end{alertblock}
+            \column{0.33\textwidth}
+            \begin{exampleblock}{例子标题}
+                \begin{description}
+                    \item[描述定义] 描述内容
+                    \item[描述定义] 描述内容
+                    \item[描述定义] 描述内容
+                \end{description}
+            \end{exampleblock}
+            \metroset{block=fill}
+            \begin{exampleblock}{例子标题}
+                \begin{description}
+                    \item[描述定义] 描述内容
+                    \item[描述定义] 描述内容
+                    \item[描述定义] 描述内容
+                \end{description}
+            \end{exampleblock}
+        \end{columns}
+    \end{frame}
+
+    \begin{fragile}
+        \bicolumns{
+            \begin{block}{图片}
+                \begin{center}
+                    \includegraphics[width=0.65\textwidth]{cuzlogo}\\
+                    \includegraphics[width=0.65\textwidth]{cuzlogo-dark}\\
+                    \includegraphics[width=0.65\textwidth]{cuzlogo-light}\\
+                    \includegraphics[width=0.65\textwidth]{cuzlogo-brown}\\
+                \end{center}
+            \end{block}
+        }{
+        \begin{block}{表格}
+            \begin{table}\small
+                \begin{tabular}{llr}
+                    \toprule
+                    \multicolumn{2}{c}{项目} & \multirow{2}{*}{价格 (\$)} \\
+                    \cmidrule(r){1-2}
+                    动物                    & 描述 &  \\
+                    \midrule
+                    \multirow{2}{*}{蚋蚊}   & 每克 & 13.65 \\
+                                            & 每只 & 0.01 \\
+                    角马                    & 标本 & 92.50 \\
+                    鸸鹋                    & 标本 & 33.33 \\
+                    犰狳                    & 冷冻 & 8.99 \\
+                    \bottomrule
+                \end{tabular}
+            \end{table}
+        \end{block}
+        }
+    \end{fragile}
+
+    \begin{fragile}
+        \bicolumns[0.382]{}{
+            \begin{block}{公式}
+                \begin{align}
+                    e^{i\vartheta}&=\cos{\vartheta}+i\sin{\vartheta}\nonumber\\
+                    \rho(R,\phi)&\sim\int_{-\infty}^{+\infty}\dfrac{\tilde{W}_{n}(\gamma)\exp{\left[\iota\frac{R}{a}\left(\sqrt{k^{2}a^{2}-\gamma^{2}}\right)\right]}\cos{\phi}}{\left(k^{2}a^{2}-\gamma^{2}\right)^{3/4}H_{n}^{\prime(1)}\left(\sqrt{k^{2}a^{2}-\gamma^{2}}\right)}\mathrm{d}\gamma
+                \end{align}
+            \end{block}
+        }
+    \end{fragile}
+
+    \begin{fragile}[]
+        \bicolumns[0.382]{
+        }{
+            \begin{block}{代码}
+                \begin{minted}{c++}
+                    // 西加加
+                    #include <iostream>
+                    
+                    auto main(int argc, char const **argv) {
+                        std::cout << "Test" << std::endl;
+                        return 0;
+                    }
+                \end{minted}
+                \begin{minted}{java}
+                    // 爪哇
+                    public class Test {
+                        public static void main(String[] args) {
+                            System.out.println("Test");
+                        }
+                    }
+                \end{minted}
+                \begin{minted}{python}
+                    # 蟒蛇，测试数学公式：$\int_{-\infty}^{+\infty}{f(x)\mathrm{d}x}$
+                    print('Test')
+                \end{minted}
+            \end{block}
+        }
+    \end{fragile}
+
+    \begin{fragile}[]
+        \bicolumns[0.382]{
+        }{
+            \begin{block}{算法}
+                \begin{algorithmx}[alg:euclid]{Euclid算法}
+                    \Procedure{Euclid}{$a,b$}\Comment{$a$与$b$的最大公约数}
+                    \State $r\gets a\bmod b$
+                    \While{$r\neq 0$}\Comment{若$r$为0则可跳出循环返回答案}
+                    \State $a\gets b$
+                    \State $b\gets r$
+                    \State $r\gets a\bmod b$
+                    \EndWhile\label{euclidendwhile}
+                    \State \textbf{return} $b$\Comment{最大公约数为$b$}
+                    \EndProcedure
+                \end{algorithmx}
+            \end{block}
+        }
+    \end{fragile}
+
+    \begin{frame}
+        \begin{block}{参考文献}
+            \begin{itemize}
+                \item 可按如下方式引用参考文献：\cite{cheng2007dahua,cooper2007face,freeman2004head,gamma1994design,graham2004hackers,norman2013design,nystrom2014game,williams2014non}
+            \end{itemize}
+        \end{block}
+    \end{frame}
+
+    \begin{frame}
+        \begin{block}{类图}
+            \begin{center}
+                \begin{tikzpicture}
+                    \umlemptyclass[x=0,y=1,type=interface]{Vehicle} %
+                    \umlemptyclass[x=1,y=-2]{Bicycle} \umlemptyclass[x=-1,y=-2]{Car} %
+                    \umlemptyclass[x=-4,y=-1]{Tyre} \umlemptyclass[x=-4,y=-3]{Engine} %
+                    \umlemptyclass[x=-1,y=-4]{SUV} \umlemptyclass[x=4,y=-2]{Student} %
+                    \umlemptyclass[x=4,y=0]{School} \umlemptyclass[x=4,y=-4]{ID} %
+                    
+                    \umlimpl[geometry=|-|]{Car}{Vehicle} %
+                    \umlimpl[geometry=|-|]{Bicycle}{Vehicle} %
+                    \umlcompo[geometry=-|-]{Car}{Tyre} %
+                    \umlcompo[geometry=-|-]{Car}{Engine} %
+                    \umlinherit[geometry=--]{SUV}{Car} %
+                    \umlaggreg[geometry=|-]{School}{Student} %
+                    \umldep[geometry=--]{Student}{Bicycle} %
+                    \umlassoc[geometry=--]{Student}{ID} %
+                \end{tikzpicture}
+            \end{center}
+        \end{block}
+    \end{frame}
+
+    \begin{fragile}[]
+        \begin{block}{状态图}
+            \begin{center}
+                \begin{tikzpicture}[ >=stealth, ->, thick, black!50 ]
+                    \matrix[row sep=20mm, column sep=22mm] { %
+                        % First row:
+                        & \node (have-money) [terminal] {金额充足}; & \\ %
+                        % Second row:
+                        \node (sold-out) [terminal] {糖果售罄}; & %
+                        \node (no-money) [terminal] {金额不足}; & %
+                        \node (sold) [terminal] {售出糖果}; \\ %
+                    }; %
+                    \begin{scope}[every node/.style={midway,auto,font=\scriptsize}]
+                        \draw (have-money) to [bend left] node [align=center]
+                        {\mintinline{java}{退回}\\\mintinline{java}{25分钱}} (no-money); %
+                        \draw (no-money) to [bend left] node [align=center]
+                        {\mintinline{java}{投入}\\\mintinline{java}{25分钱}} (have-money); %
+                        \draw (have-money) to [bend left] node [align=center]
+                        {\mintinline{java}{转动曲柄}} (sold); %
+                        \draw (sold) -- node [align=center] %
+                        {\mintinline{java}{发放糖果}\\\mintinline{java}{糖果数>0}} (no-money); %
+                        \draw (sold) to [bend left] node [align=center] %
+                        {\mintinline{java}{发放糖果}\\\mintinline{java}{糖果数=0}} (sold-out); %
+                    \end{scope}
+                \end{tikzpicture}
+            \end{center}
+        \end{block}
+    \end{fragile}
+
+    \begin{frame}
+        \begin{block}{折线图}
+            \begin{figure}
+                \begin{tikzpicture}
+                    \begin{axis}[
+                        mlineplot,
+                        width=0.9\textwidth,
+                        height=6cm,
+                    ]
+                    \addplot {sin(deg(x))};
+                    \addplot+[samples=100] {sin(deg(2*x))};
+                    \end{axis}
+                \end{tikzpicture}
+            \end{figure}
+        \end{block}
+    \end{frame}
+
+    \begin{frame}
+        \begin{block}{柱状图}
+            \begin{figure}
+                \begin{tikzpicture}
+                    \begin{axis}[
+                        mbarplot,
+                        xlabel={横},
+                        ylabel={纵},
+                        width=0.9\textwidth,
+                        height=6cm,
+                    ]
+                    \addplot plot coordinates {(1, 20) (2, 25) (3, 22.4) (4, 12.4)};
+                    \addplot plot coordinates {(1, 18) (2, 24) (3, 23.5) (4, 13.2)};
+                    \addplot plot coordinates {(1, 10) (2, 19) (3, 25) (4, 15.2)};
+                    \legend{甲, 乙, 丙}
+                    \end{axis}
+                \end{tikzpicture}
+            \end{figure}
+        \end{block}
+    \end{frame}
+
+    \section{小结}
+
+    \begin{frame}{}
+        \begin{leftbar}
+            您可通过如下链接之一获取本\texttt{cuzbeamer}模板与相应的示例文件：
+            \par
+            \begin{center}
+                \href{https://github.com/xiehao/cuzbeamer}{https://github.com/xiehao/cuzbeamer}\par
+                \href{https://bitbucket.org/xiehao/cuzbeamer}{https://bitbucket.org/xiehao/cuzbeamer}
+            \end{center}
+            本模板本身遵循如下
+            \href{http://creativecommons.org/licenses/by-sa/4.0/}{署名-相同方式
+            共享4.0国际许可证（CC BY-SA 4.0）}：
+            \begin{center}
+                \ccbysa
+            \end{center}
+        \end{leftbar}
+    \end{frame}
+
+    \begin{standout}[]
+        感谢聆听！
+    \end{standout}
+
+    \appendix
+
+    \section{附录}
+
+    \begin{frame}[allowframebreaks]{参考文献}
+        \bibliography{references}
+        \bibliographystyle{unsrt}
+    \end{frame}
+
+\end{document}

@@ -1,0 +1,82 @@
+% y=0.02 (x+2)^(2) (x-1) (x-3)^(3)
+% 生成最终的图象时把第一个文档类取消注释即可
+\documentclass[10pt,varwidth]{standalone}
+% \documentclass[12pt]{article}
+% 1.必须添加varwidth选项，不然就会报错
+\PassOptionsToPackage{quiet}{fontspec}
+\usepackage{ctex}
+\usepackage{geometry}
+% 必须要保证绘图的纸张足够的大
+\geometry{a2paper,left=1in,right=1in,top=1in,bottom=1in}
+\usepackage{xifthen}
+\usepackage{xfp}
+\usepackage{xcolor}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=1.16}
+% 2.引用的tikz库
+\usetikzlibrary {matrix, chains, trees, decorations}
+\usetikzlibrary {arrows.meta, automata,positioning}
+\usetikzlibrary {decorations.pathmorphing, calc}
+\usetikzlibrary {backgrounds, mindmap,shadows}
+\usetikzlibrary {patterns, quotes, 3d, shadows}
+\usetikzlibrary {graphs, fadings, scopes}
+\usetikzlibrary {arrows, shapes.geometric}
+\usepgflibrary {shadings}
+
+\tikzset{
+    >={Latex[length=4mm, width=1mm]}
+}
+
+\usepackage{FunctionPlot}
+\newcommand{\scale}[2]{%
+    \scalebox{#1}[#1]{#2}}
+
+
+\begin{document}
+% \begin{tikzpicture}
+%     \Gplot[.5]{blue}{0.02*(x+2)^2*(x-1)*(x-3)^3}
+% \end{tikzpicture}
+
+\begin{tikzpicture}
+    \begin{axis}[
+            % 1.设置x,y坐标轴位置
+            axis x line = middle,
+            axis y line = middle,
+            % 2.设置绘图范围
+            xmin=-3, xmax=4,
+            ymin=-2.3, ymax=7,
+            % 3.设置坐标轴箭头样式
+            axis line style={->}, 
+            % 4.设置x,y轴标签
+            xlabel={\scale{.6}{$w_{i,j}$}},
+            ylabel={\scale{.6}{\shortstack[l]{{\rm Error}\vspace*{3em}\\\hspace*{4em}$y=0.02(x+2)^2(x-1)(x-3)^3+1$}}}, 
+            % 5.设置x,y轴标签位置
+            xlabel style={anchor=south, yshift=-1em, xshift=-1em}, 
+            ylabel style={anchor=west, yshift=-1.7em, xshift=-2em}, 
+            % 6.自定义 x,y 轴刻度
+            xtick={-3,-2,...,3},                                        
+            ytick={-2,-1,...,6},                                       
+            % 7.设置刻度线样式
+            tick style={color=gray, font=\footnotesize}, 
+            % xtick style={yshift=2pt,major tick length=5pt},
+            % ytick style={xshift=2pt, major tick length=5pt},             
+            % 8.设置 x,y轴刻度线标签样式
+            xticklabel={\scriptsize\itshape\pgfmathprintnumber{\tick}},       
+            yticklabel={\scriptsize\itshape\pgfmathprintnumber{\tick}},
+            % 9.设置 x,y 轴刻度标签颜色和距离坐标轴的距离   
+            xticklabel style={color=gray, yshift=5pt}, 
+            yticklabel style={color=gray, xshift=5pt},
+        ]
+        \addplot[domain=-5:5,color=red,thick,smooth]
+            gnuplot {0.02*(x+2)^2*(x-1)*(x-3)^3+1};
+        % 10.添加文本
+        \node[anchor=west,blue] at (axis cs: 2.5, 2) {\tiny 梯度$>$0}; % 添加文本节点
+        \draw[dotted, thick] (3.3, 0) -- (3.3, 1);
+        \draw[dotted, thick] (1.6, 0) -- (1.6, .6);
+        \draw[->, blue] (3, -1) -- (1.5, -1)node[right=2em,above]{\tiny 移动方向};
+        \draw[orange, thin] (8, 5.3) -- (2.5, .25); 
+
+    \end{axis}
+\end{tikzpicture}
+\end{document}

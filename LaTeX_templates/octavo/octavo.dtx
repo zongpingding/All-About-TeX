@@ -1,0 +1,2850 @@
+%%
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+%%
+% \CheckSum{2048}
+% \iffalse
+%
+% \changes{1.0}{2003/07/02}{First release}
+%
+% \section{Identification}
+%    This is document class Octavo, which can be used with \LaTeX\ only,
+%    so prepare to display a message if another \TeX\ format is used.
+%    \begin{macrocode}
+%<octavo>\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+%    \end{macrocode}
+%
+%    Announce the Class name and its version:
+%    \begin{macrocode}
+%<octavo>\ProvidesClass{octavo}
+%<10pt>\ProvidesFile{oct10.clo}
+%<11pt>\ProvidesFile{oct11.clo}
+%<12pt>\ProvidesFile{oct12.clo}
+%<*driver>
+\ProvidesFile{octavo.drv}
+%</driver>
+              [2007/03/07 v1.2 
+%<octavo> a LaTeX document class]
+%<10pt|11pt|12pt> a LaTeX file (size option)]
+%    \end{macrocode}
+%
+% \section{The driver for this document}
+% Now comes the code for the document driver, that is to say, the file
+% which produces the documentation upon extraction from this .dtx file
+% by the docstrip program.
+%    \begin{macrocode}
+%<*driver>
+]
+\documentclass{ltxdoc}
+%    \end{macrocode}
+%
+%    Not everything has to appear in the index
+%    \begin{macrocode}
+\DoNotIndex{\',\.,\@M,\@@input,\@Alph,\@alph,\@addtoreset,\@arabic}
+\DoNotIndex{\@badmath,\@centercr,\@cite}
+\DoNotIndex{\@dotsep,\@empty,\@float,\@gobble,\@gobbletwo,\@ignoretrue}
+\DoNotIndex{\@input,\@ixpt,\@m,\@minus,\@mkboth}
+\DoNotIndex{\@ne,\@nil,\@nomath,\@plus,\roman,\@set@topoint}
+\DoNotIndex{\@tempboxa,\@tempcnta,\@tempdima,\@tempdimb}
+\DoNotIndex{\@tempswafalse,\@tempswatrue,\@viipt,\@viiipt,\@vipt}
+\DoNotIndex{\@vpt,\@warning,\@xiipt,\@xipt,\@xivpt,\@xpt,\@xviipt}
+\DoNotIndex{\@xxpt,\@xxvpt,\\,\ ,\addpenalty,\addtolength,\addvspace}
+\DoNotIndex{\advance,\ast,\begin,\begingroup,\bfseries,\bgroup,\box}
+\DoNotIndex{\bullet}
+\DoNotIndex{\cdot,\cite,\CodelineIndex,\cr,\day,\DeclareOption}
+\DoNotIndex{\def,\DisableCrossrefs,\divide,\DocInput,\documentclass}
+\DoNotIndex{\DoNotIndex,\egroup,\ifdim,\else,\fi,\em,\endtrivlist}
+\DoNotIndex{\EnableCrossrefs,\end,\end@dblfloat,\end@float,\endgroup}
+\DoNotIndex{\endlist,\everycr,\everypar,\ExecuteOptions,\expandafter}
+\DoNotIndex{\fbox}
+\DoNotIndex{\filedate,\filename,\fileversion,\fontsize,\framebox,\gdef}
+\DoNotIndex{\global,\halign,\hangindent,\hbox,\hfil,\hfill,\hrule}
+\DoNotIndex{\hsize,\hskip,\hspace,\hss,\if@tempswa,\ifcase,\or,\fi,\fi}
+\DoNotIndex{\ifhmode,\ifvmode,\ifnum,\iftrue,\ifx,\fi,\fi,\fi,\fi,\fi}
+\DoNotIndex{\input}
+\DoNotIndex{\jobname,\kern,\leavevmode,\let,\leftmark}
+\DoNotIndex{\list,\llap,\long,\m@ne,\m@th,\mark,\markboth,\markright}
+\DoNotIndex{\month,\newcommand,\newcounter,\newenvironment}
+\DoNotIndex{\NeedsTeXFormat,\newdimen}
+\DoNotIndex{\newlength,\newpage,\nobreak,\noindent,\null,\number}
+\DoNotIndex{\numberline,\OldMakeindex,\OnlyDescription,\p@}
+\DoNotIndex{\pagestyle,\par,\paragraph,\paragraphmark,\parfillskip}
+\DoNotIndex{\penalty,\PrintChanges,\PrintIndex,\ProcessOptions}
+\DoNotIndex{\protect,\ProvidesClass,\raggedbottom,\raggedright}
+\DoNotIndex{\refstepcounter,\relax,\renewcommand}
+\DoNotIndex{\rightmargin,\rightmark,\rightskip,\rlap,\rmfamily}
+\DoNotIndex{\secdef,\selectfont,\setbox,\setcounter,\setlength}
+\DoNotIndex{\settowidth,\sfcode,\skip,\sloppy,\slshape,\space}
+\DoNotIndex{\symbol,\the,\trivlist,\typeout,\tw@,\undefined,\uppercase}
+\DoNotIndex{\usecounter,\usefont,\usepackage,\vfil,\vfill,\viiipt}
+\DoNotIndex{\viipt,\vipt,\vskip,\vspace}
+\DoNotIndex{\wd,\xiipt,\year,\z@}
+%    \end{macrocode}
+%    Generate an index using linenumbers
+%    \begin{macrocode}
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+%    \end{macrocode}
+%    Retrieve date and version information from the file
+%    \begin{macrocode}
+\GetFileInfo{octavo.drv}
+%    \end{macrocode}
+%    \begin{macrocode}
+\begin{document}
+\DocInput{octavo.dtx}
+\PrintIndex
+\end{document}
+%</driver>
+%    \end{macrocode}
+% \fi
+%
+% \title{The Octavo Package}
+% \author{Stefan A. Revets}
+% \date{Version \fileversion, \filedate}
+% \maketitle
+% \tableofcontents
+%
+% \section{Introduction}
+%
+% Donald Knuth developed \TeX\ because of the dissatisfaction he felt
+% with the commercial typesetting of his books `The Art of Computer
+% programming'~\cite{knuth98}. The program grew into a typesetting system, with 
+% a great deal of attention and ingenuity devoted to the calculations of the
+% placement of letters, words and paragraphs on a page. More people began
+% to use \TeX, and, with the advent of \LaTeX, ready-made class files
+% became part of the system. These style files tend to show off the
+% capabilities of the system, rather than conform to good design, or, as
+% Philip Taylor~\cite{taylor98,taylor99} put it `\ldots all of which shriek 
+% ``\TeX'' from every page'.
+%
+% Class files have been proposed and are available from CTAN which give the more
+% fastidious user the means with which to moderate at least some of the excesses 
+% of the standard \LaTeX\ styles. The KOMA package is a good example, and so
+% is the excellent Memoir class of Peter Wilson~\cite{wilson01}. The manual
+% of this package is a worthwhile read, especially since works on design and
+% style in book making are not all that easy to obtain.
+%
+% \subsection{Background}
+%
+% To \emph{make} a book is an interesting and somewhat involved 
+% process~\cite{town}. The text is set in type and printed on paper, the pages
+% are gathered and folded into signatures, and these are then bound and covered.
+%
+% The printing is done on large sheets of paper, which may have to be cut before
+% hey are folded into signatures. These are passed on to the the bookbinder who
+% sews the signatures into the book proper. As is so often the case with
+% venerable crafts, a florid terminology developed which facilitated contacts
+% between the guilds of printers and binders, while at the same time inspiring
+% some sort of grudging respect in the uninitiated, keeping them at bay.
+%
+% The sheets of paper, the broadsides, came in a limited number of more or less
+% standard sizes. These sheets are known under the names Foolscap, Crown, 
+% Post, Demy, Medium, Royal, Super Royal and Imperial. Folding the sheets
+% adds another set of terms: a single fold yields a Folio, a double fold a
+% Quarto, a triple fold an Octavo and so on. Hence, the combination of a
+% sheetname and the number of folds denotes a particular and precise size of
+% the book~\cite{town,williamson66}, for example, a crown octavo measures
+% 191x127~mm.
+%
+% Jan Tschichold devoted a lifetime to the design and production of books. 
+% Fortunately, he wrote many of his views down. Later in life, he assembled 
+% his findings in an overview~\cite{tschichold87}, discussing in a more
+% coherent, concentrated fashion the questions which face anyone wishing to
+% make a book. Of particular interest is his analysis of size and proportions of
+% page, text and margins. Through his own historical investigations, he made, 
+% and continues to make, a very strong and convincing case against the more
+% `modern' tendency of making squarish books. His elegant, eloquent and well
+% illustrated discourse guides us away from the ugliness of the convenient but
+% rather square A format (proportion 1:1.414) back to the more rectangular
+% formats with  proportions tending towards the Golden  Ratio (from 1:1.5 to
+% 1:1.618). It is certainly no accident that the classical sheets of paper
+% traditionally used in the printing of books show proportions which fall very
+% nicely within this range. 
+%
+% Tschichold analysed the size and disposition of the text block relative
+% to the page as well. By 1953, he published his discovery of the late gothic 
+% workshop secrets of determining the margins on a page.
+% Rosarivo~\cite{rosarivo61}confirmed this determination through his own, 
+% independent discovery of a different method which happily yielded the same 
+% results. Rosarivo's method is very easy to use and implement automatically:
+% divide the height and width of the page into an equal number, assign one part
+% to make up inner and upper margin, and two parts to make up outer and lower
+% margin, with the remainder defining the area available for printing the body
+% text.
+%
+% The amount of leading between lines of print depends on the nature of the
+% fount, its size, and the length of the line. Also, it should remain fixed for
+% the entire text, yielding a constant, regular grid of lines. Tschichold
+% discussed the leading of lines of text in some detail, and similar views can 
+% be found in Williamson's book~\cite{williamson66}.
+%
+% It should be clear by now that the standard book class included in \LaTeX\
+% requires a fair amount of adjustment to reflect more closely the design
+% principles just highlighted. The Octavo class is an attempt to provide
+% such a class file.
+%
+% \subsection{Rationale}
+%
+% The Octavo class is in essence a modification of the standard \LaTeX\ book
+% class, with a similar, limited amount of options and choices. These 
+% limitations are there because a number of inbuilt choices have been made on 
+% the basis of design principles and guidelines garnered from a variety of
+% authors and books. The class is christened Octavo because its express
+% aim is to implement many of these classical design elements. 
+% 
+% First of all, the option of page sizes are the classical octavo sizes. The
+% four smallest ones, i.e., foolscap, crown, post and largepost can be made
+% to fit two by two on A4 paper, allowing one to produce books in these formats
+% on printers routinely available.
+%
+% The size of the margins follows the analysis by Tschichold, but instead of
+% adopting the 6:9 ratio of division of the page (which yields only a 44\%
+% covering of a page by text), a 7:10 ratio is here implemented (yielding 
+% a 49\% cover of a page by text).
+%
+% Including a title page is very necessary when making a book, but the way in
+% which to do this is not as straightforward a matter as that may seem at first.
+% Title pages (plural) are much better when they are treated, and made, as
+% an integral part of the endpapers. When binding (good) books, endpapers
+% fulfill a functional and aesthetical role, and a separate folio bearing the
+% titling, adds to the strength, and beauty, of the endpapers~\cite{town}.
+%
+% Ideally, a separate folio should be made, bearing on the first recto page the
+% bastard title, on the verso possibly a frontispiece, or failing something
+% suitable, left blank. The next recto bears title, author, publisher and
+% the like, and the final verso provides space for the biblio or imprint. 
+% From a design perspective, it is not really feasible, nor desirable, to
+% lay down hard and fast rules for the organisation or the placement of the
+% various elements needed on a titlepage. In practice, it is much easier 
+% to do this as a separate document, especially when the text is to be
+% organised into signatures.
+%
+% An attempt is made here to try and maintain a uniform printing grid across 
+% the text. Amongst the \TeX\ algorithms, Knuth developed a set with the aim of
+% keeping the overall text block on each page the same size. If necessary, this
+% means allowing the change of spacing between paragraphs, around floating
+% objects, or indeed the leading within a paragraph. To counteract this 
+% behaviour completely would require a rewriting of part of the \TeX\ code,
+% which really is too daunting a task. However, it seems possible, through a
+% judicious setting of parameters, lengths and sizes, almost to achieve the
+% same result. In principle, the octavo class will maintain the regularity
+% of the grid within the text body, i.e., the leading should remain constant,
+% and successive paragraphs should not become separated by extra space. 
+% Adjustments, if and when they become necessary, will be made to the spacing 
+% around headings, lists and floats. Nevertheless, there will be times when
+% the actual text, the parameters defined by the octavo class, and the \TeX\
+% kernel will conspire to produce truly horrible results. Such misfortunes call
+% for direct intervention, or, the user willing, suggestions of improving the
+% definitions of the parameters proposed here for the octavo class. 
+%
+% \subsection{Some notes on making books with octavo}
+%
+% Thanks to excellent works on bookbinding such as the book by Lawrence 
+% Town~\cite{town}, the physical making of books lies well within reach of
+% anyone caring to make the effort. Thanks to a number of additional programs,
+% also available from CTAN, it is a straightforward matter to organise and print 
+% out a text in signatures. Here are some of the means which have proved to be
+% both useful and effective.
+%
+% As already mentioned, the formats foolscap, crown, post and largepost can be
+% made to sit on an A5 page. This means that four pages can be put on a single
+% A4 sheet, a set of which can be made to form a signature. To do so requires 
+% a few careful but simple adjustments.
+%
+% A problem comes up with the imposition of the textpages on an A4 sheet. The
+% four formats mentioned are all narrower than an A5 sheet, and hence extra 
+% space is left protruding at the outer margins. This is not a problem with the
+% odd-numbered pages, as it is their inner margin which is made to coincide with
+% the inner margin of the A5 sheet. However, the even-numbered pages have their 
+% outer margin made to coincide with the outer margin of the A5 sheet, the 
+% latter of course being too wide. What should happen is to have the inner 
+% margin of the even-numbered sheet coincide with the inner margins of the A5
+% sheet. The simplest solution is to add a single line to the preamble of the
+% document: |\addtolength{\evensidemargin}{148.5mm-\paperwidth}|, rather than
+% try and reposition only the even-numbered pages with dvidvi, dvips, and the 
+% like.
+%
+% Organising the pages into signatures can be done quite easily. With dvips:
+% \begin{enumerate}
+%     \item dvips -ta5 \meta{file}
+%     \item psbook -s16 \meta{file}.ps \meta{file}.tmp
+%     \item psnup -pa4 -Pa5 -l -2 -s1.0 \meta{file}.tmp \meta{file}.ps
+% \end{enumerate}
+% or with dvihplj or similar, using the switches:\\
+% |prthpljh| \meta{file} |+columns:2 +rows:1 +section-size:4|\\
+% |+full-last-section +page-width:148.5mm +page-height:210mm|\\ 
+% |+landscape-mode +double-sided:odd[even]|
+%
+% These sets of commands and switches yield signatures made up of 16 pages on 4 
+% sheets. Such an arrangement is very effective and handy when binding the
+% book. It may be necessary to instruct the printer to shift each page a little
+% on the sheet to ensure perfect register, and a little experimenting may be
+% called for.
+%
+% \subsection{Acknowledgements}
+% Octavo is a modification of |classes.dtx| written by Leslie Lamport (1992),
+% Frank Mittelbach (1994-97) and Johannes Braams (1994-97). As can be seen
+% from the code, my own input is restricted to a tweaking of some parameters
+% and true credit is due to Lamport, Mittelbach and Braams for their
+% monumental efforts.
+%
+% \begin{thebibliography}{16}
+%
+% \bibitem{knuth98} Knuth,~D. 1998. \emph{Digital Typography}. CSLI 
+% Publications, Stanford.
+%
+% \bibitem{rosarivo61} Rosarivo,~R. 1961. \emph{Divina proportio typographica}. 
+% Scherpe, Krefeld.
+%
+% \bibitem{taylor98} Taylor,~P. 1998. \emph{Book design for \TeX\ users, Part 1: 
+% Theory.} TUGBoat, 19:65--74.
+%
+% \bibitem{taylor99} Taylor,~P. 1999. \emph{Book design for \TeX\ users, Part 2:
+% Practice.} TUGBoat, 20:378--389.
+%
+% \bibitem{town} Town,~L. \emph{Bookbinding by hand.} Faber \& Faber, London.
+%
+% \bibitem{tschichold87} Tschichold,~ J. 1987. \emph{Ausgew\"{a}hlte Aufs\"{a}tze
+% \"{u}ber Fragen der Gestalt des Buches und der Typographie}. Birkh\"{a}user
+% Verlag, Basel.
+%
+% \bibitem{williamson66} Williamson,~H. 1966. \emph{Methods of book design.} Oxford 
+% University Press, Oxford.
+%
+% \bibitem{wilson01} Wilson,~P. 2001. \emph{The Memoir class for configurable
+% typesetting.} CTAN. |macros\latex\contrib\memoir|
+%
+% \end{thebibliography}
+% \StopEventually{}
+%
+%
+% \section{Preliminaries}
+%    We begin by declaring a number of commands, parameters and control 
+%    sequences which will be used later on. 
+% \begin{macro}{\@ptsize}
+%    The controlsequence stores the second digit of the pointsize in which
+%    the body of the text will be typeset.
+%    \begin{macrocode}
+%<*octavo>
+\newcommand\@ptsize{}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\if@restonecol}
+%    In texts printed in two columns, this switch is used to remember to
+%    switch back to two column if there has been a temporary change to single
+%    column mode.
+%    \begin{macrocode}
+\newif\if@restonecol
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\if@titlepage}
+%    Usually, a titlepage is produced with a book. However, if a set of
+%    endpapers is made, titlepages can be made separately from the body 
+%    of the book, and it is useful to omit the production of a titlepage.
+%    \begin{macrocode}
+\newif\if@titlepage
+\@titlepagetrue
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\if@openright}
+% \begin{macro}{\if@openbib}
+%    Another set of switches, to indicate if new chapters must start on a
+%    right-hand page. Normally they do, but novels and the like may well
+%    benefit from having new chapters start on either side.
+%    \begin{macrocode}
+\newif\if@openright
+\newif\if@openbib
+\@openbibfalse
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\if@mainmatter}
+%    A switch to indicate when we are processing the main material of the book.
+%    \begin{macrocode}
+\newif\if@mainmatter
+\@mainmattertrue
+%    \end{macrocode}
+% \end{macro}
+%
+% \section{Class options}
+% \subsection{Declaring options}
+%    The options available to the octavo class are essentially the same as those
+%    defined for the standard book class. What is different and new is a set of
+%    papersize options.
+%
+% \begin{macro}{\paperheight}
+% \begin{macro}{\paperwidth}
+%    We begin with the papersizes. These are largely the traditional octavo
+%    sizes. The option |largepost| is slightly different: it is an example
+%    of Tschichold's pentagon-based proportion (1:1.538) applied to a page
+%    height of an a5 page. 
+%    \begin{macrocode}
+\DeclareOption{foolscap}
+    {\setlength\paperheight{171mm}%
+    \setlength\paperwidth{108mm}}
+\DeclareOption{crown}
+    {\setlength\paperheight{191mm}%
+    \setlength\paperwidth{127mm}}
+\DeclareOption{post}
+    {\setlength\paperheight{194mm}%
+    \setlength\paperwidth{122mm}}
+\DeclareOption{largepost}
+    {\setlength\paperheight{210mm}%
+    \setlength\paperwidth{137mm}}
+\DeclareOption{demy}
+    {\setlength\paperheight{222mm}%
+    \setlength\paperwidth{143mm}}
+\DeclareOption{medium}
+    {\setlength\paperheight{229mm}%
+    \setlength\paperwidth{146mm}}
+\DeclareOption{royal}
+    {\setlength\paperheight{254mm}%
+    \setlength\paperwidth{159mm}}
+\DeclareOption{superroyal}
+    {\setlength\paperheight{267mm}%
+    \setlength\paperwidth{171mm}}
+\DeclareOption{imperial}
+    {\setlength\paperheight{279mm}%
+    \setlength\paperwidth{191mm}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@ptsize}
+%    The choice of type size is kept through the last digit of the size
+%    in |\@ptsize|. There are apparently good, or at least, historical
+%    reasons for doing so. Since this may well ensure compatibility with
+%    other packages, the method is maintained here.
+%    \begin{macrocode}
+\DeclareOption{10pt}{\renewcommand\@ptsize{0}}
+\DeclareOption{11pt}{\renewcommand\@ptsize{1}}
+\DeclareOption{12pt}{\renewcommand\@ptsize{2}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{twoside}
+%    When printing books, two-sided printing is the norm. This
+%    means that we have to set the |if@mparswitch| to get any margin
+%    paragraphs into the outside margin.
+%    \begin{macrocode}
+\DeclareOption{twoside}{\@twosidetrue \@mparswitchtrue}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{draft}
+%    When preparing a text for final tweaking, the |draft| mode may come in
+%    handy, as it will show on the page where overfull boxes appear.
+%    \begin{macrocode}
+\DeclareOption{draft}{\setlength\overfullrule{5pt}}
+\DeclareOption{final}{\setlength\overfullrule{0pt}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{titlepage}
+%    Having argued that it is much better to deal with the titlepage separately
+%    from the book itself, we do leave the choice of a titlepage as integral 
+%    part of the book as an option. However, the default will be to have no
+%    titlepage.
+%    \begin{macrocode}
+\DeclareOption{titlepage}{\@titlepagetrue}
+\DeclareOption{notitlepage}{\@titlepagefalse}
+%    \end{macrocode}
+% \end{macro}
+% 
+% \begin{macro}{openright}
+%    New chapters normally start on a right-hand page in books, but novels, or
+%    poetry books may well be better off by allowing chapters to begin on either
+%    side.
+%    \begin{macrocode}
+\DeclareOption{openright}{\@openrighttrue}
+\DeclareOption{openany}{\@openrightfalse}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{twocolumn}
+%    Single or double column arrangement of the body text is chosen with this
+%    option. The choice does require some care, as the width of a line of text
+%    that can be read comfortably depends on the total number of ens, and this
+%    is a function of the fount, the fount size and the text width. The larger
+%    formats almost always benefit from being typeset in two columns.
+%    \begin{macrocode}
+\DeclareOption{onecolumn}{\@twocolumnfalse}
+\DeclareOption{twocolumn}{\@twocolumntrue}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{leqno}
+% \begin{macro}{fleqn}
+%    When including mathematical formul\ae , equation numbers are usually
+%    placed to the right, but the |leqno| option places them on the left of the
+%    the equation. The |fleqn| option redefines the math display environment so
+%    that equations are typeset flush with the left margin and indented by
+%    |\mathindent| from the prevailing left margin.
+%    \begin{macrocode}
+\DeclareOption{leqno}{\input{leqno.clo}}
+\DeclareOption{fleqn}{\input{fleqn.clo}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{openbib}
+%    The format of the bibliography is set to an `open' one, that is, each block
+%    starts on a new line, with successive lines in a block indented by the
+%    amount defined by |\bibindent|.
+%    \begin{macrocode}
+\DeclareOption{openbib}{\@openbibtrue}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Executing options}
+%    Here, default options are executed in order to initialise a number of
+%    variables. The |\ProcessOptions| command then ensures the execution of the
+%    code for every option declared and for which the user included an option
+%    in the |\documentclass| command.
+%    \begin{macrocode}
+\ExecuteOptions{crown,10pt,twoside,final,notitlepage,openright,onecolumn}
+\ProcessOptions
+%    \end{macrocode}
+%    After the execution of all the options, we can now load the class option
+%    file which contains all the size dependent code.
+%    \begin{macrocode}
+\input{oct1\@ptsize.clo}
+%</octavo>
+%    \end{macrocode}
+%
+% \section{Document layout}
+% \subsection{Fount sizes}
+%    The user has access to a number of commands which change the size of
+%    the fount, relative to the `main' size used for the bulk of the text.
+%    These |\size| commands issue a 
+%    |\@setfontsize||\size|\meta{font-size}\meta{baselineskip} where:
+%    \begin{description}
+%    \item{\meta{font-size}} The absolute size of the fount to use from
+%        now on.
+%    \item{\meta{baselineskip}} The normal value of |\baselineskip|
+%        for the size of the fount selected. (The actual value will be
+%        |\baselinestretch| * \meta{baselineskip}.)
+%    \end{description}
+%
+%    A number of commands, defined in the \LaTeX\ kernel, shorten the
+%    following  definitions and are used throughout. These are:
+%    \begin{center}
+%    \begin{tabular}{ll@{\qquad}ll@{\qquad}ll}
+%    \verb=\@vpt= & 5 & \verb=\@vipt= & 6 & \verb=\@viipt= & 7 \\
+%    \verb=\@viiipt= & 8 & \verb=\@ixpt= & 9 & \verb=\@xpt= & 10 \\
+%    \verb=\@xipt= & 10.95 & \verb=\@xiipt= & 12 & \verb=\@xivpt= & 14.4\\
+%    \ldots
+%    \end{tabular}
+%    \end{center}
+%
+% \begin{macro}{\normalsize}
+% \begin{macro}{\@normalsize}
+%    The user command to obtain the `main' size is |\normalsize|. \LaTeX\
+%    uses |\@normalsize| when referring to the main size and maintains this
+%    value even if |\normalsize| is redefined. The |\normalsize| macro also
+%    sets values for |\abovedisplayskip|, |\abovedisplayshortskip| and 
+%    |\belowdisplayshortskip|.
+%    \begin{macrocode}
+%<*10pt|11pt|12pt>
+\renewcommand\normalsize{%
+%<*10pt>
+    \@setfontsize\normalsize\@xpt\@xiipt
+    \abovedisplayskip 12\p@ \@plus 2\p@ \@minus 2\p@
+    \abovedisplayshortskip \z@ \@plus 3\p@
+    \belowdisplayshortskip 6\p@ \@plus 3\p@ \@minus 3\p@
+%</10pt>
+%<*11pt>
+    \@setfontsize\normalsize\@xipt{13.2}%
+    \abovedisplayskip 13.2\p@ \@plus 3\p@ \@minus 3\p@
+    \abovedisplayshortskip \z@ \@plus 3\p@
+    \belowdisplayshortskip 6.6\p@ \@plus 3\p@ \@minus 3\p@
+%</11pt>
+%<*12pt>
+    \@setfontsize\normalsize\@xiipt\@xivpt
+    \abovedisplayskip 14.4\p@ \@plus 3\p@ \@minus 3\p@
+    \abovedisplayshortskip \z@ \@plus 3\p@
+    \belowdisplayshortskip 7.2\p@ \@plus 3\p@ \@minus 3\p@
+%</12pt>
+%    \end{macrocode}
+%    The |\belowdisplayskip| equals |\abovedisplayskip|. The parameters of
+%    the first-level list are always given by |\@listI|.
+%    \begin{macrocode}
+    \belowdisplayskip \abovedisplayskip
+    \let\@listi\@listI}
+%    \end{macrocode}
+%    Initially, the |normalsize| fount is put into use for the document
+%    \begin{macrocode}
+\normalsize
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\small}
+%    Similar to |\normalsize|
+%    \begin{macrocode}
+\newcommand\small{%
+%<*10pt>
+    \@setfontsize\small\@ixpt\@xipt%
+    \abovedisplayskip 11\p@ \@plus 2\p@ \@minus2\p@
+    \abovedisplayshortskip \z@ \@plus 3\p@
+    \belowdisplayshortskip 5.5\p@ \@plus 2\p@ \@minus 2\p@
+    \def\@listi{\leftmargin\leftmargini
+        \topsep 5.5\p@ \@plus 2\p@ \@minus 2\p@
+        \parsep  \z@
+        \itemsep \z@}%
+%</10pt>
+%<*11pt>
+    \@setfontsize\small\@xpt\@xiipt
+    \abovedisplayskip 12\p@ \@plus 2\p@ \@minus 2\p@
+    \abovedisplayshortskip \z@ \@plus 3\p@
+    \belowdisplayshortskip 6\p@ \@plus 3\p@ \@minus 3\p@
+    \def\@listi{\leftmargin\leftmargini
+        \topsep 6\p@ \@plus 2\p@ \@minus 2\p@
+        \parsep  \z@
+        \itemsep \z@}%
+%</11pt>
+%<*12pt>
+    \@setfontsize\small\@xipt{13.2}%
+    \abovedisplayskip 13.2\p@ \@plus 3\p@ \@minus 3\p@
+    \abovedisplayshortskip \z@ \@plus 3\p@
+    \belowdisplayshortskip 6.6\p@ \@plus 3\p@ \@minus 3\p@
+    \def\@listi{\leftmargin\leftmargini
+        \topsep 6.6\p@ \@plus 3\p@ \@minus 3\p@
+        \parsep  \z@
+        \itemsep \z@}%
+%</12pt>
+    \belowdisplayskip \abovedisplayskip}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\footnotesize}
+%    Again, very similar to |\normalsize|
+%    \begin{macrocode}
+\newcommand\footnotesize{%
+%<*10pt>
+    \@setfontsize\footnotesize\@viiipt{9.5}%
+    \abovedisplayskip 9.5\p@ \@plus 2\p@ \@minus 2\p@
+    \abovedisplayshortskip \z@ \@plus 2\p@
+    \belowdisplayshortskip 5\p@ \@plus 2\p@ \@minus 2\p@
+    \def\@listi{\leftmargin\leftmargini
+        \topsep  5\p@ \@plus 2\p@ \@minus 2\p@
+        \parsep  \z@
+        \itemsep \z@}%
+%</10pt>
+%<*11pt>
+    \@setfontsize\footnotesize\@ixpt\@xipt%
+    \abovedisplayskip 11\p@ \@plus 2\p@ \@minus 2\p@
+    \abovedisplayshortskip \z@ \@plus 2\p@
+    \belowdisplayshortskip 5.5\p@ \@plus 2\p@ \@minus 2\p@
+    \def\@listi{\leftmargin\leftmargini
+        \topsep 5.5\p@ \@plus 2\p@ \@minus 2\p@
+        \parsep  \z@
+        \itemsep \z@}%
+%</11pt>
+%<*12pt>
+    \@setfontsize\footnotesize\@xpt\@xiipt
+    \abovedisplayskip 12\p@ \@plus 2\p@ \@minus 2\p@
+    \abovedisplayshortskip \z@ \@plus 3\p@
+    \belowdisplayshortskip 6\p@ \@plus 3\p@ \@minus 3\p@
+    \def\@listi{\leftmargin\leftmargini
+        \topsep 6\p@ \@plus 2\p@ \@minus 2\p@
+        \parsep  \z@
+        \itemsep \z@}%
+%</12pt>
+    \belowdisplayskip \abovedisplayskip}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\scriptsize}
+% \begin{macro}{\tiny}
+% \begin{macro}{\large}
+% \begin{macro}{\Large}
+% \begin{macro}{\LARGE}
+% \begin{macro}{\huge}
+% \begin{macro}{\Huge}
+%    These macros select new fountsizes, but leave display and lists alone.
+%    \begin{macrocode}
+%<*10pt>
+\newcommand\scriptsize{\@setfontsize\scriptsize\@viipt\@viiipt}
+\newcommand\tiny{\@setfontsize\tiny\@vpt\@vipt}
+\newcommand\large{\@setfontsize\large\@xiipt{14}}
+\newcommand\Large{\@setfontsize\Large\@xivpt{18}}
+\newcommand\LARGE{\@setfontsize\LARGE\@xviipt{22}}
+\newcommand\huge{\@setfontsize\huge\@xxpt{25}}
+\newcommand\Huge{\@setfontsize\Huge\@xxvpt{30}}
+%</10pt>
+%<*11pt>
+\newcommand\scriptsize{\@setfontsize\scriptsize\@viiipt{9.5}}
+\newcommand\tiny{\@setfontsize\tiny\@vipt\@viipt}
+\newcommand\large{\@setfontsize\large\@xiipt{14}}
+\newcommand\Large{\@setfontsize\Large\@xivpt{18}}
+\newcommand\LARGE{\@setfontsize\LARGE\@xviipt{22}}
+\newcommand\huge{\@setfontsize\huge\@xxpt{25}}
+\newcommand\Huge{\@setfontsize\Huge\@xxvpt{30}}
+%</11pt>
+%<*12pt>
+\newcommand\scriptsize{\@setfontsize\scriptsize\@viiipt{9.5}}
+\newcommand\tiny{\@setfontsize\tiny\@vipt\@viipt}
+\newcommand\large{\@setfontsize\large\@xivpt{18}}
+\newcommand\Large{\@setfontsize\Large\@xviipt{22}}
+\newcommand\LARGE{\@setfontsize\LARGE\@xxpt{25}}
+\newcommand\huge{\@setfontsize\huge\@xxvpt{30}}
+\let\Huge=\huge
+%</12pt>
+%</10pt|11pt|12pt>
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \subsubsection{Fount changes}
+% Fount changes should really be done with the \LaTeXe\ commands, but quite
+% a few packages rely on the older versions of these commands. Therefore, for
+% the sake of compatibility, the old commands are retained.
+% \begin{macro}{\rm}
+% \begin{macro}{\tt}
+% \begin{macro}{\sf}
+%    These are commands to change the fount family.
+%    \begin{macrocode}
+%<*octavo>
+\DeclareOldFontCommand{\rm}{\normalfont\rmfamily}{\mathrm}
+\DeclareOldFontCommand{\sf}{\normalfont\sffamily}{\mathsf}
+\DeclareOldFontCommand{\tt}{\normalfont\ttfamily}{\mathtt}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\bf}
+% The command to change to the bold series
+%    \begin{macrocode}
+\DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\sl}
+% \begin{macro}{\it}
+% \begin{macro}{\sc}
+% And finally, the commands to change the shape of the founts.
+%    \begin{macrocode}
+\DeclareOldFontCommand{\sl}{\normalfont\slshape}{\@nomath\sl}
+\DeclareOldFontCommand{\it}{\normalfont\itshape}{\mathit}
+\DeclareOldFontCommand{\sc}{\normalfont\scshape}{\@nomath\sc}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \subsection{Paragraphs}
+%    The parameters which control \TeX 's behaviour when typesetting
+%    paragraphs receive a bit of a tweak here. Contrary to the usual
+%    behaviour of modifying the grid with glue when difficulties are
+%    encountered with vertical space, here we shall try to counteract
+%    these tendencies and enforce as much as possible uniformity of the 
+%    grid of lines.
+% \begin{macro}{\lineskip}
+% \begin{macro}{\normallineskip}
+%    These two parameters influence \TeX when two lines come too close.
+%    \begin{macrocode}
+\setlength\lineskip{1\p@}
+\setlength\normallineskip{1\p@}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\baselinestretch}
+%    Used by \TeX\ as a multiplier for |\baselineskip|. \emph{Default}
+%    behaviour is not to stretch the baselines. If this command does not
+%    resolve to `empty', any |plus| or |minus| part in the specification
+%    of |\baselineskip| is ignored.
+%    \begin{macrocode}
+\renewcommand\baselinestretch{}
+%</octavo>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\parskip}
+%    Extra vertical space can be put between successive paragraphs with
+%    |\parskip| as it is usually defined as a zero rubber length. Here, it 
+%    is set to zero, without rubber extention, hopefully helping to maintain
+%    the regular grid. 
+%    \begin{macrocode}
+%<*10pt|11pt|12pt>
+\setlength\parskip{0\p@}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\parindent}
+%    The value of |\parindent| was set to a variety of sizes depending on the
+%    fount size and whether single- or double-column is in use. Using the
+%    |em| measure relates the indent to the fount in use, and there is little
+%    merit in having a marginally wider indent when typesetting in a single 
+%    column.
+%    \begin{macrocode}
+\setlength\parindent{1em}
+%</10pt|11pt|12pt>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@lowpenalty}
+% \begin{macro}{\@medpenalty}
+% \begin{macro}{\@highpenalty}
+%    Command such as |\nopagebreak| or |\nolinebreak| put in penalties to
+%    discourage the placement of these breaks. Depending on the argument
+%    with which they are put, a low, medium or high penalty is chosen.
+%    \begin{macrocode}
+%<*octavo>
+\@lowpenalty 51
+\@medpenalty 151
+\@highpenalty 301
+%</octavo>
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+%
+% \subsection{Page layout}
+%    Here the class file deviates more noticably from the standard book class.
+%    To begin with, all dimensions are measured from the true upper left corner 
+%    of the page. Dimensions and placement of the text area is directly related
+%    to and determined as proportions of the dimensions of the page.
+%
+% \changes{1.2a}{2007/03/07}{Removed changes to hoffset and voffset to maintain 
+%               compatibility with other class files, notably crop}
+%
+% \subsubsection{Vertical spacing}
+%
+% \begin{macro}{\headheight}
+% \begin{macro}{\headsep}
+% \begin{macro}{\topskip}
+%    The |\headheight| is the height of the box containing the running head.
+%    The |\headsep| is the distance between the bottom of the box with the
+%    running head and the top of the text. The |\topskip| is the
+%    |\baselineskip| for the first line on the page.
+%    \begin{macrocode}
+\setlength\headheight{12\p@}
+%<10pt>\setlength\headsep{6\p@}
+%<11pt>\setlength\headsep{7\p@}
+%<12pt>\setlength\headsep{8\p@}
+%<10pt>\setlength\topskip{10\p@}
+%<11pt>\setlength\topskip{11\p@}
+%<12pt>\setlength\topskip{12\p@}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\footskip}
+%    This is the distance from the baseline of the box containing the running
+%    foot to the bottom of the text.
+%    \begin{macrocode}
+%<10pt>\setlength\footskip{25\p@}
+%<11pt>\setlength\footskip{27.5\p@}
+%<12pt>\setlength\footskip{30\p@}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\maxdepth}
+%    The |\maxdepth| register has a function similar to that of |\topskip|. The
+%    register |\@maxdepth| should always contain a copy of |\maxdepth|, and this
+%    is ensured by setting it when issuing the command |\begin{document}|. In
+%    \TeX\ and \LaTeX2.09 it was fixed at |4pt|. Following \LaTeXe, it now
+%    depends on the typesize, and calculation simplifies it to half the topskip.
+%    \begin{macrocode}
+\setlength\maxdepth{0.5\topskip}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsubsection{Text dimensions}
+%    Here we implement the proposals and calculations by Tschichold. In
+%    particular, the proportions of text to page are set so that 49\% of
+%    the page area is covered by the text block.
+%
+% \begin{macro}{\topmargin}
+%    The |\topmargin| is the distance between the top of the text block and
+%    the top of the box containing the running head. The running head is not
+%    part of the text block, and it goes into the top margin. As |\topmargin| 
+%    is measured from the top of the box, we have to correct for header height
+%    and header separation.
+%    By subtracting 1 inch, the effect of voffset is overcome.
+% \changes{1.2b}{2007/03/07}{Subtract 1 inch from |topmargin| to move textblock}
+%    \begin{macrocode}
+\setlength{\topmargin}{0.1\paperheight}
+    \addtolength{\topmargin}{-\headheight}
+    \addtolength{\topmargin}{-\headsep}
+    \addtolength{\topmargin}{-1in}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\textwidth}
+%    Define the width of the text block to 0.7 of the page width, and make
+%    calculations a little easier by adjusting the calculated width to a 
+%    whole number of points.
+%    \begin{macrocode}
+\setlength{\textwidth}{0.7\paperwidth}
+    \@settopoint\textwidth
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\textheight}
+%    The height of the text block itself is set to 0.7 times the page height. 
+%    This amount is then adjusted to ensure that a whole number of lines makes 
+%    up the text block, and does so exactly.
+%    \begin{macrocode}
+\setlength\@tempdima{0.7\paperheight}
+%    \end{macrocode}
+%    take away the first line, which is a bit shorter than the |\baselineskip|,
+%    \begin{macrocode}
+    \addtolength\@tempdima{-\topskip}
+%    \end{macrocode}
+%    this length may be very close, but just a little too small to accommodate 
+%    one more line, so we add a small amount,
+%    \begin{macrocode}
+    \addtolength\@tempdima{5\p@}
+%    \end{macrocode}
+%    and calculate the number of lines in this length,
+%    \begin{macrocode}
+    \divide\@tempdima\baselineskip
+    \@tempcnta=\@tempdima
+%    \end{macrocode}
+%    The correct textheight comes to the number of lines just calculated, 
+%    multiplied by the height of text lines, |\baselineskip|, and with the 
+%    addition of the |\topskip| we took away initially.
+%    \begin{macrocode}
+    \setlength\textheight{\@tempcnta\baselineskip}
+    \addtolength\textheight{\topskip}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsubsection{Margin dimensions}
+%     Now that we have set the size of the text block, the amount of space
+%     available for margins is set as well. The remaining white space is divided
+%     in a 1:2 ratio, hence the proportions between margins and text become 1:7:2.
+%
+% \begin{macro}{\evensidemargin}
+% \begin{macro}{\oddsidemargin}
+%    Since we are typesetting books, both even and odd side margins have to be
+%    set.
+% \changes{1.2c}{2007/03/07}{Subtract 1 inch from |oddsidemargin| and |evensidemargin|
+%          to move textblock}
+%    \begin{macrocode}
+\setlength{\evensidemargin}{0.2\paperwidth}
+\addtolength{\evensidemargin}{-1in}
+\setlength{\oddsidemargin}{0.1\paperwidth}
+\addtolength{\oddsidemargin}{-1in}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\marginparsep}
+% \begin{macro}{\marginparpush}
+%    The horizontal space between the text block and marginal notes is set by
+%    |\marginparsep|, while the minimal vertical separation between successive
+%    marginal notes is controlled by |\marginparpush|.
+%    \begin{macrocode}
+\if@twocolumn
+    \setlength\marginparsep{10\p@}
+\else
+%<10pt>\setlength\marginparsep{10\p@}
+%<11pt>\setlength\marginparsep{11\p@}
+%<12pt>\setlength\marginparsep{12\p@}
+\fi
+%<10pt|11pt>\setlength\marginparpush{5\p@}
+%<12pt>\setlength\marginparpush{7\p@}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\marginparwidth}
+%    The amount of space available for marginal notes is the outer margin.
+%    From this we have to substract the separation between notes and the text
+%    body, as well as another, marginal outer margin. In principle, marginal
+%    text could run up all the way to the outer margin, but this is both ugly
+%    and impractical for the book binder. Since the margins have to be cut, it
+%    is very wise to leave sufficient space: |30pt| seems a good minimum.
+%    \begin{macrocode}
+\setlength\@tempdima{\paperwidth}
+    \addtolength\@tempdima{-\textwidth}
+    \addtolength\@tempdima{-\oddsidemargin}
+    \addtolength\@tempdima{-\marginparsep}
+    \addtolength\@tempdima{-30\p@}
+    \setlength\marginparwidth{\@tempdima}
+    \@settopoint\marginparwidth
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsubsection{Footnotes}
+%
+% \begin{macro}{\footnotesep}
+%    The height of the strut placed at the beginning of every footnote. For
+%    each size, |\footnotesep| is set to the height of the corresponding
+%    |\footnotesize| strut, so there is no extra space between successive
+%    footnotes.
+%    \begin{macrocode}
+%<10pt>\setlength\footnotesep{6.65\p@}
+%<11pt>\setlength\footnotesep{7.7\p@}
+%<12pt>\setlength\footnotesep{8.4\p@}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\footins}
+%    The space between the last line of the main text and the top of the first
+%    footnote.
+%    \begin{macrocode}
+%<10pt>\setlength{\skip\footins}{9\p@ \@plus 4\p@ \@minus 2\p@}
+%<11pt>\setlength{\skip\footins}{10\p@ \@plus 4\p@ \@minus 2\p@}
+%<12pt>\setlength{\skip\footins}{11\p@ \@plus 4\p@ \@minus 2\p@}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsubsection{Float placement}
+%    Float placement parameters are given values by \LaTeXe, therefore any
+%    parameters which are not counters have to be (re)set with |\renewcommand|.
+% \begin{macro}{topnumber}
+%    The maximum number of floats allowed at the top of a page.
+%    \begin{macrocode}
+%<*octavo>
+\setcounter{topnumber}{2}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\topfraction}
+%    The maximum part of a text page that may be occupied by floats at the
+%    top of a page.
+%    \begin{macrocode}
+\renewcommand\topfraction{.7}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{bottomnumber}
+%    The equivalent of |topnumber|, but for the maximum number of floats
+%    allowed at the bottom of a page.
+%    \begin{macrocode}
+\setcounter{bottomnumber}{1}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\bottomfraction}
+%    The maximum part of a text page that may be occupied by floats at the
+%    bottom of a page.
+%    \begin{macrocode}
+\renewcommand\bottomfraction{.5}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{totalnumber}
+%    The maximum number of floats in total which may appear on a page.
+%    \begin{macrocode}
+\setcounter{totalnumber}{3}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\textfraction}
+%    The minimum part of a text page which has to be occupied by text.
+%    \begin{macrocode}
+\renewcommand\textfraction{.2}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\floatpagefraction}
+%    The minimum part of a page which has to be occupied by floating object
+%    before a `float page' is produced.
+%    \begin{macrocode}
+\renewcommand\floatpagefraction{.5}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{dbltopnumber}
+%    The maximum number of two-column floats which may appear at the top of
+%    a two-column text page.
+%    \begin{macrocode}
+\setcounter{dbltopnumber}{2}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\dbltopfraction}
+%    The maximum part of a two-column text page which may be occupied at the
+%    top by two-column floats.
+%    \begin{macrocode}
+\renewcommand\dbltopfraction{.7}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\dblfloatpagefraction}
+%    The minimum part of a page which has to be occupied by two-column floating
+%    objects before a `float page' is produced.
+%    \begin{macrocode}
+\renewcommand\dblfloatpagefraction{.5}
+%</octavo>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\floatsep}
+% \begin{macro}{\textfloatsep}
+% \begin{macro}{\intextsep}
+%    These parameters control the separation between a float object and the
+%    other objects on the same page. They are used in both single-column and
+%    double-column mode.
+%    \begin{description}
+%    \item{|\floatsep|} is the amount of space between adjacent floats moved to 
+%        the top or to the bottom of the text page.
+%    \item{|\textfloatsep|} is the amount of space between the main text and the
+%        floats at the top or at the bottom of the text page.
+%    \item{|\intextsep|} is the amount of space between in-text floats and the 
+%        text
+%    \end{description}
+%    \begin{macrocode}
+%<*10pt>
+\setlength\floatsep{12\p@ \@plus 2\p@ \@minus 2\p@}
+\setlength\textfloatsep{24\p@ \@plus 2\p@ \@minus 4\p@}
+\setlength\intextsep{12\p@ \@plus 2\p@ \@minus 2\p@}
+%</10pt>
+%<*11pt>
+\setlength\floatsep{13.2\p@ \@plus 2\p@ \@minus 2\p@}
+\setlength\textfloatsep{26\p@ \@plus 2\p@ \@minus 4\p@}
+\setlength\intextsep{13.2\p@ \@plus 2\p@ \@minus 2\p@}
+%</11pt>
+%<*12pt>
+\setlength\floatsep{14.4\p@ \@plus 2\p@ \@minus 2\p@}
+\setlength\textfloatsep{28\p@ \@plus 2\p@ \@minus 4\p@}
+\setlength\intextsep{14.4\p@ \@plus 4\p@ \@minus 2\p@}
+%</12pt>
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\dblfloatsep}
+% \begin{macro}{\dbltextfloatsep}
+%    In two-column mode, floats spanning the entire |\textwidth| are placed
+%    with the parameters |\dblfloatsep| and |\dbltextfloatsep| in control.
+%    \begin{description}
+%    \item{|\dblfloatsep|} is the amount of space between adjacent floats at the 
+%        top or at the bottom of the text page
+%    \item{|\dbltextfloatsep|} is the amount of space between the main text and 
+%        floats at the top or at the bottom of the text page.
+%    \end{description}
+%    \begin{macrocode}
+%<*10pt>
+\setlength\dblfloatsep{12\p@ \@plus 2\p@ \@minus 2\p@}
+\setlength\dbltextfloatsep{24\p@ \@plus 2\p@ \@minus 4\p@}
+%</10pt>
+%<*11pt>
+\setlength\dblfloatsep{12\p@ \@plus 2\p@ \@minus 2\p@}
+\setlength\dbltextfloatsep{26\p@ \@plus 2\p@ \@minus 4\p@}
+%</11pt>
+%<*12pt>
+\setlength\dblfloatsep{14\p@ \@plus 2\p@ \@minus 2\p@}
+\setlength\dbltextfloatsep{28\p@ \@plus 2\p@ \@minus 4\p@}
+%</12pt>
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@fptop}
+% \begin{macro}{\@fpsep}
+% \begin{macro}{\@fpbot}
+%    The layout of floating objects on separate, `float' pages is controlled by
+%    the parameters |\@fptop|, |\@fpsep| and |\@fpbot|. These parameters insert
+%    stretchable amounts of white space between the top and the bottom of the  
+%    page and the floats, while |\@fpsep| inserts white space between adjacent
+%    floats. In order to ensure that any remaining space is filled, at least one
+%    of |\@fptop| or |\@fpbot| has to contain stretchable space.
+%    \begin{macrocode}
+%<*10pt>
+\setlength\@fptop{0\p@ \@plus 1fil}
+\setlength\@fpsep{10\p@ \@plus 2fil}
+\setlength\@fpbot{0\p@ \@plus 1fil}
+%</10pt>
+%<*11pt>
+\setlength\@fptop{0\p@ \@plus 1fil}
+\setlength\@fpsep{11\p@ \@plus 2fil}
+\setlength\@fpbot{0\p@ \@plus 1fil}
+%</11pt>
+%<*12pt>
+\setlength\@fptop{0\p@ \@plus 1fil}
+\setlength\@fpsep{12\p@ \@plus 2fil}
+\setlength\@fpbot{0\p@ \@plus 1fil}
+%</12pt>
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@dblfptop}
+% \begin{macro}{\@dblfpsep}
+% \begin{macro}{\@dblfpbot}
+%    The layout of floating objects in double-column mode on separate `float'
+%    pages is handled in a similar way to that used for single-column mode
+%    pages just described.
+%    \begin{macrocode}
+%<*10pt>
+\setlength\@dblfptop{0\p@ \@plus 1fil}
+\setlength\@dblfpsep{10\p@ \@plus 2fil}
+\setlength\@dblfpbot{0\p@ \@plus 1fil}
+%</10pt>
+%<*11pt>
+\setlength\@dblfptop{0\p@ \@plus 1fil}
+\setlength\@dblfpsep{11\p@ \@plus 2fil}
+\setlength\@dblfpbot{0\p@ \@plus 1fil}
+%</11pt>
+%<*12pt>
+\setlength\@dblfptop{0\p@ \@plus 1fil}
+\setlength\@dblfpsep{12\p@ \@plus 2fil}
+\setlength\@dblfpbot{0\p@ \@plus 1fil}
+%</12pt>
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+%
+% \subsection{Page styles}
+%    A number of page styles are defined by the class file. Of course, more
+%    elaborate styles can be designed using the |fancyheadings| package, but
+%    once again, here we opt for the more restrained and discrete means of
+%    guiding the reader. The page styles included in the standard \LaTeX\ book
+%    class are either |headings|, |plain|, |empty| or |myheadings|. The standard
+%    |headings| is here modified a little, so that the folios now appear 
+%    centered at the foot of the page.
+%
+%    The page style \emph{style} is defined by defining the command |\ps@style|.
+%    Definitions should be local only, and any stray spaces in definitions had 
+%    better be avoided as they may turn up unexpectedly in the output.
+%
+% \begin{macro}{\@evenhead}
+% \begin{macro}{\@oddhead}
+% \begin{macro}{\@evenfoot}
+% \begin{macro}{\@oddfoot}
+%    The |\ps@style| commands define the macros |\@evenhead|, |\@evenfoot| and
+%    their odd-page equivalents to define the running head and foot. The  
+%    contents are produced inside a |\hbox| of width |\textwidth|.
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \subsubsection{Marking conventions}
+%    The making of headings reflecting the sectioning commands, a page style
+%    has to define commands such as |\chaptermark|, |\sectionmark| and so on
+%    so that e.g., |\chapter| calls |\chaptermark{TEXT}|. These commands are
+%    all defined with the help of the following macros, which have extended
+%    in \LaTeX\ a bit as compared to the original \TeX\ |\mark| facility.
+%    So we now have at our disposal:
+%    \begin{description}
+%    \item{|\markboth{Left}{Right}|} Adds both marks
+%    \item{|\markright{Right}|} Adds a righthand-side mark
+%    \item{|\leftmark|} used in the |\SIDEhead| and |\SIDEfoot| macros, 
+%        getting the current lefthand-side mark
+%    \item{|\rightmark|} also used in the |\SIDEhead| and |\SIDEfoot| 
+%        macros, but getting the current righthand-side mark.
+%    \end{description}
+%
+% \subsubsection{The headings and myheadings styles}
+%    The two other styles, |plain| and |empty| are defined by \LaTeX.
+%
+% \begin{macro}{\ps@headings}
+%    To begin with, the folios are centered at the foot of the pages, while
+%    the running heads contain one of the marks. The contents of the running
+%    head is determined both by the chapter and the section titles, hence we
+%    let |\@mkboth| be |\markboth|.
+%    \begin{macrocode}
+%<*octavo>
+\def\ps@headings{%
+    \def\@oddfoot{\hfil\thepage\hfil}%
+    \def\@evenfoot{\hfil\thepage\hfil}%
+    \def\@evenhead{\hfil{\scshape\leftmark}\hfil}%
+    \def\@oddhead{\hfil{\scshape\rightmark}\hfil}%
+    \let\@mkboth\markboth
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\chaptermark}
+% \begin{macro}{\sectionmark}
+%    As we use |\chaptermark| and |\sectionmark| to fill the running heads
+%    we define these here. The use of |##1| as parameter of the commands, and
+%    these will be defined when |\ps@headings| is executed.
+%    \begin{macrocode}
+\def\chaptermark##1{%
+    \markboth {%
+    \ifnum \c@secnumdepth >\m@ne
+        \if@mainmatter
+            \@chapapp\ \thechapter. \ %
+        \fi
+    \fi
+    ##1}{}}%
+\def\sectionmark##1{%
+    \markright {%
+    \ifnum \c@secnumdepth >\z@
+        \thesection. \ %
+    \fi
+    ##1}}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\ps@myheadings}
+%    The definition of this page style is straightforward, as it is up to the
+%    user to determine what goes into the running heads by setting the
+%    |\markboth| and |\markright| commands in the text. We do, however, maintain
+%    the presence of the centered folios at the foot of the pages. To ensure 
+%    that the marking commands used by chapter and section commands are not 
+%    used, we set them to a macro gobbling up the arguments.
+%    \begin{macrocode}
+\def\ps@myheadings{%
+    \def\@oddfoot{\hfil\thepage\hfil}%
+    \def\@evenfoot{\hfil\thepage\hfil}%
+    \def\@evenhead{\hfil{\scshape\leftmark}\hfil}%
+    \def\@oddhead{\hfil{\scshape\rightmark}\hfil}%
+    \let\@mkboth\@gobbletwo
+    \let\chaptermark\@gobble
+    \let\sectionmark\@gobble}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Document markup}
+%
+% \subsection{The title}
+% \begin{macro}{\maketitle}
+%    The three macros |\title|, |\author| and |\date| are part of \LaTeX,
+%    and that info is therefore stored away in internal control sequences.
+%    The |\date| macro gets today's date by default, so it may have to be
+%    set explicitly to a particular date by the user.
+%
+%    If there is a request for a title, we will generate a simple, separate
+%    titlepage. First, a local redefinition of |\footnotesize| and
+%    |footnoterule|, so that we get a different appearance of the |\thanks|
+%    command. These changes affect all footnotes, but since there really is
+%    no need for true footnotes on a title page, this is hardly a problem.
+%    \begin{macrocode}
+\if@titlepage
+    \newcommand\maketitle{\begin{titlepage}%
+    \let\footnotesize\small
+    \let\footnoterule\relax
+    \let\footnote\thanks
+%    \end{macrocode}
+%    The title itself is centered vertically, with a little offset brought by
+%    a |\vskip|.
+%    \begin{macrocode}
+    \null\vfil
+    \vskip 60\p@
+%    \end{macrocode}
+%    Now we can set the title, using the |\LARGE| fount, followed by a little
+%    bit of vertical space, and then the authors, set in |\large| fount. To
+%    ensure everything lines up nicely in a single column, we resort to the
+%    tabular environment. A little vertical space is then followed by the date.
+%    \begin{macrocode}
+    \begin{center}%
+        {\LARGE \@title \par}%
+        \vskip 3em%
+        {\large
+        \lineskip .75em%
+        \begin{tabular}[t]{c}%
+            \@author
+        \end{tabular}\par}%
+        \vskip 1.5em%
+        {\large \@date \par}%
+    \end{center}\par
+%    \end{macrocode}
+%    Calling |\@thanks| prints the information to go into the footnote, and
+%    completes the printing on the page.
+%    \begin{macrocode}
+    \@thanks
+    \vfil\null
+    \end{titlepage}%
+%    \end{macrocode}
+%    Having finished the printing of the title page, we now clean up.
+%    \begin{macrocode}
+    \setcounter{footnote}{0}%
+    \let\thanks\relax
+    \let\maketitle\relax
+    \gdef\@thanks{}
+    \gdef\@author{}
+    \gdef\@title{}}
+\fi
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \subsection{Chapters and section}
+%    The coming definitions rely on two internal macros, |\@startsection| and
+%    |\secdef|. Their syntax is simpe but a bit involved. The |\@startsection|
+%    macro has 7 required arguments and 2 optional ones. The full set looks like
+%    this:
+%
+%    |\@startsection|\meta{name}\meta{level}\meta{indent}\meta{beforeskip}
+%    \meta{afterskip}\meta{style} \\ 
+%    |[|*|] ||[|\meta{altheading}|]| \meta{heading}
+%
+%    \begin{description}
+%    \item{\meta{name}} The name of the level command, e.g., `section'.
+%    \item{\meta{level}} A number denoting the depth of the section,
+%          chapter=1, section=2, etc.  A section number will be printed only
+%          if \meta{level} is equal or smaller than the value of
+%          \emph{secnumdepth}.
+%    \item{\meta{indent}} The indentation of the heading from the left margin
+%    \item{\meta{beforeskip}} The absolute value of this argument is the skip
+%          to leave above the heading. If it is negative, then the paragraph
+%          indent of the text following the heading is suppressed.
+%    \item{\meta{afterskip}} If positive, it is the skip to leave below the
+%          heading, else it is the skip to the right of a run-in heading.
+%    \item{\meta{style}} Sets the style of the heading.
+%    \item{$*$} When this is missing the heading is numbered and the
+%          corresponding counter is incremented.
+%    \item{\meta{altheading}} Gives an alternative heading to use in
+%          the table of contents and in the running heads. This should
+%          be present when the $*$ form is used.
+%    \item{\meta{heading}} The heading of the new section.
+%    \end{description}
+%
+%    The macro |\secdef| can be used when a sectioning command is
+%    defined without using |\@startsection|. It has two arguments:
+%
+%    |\secdef|\meta{unstarcmds}\meta{starcmds}
+%
+%    \begin{description}
+%    \item{\meta{unstarcmds}} Used for the normal form of the
+%          sectioning command.
+%    \item{\meta{starcmds}} Used for the $*$-form of the
+%          sectioning command.
+%    \end{description}
+%
+% \subsubsection{Definition of counters}
+% \begin{macro}{\c@secnumdepth}
+%    The \emph{secnumdepth} counter indicates to what level sectioning commands
+%    have to make and include section numbers. More often than not, such numbers
+%    are of little real value to the reader of a book: therefore, it is herein
+%    set to a value that eliminates such number. The user can always bring them 
+%    back in by resetting \emph{secnumdepth} in the preamble of the document.
+%    \begin{macrocode}
+\setcounter{secnumdepth}{-2}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\c@part}
+% \begin{macro}{\c@chapter}
+% \begin{macro}{\c@section}
+% \begin{macro}{\c@subsection}
+% \begin{macro}{\c@subsubsection}
+% \begin{macro}{\c@paragraph}
+% \begin{macro}{\c@subparagraph}
+%    Nevertheless, all counters will be defined in case they are wanted.
+%    The particular construction |\newcounter{\meta{newcount}}[\meta{oldcount}]|
+%    defined \meta{newcount} as a counter which is reset every time
+%    \meta{oldcount} is stepped. Of course, the counter \meta{oldcount} must  
+%    have been defined.
+%    \begin{macrocode}
+\newcounter{part}
+\newcounter{chapter}
+\newcounter{section}[chapter]
+\newcounter{subsection}[section]
+\newcounter{subsubsection}[subsection]
+\newcounter{paragraph}[subsubsection]
+\newcounter{subparagraph}[paragraph]
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\thepart}
+% \begin{macro}{\thechapter}
+% \begin{macro}{\thesection}
+% \begin{macro}{\thesubsection}
+% \begin{macro}{\thesubsubsection}
+% \begin{macro}{\theparagraph}
+% \begin{macro}{\thesubparagraph}
+%    For each counter, the |\theCTR| macro defines how the counter CTR is 
+%    printed.
+%    \begin{macrocode}
+\renewcommand\thepart{\@Roman\c@part}
+\renewcommand\thechapter{\@arabic\c@chapter}
+\renewcommand\thesection{\thechapter.\@arabic\c@section}
+\renewcommand\thesubsection{\thesection.\@arabic\c@subsection}
+\renewcommand\thesubsubsection{\thesubsection .\@arabic\c@subsubsection}
+\renewcommand\theparagraph{\thesubsubsection.\@arabic\c@paragraph}
+\renewcommand\thesubparagraph{\theparagraph.\@arabic\c@subparagraph}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@chapapp}
+%    The macro |\@chapapp| is defined to be |\chaptername|. But when the
+%    |\appendix| command is issued, it is changed to |\appendixname|
+%    \begin{macrocode}
+\newcommand\@chapapp{\chaptername}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsubsection{Front, main and back matter}
+%    Books are traditionally made up from three logical sections, known as
+%    front matter, main matter and back matter. The actual \emph{text} of
+%    a book is the main matter. The separation into different `matters' allows
+%    slightly different ways of typesetting these sections.
+%
+% \begin{macro}{\frontmatter}
+%    Front matter is typeset with roman page numbering and without numbers given
+%    to any of its chapters.
+%    \begin{macrocode}
+\newcommand\frontmatter{\cleardoublepage
+    \@mainmatterfalse\pagenumbering{roman}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\mainmatter}
+%    In main matter, we first clear the page, start page numbering with arabic
+%    numerals and switch on chapter numbering (which will be visible only if
+%    \emph{secnumdepth} has been set to a sufficiently high value, of course.
+%    \begin{macrocode}
+\newcommand\mainmatter{\cleardoublepage
+    \@mainmattertrue\pagenumbering{arabic}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\backmatter}
+%    Back matter clears the page, turns off any chapter numbering, but leaves
+%    the page numbering unchanged.
+%    \begin{macrocode}
+\newcommand\backmatter{\cleardoublepage
+    \@mainmatterfalse}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsubsection{Parts}
+%    The text of books may well be divided into a number of parts by the
+%    writer(s). Here are the macros to deal with these major divisions of
+%    a text, should they be required.
+% \begin{macro}{\part}
+%    A part is shown in the book by beginning on a new right-hand page and
+%    we use a \emph{plain} pagestyle. 
+%    \begin{macrocode} 
+\newcommand\part{\cleardoublepage
+    \thispagestyle{plain}%
+%    \end{macrocode}
+%    In case we are dealing with a double-column text, the page will be in a
+%    single column but we have to remember we switch back to double-column mode.
+%    \begin{macrocode}
+    \if@twocolumn
+        \onecolumn
+        \@tempswatrue
+    \else
+        \@tempswafalse
+    \fi
+%    \end{macrocode}
+%    To ensure that the fill glue does not disappear, we need an empty box.
+%    \begin{macrocode}
+    \hbox{}\vfil
+%    \end{macrocode}
+%    To make the actual heading, we issue a |\secdef| here.
+%    \begin{macrocode}
+    \secdef\@part\@spart}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@part}
+%    This is the macro which carries out the actual formatting of the title of
+%    the part. If \emph{secnumdepth} equals -2 or larger, a number is given to
+%    the part.
+%    \begin{macrocode}
+\def\@part[#1]#2{%
+    \ifnum \c@secnumdepth >-2\relax
+        \refstepcounter{part}%
+        \addcontentsline{toc}{part}{\thepart\hspace{1em}#1}%
+    \else
+        \addcontentsline{toc}{part}{#1}%
+    \fi
+%    \end{macrocode}
+%    Empty the mark registers, center the title on the page, and prevent any
+%    breaking between lines, and finally reset the fount.
+%    \begin{macrocode}
+    \markboth{}{}%
+    {\centering
+    \interlinepenalty \@M
+    \normalfont
+%    \end{macrocode}
+%    If we are dealing with a numbered part, print the number.
+%    \begin{macrocode}
+    \ifnum \c@secnumdepth >-2\relax
+        \huge \partname~\thepart
+        \par
+%    \end{macrocode}
+%    Leave some space before printing the title, and clear up with |\@endpart|.
+%    \begin{macrocode}
+        \vskip 20\p@
+    \fi
+    \Huge #2\par}%
+    \@endpart}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@spart}
+%    A macro to deal with a part*. If this sectioning command was used, we do
+%    not print a number, but otherwise the format is the same as for the
+%    unstarred part.
+%
+%    \begin{macrocode}
+\def\@spart#1{%
+    {\centering
+    \interlinepenalty \@M
+    \normalfont
+    \Huge #1\par}%
+    \@endpart}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@endpart}
+%    A macro to finishes the part page. First, fill the current page,
+%    \begin{macrocode}
+\def\@endpart{%
+    \vfil\newpage
+%    \end{macrocode}
+%    and, as we are dealing with a two-sided document, insert a blank page.
+%    \begin{macrocode}
+    \hbox{}%
+    \thispagestyle{empty}%
+    \newpage
+%    \end{macrocode}
+%    If we are dealing with a two-column document, switch back to double 
+%    column mode.
+%    \begin{macrocode}
+    \if@tempswa
+        \twocolumn
+    \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsubsection{Chapters}
+% \begin{macro}{\chapter}
+%    Chapters start on a new page, and the page style is set to \emph{plain}
+%    \begin{macrocode}
+\newcommand\chapter{%
+    \if@openright\cleardoublepage
+    \else\clearpage
+    \fi
+    \thispagestyle{plain}%
+%    \end{macrocode}
+%    Ensure that no float appears on the top of this page: it really would not
+%    do to have something like a float appearing above a chapter title.
+%    \begin{macrocode}
+    \global\@topnum\z@
+%    \end{macrocode}
+%    Also, suppress any indentation of the first paragraph and issue the
+%    |\secdef| which will take care of making the chapter title.
+%    \begin{macrocode}
+    \@afterindentfalse
+    \secdef\@chapter\@schapter}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@chapter}
+%    The macro for numbered chapters. If \emph{secnumdepth} is larger than -1, 
+%    and |\@mainmatter| is true, display the chapter number. Write a message to
+%    the terminal to let the user know that a new chapter is about to be 
+%    typeset.
+%   \begin{macrocode}
+\def\@chapter[#1]#2{%
+    \ifnum \c@secnumdepth >\m@ne
+        \if@mainmatter
+            \refstepcounter{chapter}%
+            \typeout{\@chapapp\space\thechapter.}%
+            \addcontentsline{toc}{chapter}%
+            {\protect\numberline{\thechapter}#1}%
+        \else
+            \addcontentsline{toc}{chapter}{#1}%
+        \fi
+    \else
+        \addcontentsline{toc}{chapter}{#1}%
+    \fi
+%    \end{macrocode}
+%    Having written the entry to the table of contents, store the (alternative)
+%    title of the chapter with |\chaptermark|, add some white space to the lists
+%    of figures and tables
+%    \begin{macrocode}
+    \chaptermark{#1}%
+    \addtocontents{lof}{\protect\addvspace{10\p@}}%
+    \addtocontents{lot}{\protect\addvspace{10\p@}}%
+%    \end{macrocode}
+%    Now call |\@makechapterhead| to typeset the actual chapter title. When 
+%    dealing with text in double columns, this require a bit of attention as
+%    we want the title to use the whole of the width of the text. 
+%    The |\@afterheading| macro suppresses the indentation.
+%    \begin{macrocode}
+    \if@twocolumn
+        \@topnewpage[\@makechapterhead{#2}]%
+    \else
+        \@makechapterhead{#2}%
+        \@afterheading
+    \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@makechapterhead}
+%    The macro to typeset the actual chapter heading. Before we begin, bear in
+%    mind that we have to retain the grid, so the total amount of space occupied
+%    by the heading should be a whole number of lines. So, first some white 
+%    space. Then open a group with no indenting, with ragged right text, and
+%    reset the fount.
+%    \begin{macrocode}
+\def\@makechapterhead#1{%
+    \vspace*{4\baselineskip}%
+    {\parindent \z@ \raggedright \normalfont
+%    \end{macrocode}
+%    Find out if the chapter number has to be printed, and, if that is the case,
+%    leave some white space between number and title.
+%    \begin{macrocode}
+    \ifnum \c@secnumdepth >\m@ne
+        \if@mainmatter
+            \Large \@chapapp{} \thechapter
+            \par\nobreak
+            \ifnum \@ptsize < 1
+                \vskip 26\p@
+            \else
+                \vskip 22\p@
+            \fi
+        \fi
+    \fi
+%    \end{macrocode}
+%    Set the title in Large fount, prevent a pagebreak from happening in the
+%    middle or after the title, and leave a bit of white space before the text.
+%    \begin{macrocode}
+    \interlinepenalty\@M
+    \Large #1\par\nobreak
+    \vskip 34\p@ \@minus 4\p@
+    }}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@schapter}
+%    The macro which takes care of unnumbered chapters, which is much more
+%    straightforward, as it only has to typeset the chapter title.
+%    \begin{macrocode}
+\def\@schapter#1{%
+    \if@twocolumn
+        \@topnewpage[\@makeschapterhead{#1}]%
+    \else
+        \@makeschapterhead{#1}%
+        \@afterheading
+    \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@makeschapterhead}
+%    The equivalent macro of |\@makechapterhead| but for typesetting the
+%    heading of an unnumbered chapter.
+%    \begin{macrocode}
+\def\@makeschapterhead#1{%
+    \vspace*{4\baselineskip}%
+    {\parindent \z@ \raggedright
+    \normalfont
+    \interlinepenalty\@M
+    \Large #1\par\nobreak
+    \ifnum \@ptsize < 1
+        \vskip 30\p@
+    \else
+        \vskip 34.8\p@
+    \fi
+    }}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsubsection{Lower-level headings}
+% \begin{macro}{\section}
+% \begin{macro}{\subsection}
+% \begin{macro}{\subsubsection}
+% \begin{macro}{\paragraph}
+% \begin{macro}{\subparagraph}
+%    All the lower-level headings are generated by using the |\@startsection|.
+%    Because these various headings can occur anywhere on a page, some care
+%    has gone into defining the vertical spacing surrounding the headings. The
+%    reason for the different approach, compared to the standard book class, is
+%    that we are trying our utmost to maintain the regularity of the printing
+%    grid of text lines. Through the use of |\baselineskip| multiples and
+%    fractions, the space given to headings and surrounding white space will
+%    always be a multiple of print lines.
+%    We take the opportunity here of toning down the `loudness' of some of the
+%    headings compared to the standard book class.
+%    \begin{macrocode}
+\newcommand\section{%
+    \@startsection{section}%
+    {1}%
+    {0em}%
+    {-1.166\baselineskip \@minus -2\p@}%
+    {0.835\baselineskip \@minus 2\p@}%
+    {\centering\large\normalfont\scshape}}
+\newcommand\subsection{%
+    \@startsection{subsection}%
+    {2}%
+    {1em}%
+    {-0.666\baselineskip \@minus -2\p@}%
+    {0.333\baselineskip \@minus 2\p@}%
+    {\normalfont\normalsize\scshape}}
+\newcommand\subsubsection{%
+    \@startsection{subsubsection}%
+    {3}%
+    {1em}%
+    {-0.666\baselineskip \@minus -2\p@}%
+    {0.333\baselineskip \@minus 2\p@}%
+    {\normalfont\normalsize\itshape}}
+\newcommand\paragraph{%
+    \@startsection{paragraph}%
+    {4}%
+    {\z@}%
+    {0\p@}%
+    {-1em}%
+    {\normalfont\normalsize}}
+\newcommand\subparagraph{%
+    \@startsection{subparagraph}%
+    {5}%
+    {\parindent}%
+    {0\p@}%
+    {-1em}%
+    {\normalfont\normalsize}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \subsection{Lists}
+% \subsubsection{List parameters}
+%    The type setting of the list environment is governed by a considerable
+%    number of parameters, including |\leftmargin|, |\rightmargin|, 
+%    |\listparindent|, |\itemindent|, |\labelwidth|, |\labelsep| and
+%    |\partopsep|. By default, |\rightmargin|, |\listparindent| and
+%    |itemindent| are set to |0pt|. For a list at level L, the command
+%    |\@listL| is called, with L denoting `i', `ii', \ldots `vi'. By convention, 
+%    |@listL| should set |\leftmargin| to |\leftmarginL|.
+%
+% \begin{macro}{\listmargin}
+% \begin{macro}{\listmargini}
+% \begin{macro}{\listmarginii}
+% \begin{macro}{\listmarginiii}
+% \begin{macro}{\listmarginiv}
+% \begin{macro}{\listmarginv}
+% \begin{macro}{\listmarginvi}
+%    In double-column mode, margins are set somewhat smaller.
+%    \begin{macrocode}
+\if@twocolumn
+    \setlength\leftmargini{2em}
+\else
+    \setlength\leftmargini{2.5em}
+\fi
+%    \end{macrocode}
+%    \begin{macrocode}
+\setlength\leftmargin{\leftmargini}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%    The next three levels are set so that they are larger than the sum of
+%    |\labelsep| and the width of the default labels, being `(m)', `vii.' and 
+%    `M.'
+%    \begin{macrocode}
+\setlength\leftmarginii{2.2em}
+\setlength\leftmarginiii{1.87em}
+\setlength\leftmarginiv{1.7em}
+\if@twocolumn
+    \setlength\leftmarginv{.5em}
+    \setlength\leftmarginvi{.5em}
+\else
+    \setlength\leftmarginv{1em}
+    \setlength\leftmarginvi{1em}
+\fi
+%    \end{macrocode}
+%
+% \begin{macro}{\labelsep}
+% \begin{macro}{\labelwidth}
+%    The distance between label and text of an item is set by |\labelsep|, while
+%    the width of the label is set by |\labelwidth|
+%    \begin{macrocode}
+\setlength\labelsep{.5em}
+\setlength\labelwidth{\leftmargini}
+\addtolength\labelwidth{-\labelsep}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\partopsep}
+%    When a blank line is left before the list environment, we add an extra
+%    vertical space of |\partopsep|, in addition to |\parskip| and |\topsep|.
+%    Bearing in mind our attempts to maintain the regularity of the line grid,
+%    the exact value of this space has to be set with some care.
+%    \begin{macrocode}
+%</octavo>
+%<*10pt|11pt|12pt>
+\setlength\partopsep{0.5\baselineskip \@plus 2\p@ \@minus 2\p@}
+%</10pt|11pt|12pt>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@beginparpenalty}
+% \begin{macro}{\@endparpenalty}
+% \begin{macro}{\@itempenalty}
+%    These are the penalties incurred before and after a list or paragraph
+%    environment, and set to a bonus value to encourage a page break at these
+%    points.
+%    \begin{macrocode}
+%<*octavo>
+\@beginparpenalty -\@lowpenalty
+\@endparpenalty -\@lowpenalty
+\@itempenalty -\@lowpenalty
+%</octavo>
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%    
+% \begin{macro}{\@listi}
+% \begin{macro}{\@listI}
+%    The macro |\@listi| sets the values of |\leftmargin|, |\parsep|, |\topsep|,
+%    |\itemsep|, and so forth, for the lists that appear at top level. These
+%    definitions are usually modified in function of the fount-size in use.
+%    As we wish to maintain the printing grid, these adjustments are not used
+%    here. Just to be on the safe side though, we define listI to hold a copy of
+%    listi so that |\normalsize| can switch all parameters back.
+%    \begin{macrocode}
+%<*10pt|11pt|12pt>
+\def\@listi{%
+    \leftmargin\leftmargini
+%    \end{macrocode}
+%    \begin{macrocode}
+%<*10pt>
+    \parsep \z@
+    \topsep 6\p@ \@plus 2\p@ \@minus 2\p@
+    \itemsep \z@}
+%</10pt>
+%    \end{macrocode}
+%    \begin{macrocode}
+%<*11pt>
+    \parsep \z@
+    \topsep 6.6\p@ \@plus 2\p@ \@minus 2\p@
+    \itemsep \z@}
+%</11pt>
+%    \end{macrocode}
+%    \begin{macrocode}
+%<*12pt>
+    \parsep \z@
+    \topsep 7.2\p@ \@plus 3\p@ \@minus 3\p@
+    \itemsep \z@}
+%</12pt>
+%    \end{macrocode}
+%    \begin{macrocode}
+\let\@listI\@listi
+\@listi
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@listii}
+% \begin{macro}{\@listiii}
+% \begin{macro}{\@listiv}
+% \begin{macro}{\@listv}
+% \begin{macro}{\@listvi}
+%    Lists at higher levels need their own macros, and here they are. These do
+%    not have a saved version, and are not modified by fount size commands.
+%    \begin{macrocode}
+\def\@listii{%
+    \leftmargin\leftmarginii
+    \labelwidth\leftmarginii
+    \advance\labelwidth-\labelsep
+    \itemsep \parsep}
+\def\@listiii{%
+    \leftmargin\leftmarginiii
+    \labelwidth\leftmarginiii
+    \advance\labelwidth-\labelsep
+    \itemsep \parsep}
+\def\@listiv{%
+    \leftmargin\leftmarginiv
+    \labelwidth\leftmarginiv
+    \advance\labelwidth-\labelsep
+    \itemsep \parsep}
+\def\@listv{%
+    \leftmargin\leftmarginv
+    \labelwidth\leftmarginv
+    \advance\labelwidth-\labelsep
+    \itemsep \parsep}
+\def\@listvi{%
+    \leftmargin\leftmarginvi
+    \labelwidth\leftmarginvi
+    \advance\labelwidth-\labelsep
+    \itemsep \parsep}
+%</10pt|11pt|12pt>
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \subsubsection{Enumerate}
+% \begin{macro}{\theenumi}
+% \begin{macro}{\theenumii}
+% \begin{macro}{\theenumiii}
+% \begin{macro}{\theenumiv}
+%    The \emph{enumerate} environment uses four counters, where \emph{enumN}
+%    controls the numbering at level N of the enumeration. These counters have
+%    been defined by \LaTeX, but we use a different representation here.
+%    \begin{macrocode}
+%<*octavo>
+\renewcommand\theenumi{\@arabic\c@enumi}
+\renewcommand\theenumii{\@alph\c@enumii}
+\renewcommand\theenumiii{\@roman\c@enumiii}
+\renewcommand\theenumiv{\@Alph\c@enumiv}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\labelenumi}
+% \begin{macro}{\labelenumii}
+% \begin{macro}{\labelenumiii}
+% \begin{macro}{\labelenumiv}
+%    The label for each item in generated by these commands
+%    \begin{macrocode}
+\newcommand\labelenumi{\theenumi.}
+\newcommand\labelenumii{(\theenumii)}
+\newcommand\labelenumiii{\theenumiii.}
+\newcommand\labelenumiv{\theenumiv.}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\p@enumii}
+% \begin{macro}{\p@enumiii}
+% \begin{macro}{\p@enumiv}
+%    The expanding of |\p@enumN\theenumN| defines the output of a |\ref|
+%    command when referencing an item at the Nth level in an enumerated list.
+%    \begin{macrocode}
+\renewcommand\p@enumii{\theenumi}
+\renewcommand\p@enumiii{\theenumi(\theenumii)}
+\renewcommand\p@enumiv{\p@enumiii\theenumiii}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \subsubsection{Itemise}
+% \begin{macro}{\labelitemi}
+% \begin{macro}{\labelitemii}
+% \begin{macro}{\labelitemiii}
+% \begin{macro}{\labelitemiv}
+%    Itemising is governed by four commands, |\labelitemN|, defining the labels
+%    at the various levels.
+%    \begin{macrocode}
+\newcommand\labelitemi{\normalfont\bfseries --}
+\newcommand\labelitemii{$\m@th\cdot$}
+\newcommand\labelitemiii{$\m@th\bullet$}
+\newcommand\labelitemiv{$\m@th\ast$}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \subsubsection{Description}
+% \begin{macro}{description}
+%    The \emph{itemize} and \emph{enumerate} environments are defined by 
+%    \LaTeX, but we have to define the description environment here.
+%    \begin{macrocode}
+\newenvironment{description}
+    {\list{}%
+    {\labelwidth\z@% 
+    \itemindent-\leftmargin%
+    \let\makelabel\descriptionlabel}}%
+    {\endlist}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\descriptionlabel}
+%    To change the format of the label, redefine |\descriptionlabel|
+%    \begin{macrocode}
+\newcommand*\descriptionlabel[1]{%
+    \hspace\labelsep%
+    \normalfont\bfseries #1}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Defining new environments}
+%     A number of separate environments for specific bodies of text can be
+%     specified at class level. In the context of writing and making books,
+%     here are a number of such environments.
+%
+% \subsubsection{Verse}
+% \begin{macro}{verse}
+%    A simple way of implementing the requirements of typesetting verse.
+%    The environment is defined by tweaking some parameters of the list
+%    environment. Each line of verse ends with a |\\|, and the macro takes
+%    this to be |\@centercr|.
+%    \begin{macrocode}
+\newenvironment{verse}
+    {\let\\=\@centercr
+    \list{}{\itemsep \z@
+    \itemindent -1.5em%
+    \listparindent\itemindent
+    \rightmargin \leftmargin
+    \advance\leftmargin 1.5em}%
+    \item[]}
+    {\endlist}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsubsection{Quotation}
+% \begin{macro}{quotation}
+%    Also an implementation based on the list environment. Lines of the 
+%    quotation are set more narrowly. 
+%    \begin{macrocode}
+\newenvironment{quotation}
+    {\list{}{\listparindent 1.5em%
+    \itemindent \listparindent
+    \rightmargin \leftmargin
+    \parsep \z@}%
+    \item[]}
+    {\endlist}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsubsection{Quote}
+% \begin{macro}{quote}
+%    For short quotations, the text is set as a quotation but without the
+%    narrowing of the line length.
+%    \begin{macrocode}
+\newenvironment{quote}
+    {\list{}%
+    {\rightmargin\leftmargin}%
+    \item[]}
+    {\endlist}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsubsection{Titlepage}
+% \begin{macro}{titlepage}
+%    A titlepage starts and ends a page, and omits the folio. If the text is
+%    typeset in double columns, this page alone reverts to single column mode.
+%    \begin{macrocode}
+\newenvironment{titlepage}{%
+    \cleardoublepage
+    \if@twocolumn
+        \@restonecoltrue\onecolumn
+    \else
+        \@restonecolfalse\newpage
+    \fi
+    \thispagestyle{empty}}%
+    {\if@restonecol
+        \twocolumn
+    \else
+        \newpage
+    \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsubsection{Appendix}
+% \begin{macro}{\appendix}
+%    Typesetting appendices is somewhat different from the other chapters. We
+%    have to reset section and subsection counters and redefine the macro
+%    |\thesection| so that it produces an alphabetic enumeration of the 
+%    appendices. We also set |\@chapapp| to |\appendixname|.
+%    \begin{macrocode}
+\newcommand\appendix{\par
+    \setcounter{chapter}{0}%
+    \setcounter{section}{0}%
+    \renewcommand\@chapapp{\appendixname}%
+    \renewcommand\thechapter{\@Alph\c@chapter}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Setting environment parameters}
+% \begin{macro}{\arraycolsep}
+%    Columns in an |array| environment are separated by 2 |\arraycolsep|
+%    \begin{macrocode}
+\setlength\arraycolsep{5\p@}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tabcolsep}
+%    Columns in a |tabular| environment are separated by 2 |\tabcolsep|
+%    \begin{macrocode}
+\setlength\tabcolsep{6\p@}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\arrayrulewidth}
+%    The width of the lines in |array| and |tabular| environments
+%    \begin{macrocode}
+\setlength\arrayrulewidth{.4\p@}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\doublerulesep}
+%    When rules are adjacent in |array| and |tabular| environments, this is
+%    how far apart they are drawn
+%    \begin{macrocode}
+\setlength\doublerulesep{2\p@}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tabbingsep}
+%    Defines the space requested by the |\'| command in the text
+%    \begin{macrocode}
+\setlength\tabbingsep{\labelsep}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@mpfootins}
+%    The equivalent of |\skip\footins| for footnotes appearing in minipages.
+%    \begin{macrocode}
+\skip\@mpfootins = \skip\footins
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\fboxsep}
+% \begin{macro}{\fboxrule}
+%    When using |\fbox| or |\framebox|, these macros define the amount of space
+%    left between box and text, and the width of the rules in the box.
+%    \begin{macrocode}
+\setlength\fboxsep{3\p@}
+\setlength\fboxrule{.4\p@}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\theequation}
+%    Contrary to what is often seen in mathematical texts, here we number 
+%    equations continuously throughout the text. Cross-referencing is just so
+%    easy in TeX that there is not really any need for a different numbering 
+%    system.
+% \changes{1.1}{2003/10/10}{Equations numbered continuously}
+%    \begin{macrocode}
+\renewcommand\theequation{\@arabic\c@equation}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \subsection{Floating objects}
+%    Floats cover a variety of object types. Here, we deal with two different
+%    types: figure, and table. The typesetting of floats is of course governed 
+%    by a number of specific macros.
+%    \begin{description}
+%    \item{|\fps@TYPE|} The default placement of TYPE floats
+%    \item{|\ftype@TYPE|} The type number of floats or type TYPE. These are 
+%        unique, powers of 2. For example, the type number of figures might be
+%        1, tables 2, programs 4.
+%    \item{|\ext@TYPE|} File extension of the file in which the contents list
+%        of the TYPE floats is stored (example: |\ext@figure|=`lof'
+%    \item{|fnum@TYPE|} The macro which generates the number for the caption of
+%        the TYPE float.
+%    \item{|\@makecaption|\meta{num}\meta{text}} The macro to make a caption 
+%        with \meta{num} the value produced by |\fnum@TYPE| and \meta{text} the
+%        text of the caption (in a |\parbox| of appropriate width). It is used
+%        for all floating objects.
+%    \end{description}
+%
+% \begin{macro}{\c@figure}
+%    The format of the counter of figures. Often, the chapter number is part
+%    of the number, as this supposedly makes it easier to find the figure again,
+%    but that seems rather a poor justification, especially in the light of the
+%    excellent capabilities of \TeX\ of making cross references.
+%    \begin{macrocode}
+\newcounter{figure}
+\renewcommand\thefigure{\@arabic\c@figure}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\fps@figure}
+% \begin{macro}{\ftype@figure}
+% \begin{macro}{\ext@figure}
+% \begin{macro}{\num@figure}
+%    These are the parameters dealing with the `figure' floats.
+%    \begin{macrocode}
+\def\fps@figure{tbp}
+\def\ftype@figure{1}
+\def\ext@figure{lof}
+\def\fnum@figure{\figurename~\thefigure}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{figure}
+% \begin{macro}{figure*}
+%    Here we define the actual floating figure environments. The starred version
+%    is used for double-column figures.
+%    \begin{macrocode}
+\newenvironment{figure}
+    {\@float{figure}}
+    {\end@float}
+\newenvironment{figure*}
+    {\@dblfloat{figure}}
+    {\end@dblfloat}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\c@table}
+%    And now for tables as floats. The numbering of tables follows the same
+%    ideas as that of figures.
+%    \begin{macrocode}
+\newcounter{table}
+\renewcommand\thetable{\@arabic\c@table}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\fps@table}
+% \begin{macro}{\ftype@table}
+% \begin{macro}{\ext@table}
+% \begin{macro}{\num@table}
+%    Define the parameters for table floats.
+%    \begin{macrocode}
+\def\fps@table{tbp}
+\def\ftype@table{2}
+\def\ext@table{lot}
+\def\fnum@table{\tablename~\thetable}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{table}
+% \begin{macro}{table*}
+%    Here we define the actual floating table environments. The starred version
+%    is used for double-column tables.
+%    \begin{macrocode}
+\newenvironment{table}
+    {\@float{table}}
+    {\end@float}
+\newenvironment{table*}
+    {\@dblfloat{table}}
+    {\end@dblfloat}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@makecaption}
+%    The |\caption| macro calls |\@makecaption| to typeset the caption of the
+%    floating object. It uses the arguments \meta{number} and \meta{text}, so
+%    that number and captiontext can be typeset. The macro assumes, rightly, 
+%    that it is called inside a |\parbox| of appropriate width.
+% \end{macro}
+%
+% \begin{macro}{\abovecaptionskip}
+% \begin{macro}{\belowcaptionskip}
+%    \begin{macrocode}
+\newlength\abovecaptionskip
+\newlength\belowcaptionskip
+\setlength\abovecaptionskip{10\p@}
+\setlength\belowcaptionskip{0\p@}
+%    \end{macrocode}
+%    The definition of the macro is |\long|, allowing more than a single
+%    paragraph to be put into the caption.
+%    \begin{macrocode}
+\long\def\@makecaption#1#2{%
+    \vskip\abovecaptionskip
+%    \end{macrocode}
+%    In order to see if the caption text fits on a single line, we typeset it
+%    temporarily into a box.
+%    \begin{macrocode}
+    \sbox\@tempboxa{#1: #2}%
+%    \end{macrocode}
+%    Now measure the width of the box. If it exceeds the current |\hsize| then
+%    the caption text has to be set as an ordinary paragraph.
+%    \begin{macrocode}
+    \ifdim \wd\@tempboxa >\hsize
+        #1: #2\par
+%    \end{macrocode}
+%    If the text fits, center it on the line. This means using a |\hbox| in
+%    vertical mode, hence the |\everypar| tokens are not executed. What could
+%    be needed, if at all, is a resetting of the `minipage' flag, so we do that
+%    here explicitly.
+%    \begin{macrocode}
+    \else
+        \global \@minipagefalse
+        \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+    \fi
+    \vskip\belowcaptionskip}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+%
+% \section{Cross referencing}
+%    Commands like |\section| or |\caption| write a contentsline to an
+%    appropriate file. 
+%    The line |\contentsline{section}{|\meta{title}|}{|\meta{page}|}| is 
+%    written to the |.toc| file by the |\section| command. If sections
+%    are numbered, the \meta{title} will show up as |\numberline{|\meta{num}
+%    |}{|\meta{heading}|}|, the \meta{num} is the number generated by
+%    |\thesection|. 
+%
+%    Similarly, the |\caption| command in a figure environment writes to a 
+%    |.lof| file the line |\contentsline{figure}{\numberline{|\meta{num}|}{|
+%    \meta{caption}|}}{|\meta{page}|}|.
+%
+%    The |\contentsline{|\meta{name}|}| command expands to |\l@|\meta{name}. 
+%    Hence, we have to define |\l@chapter|, |\l@section| and so on, and for 
+%    figures the similar |\l@figure|. These can be defined conveniently with the
+%    command |\@dottedtocline{|\meta{level}|}{|\meta{indent}|}{|\meta{numwidth}
+%    |}{|\meta{title}|}{|\meta{page}|}|.
+%    \begin{description}
+%    \item{\meta{level}} An entry is only produced if \meta{level} is smaller or
+%        equal to the \emph{tocdepth} counter, with chapters being level 0, 
+%        sections level 1 and so on.
+%    \item{\meta{indent}} Defines the indentation from the outer left margin of
+%        the contentsline.
+%    \item{\meta{numwidth}} Defines the width of the box containing the section
+%        number, if the \meta{title} includes a |\numberline|.
+%    \end{description}
+%
+% \subsection{Table of contents, etc.}
+% \begin{macro}{\@pnumwidth}
+% \begin{macro}{\@tocrmargin}
+% \begin{macro}{\@dotsep}
+%    The three parameters control the appearance of the contents. Their 
+%    definition through the |\newcommand| allows the use of the `em' measure,
+%    meaning that the sizes defined can depend on the fount used. The role of
+%    |\@pnumwidth| is to define the width of the box containing the page number.
+%    |\@tocrmargin| defines the right margin for multi-line entries, obviously
+%    it is a good idea ot have |\@tocrmarg| $\leq$ |\@pnumwidth|. Finally, the
+%    separation between the dots on contentslines in mu units is given as a 
+%    real number by |\@dotsep|. From a design perspective, these dots are very
+%    unattractive, and an easy way of avoiding them appearing is to set the
+%    separation to a very high number.
+%    \begin{macrocode}
+\newcommand\@pnumwidth{1.55em}
+\newcommand\@tocrmarg{2.55em}
+\newcommand\@dotsep{4500}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\tableofcontents}
+%    This is the request for the production of a table of contents. Such a
+%    table is always typeset as a single column, so it might be necessary
+%    to switch temporarily to single-column mode.
+%    \begin{macrocode}
+\setcounter{tocdepth}{2}
+\newcommand\tableofcontents{%
+    \if@twocolumn
+        \@restonecoltrue\onecolumn
+    \else
+        \@restonecolfalse
+    \fi
+%    \end{macrocode}
+%    The title is set with |\chapter*|, to ensure that a possible running head
+%    contains the correct information
+%    \begin{macrocode}
+    \chapter*{\contentsname
+        \@mkboth{%
+        \MakeUppercase\contentsname}
+        {\MakeUppercase\contentsname}}%
+%    \end{macrocode}
+%    The actual table of contents itself is typeset by calling 
+%    |\@starttoc{toc}|. If necessary, we also switch back to double-column mode.
+%    \begin{macrocode}
+    \@starttoc{toc}%
+    \if@restonecol
+        \twocolumn
+    \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\l@part}
+%    The sectioning commands require additional macros to format the entries
+%    in the table of contents. Of these various entries, the entry for parts
+%    is somewhat more involved. First of all, ensure that if a pagebreak may
+%    be imminent, it should occur before the entry of a part. The addition of
+%    a little white space and the beginning of a group to keep changes local
+%    occupies us here as well.
+%    \begin{macrocode}
+\newcommand*\l@part[2]{%
+    \ifnum \c@tocdepth >-2\relax
+    \addpenalty{-\@highpenalty}%
+    \addvspace{2.25em \@plus\p@}%
+    \begingroup
+%    \end{macrocode}
+%    Set |\parindent| to 0pt, and use |\rightskip| to reserve enough room for
+%    the page numbers. The |\parfillskip| is made negative so that no overfull
+%    box messages are issued.
+%    \begin{macrocode}
+        \setlength\@tempdima{3em}%
+        \parindent \z@ \rightskip \@pnumwidth
+        \parfillskip -\@pnumwidth
+%    \end{macrocode}
+%    Set the entry in large fount, and do a bit of housekeeping before 
+%    finishing the macro. 
+%    \begin{macrocode}
+        {\leavevmode
+        \large #1\hfil \hb@xt@\@pnumwidth{\hss #2}}\par
+        \nobreak
+        \global\@nobreaktrue
+        \everypar{\global\@nobreakfalse\everypar{}}
+    \endgroup
+    \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\l@chapter}
+%    The entries of chapters is very similar to that of parts, and the 
+%    definition of the macro follows the same lines.
+%    \begin{macrocode}
+\newcommand*\l@chapter[2]{%
+    \ifnum \c@tocdepth >\m@ne
+    \addpenalty{-\@highpenalty}%
+    \vskip 1.0em \@plus\p@
+%    \end{macrocode}
+%    The |\numberline| macro needs the width of the box holding the number of
+%    the chapter to be in the scratch |\@tempdima|. Also, begin a new group and
+%    change some of the paragraph parameters.
+%    \begin{macrocode}
+    \setlength\@tempdima{1.5em}%
+    \begingroup
+        \parindent \z@ \rightskip \@pnumwidth
+        \parfillskip -\@pnumwidth
+        \leavevmode
+%    \end{macrocode}
+%    As we do no use |\numberline|, some manual adjustments are needed before
+%    typesetting the entry. A pagebreak following a chapter entry should be
+%    discouraged but not forbidden.
+%    \begin{macrocode}
+        \advance\leftskip\@tempdima
+        \hskip -\leftskip
+        #1\nobreak\hfil \nobreak\hb@xt@\@pnumwidth{\hss #2}\par
+        \penalty\@highpenalty
+    \endgroup
+    \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\l@section}
+% \begin{macro}{\l@subsection}
+% \begin{macro}{\l@subsubsection}
+% \begin{macro}{\l@paragraph}
+% \begin{macro}{\l@subparagraph}
+%    The lower level entries are all governed by the |\@dottedtocline| macro.
+%    \begin{macrocode}
+\newcommand*\l@section{\@dottedtocline{1}{1.5em}{2.3em}}
+\newcommand*\l@subsection{\@dottedtocline{2}{3.8em}{3.2em}}
+\newcommand*\l@subsubsection{\@dottedtocline{3}{7.0em}{4.1em}}
+\newcommand*\l@paragraph{\@dottedtocline{4}{10em}{5em}}
+\newcommand*\l@subparagraph{\@dottedtocline{5}{12em}{6em}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\listoffigures}
+%    This is the request to produce a list of figures, and very similar in
+%    construction to |\tableofcontents|.
+%    \begin{macrocode}
+\newcommand\listoffigures{%
+    \if@twocolumn
+        \@restonecoltrue\onecolumn
+    \else
+        \@restonecolfalse
+    \fi
+    \chapter*{\listfigurename
+        \@mkboth{\MakeUppercase\listfigurename}%
+        {\MakeUppercase\listfigurename}}%
+        \@starttoc{lof}%
+        \if@restonecol\twocolumn
+    \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\l@figure}
+%    The macro which produces the actual entry in the list of figures.
+%    \begin{macrocode}
+\newcommand*\l@figure{\@dottedtocline{1}{1.5em}{2.3em}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\listoftables}
+%    The request to make a list of tables is given through this macro. Once
+%    again, it is very similar to the |\tableofcontents| macro.
+%    \begin{macrocode}
+\newcommand\listoftables{%
+    \if@twocolumn
+        \@restonecoltrue\onecolumn
+    \else
+        \@restonecolfalse
+    \fi
+    \chapter*{\listtablename
+        \@mkboth{%
+        \MakeUppercase\listtablename}{\MakeUppercase\listtablename}}%
+        \@starttoc{lot}%
+        \if@restonecol\twocolumn
+    \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\l@table}
+%    The macro which produces the actual entry in the list of tables.
+%    \begin{macrocode}
+\let\l@table\l@figure
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Bibliography}
+% \begin{macro}{\bibindent}
+%    The open bibliography format uses the indentation set by |\bibindent|.
+%    \begin{macrocode}
+\newdimen\bibindent
+\bibindent=1.5em
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{thebibliography}
+%    The environment is based on a generic list environment, using the 
+%    \emph{enumiv} as internal counter to generate the labels of the list. If
+%    and empty \emph{thebibliography} environment is found, issue a warning.
+%    The environment executes a number of commands: |\sloppy| is used because
+%    it is hard to do line breaks in bibliographies, |\sfcode`\.=1000\relax| is
+%    issued so that a period does not produce and end-of-sequence space.
+%    \begin{macrocode}
+\newenvironment{thebibliography}[1]
+    {\chapter*{\bibname
+        \@mkboth{\MakeUppercase\bibname}
+        {\MakeUppercase\bibname}}%
+    \list{\@biblabel{\@arabic\c@enumiv}}%
+        {\settowidth\labelwidth{\@biblabel{#1}}%
+        \leftmargin\labelwidth
+        \advance\leftmargin\labelsep
+        \if@openbib
+            \advance\leftmargin\bibindent
+            \itemindent -\bibindent
+            \listparindent \itemindent
+            \parsep \z@
+        \fi
+        \usecounter{enumiv}%
+        \let\p@enumiv\@empty
+        \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+        \if@openbib
+            \renewcommand\newblock{\par}%
+        \else
+            \renewcommand\newblock{\hskip .11em \@plus.33em \@minus.07em}%
+        \fi
+        \sloppy
+%    \end{macrocode}
+%    Reset parameters to their previous values before leaving the environment
+%    \begin{macrocode}
+        \clubpenalty4000
+        \@clubpenalty \clubpenalty
+        \widowpenalty4000
+        \sfcode`\.=\@m}
+        {\def\@noitemerr
+        {\@latex@warning{Empty `thebibliography' environment}}%
+    \endlist}
+\newcommand\newblock{}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{The index}
+% \begin{macro}{theindex}
+%    The index environment procudes a two-column index, with each new entry 
+%    having its own paragraph. In the text, the commands |\item|, |\subitem| and
+%    |\subsubitem| are available to produce index entries at three levels. 
+%    Each time a new letter of the alphabet is encountered, an |\indexspace|
+%    amount of white space can be inserted.
+%    \begin{macrocode}
+\newenvironment{theindex}
+    {\if@twocolumn
+        \@restonecolfalse
+    \else
+        \@restonecoltrue
+    \fi
+    \columnseprule \z@
+    \columnsep 35\p@
+    \twocolumn[\@makeschapterhead{\indexname}]%
+    \@mkboth{\MakeUppercase\indexname}%
+    {\MakeUppercase\indexname}%
+    \thispagestyle{plain}\parindent\z@
+    \parskip\z@ \@plus .3\p@\relax
+    \let\item\@idxitem}
+%    \end{macrocode}
+%    In case more text follows the index, and the document was typeset in
+%    single-column mode, switch back to the one column mode before finishing
+%    the index.
+%    \begin{macrocode}
+    {\if@restonecol
+        \onecolumn
+    \else
+        \clearpage
+    \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@idxitem}
+% \begin{macro}{\subitem}
+% \begin{macro}{\subsubitem}
+%    The macros which typeset the actual index entries
+%    \begin{macrocode}
+\newcommand\@idxitem{\par\hangindent 40\p@}
+\newcommand\subitem{\par\hangindent 40\p@ \hspace*{20\p@}}
+\newcommand\subsubitem{\par\hangindent 40\p@ \hspace*{30\p@}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\indexspace}
+%    Define the amount of white space to insert between letter blocks in
+%    the index.
+%    \begin{macrocode}
+\newcommand\indexspace{\par \vskip 10\p@ \@plus5\p@ \@minus3\p@\relax}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \subsection{Footnotes}
+% \begin{macro}{\footnoterule}
+%    Footnotes are often separated from the body of the text by a small rule.
+%    To ensure that such a rule does not take up any vertical space, we have
+%    to compensate for the height of the rule (of 0.4pt) by adding some vertical
+%    skip. But we also have to avoid the rule from colliding with the footnote
+%    text, so we add first a bit of negative skip, and make sure that we end up
+%    eventually at the point where we began.
+%    \begin{macrocode}
+\renewcommand\footnoterule{%
+  \kern-3\p@
+  \hrule\@width.4\columnwidth
+  \kern2.6\p@}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\c@footnote}
+%    Footnotes are numbered within chapters, so we have to restart the numbering
+%    when beginning a new chapter.
+%    \begin{macrocode}
+\@addtoreset{footnote}{chapter}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@makefntext}
+%    The macro which produces the footnote. We use a simple macro, in which the 
+%    footnote text is typeset like a normal paragraph, without indentation 
+%    except for its first line. The footnote markers printed in the text, which
+%    refer to the actual footnotes are produced by the macro |\@makefnmark|. 
+%    Here we take over the default definition without change. 
+%    \begin{macrocode}
+\newcommand\@makefntext[1]{%
+    \parindent 1em%
+    \noindent
+    \hb@xt@1.8em{\hss\@makefnmark}#1}
+%    \end{macrocode}
+% \end{macro}
+%
+% \section{Initialisation}
+% \subsection{Heading names}
+%    The names of most of the headings can be (re)defined, and here we set
+%    these names to their English equivalent. They can be renamed in the
+%    text file through the |\renewcommand|.
+%    \begin{macrocode}
+\newcommand\contentsname{Contents}
+\newcommand\listfigurename{List of Figures}
+\newcommand\listtablename{List of Tables}
+\newcommand\bibname{Bibliography}
+\newcommand\indexname{Index}
+\newcommand\figurename{Figure}
+\newcommand\tablename{Table}
+\newcommand\partname{Part}
+\newcommand\chaptername{Chapter}
+\newcommand\appendixname{Appendix}
+%    \end{macrocode}
+%
+% \subsection{Date}
+% \begin{macro}{\today}
+%    The macro |\today| relies on the \TeX\ macros |\month|, |\day| and |year|
+%    generate the date of the \LaTeX\ run. The macro has been re-arranged from
+%    the standard \LaTeX\ format to conform to European usage, that is, 
+%    day month year sequence.
+%    \begin{macrocode}
+\newcommand\today{\number\day \ \ifcase\month\or
+  January\or February\or March\or April\or May\or June\or
+  July\or August\or September\or October\or November\or December\fi
+  \ \number\year}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Double columns}
+% \begin{macro}{\columnsep}
+% \begin{macro}{\columnseprule}
+%    The macros define the distance between the two columns, and the width of
+%    rule separating the columns. Such a rule is usually unattractive and serves
+%    no real purpose for the reader: it is therefore set to 0pt.
+%    \begin{macrocode}
+\setlength\columnsep{10\p@}
+\setlength\columnseprule{0\p@}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \subsection{Page style}
+%    Set the default page style to \emph{heading} and set the folio style to
+%    \emph{arabic}
+%    \begin{macrocode}
+\pagestyle{headings}
+\pagenumbering{arabic}
+%    \end{macrocode}
+%    If |twocolumn| was chosen as an option for typesetting the text, activate 
+%    the double column mode with |\twocolumn|. Try to keep the columns balanced 
+%    but do not make things too hard, hence issue a |\sloppy| command as well.
+%    Normally, call the |\onecolumn| macro to typeset in a single column.
+%    \begin{macrocode}
+\if@twocolumn
+  \twocolumn
+  \sloppy
+  \flushbottom
+\else
+  \onecolumn
+\fi
+%</octavo>
+%    \end{macrocode}
+%
+% End of file `octavo.cls'.
+% \Finale
+% \PrintIndex
+% \PrintChanges
+\endinput

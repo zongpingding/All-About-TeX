@@ -1,0 +1,14 @@
+<snippet>
+	<content><![CDATA[
+{\em Mathematica Code:}
+\begin{lstlisting}[language = Mathematica, numbers=left, 
+numberstyle=\tiny,keywordstyle=\color{blue!70},
+commentstyle=\color{red!50!green!50!blue!50},
+rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+$1
+\end{lstlisting}
+]]></content>
+	<tabTrigger>bmma</tabTrigger>
+	<scope>text.tex.latex</scope>
+</snippet>
+

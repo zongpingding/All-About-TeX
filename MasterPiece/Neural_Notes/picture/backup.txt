@@ -1,0 +1,134 @@
+% 生成最终的图象时把第一个文档类取消注释即可
+%\documentclass[10pt,varwidth]{standalone}
+\documentclass[12pt]{article}
+% 1.必须添加varwidth选项，不然就会报错
+\PassOptionsToPackage{quiet}{fontspec}
+\usepackage{ctex}
+\usepackage{geometry}
+% 必须要保证绘图的纸张足够的大
+\geometry{a2paper,left=1in,right=1in,top=1in,bottom=1in}
+\usepackage{xifthen}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=1.16}
+% 2.引用的tikz库
+\usetikzlibrary{matrix,chains,trees,scopes,decorations}
+\usetikzlibrary{arrows.meta,automata,positioning,shadows,3d}
+\usetikzlibrary {decorations.pathmorphing}
+\usetikzlibrary {backgrounds,mindmap,shadows}
+\usetikzlibrary {patterns, quotes}
+\usetikzlibrary {graphs,fadings}
+\usetikzlibrary {arrows,shapes.geometric}
+\usepgflibrary {shadings}
+
+
+\newcommand{\Vdots}[2]{%
+    \begin{scope}
+        \node[circle, fill, inner sep=1pt] (A) at (#1, #2+0.2) {};
+        \node[circle, fill, inner sep=1pt] (B) at (#1, #2) {};
+        \node[circle, fill, inner sep=1pt] (C) at (#1, #2-0.2) {};
+    \end{scope}
+}
+\tikzset{
+    >={Latex[length=6mm, width=2mm]}
+}
+
+
+
+
+
+
+
+
+
+
+
+\begin{document}
+\begin{tikzpicture}[->]
+    % 1.声明node
+    % 错误的代码
+    \foreach \x/\name in {1/{}, 2/i, 3/j, 4/k, 5/{}}{
+        % 1.批量命名所有的节点,产生从A11~A53共15个标记node
+        % \ifnum \x > 1
+        %     \ifnum \x < 5
+        %         \foreach \y in {1, 2, 3}{
+        %             \node at ({(\x-1)*4}, {-(\y-1)*4}) (A\x\y) {$\name = \y$};
+        %         }
+        %     \else
+        %         \foreach \y in {1, 2, 3}{
+        %             \node at ({(\x-1)*4}, {-(\y-1)*4}) (A\x\y) {};
+        %         }
+        %     \fi
+        % \else
+        %     \foreach \y in {1, 2, 3}{
+        %         \node at ({(\x-1)*4}, {-(\y-1)*4}) (A\x\y) {};
+        %     }
+        % \fi
+        \foreach \y in {1, 2, 3}{
+            \node at ({(\x-1)*4}, {-(\y-1)*4}) (A\x\y) {};
+        }
+        
+        % 2.批量连接第2,3,4层节点
+        \ifnum\x < 5 
+            \ifnum\x > 2
+                \foreach \y in {2,3}{
+                    \foreach \nexty in {-4, -8}{
+                        \draw[thick] (4*\x-4, -4*\y+4) -- (4*\x, \nexty);
+                    }
+                }
+            \fi 
+        \fi
+    }
+
+    % 给2,3,4层节点设置样式(由于 \x 延后了 1，所以变为了3,4,5)
+    \foreach \x in {3, 4, 5} {
+        \foreach \y in {2,3}{
+            \draw[thick] (A\x\y) circle(1);
+        }
+    }
+
+    \draw[thick, red] (A11) -- (A53);
+
+
+
+
+
+
+
+
+
+\end{tikzpicture}
+\end{document}
+
+
+
+
+
+\begin{tikzpicture}[->]
+    % 1.声明node
+    % 错误的代码
+    \foreach \x in {1,...,5}{
+        % 1.批量命名所有的节点,产生从A11~A53共15个标记node
+        \foreach \y in {1,2,3}{
+            \node at ({(\x-1)*4}, {-(\y-1)*4}) (A\x\y) {};
+        }
+        % 2.批量连接第2,3,4层节点
+        \ifnum\x < 5 
+            \ifnum\x > 2
+                \foreach \y in {2,3}{
+                    \foreach \nexty in {-4, -8}{
+                        \draw[thick] (4*\x-4, -4*\y+4) -- (4*\x, \nexty);
+                    }
+                }
+            \fi 
+        \fi
+    }
+
+    % 给2,3,4层节点设置样式(由于 \x 延后了 1，所以变为了3,4,5)
+    \foreach \x in {3, 4, 5} {
+        \foreach \y in {2,3}{
+            \draw[thick] (A\x\y) circle(1);
+        }
+    }
+
+    \draw[thick, red] (A11) -- (A53);

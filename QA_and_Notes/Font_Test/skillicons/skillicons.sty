@@ -1,0 +1,28 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% A package to bring cute cool and modern icons into your document
+% Maintained by Anton --> AnMnV https://github.com/AnMnv/AnMnv
+%
+% Project repository and bug tracker:
+% https://github.com/AnMnv/latex-skill-icons
+%
+% Released under the MIT License
+% See https://opensource.org/license/mit
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{skillicons}[2024-05-14 version v1.0  A LaTeX package designed to seamlessly integrate skill icons into your documents]
+
+\RequirePackage{graphicx}
+
+ 
+
+\newcommand{\photosymbol}[2][1]{%
+    \raisebox{\dimexpr 0.5\fontcharht\font`T - 0.5\height - 0.5\fontchardp\font`q}{%
+        \includegraphics[height=\dimexpr#1\fontcharht\font`T+1.5\fontchardp\font`q]{skill-icons/skillicons_#2}%
+    }%
+}
+
+\endinput

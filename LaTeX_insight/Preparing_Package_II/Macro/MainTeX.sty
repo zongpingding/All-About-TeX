@@ -1,0 +1,204 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{MainTeX}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% 背景知识 %%%%%%%%%%%%%%%%%%%%%%
+%%%%%% 相关的宏包引入与初始化:必须使用在 GraphPlot 宏包之后 %%%%%%
+
+
+%% 1. 环境名首字母大写，对应的命令名小写
+%% 2. 自定义环境或者是命令多个参数时使用{}{}...{}的格式来传递参数,命令内部也用这种形式
+%% 3. LaTeX2e中允许其中一个参数有默认值,但是永远是用#1来引用的.
+%%    调用LaTeX中自定义命令时:默认参数是放在[]内部的,不是{}内部
+
+% 调用宏包可选项设置 --> 是否使用 Eemoji表情
+\RequirePackage{fontawesome5}
+\DeclareOption{emoji}{%
+    \RequirePackage{emoji}
+    \setemojifont{Twemoji Mozilla}  
+}
+\ProcessOptions\relax
+
+%% 页面设置
+\RequirePackage[a4paper, total={6.5in, 10in}]{geometry}
+%% 1. 中英文设置
+\RequirePackage{ctex}
+% 大部分的英文字体
+\RequirePackage[T1]{fontenc}
+% 产生废话
+\RequirePackage{blindtext}
+% 首字下沉
+\RequirePackage{lettrine}
+
+
+%% 2.常用数学环境和字体
+% 数学环境和字体
+\RequirePackage{lmodern}
+\RequirePackage{mathtools}
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+\RequirePackage{pifont}
+\RequirePackage{calligra}
+% 多行公式
+\RequirePackage{array}
+% 划线效果
+\RequirePackage{cancel}
+
+%% 3.png,jpe,pdf,svg插入相关
+\RequirePackage{float}
+\RequirePackage{graphicx}
+\RequirePackage{pdfpages}
+\RequirePackage{svg}
+\RequirePackage{wrapfig}
+% 一个缩放命令
+\newcommand{\scale}[2]{%
+	\scalebox{#1}[#1]{#2}
+}
+
+% 设置行, 段间距
+% \setlength{\parindent}{0pt}
+\linespread{1}
+
+%% 5.生成彩色盒子（xcolor必须放在tcolorbox之前）
+\RequirePackage{xcolor}
+% \RequirePackage{tcolorbox,framed}
+%% 修正：注释上述的命令
+% most:为了能够拓展常用颜色盒子的功能
+% many: 代码抄录需要
+\RequirePackage[most, many]{tcolorbox}
+\RequirePackage{framed}
+\RequirePackage{fancybox}
+% 提供一个 adjustwidth 环境
+\RequirePackage[strict]{changepage}
+
+
+%% 7.杂：抄录，目录，超链接等    
+\RequirePackage{listings}
+\RequirePackage[nottoc]{tocbibind}
+\RequirePackage[hidelinks]{hyperref}
+\RequirePackage{hyperref}                       % 对目录生成链接，注：该宏包可能与其他宏包冲突，故放在所有引用的宏包之后
+\hypersetup{
+    colorlinks = true,                          % 将链接文字带颜色
+	bookmarksopen = true,                       % 展开书签
+	bookmarksnumbered = true,                   % 书签带章节编号
+	pdftitle = Happy LaTeXing,                  % 标题
+	pdfauthor = Eureka                          % 作者
+} 
+%% 防止产生:I found no \citation commands错误
+% \usepackage[backend=bibtex]{biblatex}
+
+
+%% 8.自定义颜色
+% 文本框颜色
+\definecolor{innercolor}{rgb}{0.95,0.95,1} 
+% 边界框颜色
+\definecolor{bordercolor}{RGB}{200,0,0} 
+% 常用颜色
+\definecolor{lightblue}{HTML}{6495ED}
+\definecolor{greenshade}{rgb}{0.90,0.99,0.91}   
+\definecolor{redshade}{rgb}{1.00,0.90,0.90}   
+\definecolor{brownshade}{rgb}{0.99,0.97,0.93}  
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 具体的自定义宏内容  %%%%%%%%%%%%%%%%%%%%%%%%
+%% 数学环境相关命令
+%% 各种箭头
+\newcommand{\lr}{\ensuremath{\longrightarrow}}
+\newcommand{\equ}{\ensuremath{\Longleftrightarrow}\,}
+\newcommand{\sr}{\ensuremath{\longmapsto}}
+\newcommand{\lrr}{\ensuremath{\Longrightarrow}}
+
+%% 数学字体和符号等
+\newcommand{\remark}{\noindent\ensuremath{\mathbf{Remark}}\hspace*{1em}}
+\newcommand{\emp}[1]{\noindent{\bf #1}}
+\newcommand{\im}[1]{\ensuremath{\displaystyle #1}}
+\newcommand{\dis}{\displaystyle}
+\newcommand{\scale}[2]{\scalebox{#1}[#1]{#2}}
+\newcommand{\C}[1]{\ensuremath{\mathcal{#1}}}
+\renewcommand{\S}[1]{\ensuremath{\mathscr{#1}}}
+\newcommand{\B}[1]{\ensuremath{\mathbb{#1}}}
+\newcommand{\F}[1]{\ensuremath{\mathbf{#1}}}
+\newcommand{\R}[1]{\ensuremath{\mathrm{#1}}}
+\newcommand{\ns}{\ensuremath{\varnothing}}
+\newcommand{\A}{\ensuremath{\forall}}
+
+
+%% 公式和文字背景色设置
+\newcommand{\bbf}[2]{\tcbhighmath[colback=#1]{#2}}
+%% 注意：这个bbt命令只能够在文本环境中使用
+\newcommand{\bbt}[2]{\tcbhighmath[colback=#1]{\text{#2}}}
+
+%% inline Fumular with display math size
+\newcommand{\im}[1]{$\displaystyle{#1}$}
+
+%% 定义一个formal样式环境；#1参数代表内部颜色，#2代表左边竖条颜色
+%% 注意：行末需要把空格注释掉，不然画出来的方框会有空白竖线
+\newenvironment{formal}[2][innercolor]{%
+    \def\FrameCommand{%
+        \hspace{1pt}%
+        % 左侧颜色条细线的宽度
+        {\color{#2}\vrule width 2pt}%
+        % 文本距离左侧颜色条的边距
+        {\color{#1}\vrule width 4pt}%
+        \colorbox{#1}%
+    }%
+    \MakeFramed{\advance\hsize-\width\FrameRestore}%
+    \noindent\hspace{-4.55pt}% disable indenting first paragraph
+    \begin{adjustwidth}{}{7pt}%
+    \vspace{2pt}\vspace{2pt}%
+}
+{%
+    \vspace{2pt}\end{adjustwidth}\endMakeFramed%
+}
+%% 使用样例1:可选参数[]必须放在{}前面
+% \begin{formal}[green!30]{red}
+%     \foo{hello}\\
+%     \foo{Hello}{world}
+% \end{formal}
+
+%% 使用样例2
+% \begin{formal}{blue}
+%     \foo{hello}\\
+%     \foo{Hello}{world}
+% \end{formal}
+
+
+%% tformal环境改进 --> 添加标题选项
+\newtcolorbox{tformal}[2][red]{
+    enhanced, breakable,
+    title=#2, colback=white,
+    colbacktitle=#1!20!white,
+    coltitle=black,
+    fonttitle=\bfseries,
+    boxrule=.5pt, arc=3pt,
+    outer arc=3pt,
+    colframe=#1!20!white,
+    % borderline west={2pt}{0pt}{#1}
+}
+
+%% 使用样例
+% \begin{tformal}[blue]{Remarque}
+% Some sentence ...
+% \end{tformal}
+
+% \begin{tformal}{Remarque}
+% Some sentence ...
+% \end{tformal}
+
+
+%% 图片任意位置
+% 默认放在左上角，占满。偏移为零。向左移动为负
+% north west: 页面的左上角，其余类似
+% anchor: 指定参考点来进行偏移
+% at: 没有偏移时的位置
+% #1: 默认左上角
+% #2: 图片
+% #3 #4: xshift 和 yshift，单位自己给定  
+\newcommand{\Rfig}[4][north west]{%
+    \begin{tikzpicture}[overlay, remember picture]
+        \node[anchor=#1, xshift=#3, yshift=#4] at (current page.#1)
+        {\includegraphics[width=5.5cm]{#2}};
+    \end{tikzpicture}}
+
+
+%% Date   : 2023-06-10
+%% Author : Eureka

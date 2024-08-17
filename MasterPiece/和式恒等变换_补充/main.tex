@@ -1,0 +1,151 @@
+\documentclass[12pt]{article}
+\PassOptionsToPackage{quiet}{fontspec}
+% \usepackage{fontspec}
+\usepackage[a4paper, total={6.5in, 10in}]{geometry}
+\usepackage{amsmath}
+\usepackage{mathspec}
+\usepackage{tikz}
+\usepackage{ctex}
+\usepackage{mathpazo}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+\usepackage{xcolor}
+\usepackage{framed}
+\usepackage{float}
+\usepackage{titlesec}
+
+\renewcommand{\abstractname}{Introduce}
+\setmainfont{comic.ttf}
+% 先清空中文字体设置，再重新设置中文字体
+\renewcommand\CJKrmdefault{}
+\setCJKmainfont{STKAITI.TTF}
+
+
+
+\title{求和符号使用方法}
+\author{Eureka}
+\date{\today}
+\begin{document}
+\maketitle    
+
+\begin{abstract}
+    Mathematicians just love sigma notation for two reasons. First, it provides a convenient
+way to express a long or even infinite series. But even more important, it looks really
+cool and scary, which frightens nonmathematicians into revering mathematicians and
+paying them more money.
+
+\hfill ---Calculus II for Dummies
+\end{abstract}
+
+
+\tableofcontents
+\clearpage
+
+
+\section{前言}
+常见的求和符号的出处或者说是形式，主要有如下三个：
+\begin{itemize}
+    \item 纯粹的{\bf 代数}求和表达式，形如 $\sum\limits_{n}{\frac{1}{n(n+1)}}$，通常在 \textbf{求和\&求积}中出现， 
+    \item 包含组合数的形式出现，常常含有 $\binom{n}{k}$,通常在 {\bf 组合求和}中出现
+    \item 和数论中的乘性函数 $\varphi, \mu$等结合出现，形如 $\sum\limits_{d|n}$等，通常在{\bf 乘法数论}中出现
+\end{itemize}
+
+尽管在表面上这三个形式不同，但是它们背后有着同样的核心思想:{\bf 交换求和}
+\begin{framed}
+    假设有一个二元函数 $f(a, b)$,那么就有
+    \begin{align}
+        \sum_{a\in A}^{}{\sum_{b\in B}^{}{f}} 
+        = \sum_{b\in B}^{}{\sum_{a\in A}^{}{f}}
+    \end{align} 
+\end{framed}
+
+这个看似显然的结果在超过一般的情况下都是十分具有创造性的，所以任何情况下你看到
+双重求和都应该考虑交换求和顺序。{\bf 如果遇到单重的求和，考虑把它转化成双重求和},
+比如后面的生成函数。还有一些情况下，你应该考虑{\bf 改变求和的变量（表达式）}
+比如下面这几个例子:
+\begin{align*}
+    \sum_{a\ge 0}^{}{\sum_{b\ge 0}^{}{f}} 
+    = \sum_{k\ge 0}^{}{\sum_{\mathop{a, b}\limits_{a+b=k}}^{}{f}}
+\end{align*}
+
+\begin{align*}
+    \sum_{a\in A}^{}{\sum_{b\in B}^{}{a^2(b+1)}}
+ =  \sum_{a\in A}^{}{a^2\left(\sum_{b\in B}^{}{(b+1)}\right)}
+ =  \left(\sum_{a\in A}^{}{a^2}\right)\cdot \left(\sum_{b\in B}^{}{(b+1)}\right)
+\end{align*}
+
+\section{代数求解}
+\subsection{伸缩\&部分\;求和}
+这个是最没有挑战和难度的求和，只要看到多项式分母（polynomial denominators）就可以考虑。
+下面是一个Stanford考试题目：
+\begin{align*}
+    \sum_{n\ge 1}^{}{\frac{7n+32}{n(n+2)}\cdot \left(\frac34\right)^n}
+   & = \sum_{n\ge 1}^{}{\left(\frac{16}{n}-\frac{9}{n+2}\right)\cdot\left(\frac34\right)^n} \\
+   & = \lim_{n\to \infty}{\frac{16}{1}\times \left(\frac34\right)^1 + \frac{16}{2}\times \left(\frac34\right)^2
+      - \frac{16}{n+1}\times \left(\frac34\right)^{n+1} - \frac{16}{n+2}\times \left(\frac34\right)^{n+2}} \\
+   & = \frac{33}{2}
+\end{align*}
+
+\subsection{交换求和顺序}
+下面是一个概率论中的例子：
+Let $X$ and $Y$ be random variables (不一定独立)， 那么有
+\begin{align*}
+    \mathbb{E}(X+Y) 
+    & = \sum_{n\ge 0}^{}{nP(X+Y=n)} 
+        = \sum_{n\ge 0}^{}{\sum_{a+b=n}^{}{nP(X=a,Y=b)}}\\
+    & = \sum_{a, b\ge 0}^{}{{(a+b)nP(X=a,Y=b)}}   \\
+    &= \sum_{a\ge 0}^{}{\sum_{b\ge 0}^{}{aP(X=a,Y=b)}}
+        + \sum_{a\ge 0}^{}{\sum_{b\ge 0}^{}{bP(X=a,Y=b)}}\\
+    & = \sum_{a\ge 0}^{}{aP(X=a)} + \sum_{b\ge 0}^{}{bP(Y=b)}\\
+    & = \mathbb{E}(X) + \mathbb{E}(b)
+\end{align*} 
+
+下面我们来看一个在数论中关于整除的求和式子，实际上这个引理我们还会在后面用到。
+\begin{framed}
+    Let $n\ge 1$ be an Integer, 那么
+    \begin{align}
+        \sum_{d\big|n}^{}{\varphi(d)}   = n
+    \end{align}
+
+    注意：其中  $\varphi$满足 $\varphi * 1 = \mathrm{id}$
+\end{framed}
+
+又一个使用交换求和的例子,设  $n$ 是一个整数，证明：
+\begin{align*}
+    \sum_{k\ge 1}^{}{\varphi(k)\left\lfloor\frac{n}{k}\right\rfloor} = \frac12n(n+1)
+\end{align*}
+
+\subsection{Fourier 有限和}
+一个经典的例子就是计算
+\begin{align*}
+    \sum_{k\ge 1}^{}{\binom{1000}{2k}}
+\end{align*}
+
+求解思路：注意到 
+$\displaystyle \frac{1^n+(-1)^n}{2} = \left\{\begin{aligned} & 1,\quad n\mbox{是偶数}\\ & 0,\quad  n\mbox{是奇数}\end{aligned}\right.$
+于是我们有：
+\begin{align*}
+    \sum_{k\ge 1}^{}{\binom{1000}{2k}} \\
+    & = \frac12 \left(\sum_{n\ge 0}^{}{\binom{1000}{n}} + \sum_{n\ge 0}^{}{\binom{1000}{n}}\times (-1)^n\right)\\
+    & = (1+1)^{1000} + (1-1)^{1000}\\
+    & = 2^{999}
+\end{align*}
+
+
+\section{``模''求和}
+\section{多重求和}
+\subsection{乘性函数}
+\subsection{Dirichlet 卷积}
+\subsection{M\"obius 反演}
+
+
+
+\section{生成函数}
+\subsection{基本应用}
+\subsection{线性递推序列}
+\subsection{常见的生成函数}
+\subsection{Snake Oil method}
+
+\section{习题和解答}
+
+\end{document}

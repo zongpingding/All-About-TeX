@@ -1,0 +1,25 @@
+\documentclass{standalone}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=1.16}
+
+
+\begin{document}
+\begin{tikzpicture}
+    \begin{axis}[colormap/bluered]
+    \addplot+[
+            scatter,
+            scatter src=y,
+            samples=50
+        ]
+        {sin(deg(x))};
+    \end{axis}
+\end{tikzpicture}
+\end{document}
+
+
+
+
+
+
+    

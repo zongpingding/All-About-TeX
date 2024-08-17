@@ -1,0 +1,198 @@
+\mode<presentation>
+
+\newif\ifinsectionframe
+\insectionframefalse
+
+\setbeamertemplate{background}{
+    \begin{tikzpicture}[remember picture,overlay]
+        \ifnum\thepage=\@titlepagenumber\relax%
+           \fill[IMTABlue](0,-8.04) -- (3.8, -4.03) -- (9.05,-9.6)--(0,-9.6) -- cycle;
+           \fill[IMTAGreen] (3.8,-4.03) -- (7.6,0) -- (11.37,0) -- (5.672,-6.028) -- cycle;
+           \fill[IMTALightBlue] (5.672,-6.028) -- (9.05,-9.6) -- (current page.south east) -- (current page.north east) -- (11.37,0) -- cycle;
+           
+           %\draw[step=0.5,thin,black] (current page.north west) grid (current page.south east);
+           %\fill[red] (1,-1) circle[radius=3pt] {}; 
+  
+            \pgfdeclareimage[interpolate=true, width=90pt]{imtatlantiquelogo}{logos/imtatlantiquelogo};
+            \node (IMTALogo) at (1.7,-1) {\pgfuseimage{imtatlantiquelogo}};
+            \ifdefined\partnerlogo
+                \pgfdeclareimage[interpolate=true, width=80pt]{partnerlogo}{\partnerlogo};
+                \node[below=0cm of IMTALogo] {\pgfuseimage{partnerlogo}};
+
+            \fi 
+ 
+        \else
+            \ifinsectionframe
+            
+                %\node[inner sep=0pt, text width=0cm] at (current page.west){\includegraphics[height=\paperheight,width=\paperwidth]{backgrounds/sectionpage.pdf}};
+                \fill[IMTAGreen] (0,0) -- (0,-2.7) -- (1.9,-4.66) -- (6.3,0) -- cycle;
+                \fill[IMTALightBlue] (current page.south east) -- (current page.north east) -- (6.3,0) -- (1.9,-4.66) -- (6.5,-9.6) -- cycle;
+        
+                \pgfdeclareimage[interpolate=true, width=90pt]{imtatlantiquelogo}{logos/imtatlantiquelogo};
+                \node (IMTALogo) at (1.7,-8.5) {\pgfuseimage{imtatlantiquelogo}};
+                \ifdefined\partnerlogo
+                    \pgfdeclareimage[interpolate=true, width=80pt]{partnerlogo}{\partnerlogo};
+                    \node[above=0cm of IMTALogo] {\pgfuseimage{partnerlogo}};
+
+                \fi 
+
+                % \draw[step=0.5,thin,gray] (current page.north west) grid (current page.south east);
+                % \draw[step=1,thin,black] (current page.north west) grid (current page.south east);
+                % \fill[red] (1,-1) circle[radius=3pt] {}; 
+            \else
+                \fill[white,opacity=1] (0,0) rectangle(\the\paperwidth,\the\paperheight);
+            \fi
+       \fi
+    \end{tikzpicture}
+}
+
+% Title page
+\defbeamertemplate*{title page}{BetterIMTAtlantique}[1][]
+{
+    \begin{minipage}[c]{0.40\linewidth}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[c]{0.60\linewidth}
+        \vskip2cm%
+        \ifx\inserttitle\empty\else
+            \begin{beamercolorbox}[#1]{title page header}
+                \usebeamerfont{title}\inserttitle\par%
+            \end{beamercolorbox}%
+            \vskip0.1cm%
+        \fi
+        \ifx\insertsubtitle\empty\else
+            \begin{beamercolorbox}[#1]{subtitle page header}
+                \usebeamerfont{subtitle}\insertsubtitle\par%
+            \end{beamercolorbox}%
+            \vskip0.1cm%
+        \fi
+        \vskip0.65cm%
+        \ifx\insertauthor\empty\else
+            \begin{beamercolorbox}[#1]{author}
+              \usebeamerfont{author}\insertauthor%
+            \end{beamercolorbox}
+        \fi
+        \ifx\insertdate\empty\else
+             \vskip0.2cm%
+            \begin{beamercolorbox}[#1]{date}
+              \usebeamerfont{date}\insertdate%
+            \end{beamercolorbox}
+        \fi
+        \vfill
+    \end{minipage}
+}
+
+\def\imtatableofcontents{\usebeamertemplate*{imta toc}}
+\defbeamertemplate*{imta toc}{BetterIMTAtlantique}[1][]
+{
+    \begin{minipage}[c]{.38\linewidth}
+    \end{minipage}\hfill
+    \begin{minipage}[c]{.62\linewidth}
+        %\setlength{\parskip}{5pt}
+        \tableofcontents
+    \end{minipage}
+
+}
+
+\defbeamertemplate*{section page}{BetterIMTAtlantique}[1][]
+{
+    \begin{minipage}[c]{.5\linewidth}
+    \end{minipage}\hfill
+    \begin{minipage}[c]{.5\linewidth}
+        \vskip2cm%
+        \begin{beamercolorbox}{section title}
+            \usebeamerfont{section title}\thesection\hspace{0.8mm}\raisebox{0.3mm}{$\bullet$\hspace{2mm}}\insertsectionhead\par
+        \end{beamercolorbox}
+        \vfill%
+        % \tableofcontents[hideothersubsections,sectionstyle=hide/hide]
+    \end{minipage}
+}
+
+\defbeamertemplate*{subsection page}{BetterIMTAtlantique}[1][]
+{
+    \begin{minipage}[c]{.5\linewidth}
+    \end{minipage}\hfill
+    \begin{minipage}[c]{.5\linewidth}
+        \vskip2cm%
+    %     \begin{beamercolorbox}{section title}
+    %           \usebeamerfont{section title}\thesection\hspace{0.8mm}\raisebox{0.3mm}{$\bullet$\hspace{2mm}}\insertsectionhead\par
+    %       \end{beamercolorbox}
+    %       \vskip1cm
+        \begin{beamercolorbox}{subsection title}
+            \usebeamerfont{subsection title}\insertsubsectionhead\par
+        \end{beamercolorbox}
+        \vfill%
+        %\tableofcontents[hideothersubsections,sectionstyle=hide/hide]
+    \end{minipage}
+}
+
+% itemize style
+\defbeamertemplate{itemize item}{fancy arrow}{\ding{228}}
+\defbeamertemplate{itemize subitem}{fancy arrow}{\ding[.8]{228}}
+\defbeamertemplate{itemize subsubitem}{fancy arrow}{\ding[.8]{228}}
+
+\setbeamertemplate{itemize items}[fancy arrow]
+
+% blocks aspect
+
+\setbeamertemplate{blocks}[rectangles]
+
+\newenvironment<>{blueblock}[1]{%
+  \setbeamercolor{block title}{fg=white,bg=IMTABlue}%
+  \begin{block}#2{#1}}{\end{block}}
+
+\newenvironment<>{greenblock}[1]{%
+  \setbeamercolor{block title}{fg=white,bg=IMTAGreen}%
+  \begin{block}#2{#1}}{\end{block}}
+
+\newenvironment<>{redblock}[1]{%
+  \setbeamercolor{block title}{fg=white,bg=IMTARed}%
+  \begin{block}#2{#1}}{\end{block}}
+
+\newenvironment<>{blackblock}[1]{%
+  \setbeamercolor{block title}{fg=white,bg=IMTABlack}%
+  \begin{block}#2{#1}}{\end{block}}
+
+\newenvironment<>{define}[1]{%
+    \begin{block}#2{Définition~: #1}}{\end{block}}%
+
+\newsavebox \BetterIMTA@contentbox
+\newsavebox \BetterIMTA@iconbox
+
+\newenvironment{showcase}[2]{%
+
+\def\BetterIMTA@showcase@color{#1}
+\setlength{\fboxsep}{8pt}
+
+\usebeamercolor{\BetterIMTA@showcase@color}
+\setbox\BetterIMTA@iconbox=\hbox to 3em{\hss{\color{fg}\fontsize{2em}{2em}\faIcon{#2}}\hss}
+\setbox\BetterIMTA@iconbox=\vbox to 3em{\vfil \usebox{\BetterIMTA@iconbox} \vfil\relax}
+\wd\BetterIMTA@iconbox=3em
+
+\usebeamercolor{showcase body}
+\setbox \BetterIMTA@contentbox=\hbox to \dimexpr\textwidth-\wd\BetterIMTA@iconbox-4\fboxsep\relax\bgroup%
+    \vbox%
+    \bgroup%
+        \hsize\dimexpr\textwidth-\wd\BetterIMTA@iconbox-4\fboxsep\relax%
+        \leavevmode\ignorespaces\color{fg}%
+}
+{%
+\egroup\egroup
+\setlength{\fboxsep}{8pt}
+\savebox\BetterIMTA@contentbox{\mbox{\usebox{\BetterIMTA@contentbox}}}
+
+\ifdim\ht\BetterIMTA@iconbox<\ht\BetterIMTA@contentbox
+     \setbox\BetterIMTA@iconbox=%
+         \vbox to \dimexpr\ht\BetterIMTA@contentbox+\dp\BetterIMTA@contentbox\relax{\vfil \usebox{\BetterIMTA@iconbox} \vfil\relax}
+     \sbox{\BetterIMTA@iconbox}{\raisebox{\dimexpr-\dp\BetterIMTA@contentbox\relax}{\usebox{\BetterIMTA@iconbox}}}
+\else
+    \setbox\BetterIMTA@contentbox=%
+        \vbox to \dimexpr\ht\BetterIMTA@iconbox+\dp\BetterIMTA@iconbox\relax{\vfil \usebox{\BetterIMTA@contentbox} \vfil\relax}
+\fi
+
+\wd\BetterIMTA@iconbox=3em
+\wd\BetterIMTA@contentbox=\dimexpr\linewidth-\wd\BetterIMTA@iconbox-4\fboxsep\relax
+
+\usebeamercolor{\BetterIMTA@showcase@color}\colorbox{bg}{\usebox{\BetterIMTA@iconbox}}\usebeamercolor{showcase body}\colorbox{bg}{\usebox{\BetterIMTA@contentbox}}
+}
+\mode<all>

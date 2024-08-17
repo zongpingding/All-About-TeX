@@ -1,0 +1,103 @@
+% All rights to the corporate identity of University of Amsterdam and its elements
+% belong to the University of Amsterdam.
+% Please refer to the following page for further information:
+% https://extranet.uva.nl/en/a-z/content/corporate-communication/corporate-communication.html
+%
+% Copyright (c) 2015 Franz Geiger
+%
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+%
+% The above copyright notice and this permission notice shall be included in
+% all copies or substantial portions of the Software.
+%
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+% THE SOFTWARE.
+
+\mode<presentation>
+
+% Main color of title page and highlights (such as block elements, alerts, and footline).
+\DeclareOptionBeamer{maincolor}{\def\beamer@colorthemeUniversityOfAmsterdam@maincolor{#1}}
+\ExecuteOptionsBeamer{maincolor=uva-rood}
+\ProcessOptionsBeamer
+
+% These colors are from the University of Amsterdam corporate identity.
+% Pick the color of your faculty and fill it in below as 'maincolor'.
+% Please refer to the following page for usage instructions regarding the corporate identity: https://extranet.uva.nl/en/a-z/content/corporate-communication/corporate-identity-elements/colour/colour-kopie.html
+
+% UvA Black
+\definecolor{uva-zwart}{RGB}{31, 29, 33}
+% UvA Red
+\definecolor{uva-rood}{RGB}{188, 0, 49}
+
+% Economics and Business
+\definecolor{uva-feb-groen}{RGB}{190, 181, 17}
+%Faculty of Humanities
+\definecolor{uva-fgw-blauw}{RGB}{0, 78, 146}
+%Faculty of Law
+\definecolor{uva-fdr-donker-rood}{RGB}{144, 0, 62}
+%Faculty of Medicine (AMC)
+\definecolor{uva-gen-groen}{RGB}{37, 120, 53}
+%Faculty of Science
+\definecolor{uva-fnwi-paars}{RGB}{117, 27, 104}
+%Faculty of Social and Behavioural Sciences
+\definecolor{uva-fmg-oranje}{RGB}{233, 130, 0}
+% Institute of Interdisciplinary Studies
+\definecolor{uva-iis-licht-blauw}{RGB}{42, 165, 208}
+% Interfacultaire Lerarenopleidingen
+\definecolor{uva-ilo-rood}{RGB}{195, 38, 31}
+
+% Fill in the color of your faculty as defined above
+\colorlet{maincolor}{\beamer@colorthemeUniversityOfAmsterdam@maincolor}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+% Define colors
+\definecolor{bgarea}{RGB}{236,236,236}
+\definecolor{bgdarker}{RGB}{180,180,180}
+% Text colors
+\setbeamercolor{normal text}{fg=uva-zwart, bg=}
+\setbeamercolor{alerted text}{fg=maincolor}
+% Colors on title page
+\setbeamercolor{title}{bg=white, fg=uva-zwart}
+\setbeamercolor{subtitle}{bg=white, fg=uva-zwart}
+\setbeamercolor{institute}{fg=uva-zwart}  % bg is ignored by title page
+\setbeamercolor{author}{fg=white} % bg is ignored by title page
+\setbeamercolor*{date}{parent=author} % bg is ignored by title page
+% Color of backgrounds
+\setbeamercolor{background canvas}{bg=}
+\setbeamercolor{background}{fg=uva-zwart, bg=bgarea}
+% Color of frame title elements
+\setbeamercolor{frametitle}{bg=,fg=uva-zwart}
+\setbeamercolor{framesubtitle}{parent=frametitle}
+% Color of footline elements
+\setbeamercolor{footline}{bg=,fg=maincolor}
+\setbeamercolor*{page number in head/foot}{parent=footline}
+\setbeamercolor*{section in head/foot}{parent=footline}
+% Color of block elements
+\setbeamercolor{block body}{bg=white, fg=uva-zwart}
+\setbeamercolor{block title}{bg=bgdarker, fg=white}
+\setbeamercolor{block body example}{bg=white, fg=uva-zwart}
+\setbeamercolor{block title example}{bg=maincolor, fg=white}
+\setbeamercolor{block body alerted}{bg=white, fg=uva-zwart}
+\setbeamercolor{block title alerted}{bg=uva-rood, fg=white}
+% Color of list items
+\setbeamercolor{enumerate item}{bg=,fg=uva-zwart}
+\setbeamercolor{enumerate subitem}{bg=,fg=uva-zwart}
+\setbeamercolor{enumerate subsubitem}{bg=,fg=uva-zwart}
+\setbeamercolor{section in toc}{fg=uva-zwart, bg=}
+% Other colors
+\setbeamercolor{qed symbol}{fg=maincolor}
+\setbeamercolor{caption}{fg=uva-zwart, bg=}
+\setbeamercolor{caption name}{fg=maincolor, bg=}
+
+\mode<all>

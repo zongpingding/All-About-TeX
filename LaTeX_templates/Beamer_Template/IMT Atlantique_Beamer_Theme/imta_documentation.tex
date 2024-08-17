@@ -1,0 +1,227 @@
+\documentclass{beamer}
+
+\usepackage{multicol}
+
+\title{IMT Atlantique - \LaTeX{} beamer template}
+\subtitle{Documentation for the \texttt{BetterIMTAtlantique} package}
+\date{\noexpand\today}
+\author[B.~MATEU]{Bruno MATEU}
+
+\usetheme[
+    %partnerlogo=logos/arkea
+    enablesectioninterframe,
+    enablesubsectioninterframe
+]{BetterIMTAtlantique}
+
+\begin{document}
+
+\begin{frame}[plain]
+    \titlepage
+\end{frame}
+
+\inserttoc
+
+\section{Introduction}
+
+\begin{frame}[c]
+    \frametitle{Introduction}
+    %\framesubtitle{subtitle}
+
+    \begin{blueblock}{About this template}
+        The \texttt{BetterIMTAtlantique} beamer theme provides a template that satisfies IMT Atlantique
+        identity rules. It also provides
+        some graphics assets useful for a presentation.
+    \end{blueblock}
+\end{frame}
+
+\section{Theme options}%
+\label{sec:theme_options}
+
+\subsubsection{\texttt{partnerlogo}}%
+\label{ssub:partnerlogo}
+
+
+\begin{frame}[c,fragile]
+    \frametitle{Options}
+    \framesubtitle{\texttt{partnerlogo}}
+
+    \begin{blueblock}{\texttt{partnerlogo=<path>}}
+        Use given path as partner logo
+    \end{blueblock}
+
+    \begin{example}
+        \small
+        \begin{verbatim}
+  \usetheme[
+      partnerlogo=logos/labsticc
+  ]{BetterIMTAtlantique}
+        \end{verbatim}
+    \end{example}
+\end{frame}
+
+\subsubsection{\texttt{enablesectioninterframe}}%
+\label{ssub:enablesectioninterframe}
+
+\begin{frame}[c,fragile]
+    \frametitle{Options}
+    \framesubtitle{\texttt{enablesectioninterframe}}
+
+    \begin{blueblock}{\texttt{enablesectioninterframe}}
+        Enable sections interframes.
+    \end{blueblock}
+
+    \begin{example}
+        \small
+        \begin{verbatim}
+  \usetheme[
+      enablesectioninterframe
+  ]{BetterIMTAtlantique}
+        \end{verbatim}
+    \end{example}
+\end{frame}
+
+\subsubsection{\texttt{enablesubsectioninterframe}}%
+\label{ssub:enablesubsectioninterframe}
+
+\begin{frame}[c,fragile]
+    \frametitle{Options}
+    \framesubtitle{\texttt{enablesubsectioninterframe}}
+
+    \begin{blueblock}{\texttt{enablesubsectioninterframe}}
+        Enable subsections interframes.
+    \end{blueblock}
+
+    \begin{example}
+        \small
+        \begin{verbatim}
+  \usetheme[
+      enablesectioninterframe,
+      enablesubsectioninterframe
+  ]{BetterIMTAtlantique}
+        \end{verbatim}
+    \end{example}
+\end{frame}
+
+\section{Features}
+
+\subsection{Description blocks}
+
+\begin{frame}[c,fragile]
+    \frametitle{Features}
+    \framesubtitle{Description blocks}
+
+    \begin{blueblock}{Description blocks}
+        Description blocks are useful to display a title and some information.
+    \end{blueblock}
+
+    \begin{example}
+        \scriptsize
+        \begin{verbatim}
+  \begin{block}{Cats are beautiful}
+    \begin{itemize}
+      \item They have soft fur
+      \item They purr when we pet them
+      \item They like receiving attention
+    \end{itemize}
+  \end{block}
+        \end{verbatim}
+    \end{example}
+\end{frame}
+
+\begin{frame}[c]
+    \frametitle{Features}
+    \framesubtitle{Description blocks}
+
+    \begin{blueblock}{Colored blocks}
+        Four colored description blocks are defined :
+        \begin{multicols}{2}
+        \begin{itemize}
+            \item \texttt{blueblock}
+            \item \texttt{greenblock}
+            \item \texttt{redblock}
+            \item \texttt{blackblock}
+        \end{itemize}
+        \end{multicols}
+    \end{blueblock}
+
+    \begin{greenblock}{\texttt{greenblock}}
+        This is a \texttt{greenblock} !
+    \end{greenblock}
+
+    \begin{redblock}{\texttt{redblock}}
+        This is a \texttt{redblock} !
+    \end{redblock}
+
+    \begin{blackblock}{\texttt{blackblock}}
+        This is a \texttt{blackblock} !
+    \end{blackblock}
+\end{frame}
+
+\subsection{Showcase}
+
+\begin{frame}[c,fragile]
+    \frametitle{Features}
+    \framesubtitle{Showcase}
+
+    \begin{blueblock}{Showcases blocks}
+        Showcase are used to display a short text next to a logo
+    \end{blueblock}
+
+    \vspace{1cm}
+
+    \begin{minipage}{0.47\textwidth}
+        \begin{showcase}{showcase blue}{building}
+            A blue showcase with a building logo
+        \end{showcase}
+    \end{minipage}\hfill
+    \begin{minipage}{0.47\textwidth}
+        \begin{showcase}{showcase green}{server}
+            Green showcase\\
+            Server logo
+        \end{showcase}
+    \end{minipage}
+\end{frame}
+
+\begin{frame}[c,fragile]
+    \frametitle{Features}
+    \framesubtitle{Showcase}
+
+    \begin{example}
+        \scriptsize
+        \begin{verbatim}
+    \begin{minipage}{0.47\textwidth}
+        \begin{showcase}{showcase blue}{building}
+            A blue showcase with a building logo
+        \end{showcase}
+    \end{minipage}\hfill
+    \begin{minipage}{0.47\textwidth}
+        \begin{showcase}{showcase green}{server}
+            Green showcase\\
+            Server logo
+        \end{showcase}
+    \end{minipage}
+        \end{verbatim}
+    \end{example}
+\end{frame}
+
+\begin{frame}[c]
+    \frametitle{Features}
+    \framesubtitle{Showcase}
+
+    \begin{showcase}{showcase blue}{info-circle}
+      \vspace{-2mm}
+      \begin{itemize}
+          \item Showcases use \texttt{fontawesome5} logos
+          \item Use \texttt{https://fontawesome.com/icons} to find \\the most accurate !
+      \end{itemize}
+    \end{showcase}
+
+    \begin{showcase}{showcase green}{paint-brush}
+      \vspace{-2mm}
+      \begin{itemize}
+          \item Showcases can also be blue, green, red or black
+      \end{itemize}
+    \end{showcase}
+\end{frame}
+
+\end{document}

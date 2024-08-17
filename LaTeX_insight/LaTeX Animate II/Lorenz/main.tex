@@ -1,0 +1,63 @@
+\documentclass{article}
+\usepackage{multido}
+\usepackage{pst-3dplot}
+\usepackage{pst-ode}
+\usepackage{animate}
+
+\begin{document}
+
+%Lorenz' set of differential equations
+\def\lorenz{%
+  10*(x[1]-x[0])        | %dx/dt
+  x[0]*(28-x[2]) - x[1] | %dy/dt
+  x[0]*x[1] - 8/3*x[2]    %dz/dt
+}%
+%
+%write timeline file
+\newwrite\OutFile%
+\immediate\openout\OutFile=lorenz.tln%
+\multido{\iLorenz=0+1}{101}{%
+  \immediate\write\OutFile{::\iLorenz x0}%
+}%
+\immediate\write\OutFile{::c,101}%
+\multido{\iLorenz=102+1}{89}{%
+  \immediate\write\OutFile{::\iLorenz}%
+}%
+\immediate\closeout\OutFile%
+%
+\psset{unit=0.155,linewidth=0.5pt}%
+\noindent\begin{animateinline}[
+  timeline=lorenz.tln,
+  controls,poster=last,
+  begin={\begin{pspicture}(-36,-13)(36,55)},
+  end={\end{pspicture}}
+]{10}
+  %coordinate axes
+  \psset{Alpha=120,Beta=20}%
+  \pstThreeDCoor[xMax=33,yMax=33,zMax=55,linecolor=black]%
+\newframe
+  %attractor segments
+  \gdef\initCond{10 10 30}% initial condition
+  \pstVerb{/lorenzXYZall {} def} %takes the whole attractor
+  \multiframe{100}{rtZero=0+0.25,rtOne=0.25+0.25}{%
+    %compute current attractor segment, store it in `lorenzXYZseg'
+    \pstODEsolve[algebraic]{%
+      lorenzXYZseg}{0 1 2}{\rtZero}{\rtOne}{26}{\initCond}{\lorenz}%
+    %empty initial condition --> next \pstODEsolve continues
+    \gdef\initCond{}%            from last state vector
+    %append segment to the whole attractor stored in `lorenzXYZall'
+    \pstVerb{%
+      /lorenzXYZall [lorenzXYZall lorenzXYZseg] aload astore cvx def}%
+    %plot the current segment
+    \listplotThreeD[plotstyle=line]{lorenzXYZseg}%
+  }%
+\newframe% required between two \multiframe
+  %fly-around (whole attractor)
+  \multiframe{90}{rAlpha=116+-4}{%
+    \psset{Alpha=\rAlpha,Beta=20}%
+    \pstThreeDCoor[xMax=33,yMax=33,zMax=55,linecolor=black]%
+    \listplotThreeD[plotstyle=line]{lorenzXYZall}%
+  }%
+\end{animateinline}
+
+\end{document}

@@ -1,0 +1,136 @@
+\section{定积分与黎曼和}
+\begin{definition}
+    设$f(x)$是定义在$[a,b]$上的有界函数，在$[a, b]$上任取分点$\{x_i\}^n_{i=0}$,做一种划分:
+    \[
+        P:a=x_0<x_1<x_2<\cdots<x_{n-1}<x_n=b
+    \]
+    并且任取点$\xi_i\in[x_{i-1},x_i]$.记小区间的长度为$\Delta x_{i-1}=x_i-x_{i-1}$,并令$\lambda=\max\limits_{1\le i\le n}(\Delta x_i)$,若当$\lambda\to 0$时，极限
+    \begin{equation}
+        \lim\limits_{\lambda\to 0}{\sum_{i}^{n}{f(\xi_i)\Delta x_i}}\nonumber
+    \end{equation}
+    存在，并且与划分P无关，又对$\xi_i$的取法无关，则称$f(x)$在$[a, b]$上Riemann可积，和式
+    \begin{equation}
+        S_n= \sum_{i=1}^{n}{f(\xi_i\Delta x_i)}\nonumber
+    \end{equation}
+
+    称为Riemann和，其极限$I$称为$f(x)$在$[a, b]$上的定积分，记为:
+    \begin{equation}
+    I=\int_{a}^{b}{f(x) \dd x}\nonumber
+    \end{equation}
+\end{definition}
+下边给出几个基本的求取范例，其实本质思想都是相同的\\
+\vspace*{3pt}
+
+
+\begin{framed}
+    \begin{align*}
+        & I_1=\int_{a}^{b}{e^x \mathrm{d}x}
+        & \displaystyle I_2= \int_{a}^{b}{x^2 \mathrm{d}x}
+    \end{align*}
+\end{framed}
+
+\begin{formal}{blue!20}
+    对于是否Riemann可积，其实就是需要我么们去计算积分的上限和下限。
+\end{formal}
+
+\begin{proof}\textsf{第一题}
+
+对于积分上限，我们需要计算的表达式即为:
+\[
+    \lim_{n\to\infty}{\frac{b-a}{n}e^a\cdot \sum_{i=1}^{n}{e^{\frac{i\cdot(b-a)}{n}}}}\nonumber \\
+\]
+
+\begin{align*}
+    {\rm LSH}
+    &=\lim_{n\to\infty}
+    {
+        e^a\cdot\frac{b-a}{n}\frac{e^{\frac{b-a}{n}}[1-e^{\frac{b-a}{n}\cdot n}]}{1-e^{\frac{b-a}{n}}}
+    }
+    =\lim_{n\to\infty}
+    {
+        e^a\cdot\frac{b-a}{n}\cdot\frac{e^{ \frac{b-a}{n} }[e^{b-a}-1]}{\lim\limits_{n\to\infty}{   e^{  \frac{b-a}{n} }   }-1}
+    }\\
+    &=\lim_{n\to\infty}
+    {
+        e^a\cdot\frac{b-a}{n}\cdot
+        \frac{e^{\frac{b-a}{n}}[e^{b-a}-1]}  {\frac{b-a}{n}}
+    }
+    =\lim_{n\to\infty}
+    {
+        e^a\cdot e^{\frac{b-a}{n}}\cdot[e^{b-a}-1] 
+    }\\
+    &=e^b-e^a
+\end{align*}   
+
+
+对于积分下限，我们需要计算的表达式即为：
+\[
+    \lim_{n\to\infty}{\frac{b-a}{n}e^a\cdot \sum_{i=1}^{n}{e^{\frac{(i-1)\cdot(b-a)}{n}}}}\nonumber
+\]
+
+
+\begin{align*}
+    {\rm LSH}
+    &=\lim_{n\to\infty}
+    {
+        e^a\cdot\frac{b-a}{n}\frac{e^{0}[1-e^{\frac{b-a}{n}\cdot n}]}{1-e^{\frac{b-a}{n}}}
+    }
+    =\lim_{n\to\infty}
+    {
+        e^a\cdot\frac{b-a}{n}\cdot
+        \frac{e^{0}[e^{b-a}-1]}  {\frac{b-a}{n}}
+    }\\ 
+    &=\lim_{n\to\infty}
+    {
+        e^a\cdot e^{0}\cdot[e^{b-a}-1] 
+    }
+    =e^b-e^a\nonumber
+\end{align*}
+
+由此我们可以得出，积分上限和积分下限相等，所以Riemann和为：
+\[
+I_1=e^b-e^a
+\]
+\end{proof}
+
+
+\begin{proof}\textsf{第二题}
+
+首先做分割，$T=\{a, a+\frac{a-b}{n}, \cdots, a+\frac{(n-1)(b-a)}{n}, b\}$, 并取$\xi_i=$,此时的Riemann和为：
+
+\begin{align*}
+    I_2 
+    & = \int_{a}^{b}{\frac{1}{x^2} \dd x}
+        = \lim_{n\to\infty}{\sum_{i=1}^{n}{f(\xi_i)\frac{a-b}{n}}}\\
+    & = \lim_{n\to\infty}{\sum_{i=1}^{n}{f(\xi_i)}}
+\end{align*}
+    
+因为$\xi_i\in [x_{i-1}, x_i]$ 而且要求 $f(\xi_i)$ 作为通项，
+要便于我们求和，即 $\frac{1}{\xi_i^2}$ 便于求和.
+考虑到 $\frac{1}{2\times 3}=\frac{1}{2}-\frac{1}{3}$ ,受到启发，
+所以我们便取 $\xi_i=\sqrt[]{x_{i-1}x_i}$ 的形式, 所以我们取
+\begin{align*}
+    \xi_i=\sqrt[]{[\frac{(i-1)(b-a)}{n}+a]\cdot[\frac{i\cdot(b-a)}{n}]}
+\end{align*} 
+
+
+C为一个待求解的常数。因为 $na+i(a-b)-na-(i-1)(a-b)=a-b\Longrightarrow {\rm C}=\frac{1}{a-b}$, 所以我们可以得到：
+\begin{align*}
+    C = \frac{1}{a-b}
+\end{align*}
+
+带入原式我们有：
+\begin{align*}
+    \mathrm{LHS} 
+    & = \int_{a}^{b}{ \frac{1}{x^2}\dd x}=\lim_{n\to\infty}{\frac{a-b}{n}\sum_{i=1}^{n}{\frac{1}{x_{i-1}x_i}}}
+      = \lim_{n\to\infty}{\frac{a-b}{n}\sum_{i=1}^{n}{{\rm C}\cdot[\frac{1}{a+\frac{(i-1)(a-b)}{n}}-\frac{1}{a+\frac{i\cdot(a-b)}{n}}]}}\\
+    & = \lim_{n\to\infty}{\frac{1}{a-b}\cdot (a-b)\sum_{i=1}^{n}{[\frac{1}{a+\frac{(i-1)(a-b)}{n}}-\frac{1}{a+\frac{i\cdot(a-b)}{n}}]}}
+      = \sum_{i=1}^{n}{[\frac{1}{na+(i-1)(a-b)}-\frac{1}{na+i\cdot(a-b)}]}\\
+    & = \lim_{n\to\infty}\sum_{i=1}^{n}[(\frac{1}{na+0(a-b)}-\frac{1}{na+(a-b)})+(\frac{1}{na+(a-b)}-\frac{1}{na+2(a-b)})\\
+    & \quad+\cdots+(\frac{1}{na+(n-1)(a-b)}-\frac{1}{na+n(a-b)})]\\
+    & = \lim_{n\to\infty}{[\frac{1}{na+0(a-b)}-\frac{1}{na+n(a-b)}]}
+      =\lim_{n\to\infty}{[\frac{1}{n}(\frac{1}{a}-\frac{1}{2a-b})]} = 0
+\end{align*} 
+
+有错，之后再检查检查!!
+\end{proof}

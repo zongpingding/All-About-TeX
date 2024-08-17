@@ -1,0 +1,43 @@
+\section{向量内积运用}
+
+$\displaystyle  S^*(x)$  是 $f(x)$ 在子集 $\varphi\subset \mathrm{C}[a, b]$中
+最佳平方逼近函数
+
+\begin{align*}
+    &\biggl(f(x)-S(x),\, f(x)-S(x)\biggr) - \biggl(f(x)-S^*(x),\, f(x)-S^*(x)\biggr) \\
+    = & \biggl(f(x)-S^*(x)+S^*(x)-S(x),\, f(x)-S(x)\biggr) - \biggl(f(x)-S^*(x),\, f(x)-S^*(x)\biggr)\\
+    = & {\color{blue!40} \biggl(f(x)-S^*(x),\, f(x)-S^*(x)\biggr)} 
+        + \biggl(f(x)-S^*(x),\, S^*(x)-S(x)\biggr)
+        + \biggl(S^*(x)-S(x),\, f(x)-S^*(x)\biggr)\\
+    - & {\color{blue!40} \biggl(f(x)-S^*(x),\, f(x)-S^*(x)\biggr)}
+        + {\color{red!40} ||S^*(x)-S(x)||^2 }\\
+    = & 2 \biggl(f(x)-S^*(x),\, S^*(x)-S(x)\biggr) + {\color{red!40} ||S^*(x)-S(x)||^2 }
+\end{align*}
+
+又因为 
+\begin{align*}
+    \biggl(f(x),\, \psi_k(x)\biggr) 
+    & = \sum_{i=0}^{n}{a_i\biggl(\psi_i(x),\, \psi_k(x)\biggr)}, \quad k = 0, 1, 2, \cdots, n\\
+    & = \biggl(\sum_{i=0}^{n}{a_i\psi_i(x)},\, \psi_k(x)\biggr) \\
+    & = \biggl(S^*(x),\, \psi_k(x)\biggr)
+\end{align*}
+
+于是我们可以得到：
+\begin{align}
+    \biggl(f(x)-S^*(x),\, \psi_k(x)\biggr) = 0
+\end{align}
+
+那么原式就可以化简为：
+\begin{align*}
+    \mathrm {LHS} 
+    & = 2 \biggl(f(x)-S^*(x),\, S^*(x)-S(x)\biggr) + {\color{red!40} ||S^*(x)-S(x)||^2 }\\
+    & = 0 + {\color{red!40} ||S^*(x)-S(x)||^2 }\\
+    & = {\color{red!40} ||S^*(x)-S(x)||^2 } \\
+    & \ge 0  
+\end{align*}
+
+
+于是我们就有：
+\begin{align}
+    {\bigg|\bigg|f(x)-S^*(x)\bigg|\bigg|^2 \le \bigg|\bigg|f(x) - S(x)\bigg|\bigg|^2} 
+\end{align}

@@ -1,0 +1,34 @@
+\documentclass{article}
+\usepackage[margin=2.5cm]{geometry}
+
+
+
+\begin{document}
+\ExplSyntaxOn
+% 1. create a new property list
+\prop_new:N \l_my_prop
+
+
+% 2. add key-value
+% single key-value
+\prop_put:Nnn \l_my_prop {key1}{value1}
+% set from key-value
+\prop_put_from_keyval:Nn \l_my_prop {
+    key2=value2,
+    key3=value3
+}
+
+
+% 3. get value by key
+\prop_item:Nn \l_my_prop {key1}\par
+
+
+% 4. map inline 
+\prop_map_inline:Nn \l_my_prop {
+    \textbf{#1}~ --~ #2\par
+}
+
+\ExplSyntaxOff
+
+Hello ^^M World
+\end{document}

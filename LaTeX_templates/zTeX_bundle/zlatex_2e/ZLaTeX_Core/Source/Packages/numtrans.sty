@@ -1,0 +1,42 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{ZLaTeX_Core/Source/Packages/numtrans}
+\RequirePackage{expl3}
+\RequirePackage{xparse}
+
+
+
+\ExplSyntaxOn
+% 1.numtrans
+\tl_new:N \l_numPrefix_tl 
+\tl_const:Nn \c_numSufix_i {st}
+\tl_const:Nn \c_numSufix_ii {nd}
+\tl_const:Nn \c_numSufix_iii {rd}
+\tl_const:Nn \c_numSufix_ {th}
+\clist_const:Nn \c_numSpecialSufix_clist {11, 12, 13}
+\NewDocumentCommand\numtrans{O{arabic}m}{
+    \str_case:nn {#1}{
+        {arabic} {\tl_set:Nn \l_numPrefix_tl {#2}}
+        {roman} {\tl_set:Nn \l_numPrefix_tl {\int_to_roman:n {#2}}}
+        {Roman} {\tl_set:Nn \l_numPrefix_tl {\int_to_Roman:n {#2}}}
+    }
+    \clist_if_in:NnTF \c_numSpecialSufix_clist {#2}{
+        \scalebox{4}{\l_numPrefix_tl} th
+    }{
+        \int_compare:nNnTF {\int_mod:nn {#2}{10}}{>}{3}{
+            \scalebox{4}{\l_numPrefix_tl} th
+        }{
+            \scalebox{4}{\l_numPrefix_tl}
+            \tl_use:c{
+                c_numSufix_\int_to_roman:n {\int_mod:nn {#2}{10}}
+            }
+        }
+    }
+}
+% ----- testing cmd -----
+% \int_step_inline:nnn {1}{100}{
+%     \numtrans{#1}\quad
+% }
+
+
+
+\ExplSyntaxOff

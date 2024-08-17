@@ -1,0 +1,124 @@
+\documentclass[hyper, class=article, layout={slide, aspect=16|9}]{zlatex}
+\usepackage{ztikz}
+\ztikzLoadModule{python, zdraw}
+\usepackage{csquotes}
+\usepackage{lipsum}
+
+
+\pagestyle{fancy}
+\setlength{\headheight}{25pt}
+\def\headrule{\zdrawSetUnit{pt}\zrule[width=\textwidth, step=1, height=1]}
+\title{Test}
+\author{Eureka}
+\date{\today}
+\begin{document}
+\orimaketitle
+\newpage
+
+\section{Python module}
+\lipsum[1]
+
+\[
+  2^{64} = \py{2**64}
+\]
+
+\[
+  \text{eig}\begin{bmatrix}
+    1 & 2 \\
+    2 & 2
+  \end{bmatrix} = \sympy{Matrix([[1, 2], [2, 2]]).eigenvals()}
+\]
+
+\newpage
+\section{zdraw module}
+\subsection{Set unit}
+\lipsum[2]
+
+\zdrawSetUnit{em}
+
+\subsection{gradient rule}
+\lipsum[3]
+
+\zrule[width=10, startColor=red, step=1]\qquad
+
+
+\newpage
+\subsection{plot function}
+\lipsum[4]
+
+\zdrawSetUnit{cm}
+\zdrawSetPathWidth {5pt}
+\begin{center}
+  \zplot{cos(x)}[domain={-5, 0.1, 5}, action=shade, startColor=blue, endColor=red, axis=x]
+\end{center}
+\zdrawSetPathWidth {.4pt}
+
+\subsection{zdraw env}
+\lipsum[5]
+
+\subsubsection{union}
+\begin{center}
+\begin{zdraw}
+  \xscale {0.5}
+  \yscale {0.5}
+  \cir {2cm, 0}{2cm}
+  \cir {3.5cm, 0}{2cm}
+  \usepath[draw, clip]
+  \fcolor {teal!50}
+  \rec {-10cm, -10cm}{10cm, 10cm}
+  \usepath[fill]
+\end{zdraw}
+\end{center}
+
+\subsubsection{intersection}
+\begin{center}
+\begin{zdraw}
+  \xscale {0.5}
+  \yscale {0.5}
+  \cir {3.5cm, 0}{2cm}
+  \usepath[draw]
+  \cir {2cm, 0}{2cm}
+  \usepath[clip, draw]
+  \fcolor {orange}
+  \cir {3.5cm, 0}{2cm}
+  \usepath[fill]
+\end{zdraw}
+\end{center}
+
+\subsubsection{difference}
+\begin{center}
+\begin{zdraw}
+  \xscale {0.5}
+  \yscale {0.5}
+  \draw_evenodd_rule:
+  \fcolor {pink}
+  \cir {2cm, 0}{2cm}
+  \cir {3.5cm, 0}{2cm}
+  \usepath[draw, fill]
+\end{zdraw}
+\end{center}
+
+
+\begin{center}
+  \begin{zdraw}
+    \xscale {.5}
+    \yscale {.5}
+    \draw_evenodd_rule:
+    \cir {-2cm, 0}{2.5cm}
+    \cir {2cm, 0}{2.5cm}
+    \cir {0, -2*sqrt(3)cm}{2.5cm}
+    \fcolor {gray}
+    % text
+    \newtext \texta
+    % \sethtext \texta {$y=\alpha x + \beta$\\ Hello~ world}
+    \setvtext \texta {6em}{$y=\alpha x + \beta$\\ Hello~ world}
+    \scaletext \texta {2}{2}
+    \puttext \texta {hc}{b}{0, -7cm}
+    \usepath[draw]
+  \end{zdraw}
+\end{center}
+\newpage
+
+\end{document}
+
+

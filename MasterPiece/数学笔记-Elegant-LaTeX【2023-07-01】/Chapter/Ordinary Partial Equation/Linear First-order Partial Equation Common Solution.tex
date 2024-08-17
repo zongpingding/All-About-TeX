@@ -1,0 +1,119 @@
+\newcommand{\coef}{\ensuremath{\displaystyle \mathrm{Exp}\{{-\int_{}^{}{p(x){\rm d}x}}\}}}
+\newcommand{\ee}{\ensuremath{\mathrm{e}}}
+
+\section{一阶线性微分方程的通解}
+\begin{theorem}[一阶线性微分方程的通解]
+     \begin{align}
+          \mbox{标准形式:}\quad \frac{\dd y}{\dd x} + p(x)=q(x)&\nonumber\\
+          &\mbox{通解:}\quad y=\mathrm{Exp}\{{-\int_{}^{}{p(x){\rm d}x}}\}\cdot\int_{}^{}{\biggl(\mathrm{Exp}\{{\int_{}^{}{p(x) {d\rm }x}}\} \cdot q(x)+C\biggr) {\rm d}x}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+
+首先两边同时乘以积分因子 \coef 即有:
+\begin{align*}
+     & \coef \cdot\frac{\dd y}{\dd x} + \coef \cdot p(x) = q(x)\cdot \coef \\
+     \Longrightarrow\quad  & \frac{\dd }{\dd x}\biggl(y\cdot \coef \biggr)=q(x)\cdot\coef \\
+     \Longrightarrow\quad  & y=\coef \cdot\int_{}^{}{\biggl(\coef \cdot q(x)\biggr)\dd x}
+\end{align*}
+
+下边说明第一个积分 
+\[
+    \coef = \gamma(x)
+\]
+
+不用加任意常数$C$, 假设
+\[
+    \coef = \gamma(x) + C    
+\]
+
+带入上边的式子即有
+\begin{align*}
+     y & =\quad  \ee^{-\gamma(x)-C}\cdot \int_{}^{}{e^{\gamma(x)+C}\cdot q(x) \dd x}\\
+     & \Longrightarrow\quad  y=e^{-C}\cdot e^{-\gamma(x)}\cdot e^C\cdot \int_{}^{}{e^{\gamma(x)}\cdot q(x)\dd x}\\
+     & \Longrightarrow\quad  y=e^{-\gamma(x)}\cdot\int_{}^{}{e^{\gamma(x)}\cdot q(x)\dd x}
+ \end{align*} 
+
+所以从上边我们可以看出，第一个积分可以不加常数C. 但是注意:上边只是非齐次方程的特解，
+我们还应该加上齐次方程的通解,所以可以得到原微分方程的通解为:
+
+\begin{framed}
+    \begin{align*}
+        y & = \ee^{-\int_{}^{}{p(x)\dd x}}\cdot\int_{}^{}{[\ee^{\int_{}^{}{p(x) \dd x}} \cdot q(x)+C] \dd x}
+        = \mathrm{Exp}\{{-\int_{}^{}{p(x) \dd x}}\}\cdot\int_{}^{}{\biggl(\mathrm{Exp}\{{\int_{}^{}{p(x) {d\rm }x}}\} \cdot q(x)+C\biggr) \dd x}
+    \end{align*}
+\end{framed}
+\end{proof}
+
+\clearpage
+
+\subsection{两个错误的带入公式的例子}
+\begin{framed}
+\[
+    xy'+(x+1)y=\ee^x \hspace*{.5\linewidth} x'' -x = C_0   
+\]
+\end{framed}
+\noindent{\bf 第一题}
+
+{\bf 错解}
+
+先求出齐次方程的通解
+\[
+    y={\rm Exp}\{\int_{}^{}{\frac{1+x}{x} dx}\}
+\]
+原来非齐次方程的解即为:
+\begin{align*}
+    y & = \ee^{\int_{}^{}{\frac{1+x}{x} \dd x}}[\int_{}^{}{e^{\int_{}^{}{\frac{1+x}{x} \dd x}}\cdot \frac{e^x}{x} \dd x}]
+        = \ee^{\ln |x|+x}[\int_{}^{}{\ee^{\ln |x|+x} \cdot \frac{\ee^x} {x}\dd x}]\\
+      & = |x|\ee^x\cdot\biggl(\int_{}^{}{\ee^{2x} \dd x}\biggr)
+        = x\ee^x\cdot(\frac{1}{2}\ee^{2x}+C)
+\end{align*}
+
+\begin{formal}{blue!20}
+    错因：积分因子乘过去没有取倒数
+\end{formal}
+{\bf 正解}
+
+首先求得积分因子
+\[
+    \ee^{\int_{}^{}{\frac{x+1}{x} \dd x}}=x\ee^x    
+\]
+然后使用公式可以知道：
+\begin{align*}
+    & y = \frac{1}{x\ee^x}\cdot \int_{}^{}{\ee^x\cdot x\ee^x \dd x}
+        = \frac{\ee^{-x}}{x}\cdot (\frac{1}{2}x\ee^x-\frac{1}{4}\ee^{2x}+C)
+        = (\frac{1}{2}-\frac{1}{2x})\ee^x + C\cdot \frac{\ee^{-x}}{x}
+\end{align*} 
+
+仍然有错:原方程两边同时除以 $x$ 时没有对右边的 $e^x$ 除以 $x$.
+只需要把第二种错误的解法稍微改善以下就可以得到正解
+\begin{formal}{blue!20}
+\[
+    \displaystyle y = \frac{\ee^x}{2x}+C\cdot\frac{\ee^{-x}}{x}
+\]
+\end{formal}  
+
+\noindent{\bf 第二题}
+
+求解如下的二阶微分方程
+\[
+    x'' -x = C_0  \Longleftrightarrow x'' - x' + x' - x = 0
+\]
+即 $g'(t) - g'(t) = C_0$, 其中: $g(t) = x'(t) -x(t)$. 可以猜测 $g(t)$的形式如下:
+\[
+    g(t) = -C_0 + c\ee^{-t}    
+\]
+验证
+\[
+    g'(t) - g(t) = c\ee^{-t} -(-C_0 + c\ee^{-t}) = C_0    
+\]
+然后求解得到: $x'(t) - x(t) = c\ee^{-t} -C_0$.
+
+但是如果直接代入公式是得不到正确 $g(t)$, 理由如下:
+\begin{align*}
+    g(t) = \ee^{-\int_{}^{}{-1}\dd t}\cdot \int_{}^{}{\ee^{\int_{}^{}{-1}}\dd t}
+         = C_0 \ee^{t} (\ee^{-t}+\ee^{c_1}) 
+         = C_0 + \ee^{c_1}\cdot C_0  e^t
+         = C_0 + C\ee^t
+\end{align*} 

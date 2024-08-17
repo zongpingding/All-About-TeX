@@ -1,0 +1,67 @@
+\documentclass[aspectratio=169]{beamer}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+
+\title{Presentation Title}
+\date{July 25, Nuremberg}
+\author{Duncan Mac-Vicar P. <\texttt{dmacvicar@suse.com}>}
+\usetheme{suse}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Presentation Title}
+\framesubtitle{This is \textit{a subtitle}.}
+
+\begin{columns}
+
+\column{0.5\textwidth}
+This is a text in first column.
+\begin{itemize}
+  \item First item
+  \item Second item
+  \item \texttt{mono spaced font example}
+  \begin{itemize}
+    \item First item
+    \item Second item
+  \end{itemize}
+\end{itemize}
+
+\column{0.5\textwidth}
+This text will be in the second column
+and on a second thought this is a nice looking
+layout in some cases.
+\begin{lstlisting}[language=C, showstringspaces=false]
+#include <stdio.h>
+int main() {
+  printf("Hello World");
+}
+\end{lstlisting}
+
+\end{columns}
+
+\end{frame}
+
+\begin{frame} 
+\frametitle{Another slide}
+\framesubtitle{This is \textit{a subtitle}.}
+
+\begin{table}
+  \begin{tabular}{c|c}
+    table1 & trial \\
+    \hline
+    \hline
+    1 & 2 \\
+    3 & 4
+  \end{tabular}
+  \caption*{My table}
+\end{table}
+\end{frame}
+
+\end{document}
+

@@ -1,0 +1,1332 @@
+\documentclass[load-preamble+]{cnltx-doc}
+
+\usepackage[fontset = fandol]{ctex}
+\usepackage
+  {
+    enumitem,newtxmath,indentfirst,tabularray,ninecolors,
+    fancyvrb,geometry,hologo,pifont,changelog
+  }
+\definecolorscheme{blue}
+  {
+    cs          => violet,
+    option      => olive6,
+    cnltx       => blue,
+    link        => purple5,
+    module      => orange,
+    meta        => black,
+    versionnote => black
+  }
+\setcnltx
+  {
+    name            = easybook,
+    color-scheme    = blue,
+    title           = EASYBOOK使用手册,
+    version         = v1.71D,
+    date            = 2022/11/08,
+    authors         = 瞿毅,
+    info            = 简便地排版中文学位论文或书籍,
+    email           = toquyi@163.com,
+    url             = https://gitee.com/texno3/easybook,
+    abstract        =
+      {
+        \cls*{easybook} 是基于 \cls*{ctexbook} 书籍文档类创建的纯净学术模板，同时兼具 \cls*{book} 与 \cls*{article} 文档类的功能。结合中国许多高校学位论文的通用框架设计，提供多个命令和接口可以使用户简便地定制论文模板。它的基础宏包 \pkg*{easybase} 还可以搭配 \CTeX 和标准文档类使用。
+      },
+    arg-format      = \normalfont\small\itshape\xeCJKVerbAddon,
+    abstract-format = \small,
+    module-sep      = \,\raisebox{-1pt}{\ding{224}}\,,
+    title-format    = \huge\sffamily
+  }
+\KOMAoptions{numbers = noenddot}
+\setfootnoterule[0.5pt]{0.4\columnwidth}
+\addtokomafont{headsepline}{\color{blue}}
+\addtokomafont{footnoterule}{\color{blue}}
+\addtokomafont{section}{\normalfont\sffamily}
+\addtokomafont{subsection}{\normalfont\sffamily}
+\addtokomafont{subsubsection}{\normalfont\sffamily}
+\DeclareTOCStyleEntry[entryformat = \sffamily]{default}{section}
+\DeclareFieldFormat[book]{title}{\textsf{#1}}
+\geometry{margin = 1in,marginparwidth = 0.6in}
+\SetEnumitemValue{label}{smallbullet}{\small\color{blue}\textbullet}
+\setlist{nosep,topsep = \smallskipamount,labelsep = 0.5em}
+\setlist[1]{labelindent = \parindent}
+\setlist[itemize,1]{label = smallbullet,leftmargin = *}
+\setcounter{tocdepth}{2}
+\SetTblrInner[talltblr]{hline{1,Z} = {0.8pt,blue}}
+\SetTblrTemplate{caption}{empty}
+\DefTblrTemplate{remark-sep}{default}{\space}
+\SetTblrStyle{remark}{font = \small\normalfont}
+
+\ExplSyntaxOn\makeatletter
+% * Do not add entries to the index
+% - Leave the option value blank
+\NewDocumentCommand{\kvsplit}{st-mm}
+  {
+    \item\code
+      {
+        \IfBooleanTF{#1}{\option*{#3}}{\option{#3}}
+        \cnltx@isvalue
+        \IfBooleanTF{#2}{#4}{\splitmarg{#4}}
+      }
+    \cnltx@checkdefault{\hfill\newline}
+  }
+% Traversal output parameters
+\newcommand{\splitmeta}[2][\code{,}]
+  {
+    \clist_clear:N \l_tmpa_clist
+    \clist_map_inline:nn {#2} { \clist_put_right:Nn \l_tmpa_clist { \meta{##1} } }
+    \clist_use:Nn \l_tmpa_clist {#1}
+  }
+% Add delimiters to parameters
+\newcommand{\newsplitarg}[4][\code{,}]
+  {
+    \newcommand{#2}[1]
+      {\code{\textcolor{argument}{#3\textnormal{\splitmeta[#1]{##1}}#4}}}
+  }
+\newsplitarg{\splitoarg}{[}{]}
+\newsplitarg{\splitdarg}{(}{)}
+\newsplitarg{\splitmarg}{\{}{\}}
+\newsplitarg[\code{|}]{\baroarg}{[}{]}
+\newcommand{\harg}{\textcolor{argument}{\code{-}}}
+% Remove default braces of values
+\RenewDocumentCommand{\key}{s}
+  {
+    \IfBooleanTF{#1}{\cnltx@key@aux*}{\cnltx@key@aux{}}
+    \meta
+  }
+\RenewDocumentCommand{\keyis}{s}
+  {
+    \IfBooleanTF{#1}{\cnltx@key@aux*}{\cnltx@key@aux{}}
+    \@firstofone
+  }
+% A tag that distinguishes the options for different paths
+\NewDocumentCommand{\dtag}{sO{\ding{73}}}
+  {
+    \begingroup
+    \reversemarginpar
+    \marginnote{\hfill\llap{#2}}
+    \endgroup
+    \IfBooleanF{#1}{\cnltx@checkdefault{\hfill\newline}}
+  }
+\newnote{\newtag}[1][New]{\fbox{#1}}
+% Use a separate module margin marker to prevent overlap
+\newcommand{\smodule}[1]{\cnltx@module@text*{\normalsize #1}}
+\newcommand{\noitemsep}{\setlength{\itemsep}{0ex}}
+\newcommand{\insertalltblr}[3][]
+  {
+    \begin{center}
+    \begin{talltblr}[#1]{#2}
+      #3
+    \end{talltblr}
+    \end{center}
+  }
+\renewcommand{\cnltx@package@abstract@width}{0.85\linewidth}
+\renewcommand{\cmltx@list@setup}
+  {
+    \setlength{\leftmargin}{0em}
+    \setlength{\labelwidth}{2em}
+    \setlength{\itemindent}{-1em}
+    \setlength{\labelsep}{0em}
+    \setlength{\listparindent}{2em}
+    \setlength{\topsep}{\smallskipamount}
+    \setlength{\itemsep}{\smallskipamount}
+    \setlength{\partopsep}{0ex}
+    \setlength{\parsep}{0ex}
+  }
+\newcounter{ctexexam}
+\define@key{FV}{labelref}{\def\ctexexamlabelref{\label{#1}}}
+\let\ctexexamlabelref\empty
+\fvset
+  {
+    formatcom       = \xeCJKVerbAddon,
+    baselinestretch = 1.2,
+    gobble          = 2,
+    fontsize        = \small,
+    rulecolor       = \color{blue},
+    framerule       = 0.5pt,
+    frame           = single,
+    framesep        = 6pt
+  }
+\DefineVerbatimEnvironment{frameverb}{Verbatim}
+  {
+    listparameters =
+      {
+        \setlength{\topsep}{\bigskipamount}
+        \appto\FV@EndList{\nointerlineskip}
+      }
+  }
+\DefineVerbatimEnvironment{ctexexam}{Verbatim}
+  {
+    label = \rule{0pt}{12pt}\textnormal{\bfseries 例 \arabic{ctexexam}},
+    listparameters =
+      {
+        \setlength{\topsep}{\bigskipamount}
+        \appto\FV@EndList{\nointerlineskip}
+        \refstepcounter{ctexexam}\ctexexamlabelref
+      }
+  }
+\makeatother\ExplSyntaxOff
+\labelformat{section}{节#1}
+\labelformat{subsection}{小节#1}
+\labelformat{subsubsection}{小节#1}
+\labelformat{ctexexam}{例#1}
+
+\begin{document}
+
+\section{准备开始}
+您在使用 \cls*{easybook} 文档类编写文档前可能需要具备以下的条件：
+\begin{itemize}
+  \item 使用 \hologo{XeLaTeX}（推荐）或 \hologo{LuaLaTeX} 两种编译方式。
+  \item 由于文档类用到了一些 \LaTeX 和依赖宏包较新的功能，需要版本至少在\textbf{2020/10/01}以后的 \LaTeX 内核支持。建议您安装最新的 \TeX 发行版。
+  \item 虽然手册对基本用法做了介绍，但这并不是入门教程，所涉及到宏包的用法与命令也需要有了解。您应当具有一定的 \LaTeX 使用基础，可以在 \TeX 综合网站 \href{https://www.ctan.org/}{CTAN} 查看相关资源。
+\end{itemize}
+
+\subsection{基本用法}
+\label{subsec:basic usage}
+以下一份简单的 \TeX 文档演示了 \cls*{easybook} 的最基本用法，在导言区进行宏包载入与文档设置，一些详细的使用样例会不定期上传在 \href{https://www.latexstudio.net/}{\LaTeX 工作室} 的网站。
+\begin{frameverb}
+  \documentclass[文档类选项]{easybook}
+
+  \ctexset{键值列表}
+  \usepackage{宏包列表}
+
+  \begin{document}
+  \chapter{欢迎}
+  \section{Welcome to easybook}
+    Hello, \LaTeX
+  \end{document}
+\end{frameverb}
+
+或者直接使用 \pkg*{easybase} 宏包，目前适用于 \cls*{ctexbook}、\cls*{ctexrep}、\cls*{ctexart} 以及标准文档类，包含了\ref{sec:interface options} 所示各个模块接口命令的功能。它的宏包选项共享文档类选项的一部分，支持的选项见\ref{sec:document class options}。当在\textbf{标准文档类}后载入时还可以使用 \pkg*{ctex} 宏包的选项，将会传递给 \pkg*{ctex} 宏包。
+\begin{frameverb}
+  \documentclass[文档类选项]{ctexbook}
+
+  \usepackage[宏包选项]{easybase}
+  \ctexset{键值列表}
+
+  \usepackage{宏包列表}
+
+  \begin{document}
+  \chapter{欢迎}
+  \section{Welcome to easybook}
+    Hello, \LaTeX
+  \end{document}
+\end{frameverb}
+
+\subsection{编译方式}
+假设您的 \TeX 源文件名为 \code{easybook.tex}，需要使用参考文献和索引功能，并使用 \hologo{XeLaTeX} 和 \hologo{BibTeX} 引擎编译文档，那么需要在命令行中执行：
+\begin{frameverb}
+  xelatex -shell-escape easybook
+  bibtex easybook
+  makeindex easybook
+  xelatex -shell-escape easybook
+  xelatex -shell-escape easybook
+\end{frameverb}
+当然也可以使用 \code{latexmk} 及一些软件自带的编译工具，这里就不做介绍。 \\
+\ding{72} 需要注意正确\textbf{编译索引}要增加 \code{-shell-escape} 命令行选项。
+
+\subsection{依赖宏包}
+以下为 \pkg*{easybase} 直接调用的关键宏包清单，通常情况下它们是常用且稳定的。棕色背景的宏包表示修改了或依赖它们的内部命令。绿色背景的宏包表示并未调用它们，但做了一些预配置，可在导言区手动载入以实现相关的功能。
+\insertalltblr
+  {
+    colspec       = @{}*{5}{c}@{},
+    cells = {cmd  = \pkg*},
+    cell{1}{3,4}  = yellow8,
+    cell{2}{5}    = yellow8,
+    cell{3}{2,4}  = yellow8,
+    cell{5}{1}    = yellow8,
+    cell{1}{2}    = green8,
+    cell{3}{1,4}  = green8,
+    cell{5}{2}    = green8
+  }{
+    amsthm & bicaption & ctexbook & caption & chemformula \\
+    enumitem & etoolbox & fancyhdr & geometry & hyperref \\
+    imakeidx & listings & marginnote & mathtools & multicol \\
+    pifont & pdfpages & siunitx & spbmark & thmtools \\
+    tcolorbox & titletoc & tabularray & ulem &
+  }
+
+\section{文档类选项}
+\label{sec:document class options}
+文档类选项应当在使用 \cls*{easybook} 文档类或 \pkg*{easybase} 宏包（部分支持）时指定，可见\ref{subsec:basic usage} 的例子。选项前带有 \ding{73} 符号表示只可用于文档类，否则文档类与宏包都适用。除了下面列举的选项以外，还支持标准和 \CTeX 文档类的选项。
+
+\subsection{基本选项}
+\begin{options}
+  \opt{draft}
+  开启草稿模式会加快编译速度，表现有显示页面边框、行溢出的地方显示黑色方块、图片变成占位方框、显示当前日期和关闭超链接渲染。不使用绘图宏包及依赖于 \pkg*{tcolorbox} 宏包的盒子环境也会增快编译速度，详情见\ref{subsec:box}。
+  \opt{newline}\dtag
+  部分和章标题的样式为另起一行，符合一般英文书籍的习惯。
+  \keychoice{scheme}{chinese,plain}\dtag\Default{chinese}
+  文档主题方案选项 \option{scheme} 扩展了 \CTeX 文档类中同名选项原有的作用范围，选项值 \code{plain} 可使各类标题变为英文形式。包括章节标题、图表标题和定理名等。
+  \opt{enmode}\dtag
+  同时开启 \option{newline} 和 \keyis{scheme}{plain} 选项以符合英文原生风格。
+  \keychoice{paper}{a4paper,b5paper,c5paper,letterpaper,other paper}\Default{a4paper}
+  文档页面尺寸选项将参数交给 \pkg*{geometry} 宏包处理，可使用它支持的所有标准纸张规格。
+  \keyval{config}{配置文件列表}\dtag
+  载入用户配置的文件名列表，文件列表以花括号包裹并以英文逗号分隔。文件名应包含如 \code{tex}、\code{def} 或 \code{cfg} 等扩展名。若配置文件不在当前文件夹则文件名需要包含路径。
+  \keybool{floatpage}\Default{false}
+  开启这个选项后浮动环境 \env*{table} 和 \env*{figure} 的比例参数会使用默认值。关闭它则尽可能避免出现浮动页，使图表环境与正文段落更加紧凑，减少多余的空白版面。
+  \keybool{theorem}\Default{true}
+  是否提供定理功能支持。选项开启时定理样式模块生效，此时会载入 \pkg*{amsthm} 和 \pkg*{thmtools} 宏包。
+\end{options}
+
+\subsection{配置字体}
+\begin{options}
+  \keychoice{cjkfont}{adobe,fandol,founder,mac,macnew,macold,ubuntu,windows,none}\dtag
+  中文字体采用 \CTeX 宏集包含的字库并与其一致，具体配置方案可以查看 \CTeX 使用手册。它与 \option*{fontset} 选项是等效的，如果没有指定 \option{cjkfont} 的值，将会自动检测操作系统并选择相应的字体。
+
+  如果需要使用其它中文字体，可以在启用选项 \keyis{cjkfont}{none} 后，再使用 \pkg*{xeCJK} 宏包的相关命令设置字体以及声明字体族：
+  \begin{ctexexam}
+  \setCJKmainfont{SimSun}[BoldFont = SimHei,ItalicFont = KaiTi]
+  \setCJKsansfont{SimHei}
+  \setCJKmonofont{FangSong}
+  \newCJKfontfamily[song]\songti{SimSun}
+  \end{ctexexam}
+\end{options}
+
+\begin{options}
+  \keychoice{font}{noto,times,times*,ebgaramond,libertine,palatino,auto}\dtag\Default{auto}
+  预置的英文字体相关配置方案如下表所示。这些字体已经包含在了 \TeX Live 发行版中，所以通常不需要再专门安装。如果您想使用其它英文字体，可以使用 \pkg*{fontspec} 宏包的相关命令进行设置。
+  \insertalltblr[
+      remark{\ding{72}} = \code{times*} 方案为 \textsf{windows} 系统的预置字体。
+    ]{
+      colspec   = @{}*{4}{c}@{},
+      hline{2}  = {0.5pt,blue},
+      row{1}    = {font = \sffamily},
+      column{1} = {cmd = \code}
+    }{
+    & 正文字体 & 无衬线字体 & 等宽字体 \\
+    noto & Noto Serif & Noto Sans & Noto Sans Mono \\
+    times & XITS & TG Heros & TG Cursor \\
+    times* & Times New Roman & Arial & Courier New \\
+    ebgaramond & EB Garamond & Libertinus Sans & LM Mono \\
+    palatino & TG Pagella & Libertinus Sans & LM Mono \\
+    libertine & Libertinus Serif & Libertinus Sans & LM Mono
+    }
+\end{options}
+
+\begin{options}
+  \keychoice{mathfont}{times,noto,notosans,nc,stix2,charter,ebgaramond,libertine,none}\dtag\Default{times}
+  选择合适的数学字体，将会加载 \pkg*{newtxmath} 和 \pkg*{bm} 宏包。使用选项 \code{none} 时可以使用 \pkg*{unicode-math} 等其它数学字体宏包定义字体。
+\end{options}
+
+\subsection{\textsf{article} 模式}
+\begin{options}
+  \keychoice{class}{book,article}\Default{book}
+  使用 \cls*{easybook} 文档类可以有两种模式，默认为 \cls*{book} 模式。选用 \code{article} 会变为 \code{oneside} 单面排版，同时使文档编号、结构等与标准 \cls*{article} 文档类的特性相似，可用于短篇幅的文章，不需要再使用 \cs*{chapter} 命令。此时\ref{subsec:directory command} 中目录命令的 \option{chapter} 选项会失效，将以 \code{section} 标题级别输出目录。如果使用 \cls*{ctexart} 配合 \pkg*{easybase} 宏包，则选项值 \code{book} 会失效。
+  \opt{book}
+  开启 \cls*{book} 书籍模式，与 \keyis*{class}{book} 等效。
+  \opt{article}
+  开启 \cls*{article} 文章模式，与 \keyis*{class}{article} 等效。
+\end{options}
+
+\section{接口选项}
+\label{sec:interface options}
+\begin{commands}
+  \command*{ctexset}[\marg{键值列表}]
+  \cls*{easybook} 扩展了 \CTeX 宏集 \hologo{LaTeX3} 风格键值的通用控制命令 \cs*{ctexset}，接口选项同样可用它设置，原有的 \meta{键值列表} 仍然可用。本文档类目前有9个模块用于实现常规的排版功能，如下表所示。模块名也是统一接口 \cs*{ctexset} 的路径，不同模块单独接口的命令名\textbf{加上前缀} \code{eb}：
+  \insertalltblr
+  {
+    colspec   = @{}*{5}{c}@{},
+    hline{3}  = {0.5pt,blue},
+    row{1,3}  = {font = \sffamily,belowsep = 0pt},
+    row{2,4}  = {cmd = \module*}
+  }{
+  \hyperref[subsec:style]{风格} & \hyperref[subsec:other font]{其它字体} & \hyperref[subsec:spacing]{行距} & \hyperref[subsec:hyperlinks]{超链接} & \hyperref[subsec:reference]{参考文献} \\
+  style & subfont & spread & refset & bibset \\
+  \hyperref[subsec:theorem of style]{定理样式} & \hyperref[subsec:page margins]{页面尺寸} & \hyperref[subsec:header and footer]{页眉页脚} & \hyperref[subsec:catalog style]{目录样式} & \\
+  thmset & geoset & hdrset & tocset &
+  }
+
+  例如使用下面\ref{subsec:style} 介绍的风格 \module*{style} 模块，路径名与所属下级选项之间可以 \code{/} 或 \code{=} 号分开，斜线 \code{/} 后不能有空格或者换行：
+  \begin{ctexexam}
+  \ctexset
+    {
+      style/color     = seaside,
+      style           =
+        {
+          fntnumwith  = page,
+          uppercase   = first
+        }
+    }
+  \ebstyle{hyphen-figure = {-}}
+  \end{ctexexam}
+
+  文档类有三种选项：布尔型 \boolkey*{key}，选项的值为真 \code{true} 或假 \code{false}，如果不指定默认为真。键值型 \key*{key}{value} 需要为选项指定值，后面 \code{=} 号不能省略。选择型 \choicekey*{key}{one,\default{two},three} 根据提供的可选值进行设定。
+\end{commands}
+
+\subsection[风格]{风格\smodule{style}}
+\label{subsec:style}
+\begin{options}
+  \keychoice{color}{none,seaside,energy,cyberpunk}\Default{none}
+  预置了四种颜色主题，默认主题 \code{none} 为黑白页面，颜色主题不包括超链接。
+  \begin{commands}
+  \command{DeclareThemeColor}[\splitmarg{风格名称,颜色1,颜色2,颜色3}]
+  声明新的颜色主题命令。它的参数以英文逗号分隔，第一部分为颜色风格名称，后面三部分为 \code{HTML} 颜色代码，构成主题颜色列表。类似地更改超链接颜色见\ref{subsec:hyperlinks}。
+  \end{commands}
+  \keyval{color-every}{HTML颜色代码}
+  统一设置主题的各部分颜色。参数是6个十六进制数字组成的 \code{HTML} 颜色代码，任意颜色的代码可以在常见的图片处理工具拾色器中查看。
+  \keyval{multoc}{整数}\Default{2}
+  设置目录的排版栏数，与\ref{subsec:directory command} 中目录命令的同名选项有相同效果。
+  \keybool{withpart}\Default{false}
+  使章标题跟随部分计数器编号，当开启新的一部分时章编号从1开始。
+  \keychoice{fntnumwith}{part,chapter,page}\Default{chapter}
+  使脚注跟随编号的计数器名。默认跟随章计数器，即开启新的一章时脚注编号从1开始。
+  \keychoice{uppercase}{all,first,none,none*}\Default{all}
+  使用 \cs{rightmark} 和 \cs{leftmark} 等标题标记命令获取标题内容用于页眉页脚时其中英文的大小写类型。\code{all} 为标题标记中的英文字母全部大写。\code{first} 为标记以英文起始时仅第一个字母大写。\code{none} 不改变标记中英文字母的大小写形式，变体 \code{none*} 则强制标记的字母均为小写形式。
+  \kvsplit{brackets}{左括号,右括号}\Default{\Marg{(,)}}
+  设置行间公式编号标签的括号及格式，以英文逗号分隔，分别代表左右括号。\meta{左括号} 可以是带有一个参数的命令，用于接受编号和 \meta{右括号}。将标签括号设置为方括号，并使用无衬线字体：
+  \begin{ctexexam}
+  \newcommand{\bracketsf}[1]{\textsf{[#1}}
+  \ebstyle{brackets = {\bracketsf,]}}
+  \end{ctexexam}
+  \kvsplit-{figurepath}{\marg{路径名1}\marg{路径名2}$\cdots$\marg{路径名n}}
+  设置插入图片的文件夹路径名。可以有多个路径名，每个路径包含在花括号内分隔，只有一个路径时需要包含在两层括号内。
+\end{options}
+
+\subsubsection{连字符}
+\begin{options}
+  \keyval{hyphen-figure}{图片连字符}\Default{\Marg{.}}
+  设置图片题注编号的连字符。
+  \keyval{hyphen-table}{表格连字符}\Default{\Marg{.}}
+  设置表格题注编号的连字符。
+  \keyval{hyphen-listing}{代码连字符}\Default{\Marg{.}}
+  设置代码题注编号的连字符。
+  \keyval{hyphen-equation}{公式连字符}\Default{\Marg{.}}
+  设置公式题注编号的连字符。
+  \keyval{hyphen-every}{连字符}\Default{\Marg{.}}
+  统一设置上述所有编号的连字符。
+\end{options}
+
+\subsubsection{上下标全局设置}
+\label{subsubsec:super-sub-script}
+\begin{options}
+  \keyval{spvmove}{刚性长度}\Default{0pt}
+  上标命令 \cs{super} 对应的上标垂直偏移量。
+  \keyval{sphmove}{刚性长度}\Default{0pt}
+  上标命令 \cs{super} 对应的上标水平偏移量。
+  \keyval{sbvmove}{刚性长度}\Default{0pt}
+  下标命令 \cs{sub} 对应的下标垂直偏移量。
+  \keyval{sbhmove}{刚性长度}\Default{0pt}
+  下标命令 \cs{sub} 对应的下标水平偏移量。
+  \opt{nohmove}
+  同时取消上标和下标的 \meta{水平偏移}，与 \keyis{sphmove}{0pt} 和 \keyis{sbhmove}{0pt} 等效。
+  \opt{novmove}
+  同时取消上标和下标的 \meta{垂直偏移}，与 \keyis{spvmove}{0pt} 和 \keyis{sbvmove}{0pt} 等效。
+  \keyval{spcmd}{格式命令}
+  上标命令 \cs{super} 对应的上标的格式命令。
+  \keyval{sbcmd}{格式命令}
+  下标命令 \cs{sub} 对应的下标的格式命令。
+  \keyval{spbhmove}{刚性长度}\Default{0pt}
+  上下标命令 \cs{supersub} 对应的上下标共同水平偏移量。
+  \kvsplit{spbcmd}{上标格式,下标格式}
+  上下标命令 \cs{supersub} 对应的上下标格式命令。以英文逗号分隔为前后两个部分分别设置上下标格式，也可以只有前部分，表示上标的格式。
+  \kvsplit{vsep}{上标偏移,下标偏移}\Default{0.6ex}
+  上下标命令 \cs{supersub} 对应的上下标额外垂直距离。前部分为上标的偏移量，后部分为下标的偏移量。如果只有前部分则上下标各自垂直移动当前值的一半。
+  \keychoice{halign}{l,c,r}\Default{l}
+  上下标命令 \cs{supersub} 对应的上下标水平对齐方式，有左 \code{l}、居中 \code{c} 和右 \code{r} 三种对齐方式。
+\end{options}
+
+\subsection[超链接]{超链接\smodule{refset}}
+\label{subsec:hyperlinks}
+模块 \module*{refset} 将超链接选项交给 \pkg*{hyperref} 宏包处理。除了一些超链接颜色的选项失效，其它由宏包全局和接口命令 \cs*{hypersetup} 支持的多数选项可用。
+\begin{options}
+  \keychoice{linktype}{edge,colors,none}\Default{edge}
+  超链接类型。\code{edge} 使超链接形式为边框，\code{colors} 使超链接字体为彩色，\code{none} 关闭超链接边框与颜色，此时 \option{linkcolor} 选项无效。
+  \keychoice{linkcolor}{fresh,cutepink,navyblue,crimson}\Default{navyblue}
+  超链接颜色样式。预置了四种超链接颜色风格。为使相关颜色能够正确显示，选项 \option{linkcolor} 应当在 \option{linktype} 前使用。
+  \begin{commands}
+  \command{DeclareLinkColor}[\splitmarg{风格名称,颜色1,颜色2,颜色3}]
+  声明新的超链接颜色样式命令。它的参数以英文逗号分隔，第一部分为颜色风格名称，后面三部分为 \code{HTML} 颜色代码，构成超链接颜色列表。
+  \end{commands}
+  \keyval{linkcolor-every}{HTML颜色代码}
+  统一设置超链接的各部分颜色。参数是6个十六进制数字组成的 \code{HTML} 颜色代码，任意颜色的代码可以在常见的图片处理工具拾色器中查看。
+  \keychoice{linktoc}{none,section,page,all}\Default{all}
+  将目录中的超链接取消、置于标题上、置于页码上或置于标题和页码上。
+\end{options}
+
+\subsection[行距]{行距\smodule{spread}}
+\label{subsec:spacing}
+行距因子用于设置各种行距倍数，\meta{数值} 是不带有长度单位的浮点数。各类行距既可以在导言区全局设置，也可以在正文中设置对后面生效。
+\begin{options}
+  \keyval{line}{数值}
+  正文行距因子。行距因子初始值为 \code{1.354}（相当于 \textsf{Word} 的1.25倍行距），如果设置了文类或 \pkg*{ctex} 宏包的全局行距选项 \option*{linespread} 则初始值设为它的值。
+  \keyval{table}{数值}\Default{1.354}
+  表格内容行距因子。对传统表格 \env*{tabular} 和 \env*{tabularx} 等环境以及 \pkg*{tabularray} 宏包的 \env{tblr} 环境生效，同时 \env{tblr} 也自带有 \option*{stretch} 选项设置行距系数。
+  \keyval{math}{数值}\Default{1.354}
+  数学环境的行距因子，包含了 \pkg*{amsmath} 和 \pkg*{mathtools} 宏包提供的公式环境。
+  \keyval{caption-figure}{数值}\Default{1.2}
+  图片题注的行距因子。
+  \keyval{caption-table}{数值}\Default{1.2}
+  表格题注的行距因子。
+  \keyval{caption-listing}{数值}\Default{1.2}
+  代码题注的行距因子。
+  \keyval{caption-every}{数值}\Default{1.2}
+  同时设置图片、表格和代码题注的行距因子。
+  \keyval{footnote}{数值}\Default{1.2}
+  脚注内容整体的行距因子。可以使用 \option{fnpara-format} 的代码覆盖每个脚注单独的行距，从而与不同脚注的段落间距不同\footnote{若在正文区中更改脚注行距，脚注横线下方的间距不会随当前行距改变。}。
+  \begin{ctexexam}
+  \ebspread{footnote = 1.3}
+  \ebhdrset{fnpara-format = \linespread{1.2}\selectfont}
+  \end{ctexexam}
+  \keyval{every}{数值}
+  统一设置上述所有的行距因子。
+\end{options}
+
+\subsection[其它字体]{其它字体\smodule{subfont}}
+\label{subsec:other font}
+\begin{options}
+  \keyval{caption-table}{字体命令}\Default{\cs*{sffamily}\cs*{small}}
+  设置表格题注的字体，包括字体族、字体系列、字体尺寸和字体形状命令。
+  \keyval{caption-figure}{字体命令}\Default{\cs*{sffamily}\cs*{small}}
+  设置图片题注的字体，包括字体族、字体系列、字体尺寸和字体形状命令。
+  \keyval{caption-listing}{字体命令}\Default{\cs*{sffamily}\cs*{small}}
+  设置代码题注的字体，包括字体族、字体系列、字体尺寸和字体形状命令。
+  \keyval{caption-every}{字体命令}\Default{\cs*{sffamily}\cs*{small}}
+  同时设置图片、表格和代码题注的字体命令。
+  \keyval{footnote}{字体命令}
+  设置脚注标记与内容的字体，包括字体族、字体系列和字体形状命令。
+  \keyval{marginpar}{字体命令}\Default{\cs*{footnotesize}}
+  设置边注的字体，包括字体族、字体系列、字体尺寸和字体形状命令。
+\end{options}
+
+\begin{commands}
+  \command{addtosubfont}[\marg{字体类型}\marg{字体命令}]
+  用于在上述各种字体原有的格式上附加代码。其中 \meta{字体命令} 也可以包括行距命令且相对于 \module*{spread} 模块具有优先性，不同题注的 \meta{字体类型} 则为相应选项的后缀名。
+  \begin{ctexexam}
+  \addtosubfont{every}{\linespread{1.5}\selectfont}
+  \addtosubfont{footnote}{\sffamily}
+  \end{ctexexam}
+\end{commands}
+
+\subsection[参考文献]{参考文献\smodule{bibset}}
+\label{subsec:reference}
+\begin{options}
+  \keychoice{backend}{bibtex,biblatex}\Default{bibtex}
+  参考文献处理后端。默认用传统的 \hologo{BibTeX} 处理参考文献\footnote{使用 \hologo{BibTeX} 引擎时加载 \pkg*{natbib} 宏包，使用 \hologo{biber} 时将加载 \pkg*{biblatex} 宏包。}。
+  \keychoice{bibstyle}{numerical,authoryear,other sty}\Default{numerical}
+  参考文献格式使用中国参考文献推荐标准GB/T 7714-2015，对应顺序编码制和著者—出版年制两种风格。若使用其它格式，使用 \hologo{BibTeX} 处理时需确保正确的 \code{bst} 文件，使用 \hologo{biber} 处理可使用 \pkg*{biblatex} 宏包支持的参考文献风格名称。
+  \keyval{citestyle}{标注风格}
+  标注参考文献的风格。后端为 \code{bibtex} 时可使用 \option{super}（数字上标标注，默认）或 \option{numbers}（数字标注）等 \pkg*{natbib} 宏包带有的标注风格，后端为 \code{biblatex} 时可使用 \pkg*{biblatex} 宏包支持的标注风格。
+  \keyval{datafile}{数据库列表}
+  参考文献数据库的文件名列表，文件列表以花括号包裹并以英文逗号分隔。使用 \hologo{biber} 处理时要带有 \code{bib} 后缀，若参考文献文件不在当前文件夹则文件名需要包含路径。不设置参考文献数据库名时 \module*{bibset} 模块中的选项会失效，即不自动载入 \pkg*{natbib} 或 \pkg*{biblatex} 宏包，此时需要手动载入相关宏包配置参考文献。
+\end{options}
+
+\begin{commands}
+  \command{printbibliography}[\oarg{键值列表}]
+  两种方式\textbf{均使用}此命令打印参考文献，不同处理后端此命令的 \meta{键值列表} 不同。使用 \hologo{BibTeX} 处理时选项与\ref{subsec:directory command} 目录命令的选项相同，使用 \hologo{biber} 处理时常用的选项如下：
+\end{commands}
+
+\begin{options}
+  \keychoice*{heading}{bibliography,subbibliography,bibintoc,subbibintoc}\Default{bibintoc}
+  参考文献通常有一个章标题或者节标题，该选项选择由 \cs*{defbibheading} 定义的标题名。
+  \keyval*{title}{参考文献标题名}
+  如果标题定义支持的话，该选项覆盖由 \option*{heading} 选项提供的缺省标题名。
+  \keyval*{prenote}{参考文献前注}
+  该选项选择由 \cs*{defbibnote} 所定义的前注，缺省状态下不打印任何前注。
+  \keyval*{section}{整数}\Default{0}
+  只打印在指定文节中引用的条目。该参考文献节从1开始编号，所有在 \env*{refsection} 环境外给出的引用标记为第零节。
+  \keyval*{type}{条目类型}
+  指定条目的打印类型。
+  \keyval*{filter}{过滤器名}
+  使用由 \cs*{defbibfilter} 定义的 \option*{filter} 来过滤条目。
+
+  可能在一些情况下您希望更加灵活地设置参考文献或有更多需求，下面举一个在导言区手动配置 \pkg*{biblatex} 宏包并使一个条目输出双语对照文献的例子：
+  \begin{ctexexam}
+  \usepackage[style = gb7714-2015]{biblatex}
+  \addbibresource{reference.bib}
+  \defbibheading{bibliography}[参考文献] % 定义参考文献标题
+    {\chapter*{#1}\markboth{#1}{#1}}
+  \defbibentryset{Zhang2022}{张三2022,ZhangSan2022}
+  \cite{Zhang2022} % 在正文中引用
+  \end{ctexexam}
+\end{options}
+
+\subsection[定理样式]{定理样式\smodule{thmset}}
+\label{subsec:theorem of style}
+模块 \module*{thmset} 由 \pkg*{thmtools} 宏包提供支持，主要提供了定理声明和样式声明两个命令。定理声明命令使用的定理样式由样式声明命令提供，文档类预置了一个定理样式 \code{fancy}。
+\begin{commands}
+  \command{declaretheorem}[\oarg{键值列表1}\marg{环境名}\oarg{键值列表2}]
+  定理环境声明命令。可选参数的 \meta{键值列表1} 与 \meta{键值列表2} 等效，其中常用的选项如下：
+  \begin{options}
+  \keyval*{name}{定理名}
+  定理环境的标题名称，默认为英文首字母大写的环境名。
+  \keychoice*{numbered}{no,yes,unless unique}
+  定理可以被编号、不被编号或者只有在文档中多次出现时才被编号。
+  \keychoice*{within}{chapter,section,empty,counter}
+  定理编号跟随的计数器。当计数器值递增时定理编号会从零开始，通常这是一个章节计数器。
+  \keyval*{numberlike}{计数器}
+  定理将使用此 \meta{计数器} 进行编号，通常这是另一个定理环境的名称。
+  \keyval*{style}{定理样式}
+  选项的值为使用 \cs{declaretheoremstyle} 命令新定义的定理样式。
+
+  使用 \cs{declaretheorem} 命令以\ref{exam:new theorem sty} 中的定理样式 \code{fancy} 新建一个定理环境猜想，然后用一个基于 \pkg*{tcolorbox} 宏包的预置彩色盒子 \env{easyboxi} 增加背景：
+  \begin{ctexexam}[labelref = exam:new theorem env]
+  \declaretheorem[style = fancy,name = 猜想]{caixiang}
+  \addtotcbstyle{tc-easyboxi}{colback = GreenYellow}
+  \tcolorboxenvironment{caixiang}{tc-easyboxi}
+  \end{ctexexam}
+  \end{options}
+  \command{declaretheoremstyle}[\oarg{键值列表1}\marg{定理样式}\oarg{键值列表2}]
+  定理样式声明命令，键值列表支持自身以及定理声明命令 \cs{declaretheorem} 的所有选项。可选参数的 \meta{键值列表1} 与 \meta{键值列表2} 等效，其中支持的选项如下：
+  \begin{options}
+  \keyval{headfont}{字体命令}
+  定理标题部分的字体，包括字体族、字体系列、字体尺寸和字体形状命令。
+  \keyval{notefont}{字体命令}
+  定理题注部分的字体，包括字体族、字体系列、字体尺寸和字体形状命令。
+  \keyval{bodyfont}{字体命令}
+  定理内容部分的字体，包括字体族、字体系列、字体尺寸和字体形状命令。
+  \keyval{headpunct}{代码}
+  紧随定理标题末尾的标记代码，位于定理第一段内容的间距 \option{postheadspace} 之前，可以是字符或插入换行符 \cs*{newline} 等命令。
+  \keyval{headindent}{刚性长度}
+  定理标题的缩进。默认无缩进，可用 \cs*{parindent} 命令设置为段落缩进。
+  \keyval{postheadspace}{刚性长度}
+  定理标题后与定理第一段内容的间距。
+  \keyval{spaceabove}{弹性长度}
+  定理环境前的间距，使用 \pkg*{tcolorbox} 的盒子环境包装后被覆盖。
+  \keyval{spacebelow}{弹性长度}
+  定理环境后的间距，使用 \pkg*{tcolorbox} 的盒子环境包装后被覆盖。
+  \kvsplit-{notebraces}{\marg{左括号}\marg{右括号}}
+  设置定理题注两边的括号，两个必选参数分别代表左括号和右括号。
+  \keyval{headformat}{标题排列}
+  定理标题各组成元素的位置排列和格式。定理标题由定理名、编号和题注组成，\meta{标题排列} 中命令 \cs*{NAME}、\cs*{NUMBER} 和 \cs*{NOTE} 分别代表定理名、编号和题注。
+  \end{options}
+  \command{theoremstyle}[\marg{定理样式}]
+  设置其后由 \cs{declaretheorem} 命令声明的定理环境的样式。
+
+  下面定义一个名为 \code{fancy} 的定理样式用于 \cs{declaretheorem} 的 \option*{style} 选项：
+  \begin{ctexexam}[labelref = exam:new theorem sty]
+  \declaretheoremstyle{fancy}[
+    wihin       = chapter,
+    spaceabove  = 6pt,
+    spacebelow  = 6pt,
+    headfont    = \normalfont\bfseries,
+    notefont    = \sffamily,
+    notebraces  = {[}{]},
+    bodyfont    = \itshape
+    ]
+  \end{ctexexam}
+\end{commands}
+
+\subsection[页面尺寸]{页面尺寸\smodule{geoset}}
+\label{subsec:page margins}
+模块 \module*{geoset} 会将除了前两个附加的选项交给页面尺寸宏包 \pkg*{geometry} 处理，并且支持它的键值列表，预置的页面尺寸与 \textsf{Word} 的默认值接近。下面列举几种代表性选项，其它选项可查阅宏包帮助文档。当在此设置纸张规格时，会覆盖文类选项 \option{paper} 的设置。
+\begin{options}\noitemsep
+  \keyval{headruleskip}{页眉线间距}\Default*{0pt}
+  \keyval{footruleskip}{页脚线间距}\Default*{3.5pt}
+  \kvsplit*{hdivide}{左边距,页面文本宽度,右边距}\default{}
+  \kvsplit*{hmargin}{左边距,右边距}\default{}
+  \keyval*{textheight}{页面文本高度}\default{}
+  \keybool*{nofoot}\Default*{false}
+  \begin{ctexexam}
+  \ebgeoset
+    {
+      headruleskip  = 3pt,
+      vscale        = 0.9,
+      hdivide       = {2cm,15cm,*},
+      vcentering
+    }
+  \end{ctexexam}
+\end{options}
+
+\subsection[页眉页脚]{页眉页脚\smodule{hdrset}}
+\label{subsec:header and footer}
+模块 \module*{hdrset} 设置的命令由 \pkg*{fancyhdr} 宏包提供支持。标题标记由标签和标题组成，选项中参数 \code{\#1} 代表当前章、节或小节的标题。在 \cls*{book} 模式时使用标题标记选项 \option{chap-mark} 和 \option{sec-mark}，在 \cls*{article} 模式时使用 \option{sec-mark} 和 \option{subsec-mark} 选项，这与标准文档类的行为一致。重新设置标题标记选项时标记大小写选项 \option{uppercase} 会失效。
+\begin{options}
+  \keyval{chap-mark}{标题标记}
+  标题标记命令 \cs*{chaptermark} 的内容，包括了标签选项 \option{chap-label} 的内容。
+  \keyval{sec-mark}{标题标记}
+  标题标记命令 \cs*{sectionmark} 的内容，包括了标签选项 \option{sec-label} 的内容。
+  \keyval{subsec-mark}{标题标记}
+  标题标记命令 \cs*{subsectionmark} 的内容，包括了标签选项 \option{subsec-label} 的内容。
+  \kvsplit-{chap-label}{\oarg{数字输出命令}\marg{距离命令}}\Default{\cs*{hspace}\Marg{1em}}
+  标题标记命令 \cs*{chaptermark} 内容的标签（标题有编号时）。比标题标记选项更常用，可选参数是对应于章节编号计数器的输出命令，必选参数是编号与标题之间的距离命令：
+  \begin{ctexexam}
+  \ebhdrset
+    {
+      chap-label  = [\thechapter]{\hspace{1em}},
+      sec-mark    = \CTEXifname{\CTEXthesection——}{}#1
+    }
+  \end{ctexexam}
+  \kvsplit-{sec-label}{\oarg{数字输出命令}\marg{距离命令}}\Default{\cs*{hspace}\Marg{0.5em}}
+  标题标记命令 \cs*{sectionmark} 内容的标签，用法与 \option{chap-label} 类似。
+  \kvsplit-{subsec-label}{\oarg{数字输出命令}\marg{距离命令}}\Default{\cs*{hspace}\Marg{0.5em}}
+  标题标记命令内容 \cs*{subsectionmark} 的标签，用法与 \option{chap-label} 类似。
+  \keyval{headrule}{横线命令}
+  绘制页眉横线的选项，可以使用 \cs*{hrule} 或下述 \cs{markrule} 等画线命令来绘制横线。
+  \keyval{footrule}{横线命令}
+  绘制页脚横线的选项，可以使用 \cs*{hrule} 或下述 \cs{markrule} 等画线命令来绘制横线。
+  \keyval{footnoterule}{横线命令}
+  绘制脚注横线的选项，可以使用 \cs*{hrule} 或下述 \cs{markrule} 等画线命令来绘制横线。
+  \keyval{headrulewd}{刚性长度}\Default{0.5pt}
+  页眉横线默认的粗细。
+  \keyval{footnoterulewd}{刚性长度}\Default{0.5pt}
+  脚注横线默认的粗细。
+\end{options}
+
+\begin{commands}\noitemsep
+  \command{fancyhead}[\oarg{位置}\marg{内容}]\default{}
+  \command{fancyfoot}[\oarg{位置}\marg{内容}]
+  使用 \cs{fancyhead} 和 \cs{fancyfoot} 等命令设置页眉页脚时为了显示正确的页面，在导言区时需要在页面边距的命令之后。默认设置的是一个名为 \code{fancy} 的页面风格。\pkg*{fancyhdr} 将页眉页脚分成了左中右和奇数页（odd）、偶数页（even）共12个部分，可选参数中 \code{E} 和 \code{O} 代表偶数和奇数，\code{L}、\code{C} 和 \code{R} 代表左、中和右部分。单面打印时，含有偶数位置的命令无效。
+\end{commands}
+
+\begin{commands}\noitemsep
+  \command*{markboth}[\marg{左页标题标记}\marg{右页标题标记}]\default{}
+  \command*{markright}[\marg{右页标题标记}]\default{}
+  \command{markdouble}[\marg{双页标题标记}]
+  这三个命令用于手动设置当前页标题标记，一般紧随标题命令，特殊情况下可以使用它们得到需要的页眉页脚内容。上述标记命令内容的选项便是基于这三个命令。其中 \cs{markdouble} 根据是否是双面打印设置相应标记。如果是单面打印，则 \meta{左页标题标记} 无效。
+\end{commands}
+
+\begin{commands}
+  \command{markrule}[\oarg{长度}\darg{颜色名}\marg{线宽}\baroarg{上间距,下间距}]
+  实线命令 \cs{markrule} 既可在 \meta{横线命令} 中用于绘制页眉页脚横线，也可以在正文中使用。\meta{长度} 默认为页面文本区的宽度，上下间距为横线与上下方部件的间距，带有长度单位，上下间距之间用符号 \code{|} 分开，若只有一部分则表示 \meta{上间距}。下面举一个设置页眉内容的例子：
+  \begin{ctexexam}
+  \ebhdrset{headrule = \markrule(DarkOrchid){0.5pt}[2pt|2pt]}
+  \fancyhead[ER]{\leftmark}
+  \fancyhead[OL]{\rightmark}
+  \fancyhead[EL,OR]{\textbf{\thepage}}
+  \end{ctexexam}
+\end{commands}
+
+\subsection[脚注格式]{脚注格式\smodule{hdrset}}
+模块 \module*{hdrset} 还可以灵活调整脚注编号和内容的格式。格式主要包括脚注标记的编号类型、字体、附加符号和对齐方式等，以及脚注内容的首行缩进、行距和字体等。基本思想是默认脚注和自定义编号脚注标记的格式分离，两种类型脚注各自正文和内容的标记又共享格式，默认脚注中正文和内容标记的编号类型分离。目前脚注模块基本兼容 \pkg*{footmisc} 宏包。
+\begin{options}
+  \keychoice{footnotetype}{plain,hang,flush,bottom}\Default{hang}
+  脚注的类型。悬挂缩进 \code{hang} 是默认值，\code{plain} 是原始的类型，\code{flush} 使脚注内容标记位于脚注首行边缘外侧并右对齐。当存在浮动环境排版时，脚注可能位于页面中间，\code{bottom} 使脚注始终位于页面底端。其中 \code{bottom} 是复合选项，可以与前三种类型重复或复合使用：
+  \begin{ctexexam}
+  \ebhdrset{footnotetype = plain,footnotetype = bottom}
+  \ebhdrset{footnotetype = {hang,bottom}}
+  \end{ctexexam}
+  \keyval{fnfirstindent}{刚性长度}\Default{0.8em}
+  每个脚注首段的首行缩进（选项 \option*{hang} 为整体缩进），等于长度 \cs{fnfirstindent} 的值。
+  \keyval{fnafterindent}{刚性长度}\Default{2em}
+  每个脚注第二段及之后段落的首行缩进，等于长度 \cs{fnafterindent} 的值。
+  \keyval{fnparskip}{弹性长度}\Default{0ex plus .1ex}
+  不同脚注的段落间距，等于长度 \cs{fnparskip} 的值。
+  \keychoice{fntext-pos}{normal,super}\Default{super}
+  设置脚注内容标记的位置，正常文本或是上标形式。
+  \keychoice{fnmark-num}{plain,pifont,pifont*,pisans,pisans*,short num}\Default{plain}
+  脚注正文标记编号的类型。默认为原生样式 \code{plain}，还可以改为 \code{pifont} 的各个版本，从左往右依次为普通版、阴文衬线版、阳文无衬线版和阴文无衬线版，缺点是它们的编号仅包括1-10。
+
+  短编号的形式与列表环境类似，不过增加了中文数字 \code{c} 和符号 \code{s} 格式参数。原生样式 \code{plain} 等同于单独使用数字 \code{1} 参数。这个选项可以用在正文中改变其后脚注编号类型。
+  \begin{commands}
+  \command{footref}[\marg{脚注标签名}]
+  在当前位置对自动编号的脚注进行引用，与被引用的正文标记共享一个编号与格式。
+  \end{commands}
+  \begin{ctexexam}
+  \ebhdrset{fnmark-num = 1} % 等于编号类型plain
+  \ebhdrset{fnmark-num = (a)}
+  \end{ctexexam}
+  \begin{commands}\noitemsep
+  \command{DefineFntSymbols}[\marg{符号表名}\marg{符号数量}\marg{符号列表}]\default{}
+  \command{setfntsymbol}[\marg{符号表名}]
+  这两个命令用于在脚注短编号标记为 \code{s} 自定义符号型时设置符号列表。\cs{DefineFntSymbols} 命令用于设置符号列表，\cs{setfntsymbol} 命令用于选择已定义的符号列表。默认的脚注符号列表是空的，定义新列表时应注意 \meta{符号列表} 的写法和命令顺序：
+  \begin{ctexexam}
+  \DefineFntSymbols{fancy}{2}{{1}{*}{2}{@}}
+  \setfntsymbol{fancy}
+  \ebhdrset{fnmark-num = s}
+  \end{ctexexam}
+  \end{commands}
+  \keychoice{fntext-num}{plain,pifont,pifont*,pisans,pisans*,short num}\Default{plain}
+  脚注内容标记编号的类型。用法与 \option{fnmark-num} 一样，所以脚注内容与正文标记编号类型\textbf{可以不同}。
+  \keychoice{fnmarktext-num}{plain,pifont,pifont*,pisans,pisans*,short num}\Default{plain}
+  同时设定脚注正文标记编号 \option{fnmark-num} 与脚注内容标记编号 \option{fntext-num} 的类型。目前脚注编号类型选项对于迷你页环境 \env*{minipage} 无效，其中的脚注保持默认英文字母的编号类型。
+  \keychoice{fnmark-vmove}{fixed length,match}\Default{0pt}
+  脚注正文标记的垂直偏移。可以设为刚性长度，或用 \code{match} 匹配 \option*{spvmove} 全局的值。
+  \keychoice{fnmark-hmove}{fixed length,match}\Default{0pt}
+  脚注正文标记的水平偏移。可以设为刚性长度，或用 \code{match} 匹配 \option*{sphmove} 全局的值。
+  \keychoice{fntext-vmove}{fixed length,match}\Default{0pt}
+  脚注内容标记的垂直偏移。可以设为刚性长度，或用 \code{match} 匹配 \option*{spvmove} 全局的值。
+  \keychoice{fnmarktext-format}{format code,match}
+  默认脚注标记的格式，选项 \code{match} 可以匹配 \option*{spcmd} 全局的值。一般配合 \keyis{fnmarktext-num}{plain} 原生编号形式使用，例如用 \pkg*{circledtext} 宏包的带圈字符命令 \cs*{circledtext} 给脚注标记添加圆圈：
+  \begin{ctexexam}
+  \usepackage{circledtext}
+  \circledtextset{resize = real,width = 0.5em}
+  \ebhdrset
+    {
+      fntext-pos        = normal,
+      fnmarktext-format = \circledtext
+    }
+  \end{ctexexam}
+  \begin{commands}
+  \command{defupfntmark}[\marg{脚注正文标记格式}]
+  定义脚注正文标记的格式，与正文标记编号命令 \cs{theupfootnote} 配合使用。
+  \command{defdownfntmark}[\marg{脚注内容标记格式}]
+  定义脚注内容标记的格式，与内容标记编号命令 \cs{thedownfootnote} 配合使用。
+  \command{notminipage}[\marg{普通页内容}\marg{迷你页内容}]\newtag[Chg]%
+  用于在定义脚注标记的命令中判断当前脚注是否处于迷你页而输出不同的内容。
+  \command{theupfootnote}
+  保存正文标记编号类型选项 \option{fnmark-num} 指定的正文标记。
+  \command{thedownfootnote}
+  保存内容标记编号类型选项 \option{fnmtext-num} 指定的内容标记。
+  \end{commands}
+  \begin{ctexexam}
+  \defupfntmark{\super[vmove = 2pt]{\theupfootnote}}
+  \defdownfntmark{\notminipage{\textcolor{blue}{\thedownfootnote}}{}}
+  \end{ctexexam}
+  \keychoice{fncustom-format}{format code,match}
+  单独设定自定义脚注标记的格式，选项 \code{match} 可以匹配 \option*{spcmd} 全局的值。自定义脚注的命令与用法可以见下方的介绍。
+  \begin{commands}\noitemsep
+  \command{Footnote}[\oarg{内容标记}\marg{正文标记}\marg{脚注文本}]\default{}
+  \command{Footnotetext}[\marg{内容标记}\marg{脚注文本}]\default{}
+  \command{Footnotemark}[\marg{正文标记}]
+  这些是自定义标记且不影响正常编号的脚注命令，用法与它们对应首字母小写的命令类似。\meta{内容标记} 默认与 \meta{正文标记} 一致，可以进行微调。如果当前标记为空，那么将会使用上一个脚注标记。
+  \begin{ctexexam}
+  \Footnote{*}{这是可以自定义标记的脚注。}
+  \end{ctexexam}
+  \end{commands}
+  \keychoice{fnboth-format}{format code,match}
+  同时设定默认脚注标记 \option{fnmarktext-format} 和自定义脚注标记 \option{fncustom-format} 的格式。两种脚注标记匹配上标格式 \option*{spcmd} 的值是独立的，使用 \code{match} 则可以同时匹配。标记格式选项含有字体命令会覆盖 \option{footnote} 的设置，最后一个格式命令可以带有一个参数接受脚注标记。
+  \keyval{fnpara-format}{格式代码}
+  脚注内容的格式。在此设置字体命令会覆盖 \option{footnote} 的设置，最后一个格式命令可以带有一个参数接受脚注内容。
+  \kvsplit{fntext-code}{前代码,后代码}
+  可以用 \meta{前代码} 与 \meta{后代码} 额外增加脚注内容标记前后的代码。也可以只有前部分，\meta{前代码} 中最后一个格式命令可以带有一个参数接受脚注内容标记。由于脚注标记处于水平模式，一般用于在脚注内容标记与脚注首行间插入一点距离，或与脚注正文标记的格式稍有不同。
+  \begin{ctexexam}
+  \ebhdrset
+    {
+      footnotetype  = flush,
+      fntext-code   = {,\enskip}
+    }
+  \end{ctexexam}
+\end{options}
+
+\subsection[目录样式]{目录样式\smodule{tocset}}
+\label{subsec:catalog style}
+模块 \module*{tocset} 将使用 \pkg*{titletoc} 宏包处理目录样式。默认包括 \module*{part}、\module*{chapter}、\module*{section}、\module*{subsection}、\module*{figure}、\module*{table} 和 \module*{lstlisting} 二级路径，而使用 \module*{float} 路径可以统一设置图片、表格和代码目录的样式。选项前带有 \ding{73} 符号表示支持所有相应\textbf{条目名}的路径，其它选项则处于 \module*{tocset} 一级路径下。目前支持标准的论文目录样式，更复杂的样式可以查看 \pkg*{titletoc} 的相关用法。
+\begin{options}
+  \keyval{tocformat}{条目格式}\dtag
+  目录中各级别条目的格式。可以设置条目字体和加入垂直间距等，垂直间距最好使用防止垂直间距重合的 \cs*{addvspace} 命令。
+  \keyval{tocformat+}{条目格式}\dtag
+  与选项 \option{tocformat} 用法一样，只是在已有的格式命令后附加代码。
+  \keyval{tocindent}{刚性长度}\dtag
+  目录条目左边的缩进距离，通常标题级别越低缩进越大。
+  \keyval{tocrule}{引导线命令}\dtag
+  引导线选项 \option{tocrule} 中一般可以使用基于 \cs*{xleaders} 命令的 \cs{tocrule} 绘制引导线。
+  \begin{commands}
+  \command{tocrule}[\sarg\harg\oarg{引导点间距}\darg{放大因子}\marg{引导点}\oarg{页码格式}]
+  生成目录引导线的命令，需要在引导线选项 \option{tocrule} 中使用。带有星号的命令与 \keyis{dotalign}{false} 效果相同。带有 \harg{} 号的命令不添加引导线后的目录页码。\meta{引导点间距} 需带有长度单位，\meta{放大因子} 为 \meta{引导点} 的放大倍数。\meta{页码格式} 中最后一个命令可以带有一个参数为页码编号。
+  \end{commands}
+  \keyval{tocafter}{距离命令}\dtag\Default{\cs*{hspace}\Marg{1em}}
+  目录条目编号与标题间的代码，默认为插入 \code{1em} 横向距离。
+  \keyval{tocbelow}{距离命令}\dtag\newtag%
+  在目录条目下方执行的代码，可以插入垂直距离等命令。
+  \keyval{tocline}{条目定义}\dtag[\textcolor{red}{\ding{73}}]
+  这个选项在章节标题基础上扩展了浮动环境的题注在目录文件中的定义。选项中参数 \code{\#1} 代表相应题注编号 \cs*{the}\meta{计数器} 的值，参数 \code{\#2} 代表相应题注内容。
+  \begin{ctexexam}
+  \ctexset
+    {
+      chapter       =
+        {
+          tocformat = \addvspace{8pt}\large,
+          tocindent = 1.5em,
+          tocrule   = \tocrule[0.6pc](1.1){.}[\zihao{5}],
+          tocline   = \CTEXnumberline{#1}#2
+        }
+    }
+  \end{ctexexam}
+\end{options}
+
+\begin{commands}
+  \command{RegisterTocName}[\marg{条目名}]\newtag%
+  给名称为 \meta{条目名} 的浮动环境注册设置目录样式的选项，选项前有符号 \ding{73} 表示在注册后可用。
+  \command{contentsuse}[\marg{条目名}\marg{扩展名}]
+  激活名称为 \meta{条目名} 的浮动环境目录定制功能，它使用的目录文件后缀为 \meta{扩展名}。需要在激活条目后再使用命令 \cs{RegisterTocName} 注册选项。
+  \command{DeclareFloatList}[\marg{条目名}\marg{扩展名}]\newtag%
+  声明一个新的 \cs*{listof}\meta{条目名}\code{\textcolor{cs}{s}} 的浮动环境目录命令，并且支持\ref{subsec:directory command} 中图表目录命令的机制。使用这个命令要确保将条目加入目录的机制已经存在，推荐搭配 \pkg*{newfloat} 宏包创建新的浮动环境。选项前有符号 \textcolor{red}{\ding{73}} 表示在声明后可用。下面举一个声明算法目录的例子：
+  \begin{ctexexam}
+  \usepackage{newfloat}
+  \DeclareFloatingEnvironment[
+    fileext   = loa,
+    listname  = 算法清单
+    ]{algorithm}
+  \DeclareFloatList{algorithm}{loa}
+  \listofalgorithms[multoc] % 在正文中输出双栏算法目录
+  \end{ctexexam}
+  \command{listnumberline}[\marg{条目名}]
+  在图表等浮动环境目录中插入条目标签和编号，默认标签可以由格式命令 \cs{labelformat} 设置。注意其中 \meta{条目名} 需要用对应名称\textbf{显示指定}。
+  \begin{ctexexam}
+  \ctexset
+    {
+      figure/tocline      = \listnumberline{figure}#2,
+      lstlisting/tocline  = \protect\numberline{代码#1\hspace{1em}}#2
+    }
+  \end{ctexexam}
+\end{commands}
+
+\begin{options}
+  \keybool{hang}\Default{true}
+  悬挂缩进选项 \option{hang} 使目录条目为悬挂缩进形式。缩进距离为条目编号及其与标题间距的长度和。这个选项对所有条目名同时生效。
+  \keyval{lolskip}{弹性长度}\Default{10pt}
+  代码目录中每章第一个条目上方增加的垂直距离。与 \CTeX 的表格和图片目录中每章间的条目距离选项 \option*{lotskip} 和 \option*{lofskip} 类似，在 \cls*{article} 模式中此选项失效。
+  \keyval{between}{代码钩子}\dtag[\textcolor{red}{\ding{73}}]
+  目录标题与内容间的钩子（作用于标题下方间距之后），一般插入负的垂直距离代码用于抵消目录首行额外的垂直间距。一级路径此选项对应文档主目录的钩子，二级路径为浮动环境的 \meta{条目名}。
+  \keyval{bibetween}{代码钩子}\newtag%
+  与选项 \option{between} 类似，是位于一级路径的英文文档主目录（如果启用）代码钩子。
+  \keybool{dotalign}\Default{true}
+  引导线选项 \option{dotalign} 可以使目录引导线右端对齐并与页码保持一定间距，否则会与页码相连。
+  \keyval{pagenumwd}{刚性长度}\Default{1.55em}
+  目录条目页码的宽度。开启 \option{dotalign} 选项时宽度越大引导线与页码的距离就越大。
+  \keyval{tocafter-every}{距离命令}\Default{\cs*{hspace}\Marg{1em}}
+  统一设置所有级别条目编号与标题间的代码。
+  \keyval{tocindent-every}{刚性长度}
+  统一设置所有级别条目的左边缩进。
+  \keyval{tocrule-every}{引导线命令}
+  统一设置所有级别的目录引导线样式。
+\end{options}
+
+\section{环境和命令}
+
+\subsection{文区命令}
+\begin{commands}
+  \command{frontmatter}[\sarg\oarg{编号格式}]\Default{Roman}
+  前言区命令。使部分和章标题不编号，带有星号的变体命令不使用 \cs{cleardoublepage} 命令。页码 \meta{编号格式} 可设置为例如 \code{roman} 或 \code{Alph} 等形式。
+  \command{mainmatter}[\sarg]
+  主文区命令。章标题正常编号且页码为从1开始计数的阿拉伯数字，带有星号的变体命令不使用 \cs{cleardoublepage} 清双页命令。
+  \command{backmatter}
+  后记区命令。页码格式与编号保持不变，章标题不编号。
+  \command{cleardoublepage}[\oarg{页面风格}]\Default{empty}
+  清双页命令可以确保下一页文本总在奇数页开始，在奇数页使用它会产生空白偶数页。文区命令 \cs{frontmatter} 和 \cs{mainmatter} 会用到清双页命令，在启用文类选项 \option*{openright} 时标题命令 \cs*{part} 和 \cs*{chapter} 也会默认用到清双页命令。
+  \command{blankpagestyle}[\marg{页面风格}]
+  多出空白页的 \meta{页面风格} 用空白页面风格命令 \cs{blankpagestyle} 全局指定，或使用清双页命令的可选参数局部指定。空白页默认的风格为 \code{empty}，即空的页眉页脚。
+  \end{commands}
+
+\subsection{目录命令}
+\label{subsec:directory command}
+\begin{commands}
+  \command{tableofcontents}[\sarg\oarg{键值列表}\darg{代码钩子}]
+  文档主目录命令。带有星号参数的命令不输出目录标题。\meta{代码钩子} 是当方案 \keyis{plan}{both} 时中文与英文目录之间执行的代码，可以插入目录样式和换页等命令。
+  \begin{options}
+  \keychoice{plan}{cn,bi,both}\Default{cn}\newtag[Exp]%
+  文档主目录的输出方案。\code{cn} 只输出中文目录，\code{bi} 只输出英文目录。\code{both} 同时连续输出中文和英文目录，需要与双语目录标题命令 \cs{bichapter} 等或双语标题选项 \option{title} 配合使用。
+  \keyval{bicontentsname}{英文目录标题}\Default{Contents}\newtag%
+  英文目录的标题，为通用接口命令 \cs*{ctexset} 的选项。
+  \end{options}
+  \command{listoffigures}[\sarg\oarg{键值列表}]
+  输出图片目录命令。带有星号参数的命令不输出目录标题。
+  \command{listoftables}[\sarg\oarg{键值列表}]
+  输出表格目录命令。带有星号参数的命令不输出目录标题。
+  \command{listoflstlistings}[\sarg\oarg{键值列表}]
+  输出代码目录命令。带有星号参数的命令不输出目录标题。
+
+  如果需要部分而不是全文的目录或其它类型的目录，可以查看 \pkg*{titletoc} 宏包的相关示例。如果需要双语图表目录，可以查看 \pkg*{bicaption} 宏包的相关示例。上面目录命令的可选参数改进了原本单一的功能，其中 \meta{键值列表} 的选项如下：
+  \begin{options}
+  \keyval{level}{标题命令}\newtag%
+  设定输出目录标题的命令。如果使用 \option{title} 选项设置了双语标题则需要配合双语标题命令。
+  \begin{ctexexam}
+  \tableofcontents[level = \chapter*]
+  \listoffigures[level = \bichapter,title = {图片索引,List of Figures}]
+  \end{ctexexam}
+  \keyval{multoc}{整数}\Default{2}
+  设置目录的排版栏数。\meta{整数} 代表目录栏数，不指定栏数的值则默认为双栏。
+  \kvsplit{title}{中文目录标题,英文目录标题}
+  用于更改目录的双语标题。标题之间用一个英文逗号分开，对主目录来说前部分为中文目录标题，后部分为英文目录标题，对图表和代码目录来说后部分则是加入英文目录的条目。也可以只有一部分，表示中文目录的标题。
+  \keychoice{bilist}{mix,new}\Default{new}
+  确定文档主目录中双语标题列表的输出排列方式。选项 \code{mix} 使每个英文标题条目在中文目录中跟随对应的中文标题输出，\code{new} 则在新建的英文目录中输出英文标题。
+  \keyval{format}{目录标题格式}
+  设置目录标题的格式，在标题级别为 \code{chapter} 或者 \cls*{article} 模式且标题级别为 \code{section} 时有效。
+  \keyval{aftertitle}{标题后代码}
+  目录标题文本之后插入的代码，生效情形同上。
+  \keyval{pagestyle}{页面风格}\Default{empty}
+  目录标题所在页的页面格式，仅当目录以 \code{chapter} 级别输出时有效。除了上述选项还支持 \CTeX 键值列表路径 \module*{chapter} 或 \module*{section} 所有的章节标题样式选项。
+  \end{options}
+\end{commands}
+
+\subsection[双语标题]{双语标题\smodule{chapter}}
+双语目录标题命令目前设置了常用的三个级别，它们将中文标题正常输出，并使中英文标题加入双语目录。类似于标准文档类，这三个标题命令分别具有独立的计数器\footnote{默认情况下与普通标题命令共享使用计数器。}，并对应 \cs*{the}\meta{计数器} 的值，可以用于 \option{binumber} 选项更改英文目录中的编号。这个功能是为国内一些高校的学位论文模板的要求设计，在一般情况和英文模式下\textbf{不需要使用}。
+\begin{commands}
+  \command{bichapter}[\sarg\oarg{目录中文标题}\marg{中文标题}\marg{目录英文标题}]
+  \code{chapter} 章级别的双语目录标题命令，具有独立的 \code{bichapter} 计数器。
+  \command{bisection}[\sarg\oarg{目录中文标题}\marg{中文标题}\marg{目录英文标题}]
+  \code{section} 节级别的双语目录标题命令，具有独立的 \code{bisection} 计数器。
+  \command{bisubsection}[\sarg\oarg{目录中文标题}\marg{中文标题}\marg{目录英文标题}]
+  \code{subsection} 小节级别的双语目录标题命令，具有独立的 \code{bisubsection} 计数器。
+
+  它们的星号变体命令使文中标题不编号，但是仍然加入双语目录，若英文标题参数空置那么仅加入中文目录而不加入英文目录，这一特点与 \cs*{chapter}\sarg{} 等命令的行为不太一样，在一些情况下会用到。可选参数是目录中的中文标题，默认与中文标题一致，正文标题过长时可用它设置在目录中显示的标题。默认情况下双语目录的格式是一致的，共享使用 \module*{tocset} 模块的设置，英文目录的章级别标题名及编号的修改方式如下：
+  \begin{options}
+  \kvsplit{biname}{英文目录前名字,英文目录后名字}\Default{Chapter\cs*{space}}
+  更改英文目录 \code{chapter} 级别的标题编号前后名字，类似于 \CTeX 的 \option*{name} 选项。
+  \keyval{binmuber}{英文目录数字输出命令}\Default{\cs*{arabic}\Marg{chapter}}
+  更改英文目录 \code{chapter} 级别的标题编号输出格式，类似于 \CTeX 的 \option*{number} 选项。
+  \end{options}
+\end{commands}
+
+\begin{commands}
+  \command{appendix}[\splitoarg{前名字,后名字}\darg{数字输出命令}]
+  附录起始命令，其后的章节标题变为附录形式。英文目录中附录标题的 \meta{前名字} 为英文附录目录前名字，\meta{后名字} 为英文附录目录后名字。前后名字之间用一个半角逗号分开，也可以只有一部分，表示英文附录目录前名字。\meta{数字输出命令} 为附录标题计数器在英文目录中的编号命令。
+  \command{BeforeAddBitoc}[\sarg\marg{英文标题加入目录前的代码}]
+  作用于局部范围的英文目录钩子，可以插入标题或目录设置的命令改变英文目录中标题的显示格式，也可以覆盖上述的目录前后名字和编号等设置，带有星号的命令会重置之前的代码，放置在导言区或 \cs{bichapter} 等命令前生效。
+\end{commands}
+
+\subsection[上标和下标]{上标和下标\smodule{style}}
+上标和下标的功能来自 \pkg*{spbmark} 宏包，下面有三个命令可以用于输出上标和下标。可以使用键值列表的形式对上下标格式进行局部或全局设置，下面命令中两个可选参数的键值列表是等效的。全局设置的详情见\ref{subsubsec:super-sub-script}。
+\begin{commands}
+  \command{super}[\sarg\oarg{键值列表1}\marg{内容}\oarg{键值列表2}]
+  输出上标的命令，与简短命令 \cs{sp} 等效。
+  \command{sub}[\sarg\oarg{键值列表1}\marg{内容}\oarg{键值列表2}]
+  输出下标的命令，与简短命令 \cs{sb} 等效。用法和参数与上标命令 \cs{super} 类似。
+  \command{supersub}[\sarg\oarg{键值列表1}\marg{上标内容}\marg{下标内容}\oarg{键值列表2}]
+  同时输出上标和下标的命令，与简短命令 \cs{spb} 等效。
+  \command{spbifmath}[\marg{数学模式代码}\marg{文本模式代码}]
+  根据上下标处于数学还是文本模式分别设置不同的值，应当在格式命令或偏移距离选项中使用。
+
+  上下标命令键值列表中共同的选项如下所示。当下面除 \option{mode} 以外的选项用于 \module*{style} 模块全局设置时，它们将根据前面最近一个命令的类型设定相应值。
+  \begin{options}
+  \keyval{vmove}{刚性长度}\Default{0pt}
+  上标或下标的垂直偏移。如果是上下标命令使用则代表上标和上标间的额外垂直距离 \option{vsep}。
+  \keyval{hmove}{刚性长度}\Default{0pt}
+  上标或下标的水平偏移。如果是上下标命令使用则代表上标和上标的共同偏移。
+  \keyval{cmd}{格式命令}
+  上标或下标的格式命令选项。最后一个命令可以带有一个参数，这个参数用于接受上标或下标。
+  \keyval{height}{刚性长度}
+  段落中当前行上标或下标的基线与前一行的间距。
+  \keyval{depth}{刚性长度}
+  段落中当前行上标或下标的基线与下一行的间距。
+  \keychoice{mode}{text,math,match}\Default{match}
+  上标或下标的输出格式。可以为文本 \code{text} 或数学 \code{math} 模式。当使用选项 \code{match} 时可以根据当前段落所处的模式自动匹配。
+  \end{options}
+\end{commands}
+
+\subsection{公式}
+\begin{environments}\noitemsep
+  \environment*{equation}\default{}
+  \environment*{multline}\default{}
+  \environment*{gather}\default{}
+  \environment*{align}
+  \pkg*{amsmath} 宏包提供了一系列行间数学环境，它们可以排布各种对齐或不对齐的公式组。\env*{multline} 环境用于一行无法放下的长公式，\env*{gather} 环境用于每行居中的公式组，\env*{align} 环境用于多列对齐的公式组。还有例如 \pkg*{mathtools} 等对数学功能进行扩展的宏包，提供了更全面的数学命令与环境。
+\end{environments}
+
+\subsection{表格}
+\begin{environments}\noitemsep
+  \environment*{tabular}[\marg{列格式}]\default{}
+  \environment{tblr}[\marg{键值列表}]
+  \pkg*{tabularray} 是一个强大且全面的表格宏包，不依赖其它表格宏包所以同时使用不会产生冲突。不仅提供了各种传统表格宏包的功能，还实现了用键值列表方式简便地设置表格样式。具体用法可见宏包的说明文档，下面演示一个 \env{tblr} 表格的用法：
+  \begin{ctexexam}
+  \begin{tblr}
+    {
+      colspec     = {X[2,l]XX[LimeGreen]X},
+      rowspec     = {Q[t]Q[m]Q[b,Magenta]Q[t]Q[m]Q[b]},
+      hline{1,6}  = {1pt,solid},
+      hline{3-5}  = {LightBlue,dashed},
+      vline{1,5}  = {3-4}{dotted},
+      rows        = {1cm,abovesep = 2pt},
+      column{1}   = {font = \sffamily,mode = math}
+    }
+    Alpha   & Beta  & Gamma   & Delta \\
+    Epsilon & Zeta  & Eta     & Theta \\
+    Iota    & Kappa & \SetCell[r = 2]{h,c,Cyan}Lambda & Mu \\
+    Nu      & Xi    & Omicron & Pi \\
+    Rho     & Sigma & Tau     & Upsilon
+  \end{tblr}
+  \end{ctexexam}
+\end{environments}
+
+\subsection{列表}
+\begin{commands}
+  \command{setlist}[\sarg\splitoarg{列表类型,级别}\marg{键值列表}]
+  列表宏包 \pkg*{enumitem} 为系统预置的三个列表环境提供了灵活的标签以及间距控制，这是设置列表环境的通用接口命令。带有星号参数的命令在原有格式上补充。\meta{列表类型} 是排序列表 \code{enumerate}、常规列表 \code{itemize} 和主题列表 \code{description} 三个基本类型，也可以是 \cs{newlist} 新建的定理环境，若不指定则设置所有列表类型的格式。若不指定 \meta{级别} 则设置所有列表级别的格式。
+  \command{newlist}[\marg{列表名}\marg{列表类型}\marg{最大级别}]
+  克隆基本的 \meta{列表类型} 在其基础上新建一个名为 \meta{列表名} 的列表环境。不要将 \meta{最大级别} 设置过大以避免创建过多的计数器和相关宏。
+  \begin{ctexexam}
+  \setlist{} % 清除所有列表共享的格式
+  \setlist[1]{labelindent = \parindent}
+  \setlist[itemize,1]{label = $\triangleleft$}
+  \setlist[enumerate]{labelsep = *,leftmargin = 1.5pc}
+  \newlist{steps}{enumerate}{2}
+  \setlist[steps,1,2]{label = (\alph*)}
+  \end{ctexexam}
+\end{commands}
+
+\begin{environments}\noitemsep
+  \environment*{enumerate}[\oarg{键值列表}]\default{}
+  \environment*{itemize}[\oarg{键值列表}]\default{}
+  \environment*{description}[\oarg{键值列表}]
+  已为三种列表各自预置了三个级别。同种列表或不同种列表间的不同级别可相互嵌套，可以使用短编号的形式，带有星号的环境为行内列表。默认列表标签与标准文档类一致，下面举几个更改列表标签以及其它格式的例子：
+  \begin{ctexexam}
+  \setlist*{wide = 0em} % 取消所有列表的左边距
+  \begin{enumerate}[label = (\arabic*),leftmargin = 1cm,resume]
+  \begin{enumerate*}[(1)] % 短编号形式
+  \begin{itemize}[label = \textbullet,labelsep = *]
+  \begin{description}[font = \sffamily\bfseries,style = nextline]
+  \end{ctexexam}
+\end{environments}
+
+\subsection{悬挂缩进}
+\begin{commands}
+  \command{hangpara}[\marg{缩进长度}\marg{缩进开始行数}]
+  悬挂缩进命令 \cs{hangpara} 使其后的一个段落保持悬挂缩进。参数与 \env{hangparas} 环境相同，不过只有一个段落。\meta{缩进长度} 可以是带单位的数值或由文本长度测定命令 \cs{widthof} 提供。
+\end{commands}
+
+\begin{environments}
+  \environment{hangparas}[\marg{缩进长度}\marg{缩进开始行数}]
+  悬挂缩进环境 \env{hangparas} 有两个必选参数，使其中的段落均保持悬挂缩进。每个段落的缩进将以 \meta{缩进长度} 从 \meta{缩进开始行数} 开始。
+\end{environments}
+
+\subsection{代码}
+\begin{commands}
+  \command*{lstdefinestyle}[\marg{代码风格}\marg{键值列表}]
+  代码抄录宏包 \pkg*{listings} 的代码风格定义命令，提供大量选项对代码样式进行高度定制。可以根据需要的代码语言和样式定义多种风格，默认使用的 \meta{代码风格} 为 \code{lst-latex}。
+  \command{lstinline}[\oarg{键值列表}\marg{行内代码}]
+  行内代码抄录命令。较原生的 \cs*{verb} 命令有较大改进，具有代码语言和样式支持。
+\end{commands}
+
+\begin{environments}
+  \environment{lstlisting}[\oarg{键值列表}]
+  行间代码抄录环境。支持多种语言库，默认使用 \code{LaTeX} 代码语言，可使用 \meta{键值列表} 局部修改代码样式。另外还提供了 \cs*{lstnewenvironment} 命令包装自定义名称的代码环境。
+  \begin{ctexexam}
+  \lstdefinestyle{lst-pascal}
+    {
+      language        = Pascal,
+      numbers         = left,
+      firstnumber     = last,
+      frame           = shadowbox,
+      backgroundcolor = \color{MistyRose},
+      rulesepcolor    = \color{DarkGray}
+    }
+  \lstnewenvironment{mypascal}[1][]{\lstset{style = lst-pascal,#1}}{}
+  \end{ctexexam}
+\end{environments}
+
+\begin{options}\noitemsep
+  \keyval{lstlistlistingname}{代码目录标题名}\default{}
+  \keyval{lstlistingname}{代码题注标题名}
+  代码目录名与代码环境题注名选项 \option*{lstlistlistingname} 和 \option*{lstlistingname} 用法与 \CTeX 使用手册标题汉化一节类似，可以看作对这节的扩展。
+\end{options}
+
+\subsection{盒子}
+\label{subsec:box}
+文档类预置了两个行间盒子环境和两个行内盒子命令，需要在导言区\textbf{手动载入} \pkg*{tcolorbox} 宏包提供支持。它们 \meta{配置选项} 的键值列表可见宏包文档的Option Keys一节，可以进行边距、字体及背景颜色等各种个性化设置。如果 \meta{配置选项} 较长且希望在原有基础上改为全局固定的样式，可以使用 \cs{addtotcbstyle} 命令设置，第一个参数为 \code{tc-}\meta{环境或命令名}。
+\begin{commands}
+  \command{deftcbstyle}[\marg{盒子风格}\marg{键值列表}]
+  新建或重置一个名称为 \meta{盒子风格} 的 \pkg*{tcolorbox} 宏包盒子风格，可以与 \cs{addtotcbstyle} 命令联用。
+  \command{addtotcbstyle}[\marg{盒子风格}\marg{键值列表}]
+  修改已存在的 \pkg*{tcolorbox} 宏包盒子风格。这个命令可以调整以下即将介绍的预置盒子风格，对于预置盒子来说参数 \meta{盒子风格} 即为它们对应的环境或命令名。
+  \begin{ctexexam}
+  \deftcbstyle{fancy} % 新建一个盒子风格fancy
+    {
+      colback = Snow,colframe = LimeGreen,coltext = Coral,
+      fontupper = \bfseries,arc = 6pt,
+      boxrule = 5pt,boxsep = 5pt,
+      borderline = {2pt}{2pt}{white}
+    }
+  \newtcolorbox{mytcbox}[1][]{enhanced,fancy,title = #1}
+  \begin{tcolorbox}[fancy,enhanced]
+    盒子内容
+  \end{tcolorbox}
+  \begin{mytcbox}[盒子标题]
+    盒子内容
+  \end{mytcbox}
+  \end{ctexexam}
+\end{commands}
+
+\begin{environments}
+  \environment{easyboxi}[\sarg\oarg{颜色名}\darg{段落标题}\oarg{配置选项}]
+  行间环境 \env{easyboxi} 创建一个带有三个可选参数的扁平盒子。使用星号参数时给盒子添加边框，\meta{颜色名} 选项设置背景颜色，\meta{段落标题} 选项可以设置标题，默认标题为空。
+  \begin{ctexexam}
+  \addtotcbstyle{tc-easyboxi}{arc = 6pt}
+  \begin{easyboxi}*[DarkCyan](段落标题)
+    上半盒子内容
+    \tcblower % 盒子上下部分分界线
+    下半盒子内容
+  \end{easyboxi}
+  \end{ctexexam}
+  \environment{easyboxii}[\sarg\oarg{颜色名}\darg{段落标题}\oarg{配置选项}]
+  环境 \env{easyboxii} 用法与 \env{easyboxi} 类似，同样带有三个可选参数。盒子的左边带有一条粗竖线，背景颜色为竖线颜色的浅色。\meta{颜色名} 选项可以设置竖线的颜色。使用星号参数则盒子无背景颜色。
+\end{environments}
+
+\begin{commands}
+  \command{eboxi}[\oarg{颜色名}\marg{内容}\oarg{配置选项}]
+  行内盒子命令 \cs{eboxi} 具有模糊边缘类似高亮的效果。
+  \command{eboxii}[\oarg{颜色名}\marg{内容}\oarg{配置选项}]
+  行内盒子命令 \cs{eboxii} 则有直角边缘和四周框线，效果类似带颜色的 \cs*{fbox} 盒子。
+\end{commands}
+
+\section{扩展功能}
+
+\subsection{物理量}
+\begin{commands}
+  \command{num}[\oarg{键值列表}\marg{数字}]
+  \pkg*{siunitx} 宏包的 \cs{num} 命令可以输出以科学计数法表示的数值。
+  \command{unit}[\oarg{键值列表}\marg{单位}]
+  单位格式化命令 \cs{unit} 包含文字元素（例如字母或数字）时，使用 \Marg{.} 和 \code{\~{}} 放置在单元乘积中间，并使用 \code{\_} 和 \code{\^{}} 正确放置指定的下标和上标。格式化方法可在数学和文本模式下使用。
+  \command{qty}[\oarg{键值列表}\marg{数字}\oarg{前缀}\marg{单位}]
+  命令 \cs{qty} 可用来输出带有单位的量。
+  \command{qtyrange}[\oarg{键值列表}\marg{起始数字}\marg{结束数字}\marg{单位}]
+  命令 \cs{qtyrange} 可以输出带有范围和单位的量。
+  \begin{ctexexam}
+  \numproduct{-21x3e5}
+  \unit{mL~min^{-1}}
+  \qty{5}{\mole}
+  \qtyrange[unit-color = green]{1.5}{4}{kg}
+  \end{ctexexam}
+\end{commands}
+
+\subsection{化学式}
+\begin{commands}
+  \command{ch}[\oarg{键值列表}\marg{化学式}]
+  除了以普通公式的方式，化学式还可用 \pkg*{chemformula} 实现。无机化学式使用 \cs{ch} 命令书写。化合物表达式中的原子数不需要加下标符号，化学计量数与表达式间隔一个空格。
+  \begin{ctexexam}
+  \ch{[Cu(NH3)4]^2+}
+  \ch{Cu2S + 2 O2 - 2 e^- == 2 Cu^2+ + SO4^2-}
+  \end{ctexexam}
+\end{commands}
+
+\subsection{计数器}
+\begin{commands}\noitemsep
+  \command{newcounter}[\marg{计数器}\oarg{父计数器}]\default{}
+  \command{counteruse}[\sarg\oarg{编号}\darg{分隔符}\marg{计数器}\oarg{父计数器}]
+  命令 \cs{newcounter} 是 \LaTeX 自带的创建计数器命令。命令 \cs{counteruse} 可以在当前位置输出这种计数器的值，它仅具有\textbf{输出功能}，并不会改变计数器原有的绑定关系。默认每使用一次输出命令 \meta{计数器} 的值增加1，带有星号参数的命令使 \meta{计数器} 的值保持不变。计数器的 \meta{编号} 为 \code{arabic} 或 \code{alph} 等计数形式。在一定的场合下可能用到 \cs{counteruse} 命令，比如通过新建快捷命令在一些位置使用定理环境的计数器。使用 \cs{labelformat} 设置计数器的标签引用时需添加 \code{eb-} 前缀：
+  \begin{ctexexam}
+  \labelformat{eb-theorem}{定理#1}
+  \newcommand{\theoremhead}[1]{定理\counteruse{theorem}[chapter]\hspace{1em}#1}
+  \theoremhead{定理内容}\label{thm:theorem}
+  \end{ctexexam}
+  \command{counterwithin}[\sarg\oarg{格式}\marg{计数器}\marg{父计数器}]
+  对计数器进行绑定的命令。将 \meta{计数器} 绑定于 \meta{父计数器}，即 \meta{父计数器} 的值递增时 \meta{计数器} 的值会归零，输出格式 \cs*{the}\meta{计数器} 被改为 \cs*{the}\meta{父计数器}\code{.}\meta{格式}\marg{计数器}。\meta{格式} 应当为接受计数器值并改变编号形式的命令，默认为 \cs*{arabic}。带有星号参数的命令仅进行绑定不更改输出格式。
+  \command{counterwithout}[\sarg\oarg{格式}\marg{计数器}\marg{父计数器}]
+  对计数器关系进行解绑的命令。将 \meta{计数器} 解绑于 \meta{父计数器}，同时输出格式被改为 \meta{格式}\marg{计数器}。带有星号参数的命令仅进行解绑不更改输出格式。
+  \begin{ctexexam}
+  \counterwithin[\Roman]{child}{parent}
+  \counterwithout*{child}{parent}
+  \end{ctexexam}
+\end{commands}
+
+\subsection{标签引用}
+\begin{commands}
+  \command{labelformat}[\marg{计数器}\marg{标签引用格式}]
+  标签格式命令 \cs{labelformat} 可以设置标签引用格式。\meta{标签引用格式} 中 \code{\#1} 代表 \cs*{the}\meta{计数器}，可以设置引用序号的前缀和后缀。也可以使用 \pkg*{cleveref} 宏包提供更强大的标签功能。
+  \command{AtEndPreamble}[\marg{钩子代码}]
+  导言区末尾的钩子命令。为了保证兼容性 \pkg*{hyperref} 宏包被设计在导言区末尾载入，一些情况下需要合适的钩子在 \pkg*{hyperref} 后方执行 \meta{钩子代码}，例如载入 \pkg*{cleveref} 宏包。
+  \begin{ctexexam}
+  \labelformat{chapter}{第#1章}
+  \labelformat{chapter}{第\thechapter 章}
+  \AtEndPreamble{\usepackage{cleveref}}
+  \end{ctexexam}
+\end{commands}
+
+\subsection{图表题注}
+\begin{commands}
+  \command{captionsetup}[\oarg{条目名}\marg{键值列表}]
+  这是 \pkg*{caption} 宏包的接口命令，\meta{键值列表} 提供多个选项更改图表题注的格式。题注主要由三部分组成：标题标签即图表名与题注编号的组合，标题文本本身通常是内容的简短描述，以及将文本与标签分开的题注分隔符。可以在导言区设置整体格式，也可以在正文使用局部更改格式。
+\end{commands}
+
+\begin{commands}\noitemsep
+  \command{caption}[\sarg\oarg{目录标题}\marg{标题}]\default{}
+  \command{captionof}[\sarg\marg{条目名}\oarg{目录标题}\marg{标题}]\default{}
+  \command{bicaption}[\sarg\oarg{目录中文标题}\marg{中文标题}\oarg{目录英文标题}\marg{英文标题}]
+  题注命令 \cs{caption} 用于在图表上下方插入题注，需要在浮动环境 \env*{figure} 和 \env*{table} 中使用。在浮动环境外可以使用 \cs{captionof} 命令，第一个参数指定条目名。可以搭配 \pkg*{newfloat} 宏包创建更多类型的浮动环境并设置相应题注。\cs{bicaption} 命令可以实现中英文双语题注，需要在导言区载入 \pkg*{bicaption} 宏包，具体用法见说明文档。
+\end{commands}
+
+\subsection{索引}
+\begin{commands}
+  \command{indexsetup}[\marg{键值列表}]
+  \pkg*{imakeidx} 宏包增强了索引的功能。这是它的的接口命令，用于设置索引表的整体格式。
+  \command{index}[\oarg{索引名}\marg{标签}]
+  索引标签命令的可选参数可以用不同的 \meta{索引名} 给多个索引表设置标签。
+  \command{makeindex}[\oarg{键值列表}]
+  用于导言区开启索引收集的命令。这个命令可以重复使用收集多个索引表，以不同的 \meta{索引名} 作为区分，如果仅打印一个索引表没必要重复使用。
+  \command{printindex}[\sarg\oarg{键值列表}]
+  打印不同索引表的命令。这个命令被重新定义，\meta{键值列表} 中的选项与\ref{subsec:directory command} 其它目录命令相同，但是接口命令 \cs{indexsetup} 的部分选项失效。
+  \begin{options}
+  \keyval{name}{索引名}
+  指定输出名为 \meta{索引名} 的索引表，如果只使用一个索引表则默认为项目文件名不需要指定。
+  \end{options}
+\end{commands}
+
+\subsection{边注}
+\begin{commands}
+  \command{marginnote}[\oarg{左文本}\marg{右文本}\oarg{垂直偏移}]
+  边注命令用于在两侧页边空白添加标注。如果只给定了 \meta{右文本}，那么边注在奇偶数页文字相同。如果同时给定了 \meta{左文本}，则偶数页使用 \meta{左文本} 的文字。
+  \command{reversemarginpar}
+  边注位置设置命令，用于将边注排版到与默认边空位置相反的边空中。
+\end{commands}
+
+\subsection{公式符号对照}
+\begin{environments}
+  \environment{eqcomp}[\oarg{键值列表1}\darg{键值列表2}]
+  一些公式之后可以使用基于列表环境的 \env{eqcomp} 进行符号对照。对照列表的 \meta{键值列表2} 与 \pkg*{enumitem} 的选项相同，一般较少用到，可以用于设置垂直间距等。
+  \begin{ctexexam}
+  \seteqcomp{intro = 上式中}
+  \begin{eqcomp}[width = 1.5em]
+    \symb{Ab}[$\to$] 符号说明
+    \symb{C}[---] 符号说明
+  \end{eqcomp}
+  \end{ctexexam}
+\end{environments}
+
+\begin{commands}
+  \command{symb}[\sarg\marg{符号}\oarg{引导符}]
+  符号条目命令 \cs{symb} 类似 \cs*{item}，需要在环境内使用，带有星号的命令可在文本段落单独使用。
+  \command{seteqcomplist}[\marg{键值列表2}]
+  对照列表条目格式的 \meta{键值列表2} 可以使用 \cs{seteqcomplist} 全局设置。
+  \command{seteqcomp}[\marg{键值列表1}]
+  对照环境的 \meta{键值列表1} 可以使用 \cs{seteqcomp} 全局设置，它的选项如下：
+  \begin{options}
+  \keyval{width}{符号宽度}\Default{10pt}
+  设置适当的符号宽度可以防止文字重叠和边界溢出等问题。
+  \keyval{delim}{引导符}\Default{——}
+  全局的符号对照引导符。\cs{symb} 局部的 \meta{引导符} 和对齐方式是基于这个符号的宽度。
+  \keyval{space}{符号间隙}\Default{0.25em}
+  符号间隙为引导符两侧与符号和说明文字间的距离。
+  \keychoice{item-align}{l,c,r}\Default{r}
+  符号的对齐方式，分为左 \code{l}、中 \code{c} 和右 \code{r} 三种对齐方式。
+  \keychoice{delim-align}{l,c,r}\Default{c}
+  引导符的对齐方式，分为左 \code{l}、中 \code{c} 和右 \code{r} 三种对齐方式。
+  \keyval{enumitem}{键值列表2}
+  可以使用选项 \option{enumitem} 或命令 \cs{seteqcomplist} 调整对照列表的水平和垂直间距。
+  \keyval{intro}{首行文字}
+  符号对照的说明文字。应当为简短的几个字，只显示在第一行，其后为悬挂缩进的对照列表。
+  \keyval{font}{符号字体}
+  符号的字体。数学和文本符号模式应采用不同的字体命令，最后一个命令可以接受一个参数，这个参数为符号。
+  \keychoice{mode}{math,text}\Default{math}
+  符号字体模式，可以为数学字体或者文本字体。
+  \end{options}
+\end{commands}
+
+\subsection{插入文档}
+\begin{commands}
+  \command{includepdf}[\oarg{键值列表}\marg{文档名}]
+  该命令由文档宏包 \pkg*{pdfpages} 提供。可以将其它 \code{pdf} 文档插入当前文档，比如插入其它软件制作的封面。\meta{键值列表} 可以指定插入页数、逻辑页和横向页面等，详情查看宏包文档。
+\end{commands}
+
+\subsection{下划线}
+\begin{commands}\noitemsep
+  \command{uline}[\marg{下划直线}]\default{}
+  \command{uuline}[\marg{下划双直线}]\default{}
+  \command{uwave}[\marg{下划波浪线}]
+  \pkg*{ulem} 宏包提供了多种下划线命令，可以重新定义 \cs*{ULthickness} 命令控制下划线的粗细。下划线的深度由 \cs*{ULdepth} 控制，默认值 \cs*{maxdimen} 是一个允许深度根据当前字体变化的特殊标志，当然也可以使用 \cs*{setlength} 设定为指定深度。
+\end{commands}
+
+\appendix
+\setlist[1]{}
+\begin{changelog}[title = 更新日志]
+  \shortversion{v = 1.45,date = 2022/01/08,changes = 经过前期各模块的功能调整和错误修复，稳定版本正式发布。}
+  \begin{version}[v = 1.46,date = 2022/01/12]
+  \added
+  \item 增加定义脚注正文和内容标记格式的命令 \cs{defupfntmark} 和 \cs{defdownfntmark}。
+  \item 新增文档主目录中双语标题列表的输出排列方式选项 \option{bilist}。
+  \end{version}
+  \begin{version}[v = 1.55,date = 2022/01/28]
+  \added
+  \item 新增文类选项 \option{theorem} 用于提供定理功能支持。
+  \deprecated
+  \item 由于命令存在一些无法解决的问题弃用定理环境定义命令 \cs*{deftheorem}。
+  \item 文档类移除预置的定理环境，改为由用户自行定义环境。
+  \item 考虑到功能性和实用性不强弃用摘要环境 \env*{outline} 和习题环境 \env*{exercise}。
+  \end{version}
+  \begin{version}[v = 1.62,date = 2022/02/16]
+  \added
+  \item 增加目录条目下方执行的代码选项 \option{tocbelow}。
+  \changed
+  \item 目录改用标题级别选项 \option{level} 设定标题命令，不输出标题则使用星号参数。
+  \end{version}
+  \begin{version}[v = 1.636,date = 2022/03/03]
+  \added
+  \item \cs*{tableofcontents} 命令增加输出方案选项 \option{plan}，不再使用 \parg{} 参数输出英文目录。
+  \item 增加英文主文档目录钩子选项 \option{bibetween}。
+  \end{version}
+  \shortversion{v = 1.638,date = 2022/03/04,changes = 增加目录条目样式选项注册命令 \cs{RegisterTocName}。}
+  \shortversion{v = 1.644,date = 2022/03/10,changes = 增加浮动环境目录声明命令 \cs{DeclareFloatList} 配合 \pkg*{caption} 宏包。}
+  \shortversion{v = 1.682,date = 2022/05/01,changes = 将迷你页判断命令 \cs*{notminipage} 改为被保护命令兼容 \pkg*{circledtext} 宏包。}
+\end{changelog}
+\nocite{*}
+
+\end{document}

@@ -1,0 +1,17 @@
+\documentclass{standalone}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=1.16}
+\usetikzlibrary{matrix,chains,trees,scopes,decorations,arrows.meta,automata,positioning,shadows,3d}
+
+
+\begin{document}
+\begin{tikzpicture}[->]
+    \draw (0,0,0) -- (xyz cylindrical cs:radius=1);
+    \draw (0,0,0) -- (xyz cylindrical cs:radius=1,angle=90);
+    \draw (0,0,0) -- (xyz cylindrical cs:z=1);
+\end{tikzpicture}
+\end{document}
+
+
+

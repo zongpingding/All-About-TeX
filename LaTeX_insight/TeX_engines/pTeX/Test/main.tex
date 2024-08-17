@@ -1,0 +1,138 @@
+\documentclass{article}
+\usepackage{xeCJK}
+\usepackage{amsmath}
+\usepackage{xpinyin}
+\usepackage{graphicx}
+\usepackage{adjustbox}
+
+
+% \setCJKmainfont{Noto Serif CJK SC} % 设置中文字体（根据自己的字体设置）
+
+% 定义一个命令用于将中文转换为繁体
+\newcommand{\tra}[1]{%
+  \ifcase#1\relax%
+  \or 壹% 1
+  \or 贰% 2
+  \or 叁% 3
+  \or 肆% 4
+  \or 伍% 5
+  \or 陆% 6
+  \or 柒% 7
+  \or 捌% 8
+  \or 玖% 9
+  \or 拾% 10
+  \else 未定义\fi% 其他情况
+}
+
+
+\newenvironment{Test}{\begin{center}}{\end{center}}
+\newenvironment{ralign}{%
+    \equation
+    \begin{aligned}%
+}{%
+    \end{aligned}
+    \endequation
+}
+
+\newenvironment{Ralign}{%
+	\begin{adjustbox}{angle=90, center}
+	\minipage{.2\linewidth}
+    \equation
+    \begin{aligned}%
+}{%
+    \end{aligned}
+    \endequation
+    \endminipage
+	\end{adjustbox}
+}
+
+\begin{document}
+\section{繁体转换}
+阿拉伯："1" 的繁体为 \verb|\tra{1}|:"\tra{1}"
+
+
+
+
+\section{计数器}
+\verb|\arabic{section}|:\arabic{section},\qquad \verb|\thesection|:\thesection
+% 错误写法
+% \arabic{thesection}
+
+
+
+
+\section{符号替换}
+\catcode`\:=\active
+\catcode`\：=\active 
+\def:{\rotatebox[origin=c]{90}{A}}
+\def：{\rotatebox[origin=c]{90}{B}}
+
+实验效果如下 -- : ：
+
+
+
+\section{align 旋转}
+\begin{adjustbox}{angle=90, center}
+\begin{minipage}{.3\linewidth} % 适当调整 minipage 的宽度以适应页面
+\begin{align}
+    & a = b + c \\
+    & x = y + z
+\end{align}
+\end{minipage}
+\end{adjustbox}
+
+\begin{ralign}
+\alpha + \beta = \gamma
+\end{ralign}
+
+\begin{ralign}
+\alpha + \beta
+\end{ralign}
+
+\begin{adjustbox}{angle=90, center}
+\minipage{.2\linewidth}
+\begin{ralign}
+\alpha + \beta
+\end{ralign}
+\endminipage
+\end{adjustbox}
+
+
+\begin{Ralign}
+\alpha + \beta
+\end{Ralign}
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

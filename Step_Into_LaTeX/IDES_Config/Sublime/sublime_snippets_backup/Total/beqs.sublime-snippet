@@ -1,0 +1,13 @@
+<snippet>
+	<content><![CDATA[
+\begin{equation}
+\begin{split}
+$1
+\end{split}
+\label{eq:${2:label}}
+\end{equation}
+]]></content>
+	<tabTrigger>beqs</tabTrigger>
+	<scope>text.tex.latex</scope>
+</snippet>
+

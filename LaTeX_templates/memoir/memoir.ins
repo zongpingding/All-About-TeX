@@ -1,0 +1,116 @@
+%% memoir.ins
+%% Author: Peter Wilson (herries dot press at earthlink dot net)
+%% Copyright 2001--2011 Peter R. Wilson
+%% Copyright 2011--     Lars Madsen
+%% Maintainer: Lars Madsen (daleif at imf dot au dot dk)
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either
+%% version 1.3c of this license or (at your option) any 
+%% later version.
+%% The latest version of the license is in
+%%    http://www.latex-project.org/lppl.txt
+%% and version 1.3c or later is part of all distributions of
+%% LaTeX version 2008/05/04 or later.
+%%
+%% This work has the LPPL maintenance status "maintained".
+%% (Note: Lars Madsen is gradually taking over maintenance)
+%%
+%% This work consists of the files listed in the README file.
+%%
+%% This file will generate fast loadable files and documentation
+%% driver files from the doc files in this work when run through
+%% LaTeX.
+%%
+%% --------------- start of docstrip commands ------------------
+%%
+\def\batchfile{memoir.ins}
+\input docstrip.tex
+\preamble
+ 
+  Author: Peter Wilson  (herries dot press at earthlink dot net)
+          Herries Press
+  Copyright 2001--2011 Peter R. Wilson
+  Copyright 2013--     Lars Madsen
+  Maintainer: Lars Madsen (daleif at math dot au dot dk)
+ 
+
+  This work may be distributed and/or modified under the
+  conditions of the LaTeX Project Public License, either
+  version 1.3 of this license or (at your option) any 
+  later version.
+  The latest version of the license is in
+     http://www.latex-project.org/lppl.txt
+  and version 1.3 or later is part of all distributions of
+  LaTeX version 2003/06/01 or later.
+ 
+  This work has the LPPL maintenance status "maintained".
+ 
+  This work consists of the files listed in the README file.
+
+\endpreamble
+
+\keepsilent
+
+%% \Msg{*** Generating the driver file ***}
+
+%% \generateFile{memoir.drv}{t}{\from{memoir.dtx}{driver}}
+
+\Msg{*** Generating the LaTeX2e document class files ***}
+
+\generateFile{memoir.cls}{n}{\from{memoir.dtx}{class}}
+
+
+\Msg{*** Generating the LaTeX2e document class option files ***}
+
+\generateFile{mem9.clo}{n}{\from{memoir.dtx}{9pt}}
+\generateFile{mem10.clo}{n}{\from{memoir.dtx}{10pt}}
+\generateFile{mem11.clo}{n}{\from{memoir.dtx}{11pt}}
+\generateFile{mem12.clo}{n}{\from{memoir.dtx}{12pt}}
+\generateFile{mem14.clo}{n}{\from{memoir.dtx}{14pt}}
+\generateFile{mem17.clo}{n}{\from{memoir.dtx}{17pt}}
+\generateFile{mem20.clo}{n}{\from{memoir.dtx}{20pt}}
+\generateFile{mem25.clo}{n}{\from{memoir.dtx}{25pt}}
+\generateFile{mem30.clo}{n}{\from{memoir.dtx}{30pt}}
+\generateFile{mem36.clo}{n}{\from{memoir.dtx}{36pt}}
+\generateFile{mem48.clo}{n}{\from{memoir.dtx}{48pt}}
+\generateFile{mem60.clo}{n}{\from{memoir.dtx}{60pt}}
+
+\Msg{*** Generating the MakeIndex configuration files ***}
+
+%%%%\usepreamble\empty
+\usepostamble\empty
+\generateFile{basic.gst}{n}{\from{memoir.dtx}{gst}}
+
+\Msg{***********************************************************}
+\Msg{*}
+\Msg{* To finish the installation you have to move the following}
+\Msg{* files into a directory searched by LaTeX. See the FAQ}
+\Msg{* at https://texfaq.org/ for more on this.}
+\Msg{*}
+\Msg{* \space\space memoir.cls}
+\Msg{* \space\space mem9.clo}
+\Msg{* \space\space mem10.clo}
+\Msg{* \space\space mem11.clo}
+\Msg{* \space\space mem12.clo}
+\Msg{* \space\space mem14.clo}
+\Msg{* \space\space mem17.clo}
+\Msg{* \space\space mem20.clo}
+\Msg{* \space\space mem25.clo}
+\Msg{* \space\space mem30.clo}
+\Msg{* \space\space mem36.clo}
+\Msg{* \space\space mem48.clo}
+\Msg{* \space\space mem60.clo}
+\Msg{*}
+\Msg{*}
+\Msg{* To produce the documented source run the files ending with}
+\Msg{* `.dtx' through LaTeX.}
+\Msg{* For an index process any name.idx file by:}
+\Msg{* \space\space\space\space makeindex -s gind.ist name}
+\Msg{* Process any name.glo file by:}
+\Msg{* \space\space\space\space makeindex -s gglo.ist -o name.gls name.glo}
+\Msg{*}
+\Msg{* Happy TeXing}
+\Msg{***********************************************************}
+
+\endinput

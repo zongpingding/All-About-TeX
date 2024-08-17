@@ -1,0 +1,18 @@
+\contentsline {chapter}{\numberline {第一章\hspace {.3em}}模板自身测试}{1}{chapter.1}%
+\ttl@change@i {\@ne }{psection}{2em}{}{\contentslabel {2em}}{}{\titlerule *[1pc]{.}\contentspage }\relax 
+\ttl@change@v {psection}{}{}{}\relax 
+\ttl@change@i {\@ne }{psubsection}{4.5em}{}{\contentslabel {2.5em}}{}{\titlerule *[1pc]{.}\contentspage }\relax 
+\ttl@change@v {psubsection}{}{}{}\relax 
+\ttl@change@i {\@ne }{psubsubsection}{5.5em}{}{\contentslabel {0em}}{}{\titlerule *[1pc]{.}\contentspage }\relax 
+\ttl@change@v {psubsubsection}{}{}{}\relax 
+\ttl@starttoc {chapters@1}
+\contentsline {section}{\numberline {1}colortext}{1}{section.1.1}%
+\contentsline {subsection}{\numberline {1.1}定理类环境}{1}{subsection.1.1.1}%
+\contentsline {section}{\numberline {2}测试}{1}{section.1.2}%
+\contentsline {subsection}{\numberline {2.1}文本输入}{1}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {2.2}Wolfram测试}{2}{subsection.1.2.2}%
+\contentsline {subsection}{\numberline {2.3}图片}{2}{subsection.1.2.3}%
+\contentsline {section}{\numberline {3}Lions Main Theorem}{2}{section.1.3}%
+\contentsline {subsection}{\numberline {3.1}Concentration-Compactness Lemma}{2}{subsection.1.3.1}%
+\contentsline {subsection}{\numberline {3.2}tikz绘图接口}{3}{subsection.1.3.2}%
+\contentsfinish 

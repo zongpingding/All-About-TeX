@@ -1,0 +1,33 @@
+\documentclass{article}
+\usepackage{graphics}
+
+
+\newcommand{\im}[1]{%
+	\ensuremath{\displaystyle #1}}
+	
+\newcommand{\scale}[2]{%
+    \scalebox{#1}[#1]{#2}}
+    
+\newcommand{\test}{\oint\frac{\partial f}{\partial \overrightarrow{n}}\mathrm{d}s}
+
+\newcommand{\iM}[2][.5]{%
+    \lower-.2em\hbox{
+    \scalebox{#1}[#1]{%
+    \ensuremath{\displaystyle #2}%
+}}}
+
+\begin{document}
+Hello \im{\test}, latex in line.
+
+Hello \iM{\oint_1^\infty f(x,y)=\sum_{i=1}^{+\infty}{\frac{1}{i+j}}}, latex in line.
+ 
+\vspace*{4em}
+
+Hello \scale{0.7}{\im{\test}}, latex in line.
+
+a\hbox{b}c
+
+a\lower-.5em\hbox{b}c
+
+a\kern-.4em bc
+\end{document}

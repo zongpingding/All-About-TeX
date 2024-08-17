@@ -1,0 +1,13 @@
+<snippet>
+	<content><![CDATA[
+\begin{itemize}
+	\item $1
+\end{itemize} 
+]]></content>
+	<tabTrigger>bit</tabTrigger>
+	<scope>text.tex.latex</scope>
+</snippet>
+<!-- 
+\usepackage{soul, color}
+\newcommand{\hlg}[2][green]{{\sethlcolor{#1}\hl{#2}}} 
+-->

@@ -1,0 +1,77 @@
+% \documentclass{article}
+% \usepackage{lipsum}
+% \begin{document}
+% \def\centerlastline#1{%
+%   % \bgroup
+%     \setbox0=\vbox{\noindent #1}%
+%     \setbox1=\vbox{%
+%         \unvbox0  % 展开\vbox0中的内容
+%         \setbox2=\lastbox
+%         \hbox to \linewidth{\hfill\unhbox2 \hfill}%
+%         \setbox3=\hbox{\lastbox}
+%     }%
+%     \unvbox1
+%   % \egroup
+% }%
+% \centerlastline{\lipsum[3]}
+
+% \vspace*{4em}
+% \usebox3
+% \end{document}
+
+
+\documentclass{article}
+\usepackage{expl3}
+\usepackage{lipsum}
+\usepackage{fancyhdr}
+
+
+\ExplSyntaxOn
+\dim_set:Nn \headheight {18pt}
+\box_new:N \myboxa
+\box_new:N \myboxb
+
+\box_new:N \myboxc
+\box_new:N \myboxd
+% get the first line
+\newcommand\firstLine[1]{
+  #1
+  \vbox_set:Nn \myboxa {#1}
+  \vbox_set_split_to_ht:NNn \myboxb\myboxa{12pt}
+  % \box_use:N \myboxb
+}
+
+% get the last line
+\newcommand\lastLine[1]{
+  #1
+  \vbox_set:Nn \myboxa {#1}
+  \bool_set_true:N \l_tmpa_bool
+  \bool_do_while:Nn \l_tmpa_bool {
+    \vbox_set_split_to_ht:NNn \myboxd\myboxa{12pt}
+    \box_if_empty:NTF \myboxd {
+      \bool_set_false:N \l_tmpa_bool
+      % \box_use:N \myboxc\par
+    }{
+      \box_set_eq:NN \myboxc\myboxd 
+    }
+  }
+}
+% fancy style
+\fancypagestyle{fancy}{
+  \fancyhead[R]{\thepage}
+  \fancyhead[L]{\box_use:N \myboxc}
+}
+\ExplSyntaxOff
+
+
+\begin{document}
+\pagestyle{fancy}
+\lipsum[1-3]
+
+\newpage
+% \firstLine{\lipsum[1-2]}
+\vspace*{20em}
+% \lastLine{\box255}
+\usebox{255}
+
+\end{document}

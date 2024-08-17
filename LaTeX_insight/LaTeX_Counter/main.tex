@@ -1,0 +1,199 @@
+\documentclass[12pt]{article}
+\PassOptionsToPackage{quiet}{fontspec}
+\usepackage[a4paper, total={6.5in, 10in}]{geometry}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{ctex}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+\usepackage{xcolor}
+\usepackage{float}
+
+\newcommand{\m}{\textbackslash}
+\newcommand{\hl}{\noindent\rule{1\linewidth}{.1em}}
+
+\title{LaTeX 中的计数器}
+\author{Eureka}
+\date{\today}
+\begin{document}
+\maketitle
+
+\section{LaTeX中的计数器类别}
+LaTeX中有很多内置的计数器，常用的包括以下几种：
+
+\begin{itemize}
+    \item part、chapter、section、subsection、subsubsection、paragraph、subparagraph：
+          这些计数器用于对文档的结构进行编号。
+    \item figure、table：这些计数器用于对插图和表格进行编号。
+    \item equation：这个计数器用于对公式进行编号。
+    \item page：这个计数器用于对页面进行编号。
+\end{itemize}
+
+此外，还有许多其他的计数器，如 footnote（脚注）、enumi、enumii（枚举列表计数器）、theorem（定理计数器）等等。
+你可以使用\m the命令来输出计数器的当前值，例如\m thepage会输出当前页面的编号。
+你也可以使用\m arabic、\m roman、\m alph等命令来指定输出计数器的方式
+第一页。 具体的使用样例：
+
+\begin{verbatim}
+alph: \alph{page}
+
+alph: \Alph{page}
+
+arabic: \arabic{page}
+
+roman: \roman{page}
+
+roman: \Roman{page}
+\end{verbatim}
+
+
+\section{LaTex种重置计数器}
+
+在LaTeX中，如果想要重置计数器，可以使用以下命令：
+
+\hl
+\begin{verbatim}
+\setcounter{counter_name}{value}
+
+% counter_name是计数器的名称
+% value是你想要将计数器设置为的值
+\end{verbatim}
+\hl
+
+\section{LaTex中的计数器操作设置方法}
+\begin{verbatim}
+\setcounter{counter}{value}：设置计数器counter的值为value。
+
+\addtocounter{counter}{value}：将计数器counter的值增加value。
+
+\stepcounter{counter}：将计数器counter的值增加1。
+
+\refstepcounter{counter}：将计数器counter的值增加1，并将该计数器作为参考点用于交叉引用。
+
+\thecounter：用于输出计数器counter的值。
+
+\value{counter}：用于获取计数器counter的当前值。
+
+\arabic{counter}：将计数器counter的值转换为阿拉伯数字形式输出。
+
+\alph{counter}：将计数器counter的值转换为小写字母形式输出。
+
+\Alph{counter}：将计数器counter的值转换为大写字母形式输出。
+
+\roman{counter}：将计数器counter的值转换为小写罗马数字形式输出。
+
+\Roman{counter}：将计数器counter的值转换为大写罗马数字形式输出。
+\end{verbatim}
+
+
+
+
+% 定义一个计数器环境
+\section{自定义一个带有计数器的环境}
+
+\newcounter{mycounter}
+
+\newenvironment{myenv}{%
+  \stepcounter{mycounter} % 使用 \stepcounter{mycounter} 命令将计数器 mycounter 的值加 1
+  Environment started. This is environment number \themycounter:%
+}{%
+  \par Environment ended.%
+}
+
+\subsection{定义一个计数器}
+\hl
+\begin{verbatim}
+\newcounter{mycounter}
+
+\newenvironment{myenv}{%
+  \stepcounter{mycounter} % 使用 \stepcounter{mycounter} 命令将计数器 mycounter 的值加 1
+  Environment started. This is environment number \themycounter:%
+}{%
+  \par Environment ended.%
+}
+\end{verbatim}
+\hl
+
+
+\subsection{具体使用样例}
+\begin{myenv}
+  This is the first instance of the environment.
+\end{myenv}
+
+\begin{myenv}
+  This is the second instance of the environment.
+\end{myenv}
+
+
+\subsection{定义其父计数器}
+在 LaTeX 中，您可以使用 \m newcounter\{countername\}[dependencounter] 
+命令定义一个新的计数器，并指定一个可选参数 dependencounter 作为该计数器的父
+计数器。此外，您可以使用 \m renewcommand\{\m thecountername\}\{format\} 
+命令来定义计数器的显示格式，其中 format 是一个包含特殊符号的字符串，用于指定
+计数器的样式。
+
+\hl
+\begin{verbatim}
+\newcounter{mycounter}[section]
+
+\renewcommand{\themycounter}{\thechapter.\arabic{mycounter}}
+
+\newenvironment{myenv}{%
+  \refstepcounter{mycounter}%
+  Environment started. This is environment number \themycounter:%
+}{%
+  \par Environment ended.%
+}   
+\end{verbatim}
+\hl
+
+\newcounter{themycounter}[section]
+
+\renewcommand{\themycounter}{\thesection.\arabic{mycounter}}
+
+\newenvironment{themyenv}{%
+  \refstepcounter{mycounter}%
+  Environment started. This is environment number \themycounter:%
+}{%
+  \par Environment ended.%
+}
+
+在这个例子中，我们首先使用 \m newcounter\{mycounter\}[section] 命令
+定义一个新的计数器 mycounter，并将其设置为在每个章节中归零。
+
+接下来，我们使用 \m renewcommand\{\m themycounter\}\{\m thesection.\m arabic\{mycounter\}\} 
+命令将计数器的样式设置为 section.counter 的格式。这意味着在每个新的章节中，
+计数器的值将从 1 开始，并以 1.1、1.2、1.3 等格式增加。
+
+在环境的开始部分中，我们使用 \m refstepcounter\{mycounter\} 命令将计数器
+值加 1，并使用新的计数器样式输出一些文本，其中包含计数器的值。
+在环境的结束部分中，我们简单地输出一些文本。
+
+\textbf{使用样例}
+
+\hl
+\begin{verbatim}
+\section{Test}
+\begin{myenv}
+  This is the first instance of the environment.
+\end{myenv}
+
+\begin{myenv}
+  This is the second instance of the environment.
+\end{myenv}  
+\end{verbatim}
+\hl
+
+
+\section{Test}
+\begin{themyenv}
+  This is the first instance of the environment.
+\end{themyenv}
+
+\begin{themyenv}
+  This is the second instance of the environment.
+\end{themyenv}
+
+
+
+\end{document}

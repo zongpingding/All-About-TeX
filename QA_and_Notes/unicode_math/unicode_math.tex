@@ -1,0 +1,30 @@
+\documentclass{article}
+\usepackage{fontspec}
+\usepackage{unicode-math}
+\setmathfont{Latin Modern Math}
+
+\begin{document}
+\paragraph{Latin Modern Math}
+\begin{align}
+    \mathscr{ABCDEFGHIJKLMNOPQRSTUVWXYZ} \\
+    \mathscr{abcdefghijklmnopqrstuvwxyz}
+\end{align}
+
+\setmathfont[range={\mathscr,\mathbfscr}]{TeX Gyre Termes Math}
+\begin{align}
+    \mathscr{ABCDEFGHIJKLMNOPQRSTUVWXYZ} \\
+    \mathscr{abcdefghijklmnopqrstuvwxyz}    
+\end{align}
+
+\setmathfont[range={\mathscr,\mathbfscr}]{TeX Gyre Pagella Math}
+\begin{align}
+    \mathscr{ABCDEFGHIJKLMNOPQRSTUVWXYZ} \\
+    \mathscr{abcdefghijklmnopqrstuvwxyz}  
+\end{align}
+
+\setmathfont[range={\mathscr,\mathbfscr}]{XITS Math}
+\begin{align}
+    \mathscr{ABCDEFGHIJKLMNOPQRSTUVWXYZ} \\
+    \mathscr{abcdefghijklmnopqrstuvwxyz}
+\end{align}
+\end{document}

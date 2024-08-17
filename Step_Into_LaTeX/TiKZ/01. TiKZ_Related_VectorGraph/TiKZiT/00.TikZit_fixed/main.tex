@@ -1,0 +1,15 @@
+\documentclass{article}
+\usepackage{tikzit}
+\input{test.tikzstyles}
+\begin{document}
+    A tikz picture as an equation:
+    \begin{equation}
+    \tikzfig{fig1}
+    \end{equation}
+    A centered tikz picture:
+    \ctikzfig{fig1}
+
+% 1 .tikzdefs的目录必须和.tikzstyle的目录相同
+% 2 .tikzdefs的文件名必须和.tikzstyle的文件名相同
+
+\end{document}

@@ -1,0 +1,107 @@
+\documentclass[fontset=windows, 12pt, a4paper]{article}
+\usepackage[lmargin=2cm,tmargin=2cm,bmargin=2cm,rmargin=2cm]{geometry}
+
+% 支持xelatex编译
+\usepackage{ctex}
+% 使用宏包Calligra
+% manuscrito
+% Calligra
+\usepackage{calligra}
+\usepackage{blindtext}
+% virtual font of computer Modern for PDF
+\usepackage{ae} 
+
+% old style
+% times font
+\newcommand\timesfamily{\fontfamily{ptm} \selectfont}
+\DeclareTextFontCommand{\texttimes}{\timesfamily}
+
+% square serif (clarendon)
+% Concrete Roman
+\newcommand\concretefamily{\fontfamily{ccr} \selectfont}
+\DeclareTextFontCommand{\textconcrete}{\concretefamily}
+
+% Sans Serif
+% Helvetica
+\newcommand\helveticafamily{\fontfamily{phv} \selectfont}
+\DeclareTextFontCommand{\texthelvetica}{\helveticafamily}
+
+% Monoespacado (Typewriter)
+% Courier
+\newcommand\courierfamily{\fontfamily{pcr} \selectfont}
+\DeclareTextFontCommand{\textcourier}{\courierfamily}
+
+% gothfamily of oldgerman is Gothic. Is hand written or decorative?
+
+\usepackage{oldgerm}
+
+
+\newcommand{\TestText}{%
+    Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+Etiam lobortis facilisis sem. Nullam nec mi et neque pharetra 
+sollicitudin.Praesent imperdiet mi nec ante.Donec ullamcorper, 
+felis non sodales commodo, lectus velit ultrices augue,
+a dignissim nibh lectus placerat pede. Vivamus nunc nunc, 
+molestie ut, ultricies vel, semper in, velit.
+}
+
+
+
+\title{Font family}
+\date{\today}
+\author{Eurake}
+\begin{document}
+\maketitle
+
+    \section{default: Times New Roman}
+    {
+        \TestText
+    }
+
+    \section{oldstyle: timesfamily-Times Roman}
+    {
+        \timesfamily \TestText
+    }
+    
+
+    \section{Modern Style: rmfamily-Modern Roman}
+    {
+        \bfseries \TestText
+    }
+
+
+    \section{Sans Serif: helveticafamily-Helvetica}
+    {
+        \helveticafamily \TestText
+    }
+
+
+    \section{Mono Spaced(Typewriter): courierfamily-Courier}
+    {
+        \courierfamily \TestText
+    }
+
+    \section{Hnad Written: calligra}
+    {
+        \calligra \TestText    
+    }
+
+
+    \section{old german: gothfamily}
+    {
+        \gothfamily \TestText
+    }
+
+    \section{old german: frakfamily}
+    {
+        \frakfamily \TestText
+    }
+
+    \section{old german: swabfamily}
+    {
+        \swabfamily \TestText
+    }
+
+
+
+\end{document}

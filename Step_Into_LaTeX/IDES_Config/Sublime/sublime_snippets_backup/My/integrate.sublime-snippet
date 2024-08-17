@@ -1,0 +1,7 @@
+<snippet>
+	<content><![CDATA[
+\int_{$1}^{$2}{$3 dx}
+]]></content>
+	<tabTrigger>int</tabTrigger>
+	<scope>text.tex.latex</scope>
+</snippet>

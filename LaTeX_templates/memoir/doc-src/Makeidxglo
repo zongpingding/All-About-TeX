@@ -1,0 +1,6 @@
+# Makeidxglo  make index and glossary for memman
+echo Making the indexes and glossary for memman
+makeindex -s memman.ist memman.idx
+makeindex lines.idx
+makeindex -s memman.gst -o memman.gls memman.glo
+echo

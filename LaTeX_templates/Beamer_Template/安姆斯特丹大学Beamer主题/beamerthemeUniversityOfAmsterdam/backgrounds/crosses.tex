@@ -1,0 +1,37 @@
+\documentclass{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\tikzset{
+	San Andreas Cross/.pic = {
+		\fill [rotate=45]
+		let \n1={sqrt(0.125)/2} in
+		(-\n1, -3*\n1) rectangle +(2*\n1, 6*\n1)
+		(-3*\n1, -\n1) rectangle +(6*\n1, 2*\n1);
+	}
+}
+
+\tikzset{
+	San Andreas Crosses/.pic = {
+		% Get scaling factor
+		\pgfgettransformentries{\myxscale}{\@tempa}{\@tempa}{\@tempa}{\@tempa}{\@tempa}
+		% Wrap node around everything to make anchoring work
+		\node [minimum size={\myxscale*31*1 cm}] (frame) at (0,0) {};
+		
+		\foreach \x in {0,...,31} {
+			\foreach
+			[count=\i, evaluate=\i as \scale using \myxscale*(0.93^\i)]
+			\y in {0,...,15} {
+				\path (frame.west)++(\x, 0.5+\y) pic [scale=\scale] {San Andreas Cross};
+				\path (frame.west)++(\x, -0.5-\y) pic [scale=\scale] {San Andreas Cross};
+			};
+		};
+	}
+}
+
+\begin{document}
+	\begin{tikzpicture}
+		\pic [white] at (0, 0) {San Andreas Crosses};
+	\end{tikzpicture}
+\end{document}

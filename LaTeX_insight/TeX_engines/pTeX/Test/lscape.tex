@@ -1,0 +1,37 @@
+\documentclass{article}
+\usepackage{lscape}
+% \usepackage{pdflscape}
+\usepackage{rotating}
+\usepackage{afterpage}
+
+\begin{document}
+
+Some text in portrait mode.
+
+\begin{landscape}
+This page is in landscape mode.
+\end{landscape}
+
+% 在使用 lscape 环境前插入 \afterpage{\clearpage}
+\afterpage{\clearpage}
+\begin{landscape}
+    there is something you need rotate
+\end{landscape}
+
+\begin{landscape}
+    % 在此处插入需要旋转的内容
+    This is landscape content.
+\end{landscape}
+
+Back to portrait mode.
+
+\begin{turn}{180}
+    This is the bottom of the document.
+\end{turn}
+
+
+Normal text.
+
+\reflectbox{Mirrored text.}
+
+\end{document}

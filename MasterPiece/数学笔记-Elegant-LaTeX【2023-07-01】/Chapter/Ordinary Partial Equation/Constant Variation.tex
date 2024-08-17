@@ -1,0 +1,199 @@
+\section{非齐次方程的常数变易法}
+考虑非齐次微分方程
+\[
+    \frac{\dd^nx}{\dd t^n} + \frac{\dd^{n-1}x}{\dd t^{n-1}}\cdot a_1(t) + \frac{\dd^{n-2}x}{\dd t^{n-2}}\cdot a_2(t) + \cdots + \frac{\dd x}{\dd t}\cdot a_{n-1}(t) + x\cdot a_n(t) = f(t)
+\]
+
+简要的记作(注: $a_0(t)=1$)
+\begin{align}
+    &x^{(n)}\cdot a_{0}(t) + x^{(n-1)}\cdot a_{1}(t) + x^{(n-2)}\cdot a_{2}(t) + \cdots + x^{(n-(n-1))}\cdot a_{n-1}(t) + x^{(0)}\cdot a_{n}(t) = f(t) 
+    \label{非齐次方程}
+\end{align}
+
+对应的齐次方程记作：
+\begin{align} 
+    & \hspace*{3em}x^{(n)}\cdot a_{0}(t) + x^{(n-1)}\cdot a_{1}(t) + x^{(n-2)}\cdot a_{2}(t) + \cdots + x^{(n-(n-1))}\cdot a_{n-1}(t) + x^{(0)}\cdot a_{n}(t) = 0
+    \label{齐次方程}
+\end{align}
+设$x_1(t), x_2(t), x_3(t), \cdots, x_n(t)$是齐次方程的基本解组, 因而我们设:
+\begin{align*}
+    x = c_1x_1(t) + c_2x_2(t)+\cdots + c_n x_n(t) \label{常数变易结果}
+\end{align*}
+    
+然后使用常数常数变易法之后我们设:
+\begin{align}
+    x = c_1(t)x_1(t) + c_2(t) x_2(t) + \cdots + c_n(t) x_n(t)
+\end{align}
+    
+对$x$进行多次求导的过程如下:\par
+$
+\begin{aligned}
+        % \rule[0pt]{0.8\linewidth}{.6pt}\\
+        \num{1}\quad  x = \sum_{i=1}^{n}{c_i(t)x_i(t)} \\
+        % \rule[0pt]{0.8\linewidth}{.6pt}\\
+\end{aligned}
+$
+
+$
+\begin{aligned}
+    \num{2}\quad  x' = \sum_{i=1}^{n}{\left[c_i(t)x_i'(t)+c_i'(t)x_i(t)\right]}&=\sum_{i=1}^{n}{c_i(t)x_i'(t)} + \sum_{i=1}^{n}{c_i'(t)x_i(t)} \\
+    &\mathrm{Let}\quad \sum_{i=1}^{n}{c_i'(t)x_i(t)}=0 \label{约束方程(1)} \notice{约束方程(1)}\\
+    &\Rightarrow x'=\sum_{i=1}^{n}{c_i(t)x_i'(t)}
+\end{aligned} 
+$
+
+
+$
+\begin{aligned}
+    \num{3}\quad  x'' = (x')' = \sum_{i=1}^{n}{\left[c_i(t)x_i'(t)\right]'} &= \sum_{i=1}^{n}{c_i'(t)x_i'(t)} + \sum_{i=1}^{n}{c_i(t)x_i''(t)}  \\
+    & \mathrm{Let}\quad \sum_{i=1}^{n}{c_i'(t)x_i'(t)}=0 \label{约束方程(2)} \notice{约束方程(2)}\\
+    &\Rightarrow x''=\sum_{i=1}^{n}{c_i(t)x_i''(t)}
+\end{aligned} 
+$
+
+$\mathbf{\vdots}$
+
+$
+\begin{aligned}
+    \num{n-1}\quad  x^{(n-1)} = \sum_{i=1}^{n}{\left[c_i(t)x_i^{(n-2)}(t)\right]'} &= \sum_{i=1}^{n}{c_i'(t)x_i^{(n-2)}(t) + \sum_{i=1}^{n}{c_i(t)x_i^{(n-1)(t)}}}  \\
+    &\mathrm{Let}\quad \sum_{i=1}^{n}{c_i'(t)x_i^{(n-2)}(t)}=0  \label{约束方程(n-1)} \notice{约束方程(n-1)}\\
+    & \Rightarrow x^{(n-1)}=\sum_{i=1}^{n}{c_i(t)x_i^{(n-1)}(t)}
+\end{aligned} 
+$
+
+$
+\begin{aligned}
+    \num{n}\quad  x^{(n)} = (x^{(n-1)})' &= \sum_{i=1}^{n}{\left[c_i'(t)x_i^{n-1}(t)\right]'} + \sum_{i=1}^{n}{c_i(t)x_i^{(n)}(t)} \\
+    & \mathrm{Don't}\quad \mathrm{L}et\sum_{i=1}^{n}{c_i'(t)x_i^{(n-1)}(t)}=0\\
+    & \Rightarrow x^{(n)} = \sum_{i=1}^{n}{\left[c_i'(t)x_i^{n-1}(t)\right]'} + \sum_{i=1}^{n}{c_i(t)x_i^{(n)}(t)}
+\end{aligned} 
+$
+
+所以我们可以得出$x^{(n)}$的通式
+
+\begin{align}
+    &x^{(m)} = \sum_{i=1}^{n}{c_i(t)}x_i^{(m)}(t), ~~~~m \in [0, n) \nonumber\\
+    &x^{(n)} = \sum_{i=1}^{n}{\left[c_i'(t)x_i^{n-1}(t)\right]'} + \sum_{i=1}^{n}{c_i(t)x_i^{(n)}(t)} \label{求导规律}
+\end{align}
+
+
+
+又因为$x_1(1), x_2(t), \cdots, x_n(t)$是\ref{齐次方程}的解(它们的线性组合也是\ref{齐次方程}的解),所以我们可以得到
+\begin{align}
+    \sum_{i=1}^{n}{x^{(n-i)}(t)a_i(t)}=0, ~~x(t) \in \{x_1(1), x_2(t), \cdots, x_n(t)\}
+    \label{齐次解}
+\end{align}
+
+\noindent \textbf{关于下述思路的来源}\par
+\begin{align*}
+    & \underbrace{\left[\sum_{i=1}^{n}{c_i(t)x_i^{(n)}(t)}\right]a_0(t)}_{\mycircled{1}} + \underbrace{\left[\sum_{i=1}^{n}{c_i(t)x_i^{(n-1)}(t)}\right]a_1(t)}_{\mycircled{2}} +\cdots+\underbrace{\left[\sum_{i=1}^{n}{c_i(t)x_i^{(0)}(t)}\right]a_n(t)}_{\mycircled{3}} =f(t)\\
+\end{align*}
+下边我们把\mycircled{1}, \mycircled{2}, \mycircled{3}分别展开在一个如下的表格的对应列中:\par
+\vspace*{2em}
+\begin{figure}[!htb]
+    \centering
+    \begin{tabular}{p{13em}p{14em}p{13em}}
+    \hline\\
+    \mycircled{1} & \mycircled{2} & \mycircled{3}\\
+    \hline\\
+    $c_1(t)x_1^{(n)}(t)\cdot a_0(t)$ & $c_1(t)x_1^{(n-1)}(t)\cdot a_1(t)$ & $c_1(t)x_1^{(0)}(t)\cdot a_n(t)$\\
+    \vspace*{1em}\\
+    $c_2(t)x_2^{(n)}(t)\cdot a_0(t)$ & $c_2(t)x_2^{(n-1)}(t)\cdot a_1(t)$ & $c_2(t)x_2^{(0)}(t)\cdot a_n(t)$\\
+    \vdots & \vdots & \vdots\\
+    $c_n(t)x_n^{(n)}(t)\cdot a_0(t)$ & $c_n(t)x_n^{(n-1)}(t)\cdot a_1(t)$ & $c_n(t)x_n^{(0)}(t)\cdot a_n(t)$\\
+    \hline\\
+    \vspace*{1em}
+    \end{tabular}
+    \label{裂项}
+    \caption{裂项说明}
+\end{figure}
+
+
+
+最后我们运用\ref{求导规律}和\ref{齐次解}, 然后再把\textsf{基本解组}$x_i(t)$的线性组合带入\ref{齐次方程},可以把这个方程化为:
+\begin{align*}
+    & = x^{(n)}\cdot a_{0}(t) + x^{(n-1)}\cdot a_{1}(t) + x^{(n-2)}\cdot a_{2}(t) + \cdots + x^{(n-(n-1))}\cdot a_{n-1}(t) + x^{(0)}\cdot a_{n}(t)\\
+    & = \sum_{i=0}^{n}{x^{(n-i)}(t)a_i(t)}
+      = x^{(n)} + \sum_{i=1}^{n}{x^{(n-i)}(t)a_i(t)} ~~~~\mathtext{注：因为}x^n\mathtext{比较特殊， 所以把它单独拿出来}\\
+    & = \textcolor{cyan}{\overbrace{\sum_{i=1}^{n}{c_i(t)x_i^{(n)}(t)} + \sum_{i=1}^{n}{c_i'(t)x_i^{(n-1)}(t)}}^{x^{(n)}}} + \sum_{i=1}^{n}{x^{(n-i)}(t)a_i(t)}\\
+    & = \textcolor{cyan}{\left[\sum_{i=1}^{n}{c_i(t)x_i^{(n)}(t)}\right]a_0(t)} + \left[\sum_{i=1}^{n}{c_i(t)x_i^{(n-1)}(t)}\right]a_1(t) +\cdots\\
+    & \hspace*{15em} + \left[\sum_{i=1}^{n}{c_i(t)x_i^{(1)}(t)}\right]a_{n-1}(t) + \left[\sum_{i=1}^{n}{c_i(t)x_i^{(0)}(t)}\right]a_n(t) + \textcolor{cyan}{\sum_{i=1}^{n}{c_i'(t)x_i^{(n-1)}(t)}}\\
+    & = \sum_{j=0}^{n}{\left\{ \left[ \sum_{i=1}^{n}{c_i(t)x_i^{(n-j)}(t)}\right]a_j(t)\right\}} + \textcolor{cyan}{\sum_{i=1}^{n}{c_i'(t)x_i^{(n-1)}(t)}}\\
+    & = \sum_{j=0}^{n}{\left\{ \sum_{i=1}^{n}{\left[a_j(t)\cdot c_i(t)x_i^{(n-j)}(t)\right] }\right\}} + \textcolor{cyan}{\sum_{i=1}^{n}{c_i'(t)x_i^{(n-1)}(t)}}
+      = \sum_{j=0}^{n}{\sum_{i=1}^{n}{\left[a_j(t)\cdot c_i(t)x_i^{(n-j)}(t)\right] }} + \textcolor{cyan}{\sum_{i=1}^{n}{c_i'(t)x_i^{(n-1)}(t)}}\\
+    & = \sum_{i=1}^{n}{\sum_{j=0}^{n}{\left[a_j(t)\cdot c_i(t)x_i^{(n-j)}(t)\right] }} + \textcolor{cyan}{\sum_{i=1}^{n}{c_i'(t)x_i^{(n-1)}(t)}}
+      = \sum_{i=1}^{n}{\left\{ c_i(t)\left[\sum_{j=0}^{n}{a_j(t)x_i^{(n-j)}(t)}\right]\right\}} + \textcolor{cyan}{\sum_{i=1}^{n}{c_i'(t)x_i^{(n-1)}(t)}}\\
+    & = \sum_{i=1}^{n}{\left\{ c_i\cdot 0\right\}}+ \textcolor{cyan}{\sum_{i=1}^{n}{c_i'(t)x_i^{(n-1)}(t)}}
+      = \textcolor{cyan}{\sum_{i=1}^{n}{c_i'(t)x_i^{(n-1)}(t)}}
+      = f(t)
+\end{align*}
+
+于是我们得到了另外一个约束方程
+\begin{align}
+    \sum_{i=1}^{n}{c_i'(t)x_i^{(n-1)}(t)} = f(t) \label{约束方程(n)} \notice{约束方程(n)}
+\end{align}
+结合之前的$(n-1)$个方程(\ref{约束方程(1)}, \ref{约束方程(1)}, $\cdots$, \ref{约束方程(n-1)}和\ref{约束方程(n)})。我们就得到了含有$n$个未知数$c_i(t), ~~i = (1, 2, \cdots, n)$的$n$个方程， 它们组成一个线性方程组， 其系数行列式就是
+$W[x_1(t), x_2(t), \cdots, x_n(t)]$, 它不等于0。 所以如下的方程组的解是唯一确定的。
+
+\begin{center}
+$
+\left\{
+    \begin{aligned}
+        &\sum_{i=1}^{n}{c_i'(t)x_i(t)} & = 0\\
+        &\sum_{i=1}^{n}{c_i'(t)x_i'(t)} & = 0\\
+        &\sum_{i=1}^{n}{c_i'(t)x_i^{(n-2)}(t)} & = 0\\
+        &\cdots&\\
+        &\sum_{i=1}^{n}{c_i'(t)x_i^{(n-1)}(t)} & = f(t)
+    \end{aligned}
+\right.
+$    
+\end{center}
+
+怎么求解这个线性方程组：
+\begin{itemize}
+    \item 1. 直接硬算这个高阶微分方程
+    \item 2. 因为$x(t)$有已知，所以带入一个特定的$t$只值去求解
+\end{itemize}
+
+\noindent\textbf{正解}\par
+由于所有的$x_i(t)$都是已知的，相当于线性方程组的系数矩阵已知，并且系数矩阵行列式
+\[
+    W[x_1(t), x_2(t), \cdots, x_n(t)]\neq 0
+\]
+所以可以直接运用克拉默法则求得
+\[
+    c_i(t) = \varphi_i(t), ~~~ i = 1, 2, 3, \cdots, n
+\]
+积分可以得到:
+\[
+    c_i(t)= \int_{}^{}{\varphi_i(t) \dd t} + \gamma_i, ~~~ i = 1, 2, 3, \cdots, n
+\]
+这里的$\gamma_i$为任意的常数。将得到的$c_i(t)(i = 1, 2, 3, \cdots, n)$的表达式带入\ref{常数变易结果}及可以得到方程\ref{非齐次方程}的解为：
+
+\begin{theorem}
+    \begin{align}
+        x = \sum_{i=0}^{n}{\gamma_i x_i(t)} + \sum_{i=1}^{n}{x_i(t)\int_{}^{}{\varphi_i(t) \dd t}}
+        \label{非齐次方程的解}        
+    \end{align}
+\end{theorem}
+
+\begin{formal}{blue!20}
+    这里求解就不用加常数C了，C已经再前边体现了
+\end{formal}
+显然表达式\ref{非齐次方程的解}是方程\ref{非齐次方程}的通解。但是为了得到一个解，只需要给常数$\gamma_i(i = 1, 2, 3, \cdots, n)$以
+确定的值,比如$\gamma_i =0(i = 1, 2, 3, \cdots, n)$时， 即得到解
+\[
+    \sum_{i=1}^{n}{x_i(t)\int_{}^{}{\varphi_i(t) \dd t}}
+\]
+
+之前没有计算出结果的一个解法
+\begin{align*}
+    {\rm LHS} & = x^{(n)}\cdot a_{0}(t) + x^{(n-1)}\cdot a_{1}(t) + x^{(n-2)}\cdot a_{2}(t) + \cdots + x^{(n-(n-1))}\cdot a_{n-1}(t) + x^{(0)}\cdot a_{n}(t)\\
+    & = x^{(n)} + \sum_{i=1}^{n}{\left[a_i(t)\cdot \sum_{j=1}^{n}{c_i(t)x_j^{(n-i)}(t)}\right]}
+      = x^{(n)} + \sum_{i=1}^{n}{\left[\sum_{j=1}^{n}{a_i(t)\cdot x_j^{(n-i)}(t) c_i(t)}\right]}\\
+    & = x^{(n)} + \sum_{i=1}^{n}{\left[\sum_{j=1}^{n}{0\cdot c_j(t)}\right]}
+      = x^{(n)}
+      =f(t)
+\end{align*}
+
+

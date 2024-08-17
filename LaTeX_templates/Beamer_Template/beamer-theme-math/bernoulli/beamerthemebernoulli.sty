@@ -1,0 +1,605 @@
+% -*- coding: utf-8 -*-
+% ----------------------------------------------------------------------------
+% Author:  Jianrui Lyu <tolvjr@163.com>
+% Website: https://github.com/lvjr/theme
+% License: Creative Commons Attribution-ShareAlike 4.0 International License
+% ----------------------------------------------------------------------------
+
+\ProvidesPackage{beamerthemebernoulli}[2019/06/06 v0.7 Beamer Theme Bernoulli]
+
+\makeatletter
+
+% compatible with old versions of beamer
+\providecommand{\beamer@endinputifotherversion}[1]{}
+
+\RequirePackage{tikz,etoolbox,adjustbox}
+\usetikzlibrary{positioning}
+
+\mode<presentation>
+
+\setbeamersize{text margin left=8mm,text margin right=8mm}
+
+%% ----------------- background canvas and background ----------------
+
+\defbeamertemplate{background}{line}{%
+  \begin{tikzpicture}
+    \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+    \draw[xstep=\paperwidth,ystep=1mm,color=tcolor] (0,0) grid (\paperwidth,\paperheight);
+  \end{tikzpicture}%
+}
+
+\defbeamertemplate{background}{linear}{%
+  \begin{tikzpicture}
+    \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+    \draw[pattern=horizontal lines, pattern color=tcolor]
+      (0,0) rectangle (\paperwidth,\paperheight);
+  \end{tikzpicture}%
+}
+
+\defbeamertemplate{background}{lattice}{%
+  \begin{tikzpicture}
+    \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+    \draw[step=1mm,color=tcolor] (0,0) grid (\paperwidth,\paperheight);
+  \end{tikzpicture}%
+}
+
+% need "text badly ragged" option for correct space skips
+% see http://tex.stackexchange.com/a/132748/8956
+\gdef\my@background@title{%
+  \begin{tikzpicture}
+  \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+  \fill[fill=fcolor]
+    (0,0) rectangle (\paperwidth,\paperheight);
+  \node[above right,text width=0.76\paperwidth,text badly ragged,fill=white,
+        inner sep=0.02\paperwidth,minimum height=0.2\paperheight]
+       (one) at (0.1\paperwidth,0.5\paperheight) {%
+      \usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle
+      \ifx\insertsubtitle\@empty\else
+        \\[5pt]\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}
+        \insertsubtitle\\
+      \fi
+  };
+  \node[below right,text width=0.76\paperwidth,text badly ragged,
+        inner sep=0.02\paperwidth,minimum height=0.2\paperheight]
+       (two) at (0.1\paperwidth,0.5\paperheight) {%
+    \usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor\\%
+    \ifx\insertinstitute\@empty\else
+      \usebeamerfont{institute}\usebeamercolor[fg]{institute}\insertinstitute\\%
+    \fi
+    \usebeamerfont{date}\usebeamercolor[fg]{date}\insertdate\\%
+  };
+  \fill[fcolor!70!white]
+       (one.north west) -- ++(-0.1\paperwidth,0.1\paperwidth) node[coordinate](nw){}
+          -- +(\paperwidth,0) node[coordinate](ne){} -- (one.north east) -- cycle;
+  \fill[fcolor!50!scolor]
+       (two.south west) -- ++(-0.1\paperwidth,-0.1\paperwidth) node[coordinate](sw){}
+          -- +(\paperwidth,0) node[coordinate](se){} -- (two.south east) -- cycle;
+  \fill[fcolor!70!scolor]
+       (one.north west) -- (two.south west) -- (sw) -- (nw) -- cycle
+       (one.north east) -- (two.south east) -- (se) -- (ne) -- cycle;
+  \draw<beamer:0>[thick,densely dashed,dcolor]
+       (one.north west) -- (one.south west) -- (one.south east) -- (one.north east) -- cycle
+       (two.north west) -- (two.south west) -- (two.south east) -- (two.north east);
+  \draw<beamer:0>[thick,dcolor]
+       (one.north west) -- (nw) -- (ne) -- (one.north east)
+       (two.south west) -- (sw) -- (se) -- (two.south east);
+  \draw<beamer:0>[very thick,dcolor] (sw) -- (nw) (se) -- (ne);
+  \end{tikzpicture}
+}
+
+\newcommand{\maincontents}{Main Contents}
+
+\gdef\my@background@section{%
+  \begin{tikzpicture}
+  \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+  \node[right,text width=0.76\paperwidth,text badly ragged,inner xsep=0.02\paperwidth,
+              inner ysep=0.04\paperwidth,minimum height=0.2\paperheight]
+       (main) at (0.1\paperwidth,0.5\paperheight) {%
+          \begin{minipage}{0.76\paperwidth}
+              \usebeamertemplate{section page content}%
+          \end{minipage}%
+  };
+  \path (main.north west) +(-0.1\paperwidth,0)
+        node[above right,minimum width=\paperwidth,minimum height=0.1\paperheight,
+             text width=0.76\paperwidth,inner xsep=0.12\paperwidth,
+             text badly ragged,fill=fcolor,text=dcolor] (top)
+        {\usebeamerfont{section in toc}\maincontents};
+  \path (main.south west) +(-0.1\paperwidth,0)
+        node[below right,minimum width=\paperwidth,minimum height=0.1\paperheight,
+             fill=fcolor!50!scolor] (bot) {};
+  \draw<beamer:0> (top.north west) --  (top.north east)
+                  (top.south west) --  (top.south east);
+  \draw<beamer:0> (bot.north west) --  (bot.north east)
+                  (bot.south west) --  (bot.south east);
+  \end{tikzpicture}
+}
+
+\gdef\my@background@subsection{%
+  \begin{tikzpicture}
+  \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+  \node[right,text width=0.76\paperwidth,text badly ragged,inner xsep=0.02\paperwidth,
+              inner ysep=0.04\paperwidth,minimum height=0.2\paperheight]
+       (main) at (0.1\paperwidth,0.5\paperheight) {%
+          \begin{minipage}{0.76\paperwidth}
+               \usebeamertemplate{subsection page content}%
+          \end{minipage}
+  };
+  \path (main.north west) +(-0.1\paperwidth,0)
+        node[above right,minimum width=\paperwidth,minimum height=0.08\paperheight,
+             text width=0.76\paperwidth,inner xsep=0.12\paperwidth,
+             text badly ragged,fill=fcolor,text=dcolor] (top)
+        {\usebeamerfont{subsection in toc}\maincontents};
+  \path (main.south west) +(-0.1\paperwidth,0)
+        node[below right,minimum width=\paperwidth,minimum height=0.08\paperheight,
+             fill=fcolor!50!scolor] (bot) {};
+  \draw<beamer:0> (top.north west) --  (top.north east)
+                  (top.south west) --  (top.south east);
+  \draw<beamer:0> (bot.north west) --  (bot.north east)
+                  (bot.south west) --  (bot.south east);
+  \end{tikzpicture}
+}
+
+%% -------------------------- title page -----------------------------
+
+\defbeamertemplate{title page}{snake}
+{%
+  \nointerlineskip
+  \begin{adjustbox}{width=\paperwidth,center}%
+    \my@background@title
+  \end{adjustbox}%
+}
+
+%% ----------------------- section and subsection --------------------
+
+\def\sectionintocskip{0.5em}
+\patchcmd{\beamer@sectionintoc}{\vskip1.5em}{\vskip\sectionintocskip}{}{}
+
+% create new template for section
+\defbeamertemplate{section}{simple}{%
+  \insertsectionnumber.\hspace*{1ex}\insertsection%
+}
+
+\defbeamertemplate{at begin section}{normal}{%
+  \frame{\sectionpage}
+}
+\defbeamertemplate{at begin section}{plain}{%
+  \frame[plain]{\sectionpage}
+}
+\AtBeginSection[]{\usebeamertemplate{at begin section}}
+
+\defbeamertemplate{section page}{snake}{%
+  \nointerlineskip
+  \begin{adjustbox}{width=\paperwidth,center}%
+    \my@background@section
+  \end{adjustbox}%
+}
+
+\defbeamertemplate{section page content}{simple}{
+  \begin{beamercolorbox}[wd=\textwidth,center]{section title}%
+    \usebeamerfont{section title}
+    \usebeamertemplate{section}%
+  \end{beamercolorbox}
+}
+\defbeamertemplate{section page content}{level}{
+  \tableofcontents[sectionstyle=show/shaded,subsectionstyle=hide]%
+}
+
+% create new template for subsection
+\defbeamertemplate{subsection}{simple}{%
+  \insertsectionnumber.\insertsubsectionnumber\hspace*{2ex}\insertsubsection%
+}
+
+\defbeamertemplate{at begin subsection}{normal}{%
+  \frame{\subsectionpage}
+}
+\defbeamertemplate{at begin subsection}{plain}{%
+  \frame[plain]{\subsectionpage}
+}
+\AtBeginSubsection[]{\usebeamertemplate{at begin subsection}}
+
+\defbeamertemplate{subsection page}{snake}{%
+  \nointerlineskip
+  \begin{adjustbox}{width=\paperwidth,center}%
+    \my@background@subsection
+  \end{adjustbox}%
+}
+
+\defbeamertemplate{subsection page content}{simple}{
+  \begin{beamercolorbox}[wd=\textwidth,center]{subsection title}%
+  \usebeamerfont{subsection title}%
+  \usebeamertemplate{subsection}%
+  \end{beamercolorbox}%
+}
+\defbeamertemplate{subsection page content}{level}{%
+  \tableofcontents[sectionstyle=hide,subsectionstyle=show/shaded/hide]%
+}
+\defbeamertemplate{subsection in toc}{triangle}{%
+  \leavevmode\leftskip=2.5em\scriptsize\raise1.25pt%
+  \rlap{\hskip-1.5em\donotcoloroutermaths$\blacktriangleright$}%
+  \normalsize\inserttocsubsection\par
+}
+
+%% ---------------------- headline and footline ----------------------
+
+\defbeamertemplate{footline left}{author}{%
+  \insertshortauthor
+}
+
+\defbeamertemplate{footline center}{title}{%
+  \insertshorttitle
+}
+
+\defbeamertemplate{footline right}{number}{%
+  \Acrobatmenu{GoToPage}{\insertframenumber{}/\inserttotalframenumber}%
+}
+\defbeamertemplate{footline right}{normal}{%
+  \hyperlinkframeendprev{$\vartriangle$}
+  \Acrobatmenu{GoToPage}{\insertframenumber{}/\inserttotalframenumber}
+  \hyperlinkframestartnext{$\triangledown$}%
+}
+
+\defbeamertemplate{footline}{simple}{%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.2\paperwidth,ht=2.25ex,dp=1ex,left]{footline}%
+    \usebeamerfont{footline}\kern\beamer@leftmargin
+    \usebeamertemplate{footline left}%
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.6\paperwidth,ht=2.25ex,dp=1ex,center]{footline}%
+    \usebeamerfont{footline}\usebeamertemplate{footline center}%
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.2\paperwidth,ht=2.25ex,dp=1ex,right]{footline}%
+    \usebeamerfont{footline}\usebeamertemplate{footline right}%
+    \kern\beamer@rightmargin
+  \end{beamercolorbox}%
+  }%
+}
+
+\defbeamertemplate{footline}{sectioning}{%
+  % default height is 0.4pt, which is ignored by adobe reader, so we increase it by 0.2pt
+  {\usebeamercolor[fg]{separator line}\hrule height 0.6pt}%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.8\paperwidth,ht=2.25ex,dp=1ex,left]{footline}%
+    \usebeamerfont{footline}\kern\beamer@leftmargin\insertshorttitle
+    \ifx\insertsection\@empty\else\qquad$\vartriangleright$\qquad\insertsection\fi
+    \ifx\insertsubsection\@empty\else\qquad$\vartriangleright$\qquad\insertsubsection\fi
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.2\paperwidth,ht=2.25ex,dp=1ex,right]{footline}%
+     \usebeamerfont{footline}\usebeamertemplate{footline right}%
+     \kern\beamer@rightmargin
+  \end{beamercolorbox}%
+  }%
+}
+
+% customize mini frames template to get both a progress and navigation bar
+
+\newcommand{\my@bigsize}{9}
+\newcommand{\my@medsize}{7}
+\newcommand{\my@smallsize}{5}
+\let\my@box@size=\my@bigsize
+
+\newlength{\my@tempsize}
+
+\newcounter{my@sectnum}
+
+\newcommand{\my@lastdigit}[1]{%
+  \loop\ifnum\value{#1}>9\addtocounter{#1}{-10}\repeat
+  \arabic{#1}%
+}
+
+\newcommand\my@fixedbox[2]{%
+  \makebox[#1]{\rule[-1ex]{0pt}{3.25ex}#2}%
+}
+
+\newcommand\my@colorbox[3]{%
+  {\setlength{\fboxsep}{0pt}\colorbox{#1}{\my@fixedbox{#2}{#3}}}%
+}
+
+\newcommand{\my@navbox}[1][]{%
+  % see http://tex.stackexchange.com/a/53091/8956
+  \if\relax\detokenize{#1}\relax
+    \def\my@tempbox{\my@fixedbox}%
+  \else
+    \def\my@tempbox{\my@colorbox{#1}}%
+  \fi
+  \ifx\my@box\my@bigbox
+    \def\my@temptext{\my@lastdigit{my@sectnum}}%
+  \fi
+  \ifx\my@box\my@medbox
+    \def\my@temptext{$\diamond$}%
+  \fi
+  \ifx\my@box\my@smallbox
+    \def\my@temptext{$-$}%
+  \fi
+  \my@tempbox{\my@tempsize}{\my@temptext}%
+}
+
+\defbeamertemplate{navigation box}{home}{%
+  \setlength{\my@tempsize}{\my@box@size pt}%
+  \my@colorbox{filler2}{\my@tempsize}{$\equiv$}%
+}
+
+\defbeamertemplate{navigation box}{done}{%
+  \setlength{\my@tempsize}{\my@box@size pt}%
+  \my@navbox[filler2]%
+}
+
+\defbeamertemplate{navigation box}{todo}{%
+  \setlength{\my@tempsize}{\my@box@size pt}%
+  \my@navbox
+}
+
+\newcommand{\my@bigbox}{\global\let\my@box@size=\my@bigsize\usebeamertemplate{navigation box}}
+\newcommand{\my@medbox}{\global\let\my@box@size=\my@medsize\usebeamertemplate{navigation box}}
+\newcommand{\my@smallbox}{\global\let\my@box@size=\my@smallsize\usebeamertemplate{navigation box}}
+\let\my@medbox@orig=\my@medbox
+\let\my@smallbox@orig=\my@smallbox
+\let\my@box=\my@bigbox
+
+\newcounter{my@subsectionnumber}
+\newcounter{my@normalframenumber}
+
+\AtBeginDocument{%
+   \pretocmd{\subsection}{\refstepcounter{my@subsectionnumber}}{}{}%
+   \patchcmd{\beamer@writeslidentry}{\addtocontents}{\stepcounter{my@normalframenumber}\addtocontents}{}{}%
+}
+
+\AtEndDocument{%
+   \immediate\write\@auxout{%
+     \noexpand\gdef\noexpand\my@totalsectionnumber{\the\c@section}%
+     \noexpand\gdef\noexpand\my@totalsubsectionnumber{\the\c@my@subsectionnumber}%
+     \noexpand\gdef\noexpand\my@normalframenumber{\the\c@my@normalframenumber}%
+   }%
+}
+
+\def\my@totalsectionnumber{0}
+\def\my@totalsubsectionnumber{0}
+\def\my@normalframenumber{50} % use it instead of \inserttotalframenumber
+
+\newlength{\my@progress@width}
+\setlength{\my@progress@width}{\dimexpr0.8\paperwidth-\beamer@leftmargin\relax}
+
+\newlength{\my@slidebox@width}
+
+\def\my@scale@subsection{1}
+\def\my@scale@slide{1}
+
+\newcommand{\my@adjustbox}{%
+  \ifnum\my@normalframenumber>80\relax
+    \gdef\my@scale@subsection{0.7}%
+  \else
+  \ifnum\my@normalframenumber>45\relax
+    \gdef\my@scale@subsection{0.9}%
+  \fi\fi
+  \pgfmathsetlength{\global\my@slidebox@width}{%
+    (\my@progress@width - 2pt - 1pt*\my@bigsize*(\my@totalsectionnumber+1)%
+        - 1pt*\my@medsize*\my@scale@subsection*\my@totalsubsectionnumber) / %
+    max(1,\my@normalframenumber-\my@totalsectionnumber-\my@totalsubsectionnumber-1)%
+  }%
+  \pgfmathsetlength{\global\my@slidebox@width}{%
+     min(\my@slidebox@width,1pt*\my@smallsize)%
+  }%
+  \gdef\my@scale@slide{\strip@pt\dimexpr
+    \my@slidebox@width/\my@smallsize
+  \relax}%
+  \gdef\my@medbox{\scalebox{\my@scale@subsection}[1]{\my@medbox@orig}}%
+  \gdef\my@smallbox{\scalebox{\my@scale@slide}[1]{\my@smallbox@orig}}%
+  % only adjust boxes once
+  \global\let\my@adjustbox=\relax
+}
+
+\renewcommand{\sectionentry}[5]{\global\let\my@box=\my@bigbox\setcounter{my@sectnum}{#1}}
+
+\pretocmd{\beamer@setuplinks}{\renewcommand{\beamer@subsectionentry}[5]{}}{}{}
+\apptocmd{\beamer@setuplinks}{\global\let\beamer@subsectionentry\mybeamer@subsectionentry}{}{}
+
+\newcommand{\mybeamer@subsectionentry}[5]{\global\let\my@box=\my@medbox}
+
+\renewcommand{\slideentry}[6]{%
+  \def\my@temp@i{1/1}%
+  \def\my@temp@ii{#4}%
+  \ifx\my@temp@i\my@temp@ii % title page
+    \setbeamertemplate{navigation box}[home]%
+  \else
+    \setbeamertemplate{navigation box}[done]%
+  \fi
+  \ifnum\c@section<#1%
+    \setbeamertemplate{navigation box}[todo]%
+  \else
+    \ifnum\c@section=#1\ifnum\c@subsection<#2%
+      \setbeamertemplate{navigation box}[todo]%
+    \else
+      \ifnum\c@subsection=#2\ifnum\c@subsectionslide<#3%
+        \setbeamertemplate{navigation box}[todo]%
+      \fi\fi
+    \fi\fi
+  \fi
+  \ifx\my@temp@i\my@temp@ii % title page
+    \beamer@link(#4){\my@bigbox}%
+  \else
+    \beamer@link(#4){\my@box}%
+  \fi
+  \global\let\my@box=\my@smallbox
+}
+
+\defbeamertemplate{footline}{progress}{%
+  % default height is 0.4pt, which is ignored by adobe reader, so we increase it by 0.2pt
+  {\usebeamercolor[fg]{separator line}\hrule height 0.6pt}%
+  \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex]{footline}%
+    \usebeamerfont{footline}%
+    \kern\beamer@leftmargin
+    \my@adjustbox\dohead%
+    \hfill\usebeamertemplate{footline right}%
+    \kern\beamer@rightmargin
+  \end{beamercolorbox}%
+}
+
+%% ------------------------- frame title -----------------------------
+
+\newcommand{\insertframetitlemark}{}
+
+\defbeamertemplate{frametitle}{simple}[1][]
+{%
+  \nointerlineskip
+  \begin{beamercolorbox}[wd=\paperwidth,sep=0pt,leftskip=\beamer@leftmargin,%
+                         rightskip=\beamer@rightmargin,#1]{frametitle}
+    \usebeamerfont{frametitle}%
+    \rule[-3.6mm]{0pt}{12mm}\insertframetitle
+    \ifx\insertframetitlemark\@empty\else\hfill
+       {\usebeamercolor{normal text}\color{fg!30!bg}\insertframetitlemark}%
+    \fi
+    \rule[-3.6mm]{0pt}{12mm}\par
+  \end{beamercolorbox}
+}
+
+%% ------------------- block and theorem -----------------------------
+
+\defbeamertemplate{theorem begin}{simple}
+{%
+  \upshape%\bfseries\inserttheoremheadfont
+  {\usebeamercolor[fg]{theoremname}%
+  \inserttheoremname\inserttheoremnumber
+  \ifx\inserttheoremaddition\@empty\else\ (\inserttheoremaddition)\fi%
+  %\inserttheorempunctuation
+  }%
+  \quad\normalfont
+}
+\defbeamertemplate{theorem end}{simple}{\par}
+
+\defbeamertemplate{proof begin}{simple}
+{%
+  %\bfseries
+  {\usebeamercolor[fg]{proofname}\insertproofname}%
+  \quad\normalfont
+}
+\defbeamertemplate{proof end}{simple}{\par}
+
+%% --------------------------- font theme ----------------------------
+
+\setbeamerfont{title}{size=\LARGE}
+\setbeamerfont{subtitle}{size=\large}
+\setbeamerfont{author}{size=\normalsize}
+\setbeamerfont{institute}{size=\normalsize}
+\setbeamerfont{date}{size=\normalsize}
+\setbeamerfont{section in toc}{size=\large}
+\setbeamerfont{subsection in toc}{size=\large}
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{block title}{size=\normalsize}
+
+\usefonttheme{professionalfonts}
+%\usepackage{arev}
+
+%\setlength{\parskip}{5pt plus 1pt minus 1pt}
+
+%% ---------------------------- color theme --------------------------
+
+% always use rgb colors in pdf files
+\substitutecolormodel{hsb}{rgb}
+
+\definecolor{red99}{Hsb}{0,0.9,0.9}
+\definecolor{yellow86}{Hsb}{60,0.8,0.6}
+\definecolor{cyan19}{Hsb}{180,0.1,0.9}
+\definecolor{cyan95}{Hsb}{189,0.88,0.49}
+\definecolor{blue77}{Hsb}{240,0.7,0.7}
+\definecolor{blue99}{Hsb}{240,0.9,0.9}
+\definecolor{magenta88}{Hsb}{300,0.8,0.8}
+
+\colorlet{text1}{black}
+\colorlet{back1}{white}
+\colorlet{accent1}{cyan95}
+\colorlet{accent2}{blue99}
+\colorlet{accent3}{red99}
+\colorlet{accent4}{yellow86}
+\colorlet{accent5}{magenta88}
+\colorlet{filler1}{accent1!40!back1}
+\colorlet{filler2}{accent2!40!back1}
+\colorlet{filler3}{accent3!40!back1}
+\colorlet{filler4}{accent4!40!back1}
+\colorlet{filler5}{accent5!40!back1}
+\colorlet{tcolor}{text1!10!back1} % texture color
+\colorlet{dcolor}{white} % draw color
+\colorlet{fcolor}{cyan95} % fill color
+\colorlet{scolor}{black} % shade color
+
+\setbeamercolor{normal text}{bg=back1,fg=text1}
+\setbeamercolor{structure}{fg=cyan95}
+\setbeamercolor{local structure}{fg=blue99}
+\setbeamercolor{footline}{bg=,fg=black}
+\setbeamercolor{title}{use=structure,fg=structure.fg}
+\setbeamercolor{subtitle}{fg=text1}
+\setbeamercolor{author}{fg=white}
+\setbeamercolor{institute}{fg=white}
+\setbeamercolor{date}{fg=white}
+\setbeamercolor{section in toc}{parent=title}
+\setbeamercolor{subsection in toc}{parent=title}
+\setbeamercolor{section in toc shaded}{parent=normal text}
+\setbeamercolor{subsection in toc shaded}{parent=normal text}
+\setbeamercolor{frametitle}{parent=title}
+\setbeamercolor{separator line}{fg=accent2}
+\setbeamercolor{theoremname}{parent=subtitle}
+\setbeamercolor{proofname}{parent=subtitle}
+\setbeamercolor{block title}{fg=accent1,bg=gray}
+\setbeamercolor{block body}{bg=lightgray}
+\setbeamercolor{block title example}{fg=accent2,bg=gray}
+\setbeamercolor{block body example}{bg=lightgray}
+\setbeamercolor{block title alerted}{fg=accent3,bg=gray}
+\setbeamercolor{block body alerted}{bg=lightgray}
+
+%% ------------------------ select templates -------------------------
+
+\setbeamertemplate{background canvas}[default]
+\setbeamertemplate{background}[line]
+\setbeamertemplate{footline}[progress]
+\setbeamertemplate{footline left}[author]
+\setbeamertemplate{footline center}[title]
+\setbeamertemplate{footline right}[number]
+\setbeamertemplate{title page}[snake]
+\setbeamertemplate{at begin section}[plain]
+\setbeamertemplate{at begin subsection}[plain]
+\setbeamertemplate{section page}[snake]
+\setbeamertemplate{section page content}[level]
+\setbeamertemplate{subsection page}[snake]
+\setbeamertemplate{subsection page content}[level]
+\setbeamertemplate{theorem begin}[default]
+\setbeamertemplate{theorem end}[default]
+\setbeamertemplate{proof begin}[default]
+\setbeamertemplate{proof end}[default]
+\setbeamertemplate{frametitle}[simple]
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{section}[simple]
+\setbeamertemplate{subsection}[simple]
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamertemplate{subsection in toc}[subsections numbered]
+\setbeamertemplate{section in toc shaded}[default][100]
+\setbeamertemplate{subsection in toc shaded}[default][100]
+\setbeamertemplate{itemize items}[default]
+\setbeamertemplate{enumerate items}[default]
+
+%% ----------------------- handout mode ------------------------------
+
+\mode<handout>{
+  \setbeamertemplate{background canvas}{}
+  \setbeamertemplate{background}{}
+  \setbeamertemplate{footline}[sectioning]
+  \colorlet{dcolor}{darkgray}
+  \colorlet{fcolor}{white}
+  \colorlet{scolor}{white}
+  \setbeamercolor{normal text}{fg=black, bg=white}
+  \setbeamercolor{title}{fg=accent1}
+  \setbeamercolor{subtitle}{fg=accent1!70!gray}
+  \setbeamercolor{author}{fg=black}
+  \setbeamercolor{institute}{fg=black}
+  \setbeamercolor{date}{fg=black}
+  \setbeamercolor{section in toc}{fg=accent1!90!gray}
+  \setbeamercolor{subsection in toc}{fg=accent1!80!gray}
+  \setbeamercolor{section in toc shaded}{fg=lightgray}
+  \setbeamercolor{subsection in toc shaded}{fg=lightgray}
+  \setbeamercolor{frametitle}{fg=accent1!70!gray,bg=}
+  \setbeamercolor{theoremname}{fg=accent1!60!gray}
+  \setbeamercolor{proofname}{fg=accent1!60!gray}
+  \setbeamercolor{footline}{bg=white,fg=black}
+}
+
+\mode
+<all>
+
+\makeatother

@@ -1,0 +1,637 @@
+%%      Gezhu Typesetting Macro or TeX/LaTeX
+%%      (Gezhu: Splitted Annotation (warichu in Japanese))
+%%      File:   gezhu.sty
+%%      Author: Dian YIN (yindian@ustc)
+%%      Descr:  This macro file provides an environment \withgezhu ...
+%%              \endwithgezhu which which one can typeset gezhu by inserting
+%%              double-line annotations using |{text}. There is no limitations
+%%              in using whatever commands both in withgezhu environment and
+%%              inside |{}, theoretically. The macro use \endgraf to end the
+%%              current paragraph in order to determine the h-offset of the
+%%              current position, so any parshapes will lose efficacy.
+%%      Hist:   07.3.5.         Inspired by previous work (xguji) and thought.
+%%              07.3.6-3.7.     Framework done. Buggy.
+%%              07.3.10.        First release comes out. Works to my expectance.
+%%              07.3.11.        Extra \parskip removed.
+%%              07.3.25.        Improved balancing method to prevent overfull.
+%%                              Fixed bug when \penalty\gezhu@breakpenalty
+%%              07.5.13.        Added \beforegezhu and \aftergezhu
+%%              07.9.28.        New works began. Adding new features. Use eTeX.
+%%                              More comments written. Interline skips reserved.
+%%                              Using parshape in order to avoid cjkglue.
+%%              07.9.29.am      Finished rewriting codes until balancing module.
+%%                              Fixed some bugs of nested loop.
+%%              07.9.29.pm      More comments written. Finished the new
+%%                              implementation. Changed \gezhu@breakpenalty to
+%%                              -\@M. Fixed bug that adding \gezhu@strut isn't
+%%                              enough for empty line compensation --- simply 
+%%                              by adding \baselineskip instead of \gezhu@strut
+%%                              Added \hfuzz and \hbadness to suppress warning.
+%%              07.9.30.        Want to change \par in withgezhu environment.
+%%                              New bug of unexcepted \parskip found.
+%%              07.10.7.        Determined that the above bug is introduced by
+%%                              CJKpunct. Removed \hyphenpenalty settings. Added
+%%                              \parskip setting to avoid the bug.
+%%              07.10.8.        Fixed bug of unwanted \penalty at end of para.
+%%                              Changed \copy to \unhcopy when copying box.
+%%                              Found a bug of punct-prohibitionless after 
+%%                              a gezhu box, which seems hard to fix.
+%%                              Added \gezhu@parfillskip setting. Better
+%%                              width adjusting for balancing using bigem.
+%%              07.10.9.        Added fbox for debug. Found a bug of two chars
+%%                              appear at the end of line when the rest space
+%%                              is between the width of 1 char and 2 chars,
+%%                              which looks ugly. Fixed it by comparing the 
+%%                              rest space with 2\gezhu@smallem and adjustment.
+%%                              But not very ideal when punct-prohibition
+%%                              is concerned. Okay for now.
+%%                              Found a bug of not enough space left for a big
+%%                              char to appear at the same line after gezhu.
+%%                              Fixed it by adding stretches to \aftergezhu.
+%%              07.10.13.       Changed \newdimen\gezhu@tmpskip to \newskip.
+%%                              Added \gezhu@leftspace to fix a bug of balanced
+%%                              gezhu stretching out of the right margin.
+%%                              Fixed the bug of 1em 2 chars.
+%%                              Fixed the bug of wrong bigem and smallem 
+%%                              setting --- \wd\hbox{M} doesn't generate 1em.
+%%                              Added gezhu normalize functionality.
+%%                              Fixed the bug that the length of a widow hanzi
+%%                              box is less than \gezhu@smallem.
+%%                              \gezhurevision added.
+%%              07.10.14.       Fixed the bug of breaking after gezhu when 
+%%                              the rest space is about 1em.
+%%                              Added simple interface to set raise and parfil.
+%%                              Finally fixed the bug of CJK char wrap.
+%%              07.10.26.       Fixed the bug of wrong baselineskip cause by
+%%                              the raising of gezhu box. Fixed the bug of 
+%%                              wrong baselineskip before and after withgezhu.
+%%                              Successfully realized every par ship out.
+%%              07.10.27.       Added \gezhu@shipoutlevel setting, what a 
+%%                              tough work, expecially level 2!!!
+%%                              More debug routines. Found bug in \gezhu
+%%                              when shipout level=2: should use \prevdepth
+%%                              of the last but one line, but got last line's.
+%%                              Fixed the bug of \errmessage misspelling.
+%%                              Fixed the last but one line \prevdepth bug
+%%                              by using \prevgraf and make decision.
+%%              07.11.05.       Fixed some subtleties of \prevdepth setting.
+%%                              Changed balancing mode to find width from less
+%%                              than one_line_width/\gezhu@lines. Added 
+%%                              \lineskiplimit settings. Fixed bug of too much
+%%                              space when normailze sometimes.
+%%              07.11.06.       Uncommented last change. Fixed some bugs. Fine
+%%                              tuned a bit.
+%%      TODO:   1. Add a more friendly interface for use under LaTeX. e.g. 
+%%                 \begin{withgezhu}[raise=-2pt,lines=2,everygezhu={\tiny}]
+%%              2. Find bugs and fix...
+%%      Note:   1. Chances are that the texts may exceed the right boundary 
+%%                 because of punctuation prohibitions.
+%%              2. \gezhu@shipoutlevel  =0 :  ship out when \endwithgezhu
+%%                                      =1 :  ship out when \par
+%%                                      =2 :  ship out when \gezhu and \par
+\catcode`@=11
+\ifx\gezhurevision\@undefined
+\ifx\eTeXrevision\@undefined
+  \errmessage{eTeX required to use this package}
+\fi
+\def\gezhurevision{2007.11.06.}
+% user configurable
+\newcount\gezhu@lines
+\newcount\gezhu@breakpenalty
+\newcount\gezhu@shipoutlevel
+\newskip\gezhu@cjkglue
+\newskip\gezhu@parfillskip
+\newdimen\gezhu@gezhuraise
+\newtoks\everywithgezhu
+\newtoks\everygezhu
+\newtoks\beforegezhu
+\newtoks\aftergezhu
+\newif\ifgezhunormalize
+% for self use
+\newbox\gezhu@tmpbox
+\newbox\gezhu@tmpboy
+\newbox\gezhu@tmpboz
+\newbox\gezhu@tmpb@x
+\newbox\gezhu@tmpb@y
+\newbox\gezhu@tmpb@z
+\newbox\gezhu@tmpb@w
+\newcount\gezhu@tmpcnt
+\newcount\gezhu@tmpcns
+\newdimen\gezhu@tmpdim
+\newdimen\gezhu@tmpdil
+\newskip\gezhu@tmpskip
+\newdimen\gezhu@leftspace
+\newdimen\gezhu@bigem
+\newdimen\gezhu@smallem
+\newtoks\gezhu@strut
+%
+\gezhu@lines=2
+\gezhu@shipoutlevel=0
+\gezhu@cjkglue=0pt plus 0.1em minus 0.1em
+\gezhu@gezhuraise=-1.5pt
+\gezhu@parfillskip=0pt
+\gezhu@breakpenalty=-\@M
+\gezhunormalizefalse
+\everywithgezhu={\gezhu@makespecials}
+\ifdefined\LaTeX
+  \everygezhu={\tiny}
+\else
+  \everygezhu={\fiverm\baselineskip=6pt}
+\fi
+\beforegezhu={\nobreak\hskip 0pt plus 0.1em minus 0.01em}
+\aftergezhu={\nobreak\hskip 0pt plus 0.4em\penalty 2000\hskip 0pt plus -0.4em
+  \hskip 0pt plus 0.1em minus 0.01em}
+\gezhu@strut={\vphantom{()}}
+\def\gezhu@debug#1{}
+\def\gezhu@message#1{}
+\def\gezhu@showbox#1{}
+\def\gezhu@debugbox#1{#1}
+\def\gezhu@debugboy#1{#1}
+\def\gezhu@break{\gezhu@debug{Break}\penalty\gezhu@breakpenalty}
+\def\gezhu@makehboxofhboxesandcount{%
+  % input:  none but previous vertical mode nodes
+  % output: \gezhu@tmpb@y as the result hbox, with interline skips
+  %         \gezhu@tmpcnt as the result count
+  % uses:   \gezhu@tmpb@z, \gezhu@tmpskip, \loop
+  \setbox\gezhu@tmpb@y=\hbox{}%
+  \gezhu@tmpcnt=0
+  \loop
+    \setbox\gezhu@tmpb@z=\lastbox
+    \ifhbox\gezhu@tmpb@z
+      \setbox\gezhu@tmpb@y=\hbox{\box\gezhu@tmpb@z\unhbox\gezhu@tmpb@y}%
+      \advance\gezhu@tmpcnt by 1
+      \ifnum\lastnodetype = 11%  inter line skip
+        \gezhu@tmpskip=\lastskip
+        \setbox\gezhu@tmpb@y=\hbox{\hskip\gezhu@tmpskip\unhbox\gezhu@tmpb@y}%
+      \fi
+      \unskip
+      \unpenalty
+  \repeat
+}
+\def\gezhu@getfirsthboxes#1{%
+  % input:  #1 as the precomputed loop count
+  %         \gezhu@tmpb@y as the hboxofhbox
+  % output: \gezhu@tmpb@x as vbox of the first hboxes
+  %         \gezhu@tmpb@y as vbox of the rest boxes without interlineskips
+  % uses:   \gezhu@tmpb@x, \gezhu@tmpb@y, \gezhu@tmpcnt, \gezhu@tmpskip, \loop
+  \hskip 111sp% manual boundary
+  \unhbox\gezhu@tmpb@y
+  \setbox\gezhu@tmpb@x=\copy\voidb@x% first boxes
+  \setbox\gezhu@tmpb@y=\copy\voidb@x% last boxes
+  \gezhu@tmpcnt=0
+  \loop
+    \ifnum #1>\gezhu@tmpcnt
+      \ifnum\lastnodetype = 11%  inter line skip
+        \unskip
+      \fi
+      \setbox\gezhu@tmpb@z=\lastbox
+      \setbox\gezhu@tmpb@y=\vbox{\box\gezhu@tmpb@z\unvbox\gezhu@tmpb@y}%
+      \advance\gezhu@tmpcnt by 1
+  \repeat
+  \ifnum\lastnodetype = 11%  skip
+    \unless\ifdim\lastskip = 111sp % not boundary
+      \unskip
+    \fi
+  \fi
+  \loop
+    \setbox\gezhu@tmpb@z=\lastbox
+    \ifhbox\gezhu@tmpb@z
+      \setbox\gezhu@tmpb@x=\vbox{\box\gezhu@tmpb@z\unvbox\gezhu@tmpb@x}%
+      \ifnum\lastnodetype = 11%  skip
+        \unless\ifdim\lastskip = 111sp % not boundary
+          \gezhu@tmpskip=\lastskip
+          \setbox\gezhu@tmpb@x=\vbox{\vskip\gezhu@tmpskip\unvbox\gezhu@tmpb@x}%
+          \unskip
+        \fi
+      \fi
+  \repeat
+  \unskip% remove \hskip 111sp
+}
+\def\gezhu@removehboxes{%
+  % input:  none but previous hbox nodes
+  % output: \gezhu@tmpb@y as the result hbox
+  %         \gezhu@tmpcnt as the result count
+  % uses:   \gezhu@tmpb@z, \gezhu@tmpskip
+  \setbox\gezhu@tmpb@z=\lastbox
+  \ifhbox\gezhu@tmpb@z
+    {\gezhu@removehboxes}% grouped for use local tmpb@z
+    \unhbox\gezhu@tmpb@z
+    \unskip % removes \rightskip
+    \hskip\gezhu@cjkglue
+  \fi
+}
+\def\gezhu@makeparshape#1{%
+  % input:  #1 as the length of the first \gezhu@lines lines
+  % output: \gezhu@parshape as the generated parshape
+  \begingroup % for local loop
+  \xdef\gezhu@parshape{\number\numexpr\gezhu@lines+1}%
+  \gezhu@tmpcnt=1
+  \loop
+    \xdef\gezhu@parshape{\gezhu@parshape\space 0pt \the#1}%
+    \ifnum\gezhu@tmpcnt < \gezhu@lines
+    \advance\gezhu@tmpcnt by 1
+  \repeat
+  \xdef\gezhu@parshape{\gezhu@parshape\space 0pt \the\maxdimen}%
+  \endgroup
+}
+\def\gezhu@normalize{%
+  % input:  \gezhu@tmpdim as the length of the gezhu box
+  % output: \gezhu@tmpdil as the adjustment length, which equals to
+  %             \gezhu@bigem * ceil(#1 / \gezhu@bigem) - #1
+  % uses:   \gezhu@tmpcnt, \gezhu@tmpcns, \loop
+  % first binary search to find ceil(#1 / \gezhu@bigem)
+  \gezhu@tmpcnt=1
+  \loop
+    \ifdim\dimexpr\gezhu@bigem*\gezhu@tmpcnt < \gezhu@tmpdim
+      \multiply\gezhu@tmpcnt by 2
+  \repeat
+  \divide\gezhu@tmpcnt by 2\relax
+  % now \gezhu@bigem*\gezhu@tmpcnt*2 >= \gezhu@tmpdim
+  \gezhu@tmpcns=\gezhu@tmpcnt
+  \loop
+    \ifdim\dimexpr\gezhu@bigem*\numexpr(\gezhu@tmpcnt+\gezhu@tmpcns) 
+        > \gezhu@tmpdim
+      \divide\gezhu@tmpcns by 2
+  \repeat
+  % now \gezhu@bigem*(\gezhu@tmpcnt+\gezhu@tmpcns) <= \gezhu@tmpdim
+  \advance\gezhu@tmpcnt by \gezhu@tmpcns
+  \loop
+    \ifdim\dimexpr\gezhu@bigem*\gezhu@tmpcnt
+        < \gezhu@tmpdim
+      \advance\gezhu@tmpcnt by 1
+  \repeat
+  % now \gezhu@bigem*\gezhu@tmpcnt >= \gezhu@tmpdim
+  % \gezhu@bigem*(\gezhu@tmpcnt-1) < \gezhu@tmpdim
+  \gezhu@tmpdil=\dimexpr\gezhu@bigem*\gezhu@tmpcnt-\gezhu@tmpdim\relax
+  \ifdim\gezhu@tmpdil < 0pt
+    \errmessage{Ooops, the algorithm is wrong!}%
+  \fi
+}
+{
+\catcode`|=\active
+\gdef\gezhu@makespecials{%
+  \catcode`|=\active
+  \def|{\gezhu}%
+}
+}
+\def\withgezhu{\begingroup
+  \showboxbreadth=999
+  \showboxdepth=999
+  \hbadness=\@M\hfuzz=0.4em
+  \def\gezhu##1{%
+    \endgraf
+    \setbox\gezhu@tmpbox=\lastbox
+    \setbox\gezhu@tmpbox=\hbox{\unhbox\gezhu@tmpbox\unskip\unskip\unpenalty}%
+    \ifnum\gezhu@shipoutlevel > 1\relax
+      \unless\ifnum\currentgrouptype = 4 % vbox group
+        \errmessage{\string\gezhu\ cannot be used inside a group}%
+      \fi
+      \gezhu@tmpcnt = \prevgraf
+      \gezhu@message{pg\number\gezhu@tmpcnt}%
+      \ifnum\gezhu@tmpcnt < 2
+        \ifnum\gezhu@tmpcnt > 0
+          \global\setbox\gezhu@tmpboy=\box\gezhu@tmpbox
+          \global\gezhu@tmpdim=\dimexpr\baselineskip - \lastskip - \ht\gezhu@tmpboy\relax
+          \unskip % remove interline skip in internal vertical mode
+          \egroup\prevdepth=\gezhu@tmpdim
+          \gezhu@showbox\gezhu@tmpbox\unvbox\gezhu@tmpbox
+          \endgraf%\gezhu@message{<\number\currentgrouptype>}%
+          \setbox\gezhu@tmpbox=\vbox\bgroup
+          \prevdepth=\gezhu@tmpdim
+          \setbox\gezhu@tmpbox=\box\gezhu@tmpboy
+        \else % gezhu at the beginning of vbox
+          \unskip % should have no effect
+        \fi
+      \else
+        \unskip % remove interline skip in internal vertical mode
+        \unpenalty
+        \ifnum\lastnodetype = 1
+          \global\setbox\gezhu@tmpboz=\lastbox
+          \global\setbox\gezhu@tmpboy=\box\gezhu@tmpbox
+          \global\gezhu@tmpdim=\prevdepth\egroup
+          \gezhu@showbox\gezhu@tmpboz
+          \gezhu@showbox\gezhu@tmpbox\unvbox\gezhu@tmpbox
+          \endgraf\gezhu@message{<\number\currentgrouptype>}%
+          \setbox\gezhu@tmpbox=\vbox\bgroup
+          \setbox\gezhu@tmpbox=\box\gezhu@tmpboy
+          \box\gezhu@tmpboz
+          \vskip -\parskip
+        \else
+          \message{Unexpected lastnodetype \number\lastnodetype, should be an hbox}%
+          \global\setbox\gezhu@tmpboy=\box\gezhu@tmpbox
+          \global\gezhu@tmpdim=\dimexpr\baselineskip - \lastskip - \ht\gezhu@tmpboy\relax
+          \unskip % remove interline skip in internal vertical mode
+          \egroup\prevdepth=\gezhu@tmpdim
+          \gezhu@showbox\gezhu@tmpbox\unvbox\gezhu@tmpbox
+          \endgraf%\gezhu@message{<\number\currentgrouptype>}%
+          \setbox\gezhu@tmpbox=\vbox\bgroup
+          \prevdepth=\gezhu@tmpdim
+          \setbox\gezhu@tmpbox=\box\gezhu@tmpboy
+        \fi
+      \fi
+    \else
+      \prevdepth=\dimexpr\baselineskip - \lastskip - \ht\gezhu@tmpbox\relax
+      \unskip % remove interline skip in internal vertical mode
+      \vskip -\parskip
+    \fi
+    \noindent\gezhu@debug{Copy}\unhcopy\gezhu@tmpbox
+    \the\beforegezhu
+    \def\gezhu@tmpmacro{\setbox\gezhu@tmpboy=\hbox{\hskip 1em}}\gezhu@tmpmacro
+    \ifdefined\CJK@spaceChar % now in CJK, fix me
+      \setbox\gezhu@tmpboy=\hbox{\CJK@spaceChar}%
+    \fi
+    \gezhu@bigem=\wd\gezhu@tmpboy
+    \begingroup
+    \let\gezhu=\relax
+    \let\par\endgraf
+    \the\everygezhu
+    \def\gezhu@tmpmacro{\setbox\gezhu@tmpboy=\hbox{\hskip 1em}}\gezhu@tmpmacro
+    %\setbox\gezhu@tmpboy=\hbox{M}%
+    \ifdefined\CJK@spaceChar % now in CJK, fix me
+      \setbox\gezhu@tmpboy=\hbox{\CJK@spaceChar}%
+    \fi
+    \gezhu@smallem=\wd\gezhu@tmpboy
+    \gezhu@leftspace=\dimexpr\hsize - \wd\gezhu@tmpbox\relax
+    % now \gezhu@leftspace is the width of the rest blank space of the line
+    \ifdim\gezhu@leftspace > 0.9\gezhu@smallem % annotations at the end of line
+      \ifdim\gezhu@leftspace > 1.5\gezhu@smallem
+        \ifdim\gezhu@leftspace < 2\gezhu@smallem
+          \gezhu@leftspace = 1.9\gezhu@smallem
+        \fi
+      \else
+        \gezhu@leftspace = 0.99\gezhu@smallem
+      \fi
+      \gezhu@makeparshape{\gezhu@leftspace}%
+      % place gezhu annotation text in a vbox with specified parshape
+      \setbox\gezhu@tmpboy=\vbox{\hsize=\gezhu@leftspace
+        \leftskip=0pt\rightskip=0pt
+        \pretolerance=9999\tolerance=9999\parindent=0pt\hfuzz=3em
+        \parskip=0pt
+        \parshape\gezhu@parshape\relax
+        ##1}%
+      % extract the first \gezhu@lines lines and get the rest
+      \setbox\gezhu@tmpboy=\vbox{%
+        \unvbox\gezhu@tmpboy
+        \gezhu@makehboxofhboxesandcount% output is \gezhu@tmpb@y
+        \ifnum\gezhu@tmpcnt > \gezhu@lines
+          \advance\gezhu@tmpcnt by -\gezhu@lines
+        \fi
+        \expandafter\gezhu@getfirsthboxes\expandafter{\the\gezhu@tmpcnt}%
+        \global\setbox\gezhu@tmpb@x=\box\gezhu@tmpb@x
+        \global\setbox\gezhu@tmpb@y=\box\gezhu@tmpb@y
+      }%
+      \ifdim\wd\gezhu@tmpb@x > 0pt
+        \setbox0=\hbox{\raise\gezhu@gezhuraise\hbox{\gezhu@debugbox{\box\gezhu@tmpb@x}}}%
+        \ht0=0pt\dp0=0pt\gezhu@debugboy{\box0}%
+        \gezhu@break
+        \gezhu@leftspace=\hsize
+      \fi
+    \else % no annotations at the end of line
+      \setbox\gezhu@tmpb@y=\vbox{\hsize=\maxdimen\hbox{##1}}%
+      %\hskip 0pt plus 0.7em
+      \gezhu@break
+      \gezhu@leftspace=\hsize
+    \fi
+    % now \gezhu@tmpb@y holds the remaining annotation text
+    \loop
+      \gezhu@makeparshape{\hsize}%
+      % place gezhu annotation text in a vbox with specified parshape
+      \setbox\gezhu@tmpboy=\vbox{%  the hsize is the main text hsize
+        \leftskip=0pt\rightskip=0pt% plus 0.1em minus 0.1em%\gezhu@tmpdim
+        \pretolerance=9999\tolerance=9999\parindent=0pt\hfuzz=3em
+        \parskip=0pt
+        \parshape\gezhu@parshape
+        \unvbox\gezhu@tmpb@y
+        \gezhu@removehboxes
+        \unskip % remove last \gezhu@cjkglue
+      }%
+      % extract the first \gezhu@lines lines and get the rest
+      \setbox\gezhu@tmpboy=\vbox{%
+        \unvbox\gezhu@tmpboy
+        \gezhu@makehboxofhboxesandcount% output is \gezhu@tmpb@y
+        \ifnum\gezhu@tmpcnt > \gezhu@lines
+          \advance\gezhu@tmpcnt by -\gezhu@lines
+        \fi
+        \global\gezhu@tmpcnt=\gezhu@tmpcnt
+        \expandafter\gezhu@getfirsthboxes\expandafter{\the\gezhu@tmpcnt}%
+        \global\setbox\gezhu@tmpb@x=\box\gezhu@tmpb@x
+        \global\setbox\gezhu@tmpb@y=\box\gezhu@tmpb@y
+      }%
+      \ifdim\wd\gezhu@tmpb@x > 0pt% enough for construct a whole big line
+        \setbox\gezhu@tmpbox=\hbox{\box\gezhu@tmpb@x}%
+        \setbox0=\hbox{\raise\gezhu@gezhuraise\hbox{\gezhu@debugbox{\box\gezhu@tmpbox}}}%
+        \ht0=0pt\dp0=0pt\gezhu@debugboy{\box0}%
+        \gezhu@break
+        \gezhu@leftspace=\hsize
+    \repeat
+    % enter balancing module
+    % \gezhu@tmpcnt is the number of lines in \gezhu@tmpb@y
+    \ifhbox\gezhu@tmpb@y % no \gezhu@getfirsthboxes executed
+      \expandafter\gezhu@getfirsthboxes\expandafter{\the\gezhu@tmpcnt}%
+    \fi
+    % now \gezhu@tmpb@y is vbox of hboxes without interlineskip
+    % make \gezhu@tmpb@y hbox of hboxes without interlineskip
+    \setbox\gezhu@tmpboy=\vbox{%
+      \unvbox\gezhu@tmpb@y
+      \gezhu@makehboxofhboxesandcount
+      \global\gezhu@tmpcnt=\gezhu@tmpcnt
+      \global\setbox\gezhu@tmpb@x=\box\gezhu@tmpb@x
+      \global\setbox\gezhu@tmpb@y=\box\gezhu@tmpb@y
+    }%
+    % merge the inner hboxes, save the text in \gezhu@tmpbox
+    \setbox\gezhu@tmpbox=\hbox{\unhbox\gezhu@tmpb@y\gezhu@removehboxes
+      \unskip\unskip}% remove possible \parfillskip
+    \gezhu@tmpdim=\wd\gezhu@tmpbox
+    \divide\gezhu@tmpdim by \gezhu@lines
+    \advance\gezhu@tmpdim by -0.3\gezhu@bigem % for cases of breaking at spaces
+    % find best hsize for vbox
+    \loop
+      \setbox\gezhu@tmpboy=\vbox{\hsize=\gezhu@tmpdim
+        \leftskip=0pt\rightskip=0pt% plus 0.1em minus 0.1em%\gezhu@tmpdim
+        \pretolerance=9999\tolerance=9999\parindent=0pt\hfuzz=3em
+        \parskip=0pt
+        \parfillskip=\gezhu@parfillskip
+        \unhcopy\gezhu@tmpbox
+      }%
+      \setbox\gezhu@tmpboy=\vbox{%
+        \unvbox\gezhu@tmpboy
+        \gezhu@makehboxofhboxesandcount
+        \global\gezhu@tmpcnt=\gezhu@tmpcnt
+        \global\setbox\gezhu@tmpb@x=\box\gezhu@tmpb@x
+        \global\setbox\gezhu@tmpb@y=\box\gezhu@tmpb@y
+      }%
+      \ifnum\gezhu@tmpcnt > \gezhu@lines
+        \advance\gezhu@tmpdim by 0.1\gezhu@bigem
+    \repeat
+    % now \gezhu@tmpdim is the almost optimal hsize for vbox
+    % now find the longest line width when break with hsize=\gezhu@tmpdim
+    \gezhu@tmpdil=\gezhu@tmpdim
+    \setbox\gezhu@tmpboy=\vbox{%
+      \hskip 0pt
+      \unhbox\gezhu@tmpb@y
+      \loop
+        \ifnum\lastnodetype = 11%  inter line skip
+          \unskip
+        \fi
+        \setbox\gezhu@tmpb@x=\lastbox
+        \ifhbox\gezhu@tmpb@x
+          %\showbox\gezhu@tmpb@x
+          \setbox\gezhu@tmpb@x=\hbox{\unhbox\gezhu@tmpb@x}%
+          %\showbox\gezhu@tmpb@x
+          \ifdim\gezhu@tmpdil < \wd\gezhu@tmpb@x
+            \global\gezhu@tmpdil=\wd\gezhu@tmpb@x
+          \fi
+      \repeat
+      \unskip
+    }%
+    % now \gezhu@tmpdil is the length of the longest line
+    % the following lines tries to find a better hsize
+    \advance\gezhu@tmpdil by -\gezhu@tmpdim
+    \ifdim\gezhu@tmpdil > 0.45\gezhu@smallem
+      \advance\gezhu@tmpdim by \gezhu@tmpdil
+    \fi
+    % normalize special treatment
+    \ifgezhunormalize
+      \gezhu@normalize % output in \gezhu@tmpdil
+      \ifdim\gezhu@tmpdil < \dimexpr\gezhu@bigem/(\numexpr\gezhu@lines+1)\relax
+        \gezhu@tmpdim=\dimexpr\gezhu@tmpdim+\gezhu@tmpdil\relax
+      \fi
+      \ifdim\gezhu@tmpdil > 0.9\gezhu@bigem
+        \gezhu@tmpdim=\dimexpr\gezhu@tmpdim+\gezhu@tmpdil-\gezhu@bigem\relax
+      \fi
+    \fi
+    % left space test
+    \ifdim\gezhu@tmpdim > \gezhu@leftspace
+      \gezhu@tmpdim=\gezhu@leftspace
+    \fi
+    % now \gezhu@tmpdim is the should-be length of the gezhu box
+    %%%%
+    \setbox\gezhu@tmpboy=\vbox{\hsize=\gezhu@tmpdim
+      \leftskip=0pt\rightskip=0pt% plus 0.1em minus 0.1em%\gezhu@tmpdim
+      \pretolerance=9999\tolerance=9999\parindent=0pt\hfuzz=3em
+      \parskip=0pt
+      \parfillskip=\gezhu@parfillskip
+      \unhcopy\gezhu@tmpbox
+    }%
+    \setbox\gezhu@tmpboy=\vbox{%
+      \unvbox\gezhu@tmpboy
+      \gezhu@makehboxofhboxesandcount
+      \global\gezhu@tmpcnt=\gezhu@tmpcnt
+      \global\setbox\gezhu@tmpb@y=\box\gezhu@tmpb@y
+    }%
+    % now \gezhu@tmpb@y is the hbox of hboxes with interlineskip
+    % next find the longest line width when break with hsize=\gezhu@tmpdim
+    \gezhu@tmpdil=\gezhu@tmpdim
+    \setbox\gezhu@tmpboy=\vbox{%
+      \hskip 0pt
+      \unhcopy\gezhu@tmpb@y
+      \loop
+        \ifnum\lastnodetype = 11%  inter line skip
+          \unskip
+        \fi
+        \setbox\gezhu@tmpb@x=\lastbox
+        \ifhbox\gezhu@tmpb@x
+          \setbox\gezhu@tmpb@x=\hbox{\unhbox\gezhu@tmpb@x}%
+          \ifdim\gezhu@tmpdil < \wd\gezhu@tmpb@x
+            \global\gezhu@tmpdil=\wd\gezhu@tmpb@x
+          \fi
+      \repeat
+      \unskip
+    }%
+    % next, compensate for empty lines
+    {\gezhu@getfirsthboxes{0}\global\setbox\gezhu@tmpb@x=\box\gezhu@tmpb@x}%
+    \loop
+      \ifnum\gezhu@tmpcnt < \gezhu@lines
+        \advance\gezhu@tmpcnt by 1
+        %\setbox\gezhu@tmpb@y=\hbox{\unhbox\gezhu@tmpb@y\hbox{\the\gezhu@strut}}%
+        \setbox\gezhu@tmpb@x=\vbox{\unvbox\gezhu@tmpb@x\vskip\baselineskip}%
+    \repeat
+    % now \gezhu@tmpb@x is the gezhu box
+    \setbox0=\hbox{\raise\gezhu@gezhuraise\hbox{\gezhu@debugbox{\box\gezhu@tmpb@x}}}%
+    \ht0=0pt\dp0=0pt\gezhu@debugboy{\box0}%
+    \ifgezhunormalize
+      \gezhu@debug{\raise-3pt\hbox{\the\gezhu@tmpdim}}%
+      \gezhu@normalize % output in \gezhu@tmpdil
+      \ifdim\gezhu@tmpdil > 0pt
+        \nobreak\kern\gezhu@tmpdil
+        \gezhu@debug{\raise 8pt\hbox{\the\gezhu@tmpdil, \the\gezhu@bigem}}%
+      \fi
+    \else
+      \advance\gezhu@tmpdil by -\gezhu@tmpdim
+      \ifdim\gezhu@tmpdil > 0.45\gezhu@smallem
+	\nobreak\hskip 0.7\gezhu@tmpdil plus 0.3\gezhu@tmpdil minus 0.7\gezhu@tmpdil
+	\advance\gezhu@tmpdim by 0.7\gezhu@tmpdil
+      \fi
+    \fi
+    \endgroup
+    \the\aftergezhu\relax
+  }%
+  \let\gezhu@oldpar\par
+  \ifnum\gezhu@shipoutlevel > 0\relax
+    \def\par{\unpenalty\unskip\unpenalty\unskip\unpenalty\gezhu@oldpar
+      \global\gezhu@tmpdim=\prevdepth\egroup\prevdepth=\gezhu@tmpdim
+      \gezhu@showbox\gezhu@tmpbox\unvbox\gezhu@tmpbox
+      \endgraf%\gezhu@message{(\number\currentgrouptype)}%
+      \setbox\gezhu@tmpbox=\vbox\bgroup
+      \prevdepth=\gezhu@tmpdim
+      \ifdim\gezhu@tmpdim > -1000pt
+        \vskip 0pt% par skip go go go 
+      \fi
+    }%
+  \else
+    \def\par{\ifhmode\unpenalty\unskip\unpenalty\unskip\unpenalty\fi\gezhu@oldpar}%
+  \fi
+  \endgraf
+  \lineskiplimit=-\maxdimen\relax % only \baselineskip is to be used
+  \the\everywithgezhu
+  \ifdim\prevdepth = 0pt% we assume that it is the beginning of the page
+    \gezhu@tmpdim=-1000pt
+  \else
+    \gezhu@tmpdim=\prevdepth
+  \fi
+  \setbox\gezhu@tmpbox=\vbox\bgroup
+  \let\withgezhu\relax
+  \ifdim\gezhu@tmpdim > -1000pt
+    \prevdepth=\gezhu@tmpdim
+    \vskip 0pt% par skip go go go 
+  \fi
+}
+\def\endwithgezhu{%
+  \ifnum\gezhu@shipoutlevel > 0
+    \par\egroup
+  \else
+      \gezhu@oldpar\global\gezhu@tmpdim=\prevdepth\egroup\prevdepth=\gezhu@tmpdim
+      \gezhu@showbox\gezhu@tmpbox\unvbox\gezhu@tmpbox
+  \fi
+  \endgroup
+}
+\def\setgezhulines#1{\global\gezhu@lines=#1\relax}
+\def\setgezhuraise#1{\global\gezhu@gezhuraise=#1\relax}
+\def\setgezhushipoutlevel#1{\global\gezhu@shipoutlevel=#1\relax}
+\def\gezhuraggedtrue{\global\gezhu@parfillskip=0pt plus 1fil\relax}
+\def\gezhuraggedfalse{\global\gezhu@parfillskip=0pt\relax}
+% fbox
+\newbox\gezhu@fbox@tmpbox
+\newdimen\gezhu@fbox@linewidth
+\newdimen\gezhu@fbox@tmpdim
+\newdimen\gezhu@fbox@tmpdil
+\gezhu@fbox@linewidth=0.4pt
+\long\def\gezhu@fbox#1{%
+  \setbox\gezhu@fbox@tmpbox=\hbox{#1}%
+  \gezhu@fbox@tmpdim=2\gezhu@fbox@linewidth
+  \gezhu@fbox@tmpdil=\dp\gezhu@fbox@tmpbox
+  \advance\gezhu@fbox@tmpdim\wd\gezhu@fbox@tmpbox
+  \setbox\gezhu@fbox@tmpbox=\hbox{\hskip-\gezhu@fbox@linewidth\vbox{\vskip
+  -\gezhu@fbox@linewidth\hrule height \gezhu@fbox@linewidth width \gezhu@fbox@tmpdim
+  \hbox{\vrule width \gezhu@fbox@linewidth height \ht\gezhu@fbox@tmpbox
+  \unhcopy\gezhu@fbox@tmpbox\vrule width \gezhu@fbox@linewidth height \ht\gezhu@fbox@tmpbox}%
+  \hrule height \gezhu@fbox@linewidth width \gezhu@fbox@tmpdim
+  \vskip -\gezhu@fbox@linewidth}\hskip-\gezhu@fbox@linewidth}%
+  \leavevmode\raise-\gezhu@fbox@tmpdil\box\gezhu@fbox@tmpbox
+}
+\long\def\gezhu@baselinebox#1{%
+  \setbox\gezhu@fbox@tmpbox=\hbox{#1}%
+  \gezhu@fbox@tmpdil=\dp\gezhu@fbox@tmpbox
+  \leavevmode\rlap{\hbox to \wd\gezhu@fbox@tmpbox{\hrulefill}}\box\gezhu@fbox@tmpbox
+}
+\fi

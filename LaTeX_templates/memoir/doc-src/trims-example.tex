@@ -1,0 +1,32 @@
+\documentclass[showtrims,a6paper,9pt,english]{memoir}
+\usepackage{babel}
+\settrimmedsize{0.65\stockheight}{0.6\stockwidth}{*}
+\settypeblocksize{7cm}{4cm}{*}
+\setlrmargins{1cm}**
+\setulmargins{1cm}**
+\setheadfoot{10pt}{10pt}
+\setheaderspaces{10pt}**
+\settrims{7.5em}{6.5em}
+\checkandfixthelayout
+\usepackage{blindtext}
+\setcounter{blindtext}{1}
+\pagestyle{empty}
+\begin{document}
+\small
+\trimXmarks
+\blindtext
+\newpage
+\trimLmarks
+\blindtext
+\newpage
+\trimFrame
+\blindtext
+\newpage
+\quarkmarks
+\blindtext
+\end{document}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 

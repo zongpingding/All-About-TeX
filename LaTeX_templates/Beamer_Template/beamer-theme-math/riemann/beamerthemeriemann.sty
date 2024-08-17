@@ -1,0 +1,913 @@
+% -*- coding: utf-8 -*-
+% ----------------------------------------------------------------------------
+% Author:  Jianrui Lyu <tolvjr@163.com>
+% Website: https://github.com/lvjr/theme
+% License: Creative Commons Attribution-ShareAlike 4.0 International License
+% ----------------------------------------------------------------------------
+
+\ProvidesPackage{beamerthemeriemann}[2019/06/06 v0.7 Beamer Theme Riemann]
+
+\makeatletter
+
+% compatible with old versions of beamer
+\providecommand{\beamer@endinputifotherversion}[1]{}
+
+\RequirePackage{tikz,etoolbox,adjustbox,calc}
+\usetikzlibrary{calc}
+
+\mode<presentation>
+
+\setbeamersize{text margin left=8mm,text margin right=8mm}
+
+%% ----------------- background canvas and background ----------------
+
+\newif\ifbackgroundmarkleft
+\newif\ifbackgroundmarkright
+
+\newcommand{\insertbackgroundmark}{
+  \ifbackgroundmarkleft
+    \foreach \x in {1,2,...,11} \draw[line width=0.2mm,markcolor]
+        (0,\x*\paperheight/12) ++(0.1mm,-0.5mm) rectangle +(1mm,1mm);
+  \fi
+  \ifbackgroundmarkright
+    \foreach \x in {1,2,...,11} \draw[line width=0.2mm,markcolor]
+        (\paperwidth,\x*\paperheight/12) ++(-1.1mm,-0.5mm) rectangle +(1mm,1mm);
+  \fi
+}
+
+\defbeamertemplate{background}{line}{%
+  \begin{tikzpicture}
+    \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+    \draw[xstep=\paperwidth,ystep=1mm,color=tcolor] (0,0) grid (\paperwidth,\paperheight);
+    \insertbackgroundmark
+  \end{tikzpicture}%
+}
+
+\defbeamertemplate{background}{linear}{%
+  \begin{tikzpicture}
+    \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+    \draw[pattern=horizontal lines, pattern color=tcolor]
+      (0,0) rectangle (\paperwidth,\paperheight);
+    \insertbackgroundmark
+  \end{tikzpicture}%
+}
+
+\defbeamertemplate{background}{lattice}[1][1mm]{%
+  \begin{tikzpicture}
+    \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+    \draw[step=#1,color=tcolor,semithick] (0,0) grid (\paperwidth,\paperheight);
+    \insertbackgroundmark
+  \end{tikzpicture}%
+}
+
+\defbeamertemplate{background}{empty}{
+  \begin{tikzpicture}
+    \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+    \insertbackgroundmark
+  \end{tikzpicture}%
+}
+
+%% -------------------------- title page -----------------------------
+
+% add \occasion command
+\newcommand{\occasion}[1]{\def\insertoccasion{#1}}
+\occasion{}
+
+\defbeamertemplate{title page}{banner}{%
+  \nointerlineskip
+  \begin{adjustbox}{width=\paperwidth,center}%
+    \usebeamertemplate{title page content}%
+  \end{adjustbox}%
+}
+
+% need "text badly ragged" option for correct space skips
+% see http://tex.stackexchange.com/a/132748/8956
+\defbeamertemplate{title page content}{hexagon}{%
+  \begin{tikzpicture}
+  \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+  \path[draw=dcolor,fill=fcolor,opacity=0.8]
+      (0,0) rectangle (\paperwidth,\paperheight);
+  \node[text width=0.86\paperwidth,text badly ragged,inner ysep=1.5cm] (main) at (0.5\paperwidth,0.55\paperheight) {%
+    \begin{minipage}[c]{0.86\paperwidth}
+      \centering
+      \usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle
+      \ifx\insertsubtitle\@empty\else
+        \\[5pt]\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}
+        \insertsubtitle
+      \fi
+    \end{minipage}
+  };
+  \node[rectangle,inner sep=0pt,minimum size=3mm,fill=dcolor,right] (a) at (0,0.55\paperheight) {};
+  \node[rectangle,inner sep=0pt,minimum size=3mm,fill=dcolor,left] (b) at (\paperwidth,0.55\paperheight) {};
+  \ifx\insertoccasion\@empty
+      \draw[thick,dcolor] (a.north east) -- (main.north west)
+                   -- (main.north east) -- (b.north west);
+  \else
+      \node[text badly ragged] (occasion) at (main.north west -| 0.5\paperwidth,\paperheight) {
+          \usebeamerfont{occasion}\usebeamercolor[fg]{occasion}\insertoccasion
+      };
+      \draw[thick,dcolor] (a.north east) -- (main.north west) -- (occasion.west)
+                          (b.north west) -- (main.north east) -- (occasion.east);
+  \fi
+  \node[text badly ragged] (date) at (main.south west -| 0.5\paperwidth,0) {
+      \usebeamerfont{date}\usebeamercolor[fg]{date}\insertdate
+  };
+  \draw[thick,dcolor] (a.south east) -- (main.south west) -- (date.west)
+                      (b.south west) -- (main.south east) -- (date.east);
+  \node[below=4mm,text width=0.9\paperwidth,inner xsep=0.05\paperwidth,
+        text badly ragged,fill=white,draw=dcolor] at (date.south) {%
+      \begin{minipage}[c]{0.9\paperwidth}
+          \centering
+          \textcolor{accent2}{$\blacksquare$}\hspace{0.2em}%
+          \usebeamerfont{institute}\usebeamercolor[fg]{institute}\insertinstitute
+          \hspace{1em}\textcolor{accent2}{$\blacksquare$}\hspace{0.2em}%
+          \usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor
+      \end{minipage}
+  };
+  \end{tikzpicture}
+}
+
+\defbeamertemplate{title page content}{rectangle}{%
+  \begin{tikzpicture}
+  \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+  \path[draw=dcolor,fill=fcolor,opacity=0.8]
+      (0,0) rectangle (\paperwidth,\paperheight);
+  \node[text width=0.9\paperwidth,text badly ragged,inner ysep=1.5cm] (main) at (0.5\paperwidth,0.55\paperheight) {%
+    \begin{minipage}[c]{0.9\paperwidth}
+      \centering
+      \usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle
+      \ifx\insertsubtitle\@empty\else
+        \\[5pt]\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}
+        \insertsubtitle
+      \fi
+    \end{minipage}
+  };
+  \node[rectangle,inner sep=0pt,outer sep=0pt,minimum size=3mm,fill=dcolor,below right,xshift=2pt]
+       (a) at (main.north west -| 0,0) {};
+  \node[rectangle,inner sep=0pt,outer sep=0pt,minimum size=3mm,fill=dcolor,below left,xshift=-2pt]
+       (b) at (main.north east -| \paperwidth,0) {};
+  \node[rectangle,inner sep=0pt,outer sep=0pt,minimum size=3mm,fill=dcolor,above right,xshift=2pt]
+       (c) at (main.south west -| 0,0) {};
+  \node[rectangle,inner sep=0pt,outer sep=0pt,minimum size=3mm,fill=dcolor,above left,xshift=-2pt]
+       (d) at (main.south east -| \paperwidth,0) {};
+  \coordinate (mw) at (main.west -| a.west);
+  \coordinate (me) at  (main.east -| b.east);
+  \draw[thick,dcolor] (a.south east) -- (a.south west) -- (a.north west) -- (a.north east)
+                                     -- ++(0,-6mm) -- ++(-3mm,0) -- (mw)
+                      (c.north east) -- (c.north west) -- (c.south west) -- (c.south east)
+                                     -- ++(0,6mm)  -- ++(-3mm,0) -- (mw)
+                      (b.south west) -- (b.south east) -- (b.north east) -- (b.north west)
+                                     -- ++(0,-6mm) -- ++(3mm,0)  -- (me)
+                      (d.north west) -- (d.north east) -- (d.south east) -- (d.south west)
+                                     -- ++(0,6mm)  -- ++(3mm,0)  -- (me);
+  \ifx\insertoccasion\@empty
+      \draw[thick,dcolor] (a.south east) -- ++(3mm,0) -- ++(0,3mm) -- (main.north)
+                          (b.south west) -- ++(-3mm,0) -- ++(0,3mm) -- (main.north);
+  \else
+      \node[text badly ragged] (occasion) at (main.north west -| 0.5\paperwidth,\paperheight) {
+          \usebeamerfont{occasion}\usebeamercolor[fg]{occasion}\insertoccasion
+      };
+      \draw[thick,dcolor] (a.south east) -- ++(3mm,0) -- ++(0,3mm) -- (occasion.west)
+                          (b.south west) -- ++(-3mm,0) -- ++(0,3mm) -- (occasion.east);
+  \fi
+  \node[text badly ragged] (date) at (main.south west -| 0.5\paperwidth,0) {
+      \usebeamerfont{date}\usebeamercolor[fg]{date}\insertdate
+  };
+  \draw[thick,dcolor] (c.north east) -- ++(3mm,0) -- ++(0,-3mm) -- (date.west)
+                      (d.north west) -- ++(-3mm,0) -- ++(0,-3mm) -- (date.east);
+  \node[below=4mm,text width=0.9\paperwidth,inner xsep=0.05\paperwidth,
+        text badly ragged,fill=white,draw=dcolor] (author) at (date.south) {%
+      \begin{minipage}[c]{0.9\paperwidth}
+          \centering
+          \textcolor{accent2}{$\blacksquare$}\hspace{0.2em}%
+          \usebeamerfont{institute}\usebeamercolor[fg]{institute}\insertinstitute
+          \hspace{1em}\textcolor{accent2}{$\blacksquare$}\hspace{0.2em}%
+          \usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor
+      \end{minipage}
+  };
+  \end{tikzpicture}
+}
+
+\defbeamertemplate{title page content}{polygon}{%
+  \begin{tikzpicture}
+  \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+  \path[draw=dcolor,fill=fcolor,opacity=0.8]
+      (0,0) rectangle (\paperwidth,\paperheight);
+  \node[text width=0.82\paperwidth,text badly ragged,inner ysep=1.5cm] (main) at (0.5\paperwidth,0.55\paperheight) {%
+    \begin{minipage}[c]{0.82\paperwidth}
+      \centering
+      \usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle
+      \ifx\insertsubtitle\@empty\else
+        \\[5pt]\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}
+        \insertsubtitle
+      \fi
+    \end{minipage}
+  };
+  \node[rectangle,inner sep=0pt,outer sep=0pt,minimum size=3mm,fill=dcolor,right,yshift=12pt]
+       (a) at (main.north west -| 0,0) {};
+  \node[rectangle,inner sep=0pt,outer sep=0pt,minimum size=3mm,fill=dcolor,left,yshift=12pt]
+       (b) at (main.north east -| \paperwidth,0) {};
+  \node[rectangle,inner sep=0pt,outer sep=0pt,minimum size=3mm,fill=dcolor,right,yshift=-12pt]
+       (c) at (main.south west -| 0,0) {};
+  \node[rectangle,inner sep=0pt,outer sep=0pt,minimum size=3mm,fill=dcolor,left,yshift=-12pt]
+       (d) at (main.south east -| \paperwidth,0) {};
+  \draw[thick,dcolor] (a.south east) -- (main.west) -- (c.north east)
+                      (b.south west) -- (main.east) -- (d.north west);
+  \ifx\insertoccasion\@empty
+      \draw[thick,dcolor] (a.south east) -- (main.north west) -- (main.north east) -- (b.south west);
+  \else
+      \node[text badly ragged] (occasion) at (main.north west -| 0.5\paperwidth,\paperheight) {
+          \usebeamerfont{occasion}\usebeamercolor[fg]{occasion}\insertoccasion
+      };
+      \draw[thick,dcolor] (a.south east) -- (main.north west) -- (occasion.west)
+                          (b.south west) -- (main.north east) -- (occasion.east);
+  \fi
+  \node[text badly ragged] (date) at (main.south west -| 0.5\paperwidth,0) {
+      \usebeamerfont{date}\usebeamercolor[fg]{date}\insertdate
+  };
+  \draw[thick,dcolor] (c.north east) -- (main.south west) -- (date.west)
+                      (d.north west) -- (main.south east) -- (date.east);
+  \node[below=4mm,text width=0.9\paperwidth,inner xsep=0.026\paperwidth,
+        text badly ragged,fill=white,draw=dcolor] (author) at (date.south) {%
+      \begin{minipage}[c]{0.9\paperwidth}
+          \centering
+          \textcolor{accent2}{$\blacksquare$}\hspace{0.2em}%
+          \usebeamerfont{institute}\usebeamercolor[fg]{institute}\insertinstitute
+          \hspace{1em}\textcolor{accent2}{$\blacksquare$}\hspace{0.2em}%
+          \usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor
+      \end{minipage}
+  };
+  \path[fill=dcolor] (author.north west) -- (author.north west -| 0,0) -- (author.west)
+                         -- (author.south west -| 0,0) -- (author.south west)
+                     (author.north east) -- (author.north east -| \paperwidth,0) -- (author.east)
+                         -- (author.south east -| \paperwidth,0) -- (author.south east);
+  \end{tikzpicture}
+}
+
+\defbeamertemplate{title page content}{hypotenuse}{%
+  \begin{tikzpicture}
+  \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+  \path[draw=dcolor,fill=fcolor,opacity=0.8]
+      (0,0) rectangle (\paperwidth,\paperheight);
+  \node[text width=0.82\paperwidth,text badly ragged,inner ysep=1.5cm] (main) at (0.5\paperwidth,0.55\paperheight) {%
+    \begin{minipage}[c]{0.82\paperwidth}
+      \centering
+      \usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle
+      \ifx\insertsubtitle\@empty\else
+        \\[5pt]\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}
+        \insertsubtitle
+      \fi
+    \end{minipage}
+  };
+  \node[rectangle,inner sep=0pt,outer sep=0pt,minimum size=2.7mm,fill=dcolor] (a) at (main.north west) {};
+  \node[rectangle,inner sep=0pt,outer sep=0pt,minimum size=2.7mm,fill=dcolor,left] (b) at (main.north -| \paperwidth,0) {};
+  \node[rectangle,inner sep=0pt,outer sep=0pt,minimum size=2.7mm,fill=dcolor,right] (c) at (main.south -| 0,0) {};
+  \node[rectangle,inner sep=0pt,outer sep=0pt,minimum size=2.7mm,fill=dcolor] (d) at (main.south east) {};
+  \draw[thick,dcolor] ($(a.south west)+(0.4pt,0)$) -- ($(c.north east)+(-0.4pt,0)$)
+                      ($(b.south west)+(0.4pt,0)$) -- ($(d.north east)+(-0.4pt,0)$);
+  \draw[thick,dcolor] ($(a.south east)+(-0.4pt,0)$) -- ($(c.north west)+(0.4pt,0)$)
+                      ($(b.south east)+(-0.4pt,0)$) -- ($(d.north west)+(0.4pt,0)$);
+  \ifx\insertoccasion\@empty
+      \draw[thick,dcolor] (a.north west) -- (b.north east)
+                          (a.south west) -- (b.south east);
+  \else
+      \node[text badly ragged] (occasion) at (main.north west -| 0.5\paperwidth,\paperheight) {
+          \usebeamerfont{occasion}\usebeamercolor[fg]{occasion}\insertoccasion
+      };
+      \draw[thick,dcolor] (a.north west) -- (a.north west -| occasion.north west)
+                          (a.south west) -- (a.south west -| occasion.south west)
+                          (b.north east) -- (b.north east -| occasion.north east)
+                          (b.south east) -- (b.south east -| occasion.south east);
+  \fi
+  \node[text badly ragged] (date) at (main.south west -| 0.5\paperwidth,0) {
+      \usebeamerfont{date}\usebeamercolor[fg]{date}\insertdate
+  };
+  \draw[thick,dcolor] (c.north west) -- (c.north west -| date.north west)
+                      (c.south west) -- (c.south west -| date.south west)
+                      (d.north east) -- (d.north east -| date.north east)
+                      (d.south east) -- (d.south east -| date.south east);
+  \node[below=4mm,text width=0.9\paperwidth,inner xsep=0.015\paperwidth,
+        text badly ragged,fill=white,draw=dcolor] (author) at (date.south) {%
+      \begin{minipage}[c]{0.9\paperwidth}
+          \centering
+          \textcolor{accent2}{$\blacksquare$}\hspace{0.2em}%
+          \usebeamerfont{institute}\usebeamercolor[fg]{institute}\insertinstitute
+          \hspace{1em}\textcolor{accent2}{$\blacksquare$}\hspace{0.2em}%
+          \usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor
+      \end{minipage}
+  };
+  \path[fill=dcolor] (author.north west) -- (author.south west) -- (author.south west -| 0,0)
+                     (author.south east) -- (author.north east) -- (author.north west -| \paperwidth,0);
+  \end{tikzpicture}
+}
+
+% Several safe primes and Blum-Blum-Shub generator
+\newcommand{\my@composite}{43921} % 43921=167*263
+\newcounter{my@random@seed}
+\setcounter{my@random@seed}{43787}
+\newcommand{\next@random@seed}{%
+  \setcounter{my@random@seed}{\value{my@random@seed}*\value{my@random@seed}}%
+  \setcounter{my@random@seed}{\value{my@random@seed}-(\value{my@random@seed}/\my@composite)*\my@composite}%
+}
+
+\newlength{\my@title@height}
+
+\defbeamertemplate{title page content}{block}{%
+  \begin{tikzpicture}
+  \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+  \path[draw=dcolor,fill=fcolor,opacity=0.8] (0,0) rectangle (\paperwidth,\paperheight);
+  \path[step=4mm,draw=dcolor,ultra thick] (0,0) grid (\paperwidth,\paperheight);
+  \foreach \x in {0,1,...,31} \foreach \y in {0,1,...,23} {
+    \next@random@seed
+    \ifodd\value{my@random@seed}
+      \path[draw=dcolor,ultra thick,fill=fcolor2,opacity=0.8] (\x*\paperwidth/32,\y*\paperheight/24) rectangle +(4mm,4mm);
+    \fi
+  }
+  \ifx\insertsubtitle\@empty
+    \setlength{\my@title@height}{39.7mm}
+  \else
+    \setlength{\my@title@height}{47.7mm}
+  \fi
+  \node[minimum width=0.84\paperwidth,minimum height=\my@title@height,inner xsep=2mm,inner ysep=0mm,
+        opacity=0.95,text opacity=1,text badly ragged,fill=fcolor] (main) at (0.5\paperwidth,0.542\paperheight) {%
+    \begin{minipage}[c]{0.84\paperwidth}
+      \centering
+      \usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle
+      \ifx\insertsubtitle\@empty\else
+        \\[5pt]\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}
+        \insertsubtitle
+      \fi
+    \end{minipage}
+  };
+  \ifx\insertoccasion\@empty\else
+      \node[text badly ragged,fill=fcolor,minimum height=7.8mm,draw=dcolor,very thick]
+           (occasion) at (main.north west -| 0.5\paperwidth,\paperheight) {
+          \usebeamerfont{occasion}\usebeamercolor[fg]{occasion}\insertoccasion
+      };
+  \fi
+  \node[text badly ragged,fill=fcolor,minimum height=7.8mm,draw=dcolor,very thick]
+       (date) at (main.south west -| 0.5\paperwidth,0) {
+      \usebeamerfont{date}\usebeamercolor[fg]{date}\insertdate
+  };
+  \node[below=4mm,minimum width=0.84\paperwidth,minimum height=7.6mm,inner xsep=2mm,inner ysep=0mm,
+        opacity=0.85,text opacity=1,text badly ragged,fill=white] at (date.south) {%
+      \begin{minipage}[c]{0.84\paperwidth}
+          \centering
+          \textcolor{accent2}{$\blacksquare$}\hspace{0.2em}%
+          \usebeamerfont{institute}\usebeamercolor[fg]{institute}\insertinstitute
+          \hspace{0.4em}\textcolor{accent2}{$\blacksquare$}\hspace{0.2em}%
+          \usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor
+      \end{minipage}
+  };
+  \end{tikzpicture}
+}
+
+%% ----------------------- section and subsection --------------------
+
+\newcounter{my@pgf@picture@count}
+
+\def\sectionintocskip{0.5pt plus 0.1fill}
+\patchcmd{\beamer@sectionintoc}{\vskip1.5em}{\vskip\sectionintocskip}{}{}
+
+\AtBeginSection[]{%
+  \begin{frame}%[plain]
+    \sectionpage
+  \end{frame}%
+}
+
+\defbeamertemplate{section name}{simple}{\insertsectionnumber.}
+
+\defbeamertemplate{section name}{chinese}[1][节]{第\CJKnumber{\insertsectionnumber}#1}
+
+\defbeamertemplate{section page}{single}{%
+  \centerline{%
+    \usebeamerfont{section name}%
+    \usebeamercolor[fg]{section name}%
+    \usebeamertemplate{section name}%
+    \hspace{0.8em}%
+    \usebeamerfont{section title}%
+    \usebeamercolor[fg]{section title}%
+    \insertsection
+  }%
+}
+
+\defbeamertemplate{section name in toc}{simple}{%
+  Section \inserttocsectionnumber
+}
+
+\defbeamertemplate{section name in toc}{full}{%
+  Section \ifnum\the\beamer@tempcount<10 0\fi\inserttocsectionnumber
+}
+
+\defbeamertemplate{section name in toc}{chinese}[1][节]{%
+  第\CJKnumber{\inserttocsectionnumber}#1%
+}
+
+\newcounter{my@section@from}
+\newcounter{my@section@to}
+
+\defbeamertemplate{show sections in toc}{total}{%
+  \setcounter{my@section@from}{1}%
+  \setcounter{my@section@to}{50}%
+}
+
+% show at most five sections
+\defbeamertemplate{show sections in toc}{partial}{%
+  \setcounter{my@section@from}{\value{section}}%
+  \addtocounter{my@section@from}{-2}%
+  \setcounter{my@section@to}{\value{section}}%
+  \addtocounter{my@section@to}{2}%
+  \ifnum\my@totalsectionnumber>0%
+    \ifnum\value{my@section@to}>\my@totalsectionnumber
+      \setcounter{my@section@to}{\my@totalsectionnumber}%
+      \setcounter{my@section@from}{\value{my@section@to}}%
+      \addtocounter{my@section@from}{-4}%
+    \fi
+  \fi
+  \ifnum\value{my@section@from}<1\setcounter{my@section@from}{1}%
+    \setcounter{my@section@to}{\value{my@section@from}}%
+    \addtocounter{my@section@to}{4}%
+  \fi
+}
+
+% reset pgfid to get correct result with \tikzmark in second run
+\defbeamertemplate{section page}{fill}{%
+  \usebeamertemplate{show sections in toc}%
+  \setcounter{my@pgf@picture@count}{\the\pgf@picture@serial@count}%
+  \setlength{\parskip}{5pt minus 1pt}%
+  \tableofcontents[sectionstyle=show/shaded,subsectionstyle=hide,
+                   sections={\arabic{my@section@from}-\arabic{my@section@to}}]%
+  \global\pgf@picture@serial@count=\value{my@pgf@picture@count}%
+  \unskip
+}
+
+\defbeamertemplate{section in toc}{fill}{%
+  \noindent
+  \begin{tikzpicture}
+  \node[text width=\textwidth,inner xsep=0pt,inner ysep=5pt,text badly ragged,fill=bg] (title) {%
+        \hspace{0.28\textwidth}\parbox{0.7\textwidth}{\inserttocsection\vphantom{g}}%
+  };
+  \path (title.south west) +(2pt,2pt) coordinate (sw)
+        (title.north west) +(0.25\textwidth,-2pt) coordinate (ne);
+  \path[fill=fg,overlay] (sw) rectangle (ne);
+  \node[inner xsep=0pt,text badly ragged,overlay] at ($(sw)!0.5!(ne)$) {%
+        \color{bg}\vphantom{g}\usebeamertemplate{section name in toc}%
+  };
+  \draw[line width=1pt,dcolor,overlay] ($(ne)+(2pt,2pt)$) -- ($(ne |- title.south)+(2pt,0)$);
+  \end{tikzpicture}%
+  \par
+}
+
+\AtBeginSubsection{%
+  \begin{frame}%[plain]
+    \setlength{\parskip}{0pt}%
+    \offinterlineskip
+    \subsectionpage
+  \end{frame}%
+}
+
+\defbeamertemplate{subsection name}{simple}{%
+  \insertsectionnumber.\insertsubsectionnumber
+}
+
+\defbeamertemplate{subsection page}{single}{%
+  \centerline{%
+    \usebeamerfont{subsection name}%
+    \usebeamercolor[fg]{subsection name}%
+    \usebeamertemplate{subsection name}%
+    \hspace{0.8em}%
+    \usebeamerfont{subsection title}%
+    \usebeamercolor[fg]{subsection title}%
+    \insertsubsection
+  }%
+}
+
+\defbeamertemplate{subsection name in toc}{empty}{}
+
+\newcounter{mysubseccnt}
+\defbeamertemplate{subsection name in toc}{alphabet}{%
+  \setcounter{mysubseccnt}{\inserttocsubsectionnumber}%
+  \Alph{mysubseccnt}%
+}
+
+\defbeamertemplate{subsection name in toc}{simple}{%
+  \inserttocsubsectionnumber
+}
+
+\defbeamertemplate{subsection name in toc}{full}{%
+  \inserttocsectionnumber.\inserttocsubsectionnumber
+}
+
+% reset pgfid to get correct result with \tikzmark in second run
+\defbeamertemplate{subsection page}{fill}{%
+  \setcounter{my@pgf@picture@count}{\the\pgf@picture@serial@count}%
+  \tableofcontents[sectionstyle=show/hide,subsectionstyle=show/shaded/hide]%
+  \global\pgf@picture@serial@count=\value{my@pgf@picture@count}%
+  \unskip
+}
+
+\defbeamertemplate{subsection in toc}{fill}{%
+  \vspace{1pt}\noindent%
+  \begin{tikzpicture}
+  \node[text width=\textwidth,inner xsep=0pt,inner ysep=5pt,text badly ragged,fill=bg] (title) {%
+        \hspace{0.28\textwidth}\parbox{0.7\textwidth}{\inserttocsubsection\vphantom{g}}%
+  };
+  \path (title.south west) +(2pt,2pt) coordinate (sw)
+        (title.north west) +(0.25\textwidth,-2pt) coordinate (ne);
+  \path[fill=fg,overlay] (sw) rectangle (ne);
+  \node[inner xsep=0pt,text badly ragged,overlay] at ($(sw)!0.5!(ne)$) {%
+       \color{bg}\vphantom{g}\usebeamertemplate{subsection name in toc}%
+  };
+  \draw[line width=1pt,dcolor,overlay] ($(ne)+(2pt,2pt)$) -- ($(ne |- title.south)+(2pt,0)$);
+  \end{tikzpicture}%
+  \par
+}
+
+% chinese sections and subsections
+\defbeamertemplate{section and subsection}{chinese}[1][节]{%
+  \setbeamertemplate{section name in toc}[chinese][#1]%
+  \setbeamertemplate{section name}[chinese][#1]%
+  \setbeamertemplate{subsection name in toc}[alphabet]%
+}
+
+%% ---------------------- headline and footline ----------------------
+
+% fix headline bug in old versions
+\@ifclasslater{beamer}{2017/01/23}{}{%
+  \patchcmd{\ps@empty}
+           {\raise\headheight\box\beamer@tempbox\box\@tempboxa}
+           {\raise\headheight\box\beamer@tempbox\raise\headheight\box\@tempboxa}
+           {}{}
+}
+
+\defbeamertemplate{headline mark}{line}{
+  \draw[overlay,color=white,line width=0.8pt] (0,0.5mm) -- (\paperwidth,0.5mm);
+}
+
+\defbeamertemplate{headline}{shading}{%
+  \begin{tikzpicture}
+    \fill[left color=accent2,right color=blue85] (0,0) rectangle (\paperwidth,1mm);
+    \usebeamertemplate{headline mark}
+  \end{tikzpicture}
+}
+
+\defbeamertemplate{headline}{border}{%
+  \begin{tikzpicture}
+    \path[use as bounding box] (0,0) rectangle (\paperwidth,1mm);
+    \fill[left color=accent2,right color=blue85] (0,0) rectangle (\paperwidth,0.8pt);
+  \end{tikzpicture}
+}
+
+\defbeamertemplate{headline}{phantom}{%
+  \begin{tikzpicture}
+    \path[use as bounding box] (0,0) rectangle (\paperwidth,1mm);
+  \end{tikzpicture}
+}
+
+\defbeamertemplate{footline left}{author}{%
+  \insertshortauthor
+}
+
+\defbeamertemplate{footline center}{title}{%
+  \insertshorttitle
+}
+
+\defbeamertemplate{footline right}{number}{%
+  \Acrobatmenu{GoToPage}{\insertframenumber{}/\inserttotalframenumber}%
+}
+\defbeamertemplate{footline right}{normal}{%
+  \hyperlinkframeendprev{$\vartriangle$}
+  \Acrobatmenu{GoToPage}{\insertframenumber{}/\inserttotalframenumber}
+  \hyperlinkframestartnext{$\triangledown$}%
+}
+
+\defbeamertemplate{footline}{simple}{%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.2\paperwidth,ht=2.25ex,dp=1ex,left]{footline}%
+    \usebeamerfont{footline}\kern\beamer@leftmargin
+    \usebeamertemplate{footline left}%
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.6\paperwidth,ht=2.25ex,dp=1ex,center]{footline}%
+    \usebeamerfont{footline}\usebeamertemplate{footline center}%
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.2\paperwidth,ht=2.25ex,dp=1ex,right]{footline}%
+    \usebeamerfont{footline}\usebeamertemplate{footline right}%
+    \kern\beamer@rightmargin
+  \end{beamercolorbox}%
+  }%
+}
+
+\defbeamertemplate{footline separator}{shading}{%
+  \begin{tikzpicture}
+    \fill[left color=blue85,right color=accent2] (0,0) rectangle (\paperwidth,1pt);
+  \end{tikzpicture}
+}
+
+\defbeamertemplate{footline}{sectioning}{%
+  \usebeamertemplate{footline separator}%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.8\paperwidth,ht=2.25ex,dp=1ex,left]{footline}%
+    \usebeamerfont{footline}\kern\beamer@leftmargin\insertshorttitle
+    \ifx\insertsection\@empty\else\qquad$\vartriangleright$\qquad\insertsection\fi
+    \ifx\insertsubsection\@empty\else\qquad$\vartriangleright$\qquad\insertsubsection\fi
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.2\paperwidth,ht=2.25ex,dp=1ex,right]{footline}%
+     \usebeamerfont{footline}\usebeamertemplate{footline right}%
+     \kern\beamer@rightmargin
+  \end{beamercolorbox}%
+  }%
+}
+
+% customize mini frames template to get a section navigation bar
+
+\defbeamertemplate{navigation box}{current}{%
+  \usebeamercolor{navigation box}%
+  \colorbox{bg}{%
+    \rule[-1ex]{0pt}{3.25ex}\color{white}\kern1.4pt\my@navibox\kern1.4pt%
+  }%
+}
+
+\defbeamertemplate{navigation box}{other}{%
+  %\colorbox{white}{%
+    \rule[-1ex]{0pt}{3.25ex}\color{black}\kern1.4pt\my@navibox\kern1.4pt%
+  %}%
+}
+
+\newcommand{\my@navibox@subsection}{$\blacksquare$}
+\newcommand{\my@navibox@frame}{$\square$}
+\let\my@navibox=\my@navibox@frame
+
+% optional navigation box for some special frame
+\newcommand{\my@navibox@frame@opt}{$\boxplus$}
+\newcommand{\my@change@navibox}{\let\my@navibox=\my@navibox@frame@opt}
+\newcommand{\changenavibox}{%
+  \addtocontents{nav}{\protect\headcommand{\protect\my@change@navibox}}%
+}
+
+\newcommand{\my@sectionentry@show}[5]{%
+  \ifnum\c@section=#1%
+    \setbeamertemplate{navigation box}[current]%
+  \else
+    \setbeamertemplate{navigation box}[other]%
+  \fi
+  \begingroup
+    \def\my@navibox{#1}%
+    \hyperlink{Navigation#3}{\usebeamertemplate{navigation box}}%
+  \endgroup
+}
+
+\newif\ifmy@hidesection
+
+\newcommand{\my@sectionentry@hide}[5]{\my@hidesectiontrue}
+
+\pretocmd{\beamer@setuplinks}{\renewcommand{\beamer@subsectionentry}[5]{}}{}{}
+\apptocmd{\beamer@setuplinks}{\global\let\beamer@subsectionentry\mybeamer@subsectionentry}{}{}
+
+\newcommand{\mybeamer@subsectionentry}[5]{\global\let\my@navibox=\my@navibox@subsection}
+
+\newcommand{\my@slideentry@empty}[6]{}
+
+\newcommand{\my@slideentry@section}[6]{%
+  \ifmy@hidesection
+    \my@hidesectionfalse
+  \else
+    \ifnum\c@section=#1%
+      \setbeamertemplate{navigation box}[other]%
+      \ifnum\c@subsection=#2\ifnum\c@subsectionslide=#3%
+         \setbeamertemplate{navigation box}[current]%
+      \fi\fi
+      \beamer@link(#4){\usebeamertemplate{navigation box}}%
+    \fi
+  \fi
+  \global\let\my@navibox=\my@navibox@frame
+}
+
+\AtEndDocument{%
+   \immediate\write\@auxout{%
+     \noexpand\gdef\noexpand\my@totalsectionnumber{\the\c@section}%
+   }%
+}
+
+\def\my@totalsectionnumber{0}
+
+\defbeamertemplate{footline}{navigation}{%
+  \usebeamertemplate{footline separator}%
+  \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex]{footline}%
+    \usebeamerfont{footline}%
+    \kern\beamer@leftmargin
+    \setlength{\fboxsep}{0pt}%
+    \setbeamercolor{navigation box}{bg=blue85}%
+    \ifnum\my@totalsectionnumber=0%
+      \insertshorttitle
+    \else
+      \let\sectionentry=\my@sectionentry@show
+      \let\slideentry=\my@slideentry@empty
+      \dohead
+    \fi
+    \hfill
+    \setbeamercolor{navigation box}{bg=accent2}%
+    \let\sectionentry=\my@sectionentry@hide
+    \let\slideentry=\my@slideentry@section
+    \dohead
+    \kern\beamer@rightmargin
+  \end{beamercolorbox}%
+}
+
+%% ------------------------- frame title -----------------------------
+
+% remove extra vertical space after frametitle
+\patchcmd{\endbeamer@frameslide}{\vskip0.25em}{\relax}{}{}
+
+\defbeamertemplate{frametitle}{simple}[1][]
+{%
+  \nointerlineskip
+  \begin{beamercolorbox}[wd=\paperwidth,sep=0pt,leftskip=\beamer@leftmargin,%
+                         rightskip=\beamer@rightmargin,#1]{frametitle}
+    \usebeamerfont{frametitle}%
+    \rule[-3mm]{0pt}{10mm}\insertframetitle\rule[-3mm]{0pt}{10mm}\par
+  \end{beamercolorbox}
+}
+
+%% ------------------- block and theorem -----------------------------
+
+\defbeamertemplate{theorem begin}{simple}
+{%
+  \upshape%\bfseries\inserttheoremheadfont
+  {\usebeamercolor[fg]{theoremname}%
+  \inserttheoremname\inserttheoremnumber
+  \ifx\inserttheoremaddition\@empty\else
+    \ \usebeamercolor[fg]{local structure}(\inserttheoremaddition)%
+  \fi%
+  %\inserttheorempunctuation
+  }%
+  \quad\normalfont
+}
+\defbeamertemplate{theorem end}{simple}{\par}
+
+\defbeamertemplate{proof begin}{simple}
+{%
+  %\bfseries
+  \let\@addpunct=\@gobble
+  {\usebeamercolor[fg]{proofname}\insertproofname}%
+  \quad\normalfont
+}
+\defbeamertemplate{proof end}{simple}{\par}
+
+%% ---------------------- enumerate and itemize ----------------------
+
+\expandafter\patchcmd\csname beamer@@tmpop@enumerate item@square\endcsname
+         {height1.85ex depth.4ex}{height1.85ex depth.3ex}{}{}
+\expandafter\patchcmd\csname beamer@@tmpop@enumerate subitem@square\endcsname
+         {height1.85ex depth.4ex}{height1.85ex depth.3ex}{}{}
+\expandafter\patchcmd\csname beamer@@tmpop@enumerate subsubitem@square\endcsname
+         {height1.85ex depth.4ex}{height1.85ex depth.3ex}{}{}
+
+%% ------------------------ select templates -------------------------
+
+\setbeamertemplate{background canvas}[default]
+\setbeamertemplate{background}[line]
+\setbeamertemplate{headline}[shading]
+\setbeamertemplate{footline}[navigation]
+\setbeamertemplate{footline separator}[shading]
+\setbeamertemplate{footline left}[author]
+\setbeamertemplate{footline center}[title]
+\setbeamertemplate{footline right}[number]
+\setbeamertemplate{title page}[banner]
+\setbeamertemplate{title page content}[hexagon]
+\setbeamertemplate{section page}[fill]
+\setbeamertemplate{show sections in toc}[partial]
+\setbeamertemplate{section name}[simple]
+\setbeamertemplate{section name in toc}[simple]
+\setbeamertemplate{section in toc}[fill]
+\setbeamertemplate{section in toc shaded}[default][50]
+\setbeamertemplate{subsection page}[fill]
+\setbeamertemplate{subsection name}[simple]
+\setbeamertemplate{subsection name in toc}[simple]
+\setbeamertemplate{subsection in toc}[fill]
+\setbeamertemplate{subsection in toc shaded}[default][50]
+\setbeamertemplate{theorem begin}[default]
+\setbeamertemplate{theorem end}[default]
+\setbeamertemplate{proof begin}[default]
+\setbeamertemplate{proof end}[default]
+\setbeamertemplate{frametitle}[simple]
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize items}[square]
+\setbeamertemplate{enumerate items}[square]
+
+%% --------------------------- font theme ----------------------------
+
+\setbeamerfont{title}{size=\LARGE}
+\setbeamerfont{subtitle}{size=\large}
+\setbeamerfont{author}{size=\normalsize}
+\setbeamerfont{institute}{size=\normalsize}
+\setbeamerfont{date}{size=\normalsize}
+\setbeamerfont{occasion}{size=\normalsize}
+\setbeamerfont{section in toc}{size=\large}
+\setbeamerfont{subsection in toc}{size=\large}
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{block title}{size=\normalsize}
+\setbeamerfont{item projected}{size=\footnotesize}
+\setbeamerfont{subitem projected}{size=\scriptsize}
+\setbeamerfont{subsubitem projected}{size=\tiny}
+
+\usefonttheme{professionalfonts}
+%\usepackage{arev}
+
+%% ---------------------------- color theme --------------------------
+
+% always use rgb colors in pdf files
+\substitutecolormodel{hsb}{rgb}
+
+\definecolor{red99}{Hsb}{0,0.9,0.9}
+\definecolor{yellow5x}{Hsb}{60,0.5,1}
+\definecolor{yellow6x}{Hsb}{53,0.6,1}
+\definecolor{yellow86}{Hsb}{60,0.8,0.6}
+\definecolor{yellow99}{Hsb}{60,0.9,0.9}
+\definecolor{cyan95}{Hsb}{180,0.9,0.5}
+\definecolor{blue74}{Hsb}{240,0.7,0.4}
+\definecolor{blue77}{Hsb}{240,0.7,0.7}
+\definecolor{blue85}{Hsb}{230,0.8,0.5}
+\definecolor{blue99}{Hsb}{240,0.9,0.9}
+\definecolor{magenta88}{Hsb}{300,0.8,0.8}
+
+\colorlet{text1}{black}
+\colorlet{back1}{white}
+\colorlet{accent1}{blue99}
+\colorlet{accent2}{cyan95}
+\colorlet{accent3}{red99}
+\colorlet{accent4}{yellow86}
+\colorlet{accent5}{magenta88}
+\colorlet{filler1}{accent1!40!back1}
+\colorlet{filler2}{accent2!40!back1}
+\colorlet{filler3}{accent3!40!back1}
+\colorlet{filler4}{accent4!40!back1}
+\colorlet{filler5}{accent5!40!back1}
+\colorlet{gray1}{black!20}
+\colorlet{gray2}{black!35}
+\colorlet{gray3}{black!50}
+\colorlet{gray4}{black!65}
+\colorlet{gray5}{black!80}
+\colorlet{tcolor}{text1!10!back1}
+\colorlet{dcolor}{white}
+\colorlet{fcolor}{blue77}
+\colorlet{fcolor2}{gray3}
+\colorlet{markcolor}{gray}
+
+\setbeamercolor{normal text}{bg=white,fg=black}
+\setbeamercolor{structure}{fg=blue85}
+\setbeamercolor{local structure}{fg=cyan95}
+\setbeamercolor{footline}{bg=,fg=black}
+\setbeamercolor{title}{fg=yellow99}
+\setbeamercolor{subtitle}{fg=white}
+\setbeamercolor{author}{fg=black}
+\setbeamercolor{institute}{fg=black}
+\setbeamercolor{date}{fg=white}
+\setbeamercolor{occasion}{fg=white}
+\setbeamercolor{section name}{fg=blue85}
+\setbeamercolor{section in toc}{fg=yellow6x,bg=blue85}
+\setbeamercolor{section in toc shaded}{fg=white,bg=blue74}
+\setbeamercolor{subsection name}{parent=section name}
+\setbeamercolor{subsection in toc}{fg=yellow5x,bg=accent2}
+\setbeamercolor{subsection in toc shaded}{fg=white,bg=accent2!50!black}
+\setbeamercolor{frametitle}{parent=structure}
+\setbeamercolor{theoremname}{fg=blue77}
+\setbeamercolor{proofname}{fg=blue77}
+\setbeamercolor{block title}{fg=accent1,bg=gray}
+\setbeamercolor{block body}{bg=lightgray}
+\setbeamercolor{block title example}{fg=accent2,bg=gray}
+\setbeamercolor{block body example}{bg=lightgray}
+\setbeamercolor{block title alerted}{fg=accent3,bg=gray}
+\setbeamercolor{block body alerted}{bg=lightgray}
+
+%% ----------------------- handout mode ------------------------------
+
+\mode<handout>{
+  \setbeamertemplate{background canvas}{}
+  \setbeamertemplate{background}[empty]
+  \setbeamertemplate{headline}[phantom]
+  \setbeamertemplate{footline}[sectioning]
+  \setbeamertemplate{section page}[single]
+  \setbeamertemplate{subsection page}[single]
+  \setbeamerfont{subsection in toc}{size=\large}
+  \colorlet{dcolor}{darkgray}
+  \colorlet{fcolor}{white}
+  \colorlet{fcolor2}{gray1}
+  \setbeamercolor{normal text}{fg=black, bg=white}
+  \setbeamercolor{title}{fg=blue}
+  \setbeamercolor{subtitle}{fg=gray}
+  \setbeamercolor{occasion}{fg=black}
+  \setbeamercolor{date}{fg=black}
+  \setbeamercolor{section in toc}{fg=blue!90!gray,bg=}
+  \setbeamercolor{section in toc shaded}{fg=lightgray,bg=}
+  \setbeamercolor{subsection in toc}{fg=blue!80!gray}
+  \setbeamercolor{subsection in toc shaded}{fg=lightgray}
+  \setbeamercolor{frametitle}{fg=blue!70!gray,bg=}
+  \setbeamercolor{theoremname}{fg=blue!60!gray}
+  \setbeamercolor{proofname}{fg=blue!60!gray}
+  \setbeamercolor{footline}{bg=white,fg=black}
+}
+
+\mode
+<all>
+
+\makeatother

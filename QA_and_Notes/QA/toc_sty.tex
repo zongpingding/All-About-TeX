@@ -1,0 +1,79 @@
+\documentclass[12pt,b5paper,twoside]{book}
+\usepackage{titlesec,xeCJK,zhlipsum,fontspec}
+\usepackage[margin=2.5cm]{geometry}
+
+
+\setcounter{tocdepth}{1}
+\renewcommand{\normalsize}{\fontsize{10.5pt}{14pt}\selectfont}
+\titleformat{\chapter}{\centering\fontsize{16pt}{16pt}\sffamily}{\fontsize{16pt}{16pt}\selectfont 第 \thechapter 章}{1em}{}
+\titlespacing{\chapter}{0pt}{2cm}{20pt}
+\renewcommand{\contentsname}{目 \quad 录}
+\usepackage[titles]{tocloft}
+\renewcommand{\cftchapnumwidth}{5em}
+\renewcommand{\cftdot}{\ensuremath{\cdot}}
+\renewcommand{\cftdotsep}{2}
+\renewcommand{\cftchapleader}{\cftdotfill{\cftchapdotsep}}
+\renewcommand{\cftchapdotsep}{2} 
+\renewcommand{\cftchappresnum}{第\ }
+\renewcommand{\cftchapaftersnum}{章\ }
+\renewcommand{\cftsecindent}{2em}
+\renewcommand{\cftsecnumwidth}{2.5em}
+\renewcommand{\cftsecpresnum}{\S\ }
+\renewcommand{\cftsecaftersnum}{.}
+
+
+% ==> start patch
+\usepackage{etoolbox}
+\makeatletter
+% 1. cancle dot line
+\def\chapter@CancelLeader#1{
+  \write\@auxout{%
+    \protect\@writefile{toc}{%
+      \protect\renewcommand{\protect\cftchapdotsep}{#1}%
+    }%
+  }%
+}
+\pretocmd{\@schapter}{\chapter@CancelLeader{10000}}{}{}
+\pretocmd{\@chapter}{\chapter@CancelLeader{2}}{}{}
+% 2. cancle page number
+\newif\ifChapter@Num
+\def\addcontentsline#1#2#3{%
+  \addtocontents{#1}{\protect\contentsline{#2}{#3}{\ifChapter@Num\thepage\fi}{}%
+  \protected@file@percent}
+}
+\pretocmd{\@schapter}{\Chapter@Numfalse}{}{}
+\pretocmd{\section}{\Chapter@Numtrue}{}{}
+\pretocmd{\@chapter}{\Chapter@Numtrue}{}{}
+\makeatother
+
+
+
+\begin{document}
+  \setlength{\parindent}{2em}
+  \pagenumbering{Roman}
+  \chapter*{前序}
+  \zhlipsum[1]
+  \addcontentsline{toc}{chapter}{前序}
+  \section{sse I}
+  \section{sse II}
+  \tableofcontents
+  \newpage
+
+  
+  \clearpage
+  \pagenumbering{arabic}
+  \chapter{概述}
+  \section{sse I}
+  \section{sse II}
+  \zhlipsum[2]
+
+  \chapter{Test I}
+  \section{sse I}
+  \section{sse II}
+  
+  \chapter*{Test II}
+  \addcontentsline{toc}{chapter}{Test II}
+  \section{sse I}
+  \newpage
+  \section{sse II}
+\end{document}

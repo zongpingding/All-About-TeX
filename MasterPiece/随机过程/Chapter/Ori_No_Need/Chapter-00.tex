@@ -1,0 +1,629 @@
+\section{基本公式}
+\subsection{并与交的处理}
+
+\textbf{并的处理}
+
+1.使用\textbf{并}的展开式
+
+$$
+P(A\cup\overline{B}) = P(A)+P(\overline{B})-P(A\overline{B})
+$$
+
+2.转为交
+
+$$
+P(A\cup\overline{B})= 1-P(\overline{A\cup\overline{B}}) = 1- P(\overline{A}B)
+$$
+
+\textbf{交的处理}
+
+1.转为并
+
+$$
+P(A\cap B) =1 - P(\overline{A\cap B}) = 1 - P(\overline{A}\cup\overline{B})
+$$
+
+2.常用公式
+$$
+P(A\overline{B}) = P(A-B) = P(A-AB) = P(A) - P(AB)
+$$ 
+{\color{blue}(最后一个等号是因为$AB\in A$)}
+
+\subsection{分配律}
+\begin{align*}
+(A\cup B)\cap C & = AC \cup BC\\
+(A\cap B)\cup C & = (A\cup C) \cap (B\cup C)
+\end{align*}
+更加一般的我们有：
+\begin{align}
+A\cup\left(\bigcap_{i=1}^nB_i\right) = \bigcap_{i=1}^n(A\cup B_i)\\
+A\cap\left(\bigcup_{i=1}^nB_i\right) = \bigcup_{i=1}^n(A\cap B_i)
+\end{align}
+
+{\bf 怎么记住分配律?}
+
+{
+    \kaishu
+    1.原来在（括号）\textbf{中间}的内容，展开后仍然在\textbf{中间}.
+
+    2.或者是认为在{\bf 外面}的集合运算的优先级总是{\bf 最高}的
+}
+
+\subsection{条件概率公式}
+
+$$
+P(AB)=P(A|B)P(B)
+$$
+
+虽然上述的公式是通用的，但是还是得注意事件 A，B是否独立。
+
+\textbf{抽签原理：抽签的顺序不会影响概率}
+
+\subsection{全概率公式}
+若 $\sum\limits_{i=1}^{n}B_i=1$, 且$B_i\cap B_j=\varnothing, (i\neq j)$,那么 
+
+\begin{align}
+    P(A)=\sum\limits_{i=1}^{n}P(AB_i)=\sum\limits_{i=1}^nP(A|B_i)P(B_i)
+\end{align}
+
+{\bf 图解：}
+\begin{figure}[!htb]
+\centering
+% \includegraphics[scale=0.5]{./pic.png}
+\end{figure}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.5, decoration={
+    markings,
+    mark=at position 0.5 with {\arrowreversed{stealth}}
+  }]
+    % 标记点
+    \coordinate[label=left:{$\boxed{A}$}] (A) at (0,0);
+    \coordinate[label=right:{$\boxed{B_1}$}] (B1) at (2,2);
+    \coordinate[label=right:{$\boxed{B_2}$}] (B2) at (2,1);
+    \coordinate[label=right:{$\boxed{B_3}$}] (B3) at (2,0);
+    \coordinate[label=right:{$\boxed{B_4}$}] (B4) at (2,-1);
+    \coordinate[label=right:{$\boxed{B_5}$}] (B5) at (2,-2);
+    
+    \coordinate[label=right:{\textcircled{1} $P_1 = P(A)P(B_1)$}] (C1) at (4,2);
+    \coordinate[label=right:{\textcircled{2} $P_2 = P(A)P(B_2)$}] (C2) at (4,1);
+    \coordinate[label=right:{\textcircled{3} $P_3 = P(A)P(B_3)$}] (C3) at (4,0);
+    \coordinate[label=right:{\textcircled{4} $P_4 = P(A)P(B_4)$}] (C4) at (4,-1);
+    \coordinate[label=right:{\textcircled{5} $P_5 = P(A)P(B_5)$}] (C5) at (4,-2);
+    % 绘制线段AB, AC
+    \draw[postaction={decorate}] (A) -- (B1);
+    \draw[postaction={decorate}] (A) -- (B2);
+    \draw[postaction={decorate}] (A) -- (B3);
+    \draw[postaction={decorate}] (A) -- (B4);
+    \draw[postaction={decorate}] (A) -- (B5);
+    
+    \draw[postaction={decorate}] (2.7, 2) -- (C1);
+    \draw[postaction={decorate}] (2.7, 1) -- (C2);
+    \draw[postaction={decorate}] (2.7, 0) -- (C3);
+    \draw[postaction={decorate}] (2.7, -1) -- (C4);
+    \draw[postaction={decorate}] (2.7, -2) -- (C5);
+
+    \node at (2.3, 2.5) {第一步(经过)};
+    \node at (-0.3, 2.5) {第二步(结果)};
+    \draw [-stealth, blue] (2.3, 3)--(-0.3, 3);
+    \node at (1, 3.2) {\color{blue} 做事的顺序};
+    
+    \node at (-0.3, -1.5) {\color{blue}\parbox[r]{1em}{全概率公式}};
+    \node at (2, -1.5) {\color{blue}\parbox[r]{1em}{贝叶斯公式}};
+    
+    \node at (-2, 2) {\color{red}全概率公式：$P(A) = $\textcircled{1}+\textcircled{2}+$\cdots$ +\textcircled{5}};
+    
+    \node at (-0.5, 1.35) {\color{red}\textcircled{1}};
+    \draw[red] (-1.5, 1.2)--(0.55, 1.2);
+    \node at (-2, 1) {\color{red}贝叶斯公式：$P(B_1|A)$$$ = $$\textcircled{1}+\textcircled{2}+$\cdots$ +\textcircled{5}};
+\end{tikzpicture}
+\end{center}
+
+
+\subsection{贝叶斯公式}
+适用于已知结果， 倒推某个经过（中间事件）的概率，可以参见上面的图解。具体的形式如下：
+\begin{align}
+    P(B_{i}\big|A)=\frac{P(B_{i}A)}{P(A)}=\frac{P(A\big|B_{i})P(B_{i})}{P\big(A\big)}= \frac{P(A\big|B_{i})P(B_{i})}{\sum\limits_{k=1}^nP(A|B_k)P(B_k)}
+\end{align}
+
+
+{\bf 贝叶斯公式的使用总结}：先发生的永远是{\bf 经过}，后发生的就是{\bf 结果}。
+
+\noindent{\bf 一个具体的例子}
+
+设工厂甲和工厂乙的次品率分别是1\%和2\%.现从甲厂和乙厂的产品分别占60\%和40\%的一
+批产品中随机抽取一件，求:\\
+(1) 这件产品是次品的概率\\
+(2) 该次品是由甲厂生产的概率为
+
+{\bf 解：}
+
+设A为事件“抽到的是次品“, $B_1$ 为事件”抽到产品来自甲“，$B_2$ 为事件”抽到产品来自乙“.那么由
+题意可以知道：
+\begin{align*}
+P(B_1) = 0.6 & \qquad P(B_2) = 0.4\\
+P(A|B_1) = 0.01 & \qquad P(A|B_2) = 0.02
+\end{align*}
+
+\noindent{\bf 注意}：$P(A|B_1)$ 表示抽到的次品来自甲，实际上就是甲工厂的次品率了，不需要再次进行计算\\
+{\bf 注意}: $P(A|B_1)$ 表示抽调到一件产品来自甲的条件下，它是次品的概率；然而 $P(B_1|A)$ 表示抽到一件次品的情况下，这件次品来自甲的概率。
+
+
+在第一题中我们需要计算的是抽到次品的概率，自然是包含了来自甲，乙的两种情况。由于我们考虑的对象是抽到次品，所以条件是事件 $A$。 
+这两种情况分别是：抽到次品来自甲，表示为 $P(A|B_1)$; 另一种情况就是抽到的次品来自乙,表示为 $P(A|B_2)$.于是根据全概率公式，我们有：
+
+
+\begin{align*}
+P(A)& = P(AB_1) + P(AB_2)\\
+& =P\left(A \mid B_1\right) P\left(B_1\right) + P\left(A \mid B_2\right) P\left(B_2\right) \\
+& =0.01 \times 0.6 + 0.02 \times 0.4 \\
+& =0.014
+\end{align*}
+
+已知抽取的是次品，求它是甲场上生产的概率，使用贝叶斯公式：
+\begin{align*}
+P(B_1|A) = \frac{P(B_1A)}{P(A)} = \frac{P(A|B_1)P(B_1)}{P(A)}= \frac{0.01\times 0.6}{0.014}=\frac37
+\end{align*}
+
+{\bf 图解：}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.5]
+    % 标记点
+    \coordinate[label=left:{$A$}] (A) at (0,0);
+    \coordinate[label=right:{$B_1\quad 0.6$}] (B) at (2.5,1);
+    \coordinate[label=right:{$B_2\quad 0.4$}] (C) at (2.5,-1);
+    % 绘制线段AB, AC
+    \draw[-stealth] (A) -- (B);
+    \draw[-stealth] (A) -- (C);
+    \node at (1.25, 0.7) {$\scriptstyle 0.01$};
+    \node at (1.25, -0.7) {$\scriptstyle 0.02$};
+\end{tikzpicture}
+\end{center}
+
+\section{分布律与分布函数}
+\subsection{离散变量}
+
+\noindent\begin{tabular}{p{6em}p{16em}p{14em}}
+\toprule
+名称 & 定义 &  性质\\
+\hline
+分布律 & \im{P\big(X=x_k\big)=p_k\quad \big(k=1,2,\cdots\big)} & \im{\left\{\begin{aligned}& p_k\ge 0,k=1,2,\cdots\\& \sum p_k=1\end{aligned}\right.} \\
+\\
+分布函数 & \im{\begin{aligned}F\big(x\big) = P\big(X\leq x\big) =\sum_{x_k\leq x}p_k\end{aligned}} & \im{\left\{\begin{aligned}& 0 < F(x) < 1 \\& F(x) \mbox{单调不减} \\& F(x) \mbox{右连续}\end{aligned}\right.}\\
+\\
+概率 & \im{P\bigl(X\le a\bigr)=F\bigl(a\bigr){\color{blue}\big(\supset P(X=a)\big)}} & \im{\left\{\begin{aligned} & P\big(X>a\big)=1-F\big(a\big)\\ & P\big(a<X\leq b\big)=F\big(b\big)-F\big(a\big)\end{aligned}\right.}\\
+\bottomrule
+\end{tabular}
+
+
+\subsection{连续变量}
+
+\noindent\begin{tabular}{p{5em}p{14em}p{15em}}
+\toprule
+名称 & 定义 &  性质\\
+\hline
+分布律 & \im{F(x) = P\big(X\le x\big)= \int_{-\infty}^{x}{f(t) dt}} &\im{\left\{\begin{aligned}& 0\le F(x)\le 1\\& F(x)\mbox{单调不减} \\& F(x) \mbox{右连续}\end{aligned}\right.} \\
+\\
+密度函数 & \im{f(x),\quad -\infty < x<+\infty} & \im{\left\{\begin{aligned}& f(x)\ge 0 \\& \int_{-\infty}^{+\infty}{f(x) dx}=1 \\& \mbox{若}f(x) \mbox{连续，则：} F'(x) =f(x) \end{aligned}\right.}\\
+\\
+概率 & \im{P\bigl(X\le a\bigr)=F\bigl(a\bigr)} & \im{\left\{\begin{aligned}{{P\big(a<X\leq b\big)=P\big(a\leq X\leq b\big)}}\\ {{=P\big(a<X<b\big)=F\big(b\big)-F\big(a\big)}}\end{aligned}\right.}\\
+\bottomrule
+\end{tabular}
+
+
+\subsection{连续变量}
+
+\section{二维分布常用函数}
+
+    1、联合分布函数
+
+    \begin{align}
+        F(x, y)=P\{X \leq x, Y \leq y\}=\int_{-\infty}^x \int_{-\infty}^y f(u, v) d u d v
+    \end{align} 
+
+    2、联合概率密度满足
+
+    \begin{align}
+        f(x, y) \geq 0 ; \quad \int_{-\infty}^{+\infty} \int_{-\infty}^{+\infty} f(x, y) d x d y=1
+    \end{align} 
+
+    3、边缘概率密度
+
+    \begin{align}
+        f_X(x)=\int_{-\infty}^{+\infty} f(x, y) d y ; \quad f_Y(y)=\int_{-\infty}^{+\infty} f(x, y) d x
+    \end{align} 
+
+    4、条件概率密度
+
+    \begin{align}
+        f_{Y \mid X}(y \mid x)=\frac{f(x, y)}{f_X(x)} ;\quad f_{X \mid Y}(x \mid y)=\frac{f(x, y)}{f_Y(y)}
+    \end{align} 
+
+    5、 $X$ 和 $Y$ 相互独立
+    \begin{align}
+        \displaystyle \Longleftrightarrow  f(x, y)=f_X(x) f_Y(y)
+    \end{align}
+
+\section{随机变量函数的分布}
+\subsection{一维}
+
+{\bf (一)} $\zeta = \xi + \eta$的分布
+\begin{align}
+F_{\zeta}(z) & = P(\zeta \leq z)  = P(\xi+\eta \leq z) = \iint_{x+y \leq z} p(x, y) d x d y\notag \\
+				& = \int_{-\infty}^{+\infty}\left(\int_{-\infty}^{z-y} p(x, y) d x\right) d y
+\end{align}
+
+{\bf (二)} $\zeta = \xi - \eta$的分布
+\begin{align}
+F_{\zeta}(z) & = P(\zeta \leq z)  = P(\xi - \eta \leq z)= \iint_{x-y \leq z} p(x, y) d x d y\notag \\
+				& = \int_{-\infty}^{+\infty}\left(\int_{-\infty}^{z+y} p(x, y) d x\right) d y
+\end{align}
+
+{\bf (三)} $\zeta = \xi \times \eta$的分布和$\zeta = \xi \backslash \eta$的分布
+
+设 $(\xi, \eta)$为二维连续型随机变量, 密度函数为$p(x, y)$ , 又$(\xi, \eta)$关于$\xi$和$\eta$的边际密度函数分别为$p_{\xi}(x), p_{\eta}(y)$, 则 $\eta / \xi 、 \xi / \eta 、 \xi \eta$仍为连 续型随机变量, 其概率密度分别为:
+\begin{align}
+p_{\eta / \xi}(z) & = \int_{-\infty}^{+\infty}|x| p(x, x z) d x\\
+p_{\xi / \eta}(z) & = \int_{-\infty}^{+\infty}|y| p(y z, y) d y\\
+p_{\xi \eta}(z) & = \int_{-\infty}^{+\infty} \frac{1}{|x|} p\left(x, \frac{z}{x}\right) d x = \int_{-\infty}^{+\infty} \frac{1}{|y|} p\left(\frac{z}{y}, y\right) d y .
+\end{align}
+
+
+\subsection{二维}
+ $(\xi, \eta)$为二维连续型随机变量, 密度函数为$p(x, y)$, 设 $U = g_1(\xi, \eta), V = g_2(\xi, \eta)$,下面开始求解 $(U, V)$的密度函数:
+ 
+{\bf 变量变换定理:}\quad 设 $(\xi, \eta)$的联合密度函数为$p(x, y)$,函数
+$
+\left\{
+\begin{aligned}
+& u=g_{1}(x, y)\\ 
+& v=g_{2}(x, y)
+\end{aligned}
+\right.
+$
+有连续 偏导数, 且存在唯一的反函数
+$
+\left\{
+\begin{aligned}
+& x=x(u, v) \\ 
+& y=y(u, v)
+\end{aligned}
+\right.
+$
+, 其变换的雅可比行列式
+\begin{align}
+{J} = \frac{\partial(x, y)}{\partial(u, v)} = \left|
+\begin{aligned}
+\frac{\partial x}{\partial u} && \frac{\partial x}{\partial v} \\
+\frac{\partial y}{\partial u} && \frac{\partial y}{\partial v}
+\end{aligned}\right| 
+\neq 0
+\end{align}
+若 $
+\left\{
+\begin{aligned}
+& U = g_{1}(\xi, \eta)\\ 
+& V = g_{2}(\xi, \eta)
+\end{aligned}
+\right.
+$
+则$(U, V)$的联合密度函数为:
+\begin{align*}
+p_{\scriptscriptstyle U, V}(u, v) = p_{\xi, \eta}(x(u, v), y(u, v))|J| .
+\end{align*}
+
+{\bf 证明:}$(U, V)$的联合分布函数为
+\begin{align*}
+F_{U, V}(u, v)   
+& = P(U \leq u, V \leq v)  = P\left\{g_{1}(\xi, \eta) \leq u, g_{2}(\xi, \eta) \leq v\right\} \\
+& = \iint\limits_{\left\{\substack{g_{1}(x, y) \leq u \\ g_{2}(x, y) \leq v}\right.}p_{\xi, \eta}(x, y) d x d y \\
+& \Longrightarrow \mbox{令} \left\{
+\begin{aligned}
+s & = g_{1}(x, y) \\
+t & = g_{2}(x, y)
+\end{aligned}
+\right.\\
+\mbox{原式} & = \int_{-\infty}^{u} \int_{-\infty}^{v} p_{\xi, \eta}(x(s, t), y(s, t))|J| d s d t
+\end{align*}
+
+所以$(U, V)$的联合密度函数为:
+\begin{align*}
+p_{\scriptscriptstyle U, V}(u, v)=\frac{\partial^{2} F_{U, V}(u, v)}{\partial u \partial v}=p_{\xi, \eta}(x(u, v), y(u, v))|J| .
+\end{align*}
+
+
+\section{常见的数字特征}
+% \begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=注意]
+注：没有特殊说明时， 默认\im{a, b, C} 为常数 
+% \end{tcolorbox}
+\subsection{数学期望}
+
+离散型： \im{E(X)= \sum_{i=1}^{n}{X_ip_i}}
+
+连续型： \im{E(X) = \int_{-\infty}^{+\infty}{xf(x) dx} \xrightarrow{\mbox{拓展}} E(X^2)=\int_{-\infty}^{+\infty}{x^2f(x) dx}} 
+
+期望的性质:
+
+\hspace*{5em}
+$\begin{aligned}
+    & {E(C)=C} \\
+    & E(CX) = CE(X)\\
+    & E(X+Y) = E(X) + E(Y)\\
+    & \mbox{如果 X， Y独立} \Rightarrow E(XY) = E(X)\cdot E(Y) 
+\end{aligned}
+$
+
+二维随机变量的情形:
+\begin{align}
+    \left\{
+    \begin{aligned}
+        &\im{E(X) = \int_{-\infty}^{+\infty}{\int_{-\infty}^{+\infty}{x\cdot f(x,y) dx} dy}}\\
+        &\im{E(Y) = \int_{-\infty}^{+\infty}{\int_{-\infty}^{+\infty}{y\cdot f(x,y) dx} dy}}    
+    \end{aligned}
+    \right.
+    \Longrightarrow
+    \left\{
+    \begin{aligned}
+        & \im{E(X^2) = \int_{-\infty}^{+\infty}{\int_{-\infty}^{+\infty}{x^2\cdot f(x,y) dx} dy}}\\
+        & \im{E(Y^2) = \int_{-\infty}^{+\infty}{\int_{-\infty}^{+\infty}{y^2\cdot f(x,y) dx} dy}}\\
+        & \im{E(XY) = \int_{-\infty}^{+\infty}{\int_{-\infty}^{+\infty}{xy\cdot f(x,y) dx} dy}}
+    \end{aligned}
+    \right.
+    \notag
+\end{align}
+
+\subsection{方差}
+定义: \im{D(X) = E\left[X-E(X)\right]^2 = E(X^2) - \left[E(X)\right]^2} 
+
+标准差定义为：\im{\sigma = \sqrt{D(X)}}
+
+性质：
+
+\hspace*{2.5em}
+$
+\begin{aligned}
+    & D(C) = 0\\
+    & D(C+X) = D(X)\\
+    & D(X\textcolor{red}{\pm} Y) = D(X) \textcolor{red}{+} D(Y) \textcolor{red}{\pm} 2E\left\{[X-E(X)]\cdot[Y-E(Y)]\right\}\\
+    & \mbox{若 X， Y相互独立}: D(X\pm Y) = D(X) + D(Y) 
+\end{aligned} 
+$
+
+
+\newcommand{\cov}{\mathrm{Cov}}
+\subsection{协方差}
+定义： \im{\cov\big(X,Y\big)=E\big(X Y\big)-E\big(X\big)E\big(Y\big)}
+
+性质：
+
+\hspace*{2.5em}
+$
+\begin{aligned}
+    & \cov(X, C) = 0\\
+    & \cov(aX, bY) = ab\cov(X, Y)\\
+    & \cov(X_1+X_2, Y) = \cov(X_1, Y) + \cov(X_2, Y) \\
+    & D(X\pm Y ) = D(X) + D(Y)\pm 2\cov(X, Y)
+\end{aligned} 
+$
+
+相关系数定义为：
+\begin{align}
+    { \rho}_{\scriptscriptstyle XY} = \frac{\cov(X, Y)}{\sqrt[]{D(X)}\cdot \sqrt[]{D(Y)}}    
+\end{align}
+
+
+\subsection{常见分布总结}
+
+
+\noindent\begin{tabular}{p{11em}p{14em}p{4em}p{4em}}
+\toprule 
+常见分布 & 分布律或概率密度  &  期望 & 方差\\
+\hline 
+\im{0-1}分布\im{k\in\{0, 1\}} & \im{P(X=k)=p^k(1-p)^{1-k}} & \im{p} & \im{p(1-p)}\\
+\\
+二项分布 \im{X\sim B(n, p)} & \im{P(X=k) = \binom{k}{n}p^k(1-p)^{1-k}} & $np$ & $np(1-p)$\\
+\\
+泊松分布 \im{X\sim E(\lambda)} & \im{P(X=k) = \mathrm{e}^{-\lambda}\frac{\lambda^k}{k!}} & $\lambda$ & $\lambda$\\
+\\
+几何分布 \im{X\sim Ge(p)} & \im{P(X=k) = (1-p)^{k-1}}p & \im{\frac{1}{p}} & \im{\frac{1-p}{p^2}} \\
+\\
+均匀分布 \im{X\sim U(a, b)} & \im{f(x) = \frac{1}{b-a}} & \im{\frac{a+b}{2}} & \im{\frac{(
+b-a)^2}{12}}\\
+\\
+指数分布 \im{X\sim P(\lambda)} & \im{f(x)=\left\{\begin{aligned}\lambda\mathrm{e}^{-\lambda x},&\qquad x>0\\0,&\qquad \mbox{其他}\end{aligned}\right.} & \im{\frac{1}{\lambda}} & \im{\frac{1}{\lambda^2}}\\
+\\
+正态分布 \im{X\sim N(\mu, \sigma^2)} & \im{f(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{\frac{\left(x-\mu\right)^{2}}{2\sigma^{2}}}} & \im{\mu} & \im{\sigma^2}\\
+\bottomrule
+\end{tabular}
+
+\subsection{矩、协方差矩阵}
+1. 矩：设和n为随机变量，k和为正整数
+
+\begin{enumerate}[(1)]
+\item $\xi$的$k$阶原点矩定义为$E(\xi)$,简称$k$阶矩
+\item $\xi$的$k$阶中心矩定义为$E\{[\xi-E(\xi)]^k\}$
+\item $\xi$关于常数$a$的$k$阶矩定义为$E\left((\xi-a)^k\right)$
+\item $\xi$与$\eta$的$k+l$阶混合原点矩定义为$E(\xi^k\eta^l)$
+\item $\xi$与$\eta$的$k+l$阶混合中心矩定义为$E\left\{[\xi-E(\xi)]^k[\eta-E(\eta)]^l\right\}$
+\end{enumerate}
+
+2. 协方差矩阵: 令 $\xi=\left[\begin{array}{l}\xi_{1} \\ \xi_{2}\end{array}\right] $为二维随机变量, 则 $\xi$ 的二阶中心矩为
+\begin{align}
+E\left[(\xi-E \xi)(\xi-E \xi)^{\mathrm{T}}\right] 
+	& = E\left\{\left[\begin{array}{c}
+		\xi_{1}-E \xi_{1} \\
+		\xi_{2}-E \xi_{2}
+		\end{array}\right]\left(\xi_{1}-E \xi_{1}, \xi_{2}-E \xi_{2}\right)\right\} \notag \\
+	& = \left[\begin{array}{cc}
+	E\left(\left(\xi_{1}-E \xi_{1}\right)^{2}\right) & E\left(\left(\xi_{1}-E \xi_{1}\right)	\left(\xi_{2}-E \xi_{2}\right)\right) \\
+		E\left(\left(\xi_{2}-E \xi_{2}\right)\left(\xi_{1}-E \xi_{1}\right)\right) & E\left(\left(\xi_{2}-E \xi_{2}\right)^{2}\right)
+	\end{array}\right] \notag \\
+	& = \left[\begin{array}{cc}
+	D\left(\xi_{1}\right) & \operatorname{Cov}\left(\xi_{1}, \xi_{2}\right) \\
+	\operatorname{Cov}\left(\xi_{2}, \xi_{1}\right) & D\left(\xi_{2}\right)
+	\end{array}\right]
+	\triangleq\left[\begin{array}{cc}
+	C_{11} & C_{12} \\
+	C_{21} & C_{22}
+	\end{array}\right] 
+	\triangleq \boldsymbol{C}\notag
+\end{align}
+
+类似地可定义$n$维随机变量的协方差矩阵.其中$C_{i j}=\operatorname{Cov}\left(\xi_{i}, \xi_{j}\right), i, j=1,2 $. 我们称矩阵$\boldsymbol{C}$为$\xi$的协方差矩阵, 简称协差阵.
+
+
+\subsection{统计量及其分布}
+{\bf 1.统计量}
+
+设$\xi_1, \xi_2, \cdots,\xi_n$是来自母体$\xi$的一个简单随机子样,是$g(\xi_1, \xi_2, \cdots,\xi_n)$的一个函数.若$g$中不含未知参数 则称$g(\xi_1, \xi_2, \cdots,\xi_n)$为一个统计量。
+
+{\bf 2.常用的统计量}
+
+\begin{enumerate}[(1)]
+\item 子样均值：$\displaystyle \overline{\xi} = \frac1n\sum_{i=1}^{n}{\xi_i}$
+\item 子样方差：$\displaystyle S_n^2 = \frac1n\sum_{i=1}^{n}{(\xi_i-\overline{\xi})^2} = \frac1n\sum_{i=1}^{n}{\xi_i^2}-\overline{\xi}^2,\quad {S_n^*}^2 = \frac{1}{n-1}\sum_{i=1}^{n}{(\xi_i-\overline{\xi})^2} = \frac{n}{n-1}S_n^2$
+\item 子样标准差（或子样均方差）：$\displaystyle S_n = \sqrt{S_n^2}, \quad S_n^* = \sqrt{{S_n^*}^2}$
+\item 子样$k$阶（原点）矩：$\displaystyle \overline{\xi^k} = \frac1n\sum_{i=1}^{n}{\xi_i^k},\quad k=1, 2,\cdots$
+\item 子样$k$阶中心矩：$\displaystyle m_k = \frac{1}{n}\sum_{i=1}^{n}{(\xi_i-\overline{\xi})^k},\quad k=1, 2,\cdots$
+\end{enumerate}
+
+
+{\bf 注}: 若$\left(x_1, x_2,\cdots, x_n\right)$是子样$\xi_1, \xi_2, \cdots,\xi_n$的一组观测值,则子样均值$\overline{\xi}$和子样方差$S_n^2$的观测值分别为：
+\begin{align}
+\overline{x} & = \frac1n\sum_{i=1}^{n}{x_i} \notag \\
+S_n^2 & = \frac{1}{n}\sum_{i=1}^{n}{(x_i-\overline{x})^2} = \frac1n\sum_{i=1}^{n}{x_i^2}-\overline{x}^2 \notag
+\end{align}
+
+
+{\bf 3.统计量$\overline{\xi}$与$S_n^2$的数字特征}
+
+设 $\xi_1, \xi_2,\cdots,\xi_n$ 是取自母体 $\xi$ 的一个子样，且：
+\[
+	E(\xi) = \mu<+\infty,\qquad D(\xi) = \sigma^2<+\infty
+\]
+则有：
+\begin{align*}
+& E(\overline{\xi}) = \mu \hspace*{17em} D(\overline{\xi})  = \frac{\sigma^2}{n}\\
+& E(S_n^2) = \frac{n-1}{n}\sigma^2 \hspace*{13.5em} E({S_n^*}^2) = \sigma^2 \\
+& D(S_n^2) = \frac{\mu_4^2-\mu_2^2}{n} - \frac{2(\mu_4-2\mu_2^2)}{n^2} + \frac{\mu_4-3\mu_2^2}{n^3} \hspace*{2em} {\color{blue}(\mbox{其中} \mu_k = E\left[(\xi-\mu)^k\right], k=1, 2, 3, 4)}\\
+& Cov(\overline{\xi}, S_n^2) = \frac{n-1}{n^2}\mu_3
+\end{align*}
+
+\subsection{三大分布}
+\im{\chi^2(n)} 分布:
+若 \im{X_{1},X_{2},\cdots,X_{n}} 相互独立， 且\im{X_i\sim N(0, 1), \quad(i=1, 2, 3, \cdots)},则
+\begin{align}
+    X_{1}^{2}+X_{2}^{2}+\cdots+X_{n}^{2}\sim\chi^{2}(n)
+    \notag
+\end{align}
+其中 \im{n} 称为自由度。
+
+$t(n)$ 分布: 设 $X \sim N(0,1), Y \sim \chi^2(n) ， X, Y$ 相互独立，则称 $T=\frac{X}{\sqrt{Y / n}} \sim t(n)$.
+
+$F$ 分布: 设 $X \sim \chi_1^2\left(n_1\right), Y \sim \chi_2^2\left(n_2\right) ， X, Y$ 相互独立，则 $F=\frac{X / n_1}{Y / n_2} \sim F\left(n_1, n_2\right)$.
+
+
+{\bf 结论}
+
+$
+\begin{aligned}
+&(1)\qquad \overline{\xi}\sim N\left(\mu,\frac{\sigma^2}{n}\right) \xrightarrow{\mbox{标准化}} \frac{\overline{\xi}-\mu}{\sigma/\sqrt{n}}\sim N(0, 1)\\
+\\
+&(2)\qquad \overline{\xi}\, \mbox{和}\,S_n^2\,\mbox{相互独立，且}\, \frac{nS_n^2}{\sigma^2}\sim \chi^2(n-1)\\
+\\
+&(3)\qquad \frac{\overline{\xi}-\mu}{S_n/\sqrt{n -1}} = \frac{\overline{\xi}-\mu}{{S_n^*}\sqrt{n}}\sim t(n-1)
+\end{aligned}
+$
+
+
+
+
+\subsection{次序统计量及其分布}
+次序统计量在近代统计推断中起着重要的作用，这是由于次序统计量有一些性质
+不依赖于母体的分布，并且计算量很小，使用起来较方便. 因此在质量管理、可靠性
+等方面得到广泛的应用.
+次序统计量在近代统计推断中起着重要的作用，这是由于次序统计量有一些性质
+不依赖于母体的分布，并且计算量很小，使用起来较方便. 因此在质量管理、可靠性
+等方面得到广泛的应用.
+
+设母体$\xi$的分布函数为$F(x), \xi_1,\xi_2, \cdots,\xi_n$是取自$\xi$的一个子样,
+$(x_1,x_2,\cdots, x_n)$为该子样的一组观察值.将这些观察值{\bf 由小到大}排列并用$(x_{(1)},x_{(2)},\cdots, x_{(n)}$表示.
+即$x_{(1)}\le x_{(2)}\le \cdots\le x_{(n)}$. 若其中有两个分量$x_i$与$x_j$相等,它们先后次序的安排是可以任意的.
+
+{\bf 定义：}第 $i$ 个次序统计量$\xi_{(i)}$是上述子样 $\xi_1, \xi_2, \cdots,\xi_n$这样的一个函数，无论子样 $\xi_1, \xi_2, \cdots,\xi_n$取得怎样的一组观察值 $x_1, x_2, \cdots, x_n$， 它总是取其中的 $x_{(i)}$ 为观测值。显然，对于容量为$n$的子样，可以得到 $n$ 个次序统计量 $\xi_{(1)}\le\xi_{(2)}, \cdots\le\xi_{(n)}$,其中$\xi_{(1)}$ 称为最小的次序统计量， $\xi_{(n)}$称为最大的次序统计量，即
+\begin{align*}
+\xi_{(1)} = \mathrm{min}\{\xi_1, \xi_2, \cdots,\xi_n\}, \hspace*{6em} \xi_{(n)} = \mathrm{max}\{\xi_1, \xi_2, \cdots,\xi_n\}
+\end{align*}
+
+{\bf 次序统计量的密度函数}
+
+设母体$\xi$ 的密度函数为 $f(x)>0, \, a\le x\le b$(这里可以设$a=-\infty, \,b=+\infty$), 并且$\xi_1, \xi_2, \cdots,\xi_n$为取自这个母体的一个子样，则第 $i$个次序统计量 $\xi_{(i)}$的密度函数为：
+\begin{align}
+g_i(y) =
+	\left\{ 
+		\begin{aligned}
+			& \frac{n!}{(i-1)!(n-i)!}[F(y)]^{i-1}[1-F(y)]^{n-i}f(y), \qquad a\le x\le b\\
+			& 0, \hspace*{19em}\mbox{其他}		
+		\end{aligned}
+	\right.
+\end{align}
+
+{\bf  推论}
+
+
+
+最大的次序统计量 $\xi_{(n)}$ 的密度函数为
+\begin{align}
+g_n(y) =
+	\left\{ 
+		\begin{aligned}
+			& n[F(y)]^{n-1}f(y), \qquad a\le y\le b\\
+			& 0, \hspace*{8em}\mbox{其他}		
+		\end{aligned}
+	\right.\notag
+\end{align}
+
+从而，最大的次序统计量 $\xi_{(n)}$ 的分布函数为：
+\begin{align}
+F_{\xi_{(n)}}(y) =
+	\left\{ 
+		\begin{aligned}
+			& 0, \hspace*{4.7em} y<a\\
+			& [F(y)]^{n}, \qquad a\le y\le b\\
+			& 1, \hspace*{4.5em} y\ge b	
+		\end{aligned}
+	\right.\notag
+\end{align}
+
+最小的次序统计量 $\xi_{(1)}$ 的密度函数为
+\begin{align}
+g_1(y) =
+	\left\{ 
+		\begin{aligned}
+			& n[1-F(y)]^{n-1}f(y), \qquad a\le y\le b\\
+			& 0, \hspace*{9.7em}\mbox{其他}		
+		\end{aligned}
+	\right.\notag
+\end{align}
+
+从而，最小的次序统计量 $\xi_{(1)}$ 的分布函数为：
+\begin{align}
+F_{\xi_{(1)}}(y) =
+	\left\{ 
+		\begin{aligned}
+			& 0, \hspace*{8em} y<a\\
+			& 1 - [1-F(y)]^{n}, \qquad a\le y\le b\\
+			& 1, \hspace*{8.3em} y\ge b	
+		\end{aligned}
+	\right.\notag
+\end{align}
+
+\subsection{矩法估计}
+
+\subsection{最大似然估计}
+
+\subsection{假设检验}
+
+\section{结语}
+概率论的公式基础\footnote[1]{本笔记编辑于 \today, 所有权归作者 Eureka 所用}。

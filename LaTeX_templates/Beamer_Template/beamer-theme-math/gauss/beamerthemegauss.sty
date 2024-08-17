@@ -1,0 +1,677 @@
+% -*- coding: utf-8 -*-
+% ----------------------------------------------------------------------------
+% Author:  Jianrui Lyu <tolvjr@163.com>
+% Website: https://github.com/lvjr/theme
+% License: Creative Commons Attribution-ShareAlike 4.0 International License
+% ----------------------------------------------------------------------------
+
+\ProvidesPackage{beamerthemegauss}[2019/06/06 v0.7 Beamer Theme Gauss]
+
+\makeatletter
+
+% compatible with old versions of beamer
+\providecommand{\beamer@endinputifotherversion}[1]{}
+
+\RequirePackage{tikz,etoolbox,fontawesome}
+
+% see https://github.com/xdanaux/fontawesome-latex/issues/12
+\ifxetex
+  \newfontfamily{\FA}{FontAwesome}[Extension=.otf]
+\fi
+
+\usetikzlibrary{patterns}
+
+\mode<presentation>
+
+\setbeamersize{text margin left=10.5mm,text margin right=5.5mm}
+
+%% ----------------- background canvas and background ----------------
+
+\def\my@fa#1{#1\space}
+
+\defbeamertemplate{background canvas}{awesome}{%
+  \setlength{\fboxsep}{0pt}%
+  \noindent\colorbox{bg}{%
+    \usebeamertemplate{background texture}%
+  }%
+}
+
+\defbeamertemplate{background texture}{awesome}{%
+  \fontfamily{lmss}\fontsize{17pt}{22pt}\selectfont\color{tcolor}%
+  \hspace{0.008\paperwidth}%
+  \begin{minipage}[c][\paperheight][c]{0.984\paperwidth}
+    \my@fa\faAdjust
+    \my@fa\faAlignCenter
+    \my@fa\faAlignJustify
+    \my@fa\faAlignLeft
+    \my@fa\faAlignRight
+    \my@fa\faAngleDoubleDown
+    \my@fa\faAngleDoubleLeft
+    \my@fa\faAngleDoubleRight
+    \my@fa\faAngleDoubleUp
+    \my@fa\faAngleDown
+    \my@fa\faAngleLeft
+    \my@fa\faAngleRight
+    \my@fa\faAngleUp
+    \my@fa\faAreaChart
+    \my@fa\faArrowCircleODown
+    \my@fa\faArrowCircleOLeft
+    \my@fa\faArrowCircleORight
+    \my@fa\faArrowCircleOUp
+    \my@fa\faArrowDown
+    \my@fa\faArrowLeft
+    \my@fa\faArrowRight
+    \my@fa\faArrowUp
+    \my@fa\faArrows
+    \my@fa\faArrowsH
+    \my@fa\faArrowsV
+    \my@fa\faAsterisk
+    \my@fa\faAt
+    \my@fa\faBackward
+    \my@fa\faBan
+    \my@fa\faBarChart
+    \my@fa\faBars
+    \my@fa\faBold
+    \my@fa\faBolt
+    \my@fa\faBook
+    \my@fa\faBookmarkO
+    \my@fa\faBraille
+    \my@fa\faBullseye
+    \my@fa\faCalendarCheckO
+    \my@fa\faCalendarMinusO
+    \my@fa\faCalendarPlusO
+    \my@fa\faCalendarTimesO
+    \my@fa\faCaretDown
+    \my@fa\faCaretLeft
+    \my@fa\faCaretRight
+    \my@fa\faCaretSquareODown
+    \my@fa\faCaretSquareOLeft
+    \my@fa\faCaretSquareORight
+    \my@fa\faCaretSquareOUp
+    \my@fa\faCheck
+    \my@fa\faCheckCircleO
+    \my@fa\faCheckSquareO
+    \my@fa\faChevronDown
+    \my@fa\faChevronLeft
+    \my@fa\faChevronRight
+    \my@fa\faChevronUp
+    \my@fa\faCircleO
+    \my@fa\faCircleThin
+    \my@fa\faClone
+    \my@fa\faClose
+    \my@fa\faCode
+    \my@fa\faColumns
+    \my@fa\faCommentO
+    \my@fa\faCommentingO
+    \my@fa\faCompress
+    \my@fa\faCrosshairs
+    \my@fa\faDatabase
+    \my@fa\faDesktop
+    \my@fa\faDotCircleO
+    \my@fa\faEject
+    \my@fa\faEllipsisH
+    \my@fa\faEllipsisV
+    \my@fa\faEnvira
+    \my@fa\faEraser
+    \my@fa\faExchange
+    \my@fa\faExclamation
+    \my@fa\faExclamationCircle
+    \my@fa\faExpand
+    \my@fa\faEyedropper
+    \my@fa\faFa
+    \my@fa\faFighterJet
+    \my@fa\faFire
+    \my@fa\faFlagO
+    \my@fa\faFlash
+    \my@fa\faFlask
+    \my@fa\faFolderO
+    \my@fa\faFont
+    \my@fa\faForward
+    \my@fa\faFrownO
+    \my@fa\faGavel
+    \my@fa\faGbp
+    \my@fa\faGear
+    \my@fa\faGenderless
+    \my@fa\faGraduationCap
+    \my@fa\faGratipay
+    \my@fa\faHSquare
+    \my@fa\faHandODown
+    \my@fa\faHandOLeft
+    \my@fa\faHandORight
+    \my@fa\faHandOUp
+    \my@fa\faHandPaperO
+    \my@fa\faHandPeaceO
+    \my@fa\faHandPointerO
+    \my@fa\faHandScissorsO
+    \my@fa\faHashtag
+    \my@fa\faHeader
+    \my@fa\faHeartO
+    \my@fa\faHome
+    \my@fa\faHourglassHalf
+    \my@fa\faImage
+    \my@fa\faInfo
+    \my@fa\faInfoCircle
+    \my@fa\faItalic
+    \my@fa\faLaptop
+    \my@fa\faLeaf
+    \my@fa\faLemonO
+    \my@fa\faLevelDown
+    \my@fa\faLevelUp
+    \my@fa\faLightbulbO
+    \my@fa\faLineChart
+    \my@fa\faListOl
+    \my@fa\faListUl
+    \my@fa\faLocationArrow
+    \my@fa\faLongArrowDown
+    \my@fa\faLongArrowLeft
+    \my@fa\faLongArrowRight
+    \my@fa\faLongArrowUp
+    \my@fa\faMailForward
+    \my@fa\faMailReply
+    \my@fa\faMapO
+    \my@fa\faMehO
+    \my@fa\faMinus
+    \my@fa\faMinusCircle
+    \my@fa\faMinusSquareO
+    \my@fa\faMoonO
+    \my@fa\faMousePointer
+    \my@fa\faNeuter
+    \my@fa\faObjectGroup
+    \my@fa\faObjectUngroup
+    \my@fa\faPagelines
+    \my@fa\faPaintBrush
+    \my@fa\faPaperPlaneO
+    \my@fa\faPaperclip
+    \my@fa\faPauseCircleO
+    \my@fa\faPaw
+    \my@fa\faPencil
+    \my@fa\faPercent
+    \my@fa\faPhoto
+    \my@fa\faPieChart
+    \my@fa\faPlane
+    \my@fa\faPlayCircleO
+    \my@fa\faPlus
+    \my@fa\faPlusCircle
+    \my@fa\faPlusSquareO
+    \my@fa\faProductHunt
+    \my@fa\faPuzzlePiece
+    \my@fa\faQuestion
+    \my@fa\faQuestionCircle
+    \my@fa\faQuestionCircleO
+    \my@fa\faQuoteLeft
+    \my@fa\faQuoteRight
+    \my@fa\faRefresh
+    \my@fa\faRemove
+    \my@fa\faReorder
+    \my@fa\faReply
+    \my@fa\faRocket
+    \my@fa\faRotateLeft
+    \my@fa\faRotateRight
+    \my@fa\faScissors
+    \my@fa\faSearch
+    \my@fa\faSearchMinus
+    \my@fa\faSearchPlus
+    \my@fa\faShare
+    \my@fa\faSignal
+    \my@fa\faSmileO
+    \my@fa\faSort
+    \my@fa\faSortNumericAsc
+    \my@fa\faSortNumericDesc
+    \my@fa\faSpaceShuttle
+    \my@fa\faSquareO
+    \my@fa\faStar
+    \my@fa\faStarHalfO
+    \my@fa\faStarO
+    \my@fa\faStepBackward
+    \my@fa\faStepForward
+    \my@fa\faStickyNoteO
+    \my@fa\faStopCircle
+    \my@fa\faStopCircleO
+    \my@fa\faStrikethrough
+    \my@fa\faSubscript
+    \my@fa\faSunO
+    \my@fa\faSuperscript
+    \my@fa\faTable
+    \my@fa\faTag
+    \my@fa\faTasks
+    \my@fa\faTextHeight
+    \my@fa\faTextWidth
+    \my@fa\faTh
+    \my@fa\faThLarge
+    \my@fa\faThList
+    \my@fa\faThumbTack
+    \my@fa\faThumbsODown
+    \my@fa\faThumbsOUp
+    \my@fa\faTimes
+    \my@fa\faTimesCircle
+    \my@fa\faTimesCircleO
+    \my@fa\faTint
+    \my@fa\faToggleDown
+    \my@fa\faToggleLeft
+    \my@fa\faToggleRight
+    \my@fa\faToggleUp
+    \my@fa\faTree
+    \my@fa\faTv
+    \my@fa\faUnderline
+    \my@fa\faUniversity
+    \my@fa\faUnsorted
+    \my@fa\faUser
+    \my@fa\faWarning
+    \my@fa\faWon
+    \my@fa\faWrench
+  \end{minipage}
+}
+
+\defbeamertemplate{background texture}{line}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \draw[pattern=horizontal lines, pattern color=tcolor]
+      (current page.south east) rectangle (current page.north west);
+  \end{tikzpicture}%
+}
+\defbeamertemplate{background texture}{grid}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \draw[step=1mm,color=tcolor]
+      (current page.south east) grid (current page.north west);
+  \end{tikzpicture}%
+}
+
+\gdef\my@background@title{%
+}
+
+\gdef\my@background@section{%
+}
+
+\gdef\my@background@subsection{%
+}
+
+\newcommand{\my@fa@documentstart}{\hyperlinkdocumentstart{\rotatebox{-90}{\faStepBackward}}}
+\newcommand{\my@fa@sectionstart}{\hyperlinksectionstart{\rotatebox{-90}{\faBackward}}}
+\newcommand{\my@fa@subsectionstart}{\hyperlinksubsectionstart{\rotatebox{180}{\fontsize{9}{9}\selectfont\faSortDesc}}}
+\newcommand{\my@fa@frameendprev}{\hyperlinkframeendprev{\faArrowUp}}
+\newcommand{\my@fa@gotopage}{\Acrobatmenu{GoToPage}{\bfseries\insertframenumber}}
+\newcommand{\my@fa@framestartnext}{\hyperlinkframestartnext{\faArrowDown}}
+\newcommand{\my@fa@subsectionstartnext}{\hyperlinksubsectionstartnext{\fontsize{9}{9}\selectfont\faSortDesc}}
+\newcommand{\my@fa@sectionstartnext}{\hyperlinksectionstartnext{\rotatebox{-90}{\faForward}}}
+\newcommand{\my@fa@documentend}{\hyperlinkdocumentend{\rotatebox{-90}{\faStepForward}}}
+
+\gdef\my@background@normal{%
+  \begin{tikzpicture}[font=\fontsize{6}{6}\selectfont]
+    \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+    \path[draw=dcolor,fill=fcolor,opacity=0.4]
+      (0.03\paperwidth,0.05\paperheight) rectangle (0.97\paperwidth,0.95\paperheight)
+      (0.7,0.9\paperheight) circle (.2) node{\my@fa@documentstart}
+      (0.7,0.8\paperheight) circle (.2) node{\my@fa@sectionstart}
+      (0.7,0.7\paperheight) circle (.2) node{\my@fa@subsectionstart}
+      (0.7,0.6\paperheight) circle (.2) node{\my@fa@frameendprev}
+      (0.7,0.5\paperheight) circle (.2) node{\my@fa@gotopage}
+      (0.7,0.4\paperheight) circle (.2) node{\my@fa@framestartnext}
+      (0.7,0.3\paperheight) circle (.2) node{\my@fa@subsectionstartnext}
+      (0.7,0.2\paperheight) circle (.2) node{\my@fa@sectionstartnext}
+      (0.7,0.1\paperheight) circle (.2) node{\my@fa@documentend};
+  \end{tikzpicture}
+}
+
+\let\my@background=\my@background@title
+
+\defbeamertemplate{background}{circle}
+{%
+  \my@background
+  \global\let\my@background=\my@background@normal
+}
+
+%% -------------------------- title page -----------------------------
+
+\defbeamertemplate{title page}{circle}{%
+  \nointerlineskip\noindent
+  \hspace{-\beamer@leftmargin}%
+  \begin{tikzpicture}
+    \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+    \draw[fill=fcolor,opacity=0.4]
+      (0,0.85\paperheight) rectangle (\paperwidth,0.95\paperheight)
+      (0.05\paperwidth,0.9\paperheight) circle (.25)
+      (0.95\paperwidth,0.9\paperheight) circle (.25);
+    \node[text width=0.8\paperwidth,text badly ragged] at (0.5\paperwidth,0.9\paperheight) {%
+      \begin{minipage}[c]{0.8\paperwidth}
+        \centering
+        \usebeamerfont{date}\usebeamercolor[fg]{date}\insertdate
+      \end{minipage}
+    };
+    \draw[fill=fcolor,opacity=0.4]
+      (0,0.3\paperheight) rectangle (\paperwidth,0.8\paperheight)
+      (0.05\paperwidth,0.8\paperheight) circle (.25)
+      (0.05\paperwidth,0.7\paperheight) circle (.25)
+      (0.05\paperwidth,0.6\paperheight) circle (.25)
+      (0.05\paperwidth,0.5\paperheight) circle (.25)
+      (0.05\paperwidth,0.4\paperheight) circle (.25)
+      (0.05\paperwidth,0.3\paperheight) circle (.25)
+      (0.95\paperwidth,0.8\paperheight) circle (.25)
+      (0.95\paperwidth,0.7\paperheight) circle (.25)
+      (0.95\paperwidth,0.6\paperheight) circle (.25)
+      (0.95\paperwidth,0.5\paperheight) circle (.25)
+      (0.95\paperwidth,0.4\paperheight) circle (.25)
+      (0.95\paperwidth,0.3\paperheight) circle (.25);
+    \node[text width=0.8\paperwidth,text badly ragged] at (0.5\paperwidth,0.55\paperheight) {%
+      \begin{minipage}[c]{0.8\paperwidth}
+        \centering
+        \usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle
+        \ifx\insertsubtitle\@empty\else
+          \\\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}
+          \insertsubtitle
+        \fi
+      \end{minipage}
+    };
+    \draw[fill=fcolor,opacity=0.4]
+      (0,0.05\paperheight) rectangle (\paperwidth,0.25\paperheight)
+      (0.05\paperwidth,0.2\paperheight) circle (.25)
+      (0.05\paperwidth,0.1\paperheight) circle (.25)
+      (0.95\paperwidth,0.2\paperheight) circle (.25)
+      (0.95\paperwidth,0.1\paperheight) circle (.25);
+    \node[text width=0.8\paperwidth,text badly ragged] at (0.5\paperwidth,0.15\paperheight) {%
+      \begin{minipage}[c]{0.8\paperwidth}
+        \centering
+        \usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor\\
+        \usebeamerfont{institute}\usebeamercolor[fg]{institute}\insertinstitute
+      \end{minipage}
+    };
+  \end{tikzpicture}
+}
+
+%% ----------------------- section and subsection --------------------
+
+\def\sectionintocskip{0.5em}
+\patchcmd{\beamer@sectionintoc}{\vskip1.5em}{\vskip\sectionintocskip}{}{}
+
+% create new template for section
+\defbeamertemplate{section}{simple}{%
+  \insertsectionnumber.\hspace*{1ex}\insertsection%
+}
+
+\defbeamertemplate{at begin section}{normal}{%
+  \global\let\my@background=\my@background@section
+  \frame{\sectionpage}
+}
+\defbeamertemplate{at begin section}{plain}{%
+  \global\let\my@background=\my@background@section
+  \frame[plain]{\sectionpage}
+}
+\AtBeginSection[]{\usebeamertemplate{at begin section}}
+
+\defbeamertemplate{section page}{simple}{
+  \begin{beamercolorbox}[wd=\textwidth,center]{section title}%
+    \usebeamerfont{section title}
+    \usebeamertemplate{section}%
+  \end{beamercolorbox}
+}
+
+\defbeamertemplate{section page}{circle}{%
+  \nointerlineskip\noindent
+  \hspace{-\beamer@leftmargin}%
+  \begin{tikzpicture}
+    \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+    \draw[fill=fcolor,opacity=0.4]
+      (0,0.25\paperheight) rectangle (\paperwidth,0.75\paperheight)
+      (1,0.7\paperheight) circle (.25)
+      (1,0.6\paperheight) circle (.25)
+      (1,0.5\paperheight) circle (.25)
+      (1,0.4\paperheight) circle (.25)
+      (1,0.3\paperheight) circle (.25);
+    \node[text width=0.8\paperwidth,right,text badly ragged] at (0.15\paperwidth,0.5\paperheight) {%
+        \tableofcontents[sectionstyle=show/shaded,subsectionstyle=hide]%
+    };
+  \end{tikzpicture}
+}
+
+% create new template for subsection
+\defbeamertemplate{subsection}{simple}{%
+  \insertsectionnumber.\insertsubsectionnumber\hspace*{2ex}\insertsubsection%
+}
+
+\defbeamertemplate{at begin subsection}{normal}{%
+  \global\let\my@background=\my@background@subsection
+  \frame{\subsectionpage}
+}
+\defbeamertemplate{at begin subsection}{plain}{%
+  \global\let\my@background=\my@background@subsection
+  \frame[plain]{\subsectionpage}
+}
+\AtBeginSubsection[]{\usebeamertemplate{at begin subsection}}
+
+\defbeamertemplate{subsection page}{simple}{
+  \begin{beamercolorbox}[wd=\textwidth,center]{subsection title}%
+  \usebeamerfont{subsection title}%
+  \usebeamertemplate{subsection}%
+  \end{beamercolorbox}%
+}
+
+\defbeamertemplate{subsection page}{circle}{%
+  \nointerlineskip\noindent
+  \hspace{-\beamer@leftmargin}%
+  \begin{tikzpicture}
+    \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+    \draw[fill=fcolor,opacity=0.4]
+      (0,0.25\paperheight) rectangle (\paperwidth,0.75\paperheight)
+      (1,0.7\paperheight) circle (.23)
+      (1,0.6\paperheight) circle (.23)
+      (1,0.5\paperheight) circle (.23)
+      (1,0.4\paperheight) circle (.23)
+      (1,0.3\paperheight) circle (.23);
+    \node[text width=0.8\paperwidth,right,text badly ragged] at (0.15\paperwidth,0.5\paperheight) {%
+      \begin{minipage}[c]{0.8\paperwidth}
+        \tableofcontents[sectionstyle=hide,subsectionstyle=show/shaded/hide]%
+      \end{minipage}
+    };
+  \end{tikzpicture}
+}
+
+%% ---------------------- headline and footline ----------------------
+
+\defbeamertemplate{footline left}{title}{%
+  \insertshorttitle
+}
+
+\defbeamertemplate{footline center}{author}{%
+  \insertshortauthor
+}
+
+\defbeamertemplate{footline right}{institute}{%
+  \insertshortinstitute
+}
+
+% make \footheight = 0pt
+\patchcmd{\beamer@calculateheadfoot}{\advance\footheight by 4pt}{}{}{}
+
+\defbeamertemplate{footline}{simple}{%
+  \smash{\raisebox{1ex}{\begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex]{footline}%
+    \kern0.03\paperwidth
+    \usebeamerfont{footline}%
+    \usebeamertemplate{footline left}%
+    \hspace{0pt plus 1 filll}%
+    \usebeamertemplate{footline center}%
+    \hspace{0pt plus 1 filll}%
+    \usebeamertemplate{footline right}%
+    \kern0.03\paperwidth
+  \end{beamercolorbox}}}%
+}
+
+%% ------------------------- frame title -----------------------------
+
+\defbeamertemplate{frametitle}{gauss}{%
+  \nointerlineskip\vskip0.05\paperheight\vskip0.4pt%
+  \usebeamerfont{frametitle}\usebeamercolor[fg]{frametitle}%
+  \rule[-1ex]{0pt}{3.25ex}\insertframetitle
+  \ifx\insertframesubtitle\@empty\else\hfill
+    \usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}%
+    \insertframesubtitle
+  \fi
+  \par\nointerlineskip\usebeamercolor[fg]{separator line}\rule{\textwidth}{0.4pt}%
+}
+
+%% ------------------- block and theorem -----------------------------
+
+\newcommand{\my@block@begin}[1][]{%
+  \par\medskip
+  \begin{beamercolorbox}[colsep=0.75ex]{block title#1}
+    \usebeamerfont*{block title#1}\insertblocktitle%
+  \end{beamercolorbox}%
+  {\parskip0pt\par}%
+  \nointerlineskip
+  \usebeamerfont{block body#1}%
+  \begin{beamercolorbox}[colsep=.75ex,vmode]{block body#1}%
+  \ifbeamercolorempty[bg]{block body#1}{\vskip-.25ex}{\vskip-.75ex}\vbox{}%
+}
+
+\newcommand{\my@block@end}{\end{beamercolorbox}\smallskip}
+
+\defbeamertemplate{block begin}{gauss}{\my@block@begin}
+
+\defbeamertemplate{block end}{gauss}{\my@block@end}
+
+\defbeamertemplate{block example begin}{gauss}{\my@block@begin[ example]}
+
+\defbeamertemplate{block example end}{gauss}{\my@block@end}
+
+\defbeamertemplate{block alerted begin}{gauss}{\my@block@begin[ alerted]}
+
+\defbeamertemplate{block alerted end}{gauss}{\my@block@end}
+
+%% --------------------------- font theme ----------------------------
+
+\setbeamerfont{title}{size=\LARGE}
+\setbeamerfont{subtitle}{size=\large}
+\setbeamerfont{author}{size=\large}
+\setbeamerfont{institute}{size=\normalsize}
+\setbeamerfont{date}{size=\large}
+\setbeamerfont{section in toc}{size=\large}
+\setbeamerfont{subsection in toc}{size=\large}
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{block title}{size=\normalsize}
+
+\usefonttheme{professionalfonts}
+%\usepackage{arev}
+
+\setlength{\parskip}{5pt plus 1pt minus 1pt}
+
+%% ---------------------------- color theme --------------------------
+
+% always use rgb colors in pdf files
+\substitutecolormodel{hsb}{rgb}
+
+\definecolor{red69}{Hsb}{0,0.6,0.9}
+\definecolor{red4x}{Hsb}{0,0.4,1.0}
+\definecolor{yellow69}{Hsb}{60,0.6,0.9}
+\definecolor{yellowxx}{Hsb}{60,1.0,1.0}
+\definecolor{green33}{Hsb}{120,0.3,0.3}
+\definecolor{green39}{Hsb}{120,0.3,0.9}
+\definecolor{green69}{Hsb}{120,0.6,0.9}
+\definecolor{cyan69}{Hsb}{180,0.6,0.9}
+\definecolor{magenta69}{Hsb}{300,0.6,0.9}
+\definecolor{magenta4x}{Hsb}{300,0.4,1.0}
+
+\colorlet{text1}{white}
+\colorlet{back1}{green33}
+\colorlet{accent1}{yellow69}
+\colorlet{accent2}{green69}
+\colorlet{accent3}{red4x}
+\colorlet{accent4}{cyan69}
+\colorlet{accent5}{magenta4x}
+\colorlet{filler1}{accent1!50!back1}
+\colorlet{filler2}{accent2!50!back1}
+\colorlet{filler3}{accent3!50!back1}
+\colorlet{filler4}{accent4!50!back1}
+\colorlet{filler5}{accent5!50!back1}
+\colorlet{tcolor}{green33!95!white}
+\colorlet{dcolor}{white}
+\colorlet{fcolor}{gray}
+
+\setbeamercolor{background canvas}{bg=green33,fg=white}
+\setbeamercolor{normal text}{bg=green33,fg=white}
+\setbeamercolor{structure}{fg=yellowxx}
+\setbeamercolor{local structure}{fg=accent2}
+\setbeamercolor{footline}{bg=,fg=white}
+\setbeamercolor{title}{use=structure,fg=structure.fg}
+\setbeamercolor{subtitle}{parent=normal text}
+\setbeamercolor{author}{fg=white}
+\setbeamercolor{institute}{fg=white}
+\setbeamercolor{date}{fg=white}
+\setbeamercolor{section in toc}{parent=title}
+\setbeamercolor{subsection in toc}{parent=title}
+\setbeamercolor{section in toc shaded}{parent=normal text}
+\setbeamercolor{subsection in toc shaded}{parent=normal text}
+\setbeamercolor{frametitle}{parent=title}
+\setbeamercolor{framesubtitle}{parent=subtitle}
+\setbeamercolor{separator line}{fg=white}
+\setbeamercolor{block title}{fg=accent1,bg=darkgray}
+\setbeamercolor{block body}{bg=gray}
+\setbeamercolor{block title example}{parent=block title,fg=accent2}
+\setbeamercolor{block body example}{parent=block body}
+\setbeamercolor{block title alerted}{parent=block title,fg=accent3}
+\setbeamercolor{block body alerted}{parent=block body}
+
+%% ------------------------ select templates -------------------------
+
+\setbeamertemplate{background canvas}[awesome]
+\setbeamertemplate{background texture}[awesome]
+\setbeamertemplate{background}[circle]
+\setbeamertemplate{footline}[simple]
+\setbeamertemplate{footline left}[title]
+\setbeamertemplate{footline center}[author]
+\setbeamertemplate{footline right}[institute]
+\setbeamertemplate{title page}[circle]
+\setbeamertemplate{at begin section}[plain]
+\setbeamertemplate{at begin subsection}[plain]
+\setbeamertemplate{section page}[circle]
+\setbeamertemplate{subsection page}[circle]
+\setbeamertemplate{block begin}[gauss]
+\setbeamertemplate{block end}[gauss]
+\setbeamertemplate{block example begin}[gauss]
+\setbeamertemplate{block example end}[gauss]
+\setbeamertemplate{block alerted begin}[gauss]
+\setbeamertemplate{block alerted end}[gauss]
+\setbeamertemplate{theorem begin}[default]
+\setbeamertemplate{theorem end}[default]
+\setbeamertemplate{proof begin}[default]
+\setbeamertemplate{proof end}[default]
+\setbeamertemplate{frametitle}[gauss]
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{section}[simple]
+\setbeamertemplate{subsection}[simple]
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamertemplate{subsection in toc}[subsections numbered]
+\setbeamertemplate{section in toc shaded}[default][100]
+\setbeamertemplate{subsection in toc shaded}[default][100]
+\setbeamertemplate{itemize items}[default]
+\setbeamertemplate{enumerate items}[default]
+
+%% ----------------------- handout mode ------------------------------
+
+\mode<handout>{
+  \setbeamertemplate{background canvas}{}
+  \setbeamertemplate{background texture}{}
+  \colorlet{accent1}{accent1!50!black}
+  \colorlet{accent2}{accent2!50!black}
+  \colorlet{accent3}{accent3!50!black}
+  \colorlet{accent4}{accent4!50!black}
+  \colorlet{accent5}{accent5!50!black}
+  \colorlet{dcolor}{darkgray}
+  \colorlet{fcolor}{white}
+  \setbeamercolor{normal text}{fg=black, bg=white}
+  \setbeamercolor{title}{fg=teal}
+  \setbeamercolor{subtitle}{fg=gray}
+  \setbeamercolor{author}{fg=black}
+  \setbeamercolor{institute}{fg=gray}
+  \setbeamercolor{date}{fg=black}
+  \setbeamercolor{section in toc}{fg=teal!90!gray}
+  \setbeamercolor{subsection in toc}{fg=teal!80!gray}
+  \setbeamercolor{section in toc shaded}{fg=lightgray}
+  \setbeamercolor{subsection in toc shaded}{fg=lightgray}
+  \setbeamercolor{frametitle}{fg=teal!70!gray,bg=white}
+  \setbeamercolor{separator line}{fg=darkgray}
+  \setbeamercolor{footline}{bg=white,fg=black}
+  \setbeamercolor{block title}{bg=}
+  \setbeamercolor{block body}{bg=}
+}
+
+\mode
+<all>
+
+\makeatother

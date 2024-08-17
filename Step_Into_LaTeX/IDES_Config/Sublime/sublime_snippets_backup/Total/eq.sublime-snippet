@@ -1,0 +1,8 @@
+<snippet>
+	<content><![CDATA[
+(\ref{eq:$1})
+]]></content>
+	<tabTrigger>eq</tabTrigger>
+	<scope>text.tex.latex</scope>
+</snippet>
+

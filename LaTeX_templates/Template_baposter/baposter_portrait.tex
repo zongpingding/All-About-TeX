@@ -1,0 +1,169 @@
+%
+% note: use pdflatex to compile
+%
+\documentclass[portrait,final,a0paper,fontscale=0.277]{baposter}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+%\usepackage{relsize}
+
+\definecolor{lightblue}{rgb}{0.145,0.6666,1}
+
+\begin{document}
+
+\begin{poster} % Poster Options
+{ grid=false, % Show grid to help with alignment
+  colspacing=1em, % Column spacing
+  bgColorOne=white, % Color style
+  bgColorTwo=white,
+  borderColor=lightblue,
+  headerColorOne=black,
+  headerColorTwo=lightblue,
+  headerFontColor=white,
+  boxColorOne=white,
+  boxColorTwo=lightblue,
+  textborder=roundedleft, % Format of textbox
+  eyecatcher=true, % Format of text header
+  headerborder=closed,
+  headerheight=0.1\textheight,
+  headershape=roundedright,
+  headershade=shadelr,
+  headerfont=\Large\bf\textsc, % Sans Serif
+  textfont={\setlength{\parindent}{1.5em}}, % paragraph indentation
+  boxshade=plain,
+  background=plain,
+  linewidth=1pt
+}
+%%%%%===== logo on the left
+{\includegraphics[height=4em]{logo.png}}
+%%%%%===== Title
+{\bf\textsc{%
+   Title Title Title Title Title}\vspace{0.5em}}
+%%%%%===== Authors
+{\textsc{author and institute}}
+%%%%%===== logo on the right
+{\includegraphics[height=4em]{logo.png}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%===== 第一列第一行（column=0,row=0）
+\headerbox{Motivation}{name=motivation,column=0,row=0}{
+  Here is the motivation.
+
+  \vspace{8em}
+}
+
+%%%%%===== 第一列第二行
+\headerbox{Contributions}{name=contribution,column=0,below=motivation}{
+  Here is our contributions.
+
+  \vspace{10em}
+}
+
+%%%%%===== 第一列第三行
+\headerbox{Method}{name=method,column=0,below=contribution}{
+  The cost is interpreted as a directed acyclic graph
+  with weights on the nodes and edges. The nodes encode candidate positions,
+  and the edges the transition costs between candidates. Additional edges
+  (dashed) allow occlusion transitions which skip frames.
+
+  The optimal track is found with a modification of Dijkstra's shortest path
+  search. The search was speed up by lower bounding the cost, and lazily
+  evaluating the accurate cost only where necessary to find the global optimum.
+
+ \vspace{5em}
+}
+
+%%%%%===== 第一列第四行
+\headerbox{Source Code}{name=source,column=0,below=method,above=bottom}{
+  The source code and compiled executables with an interactive interface
+  are available at http://math.ecnu.edu.cn
+}
+
+%%%%%===== 第二列第一行（column=1,row=0）
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\headerbox{Results}{name=results,column=1,span=1,row=0}{
+    Between one and three user clicks were needed to achieve accurate tracking for
+      the head sequence. Note the correct handling of the occluded ear, which
+      required only a single click.
+
+      The eye of the running giraffe required eight user interactions, of which three
+      marked occlusions.
+  \vspace{9em}
+}
+
+
+%%%%%===== 第二列第二行
+\headerbox{Background Model}{name=background model,column=1,below=results}{
+  We incorporate a background model, such that a click tells us not only `this
+  is how the landmark looks like', but also `this is how the landmark
+  does \emph{not} look like' for all other patches in that frame.
+
+  \vspace{5em}
+}
+
+%%%%%===== 第二列第三行
+\headerbox{A Future Direction}{name=questions,column=1,below=background model,above=bottom}{
+  We incorporated a background model, where a click informs us not only that `this is how the
+  patch looks like', but also for the rest of the frame, `this is how the patch
+  does not look like'.
+
+  Can we also \emph{efficiently} use a background tracks model, allowing us
+  to reason, `this would be a good track, but part of it can be better
+  explained by tracking another point'.
+
+ \vspace{5em}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 第三列第一行（column=2,row=0）
+\headerbox{Comments}{name=comments,column=2,span=1,row=0}{
+    Between one and three user clicks were needed to achieve accurate tracking for
+      the head sequence. Note the correct handling of the occluded ear, which
+      required only a single click.
+
+      The eye of the running giraffe required eight user interactions, of which three
+      marked occlusions.
+  \vspace{15em}
+}
+
+%% 第三列第二行
+\headerbox{Speed}{name=speed,column=2,below=comments}{
+  Speed is achieved by preprocessing the video with an adaptive filter
+  bank as in~\cite{Gol07,GV13}. Preprocessing was sped up significantly, but is
+  still slower than realtime.
+
+  This encodes the video into 16 byte per pixel feature vectors. We implemented
+  an efficient search for similar patches using the SIMD hardware of modern
+  processors, and only evaluate the cost on these candidate patches. (Typically
+  200 patches per frame). The Graph-Structure focuses the evaluations on the most
+  important areas, and makes candidate search and reasoning highly efficient,
+  such that the system runs at interactive speed.
+
+  Note that the preprocessing is not specific to the interestpoints tracked
+  later. A single preprocessed video can therefore be used in many annotation
+  sessions.
+  \vspace{5em}
+}
+
+%% 第三列第二行
+\headerbox{References}{name=references,column=2,below=speed,above=bottom}{
+  \footnotesize \linespread{0.9}\selectfont
+
+  \begin{thebibliography}{1}
+    \bibitem{Gol07}
+      G. H. Golub,
+      \newblock History of numerical linear algebra: A personal view,
+      \newblock Stanford, 2007.
+
+    \bibitem{GV13}
+      G. H. Golub and C. F. Van Loan,
+      \newblock \emph{Matrix Computations},
+      \newblock The 4th Editon, The Johns Hopkins University Press, Baltimore, MD, 2013.
+
+  \end{thebibliography}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{poster}
+
+\end{document}

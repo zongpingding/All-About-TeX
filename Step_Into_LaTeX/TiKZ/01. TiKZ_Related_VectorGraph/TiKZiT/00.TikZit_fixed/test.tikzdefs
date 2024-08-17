@@ -1,0 +1,6 @@
+\usepackage{bm}
+%\usepackage{ctex}
+%\usepackage[UTF8]{ctex} % 还是报错
+\usepackage{xeCJK} 
+\setCJKmainfont{微软雅黑}
+\newcommand{\param}[1]{\ensuremath{\vec{\bm{#1}}}}

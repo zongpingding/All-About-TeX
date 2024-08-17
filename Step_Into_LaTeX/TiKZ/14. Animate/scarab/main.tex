@@ -1,0 +1,38 @@
+\documentclass{article}
+\usepackage{intcalc} %defines \intcalcMod for Modulo computation
+\usepackage{animate}
+\usepackage{graphicx}
+\newcounter{scarab}
+\setcounter{scarab}{0}
+\newcounter{blueline}
+\setcounter{blueline}{101}
+\newcounter{grayline}
+\setcounter{grayline}{202}
+%write timeline file
+\newwrite\TimeLineFile
+\immediate\openout\TimeLineFile=scarab.tln
+\whiledo{\thescarab<101}{
+    \ifthenelse{\intcalcMod{\thescarab}{2}=0}{
+        %a gray line is added to every 2nd frame
+        \immediate\write\TimeLineFile{%
+        ::\thegrayline x0;253;\thescarab x0,\theblueline}
+        \stepcounter{grayline}
+    }{
+        \immediate\write\TimeLineFile{%
+        ::;253;\thescarab x0,\theblueline}
+    }
+    \stepcounter{scarab}
+    \stepcounter{blueline}
+}
+\immediate\closeout\TimeLineFile
+
+
+\begin{document}
+\begin{center}
+    \animategraphics[
+        width=0.8\linewidth,
+        controls, loop,
+        timeline=scarab.tln
+    ]{12}{scarab_}{0}{253}
+\end{center}
+\end{document}

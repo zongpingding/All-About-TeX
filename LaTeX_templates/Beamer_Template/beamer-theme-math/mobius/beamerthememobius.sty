@@ -1,0 +1,291 @@
+% -*- coding: utf-8 -*-
+% ----------------------------------------------------------------------------
+% Author:  Jianrui Lyu <tolvjr@163.com>
+% Website: https://github.com/lvjr/theme
+% License: Creative Commons Attribution-ShareAlike 4.0 International License
+% ----------------------------------------------------------------------------
+
+\ProvidesPackage{beamerthememobius}[2019/06/06 v0.7 Beamer Theme Mobius]
+
+\makeatletter
+
+% compatible with old versions of beamer
+\providecommand{\beamer@endinputifotherversion}[1]{}
+
+\RequirePackage{tikz,adjustbox}
+\usetikzlibrary{decorations.pathmorphing,calc}
+
+\mode<presentation>
+
+\setbeamersize{text margin left=8mm,text margin right=8mm}
+
+%% ----------------- background canvas and background ----------------
+
+\defbeamertemplate{background}{mobius}{%
+  \begin{tikzpicture}
+    \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+    \foreach \i in {0,16,...,128} \foreach \j in {0,16,...,96} {
+      \path[draw=purple94!90!black] (\i mm,\j mm) circle (16mm);
+    }
+  \end{tikzpicture}%
+}
+
+% need "text badly ragged" option for correct space skips
+% see http://tex.stackexchange.com/a/132748/8956
+\gdef\my@background@title{%
+  \begin{tikzpicture}
+  \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+  \path[fill=fcolor,opacity=0.4]
+    (0,0.3\paperheight) rectangle (\paperwidth,0.8\paperheight);
+  \path[draw=dcolor,thick] (0,0.3\paperheight) -- (\paperwidth,0.3\paperheight)
+                           (0,0.8\paperheight) -- (\paperwidth,0.8\paperheight);
+  \node[text width=0.9\paperwidth,text badly ragged] at (0.5\paperwidth,0.55\paperheight) {%
+    \begin{minipage}[c][0.6\paperheight]{0.9\paperwidth}
+      \centering
+      \usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle
+      \ifx\insertsubtitle\@empty\else
+        \\[5pt]\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}
+        \insertsubtitle
+      \fi
+    \end{minipage}
+  };
+  \path[fill=fcolor,draw=dcolor,thick,opacity=0.4]
+    (0.15\paperwidth,0) -- (0.5\paperwidth,0.35\paperheight) -- (0.85\paperwidth,0);
+  \node[text width=0.9\paperwidth,text badly ragged] at (0.5\paperwidth,0.15\paperheight) {%
+    \begin{minipage}[c][0.25\paperheight]{0.9\paperwidth}
+      \centering
+      \usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor\\[3pt]
+      \usebeamerfont{institute}\usebeamercolor[fg]{institute}\insertinstitute\\[3pt]
+      \usebeamerfont{date}\usebeamercolor[fg]{date}\insertdate
+    \end{minipage}
+  };
+  \end{tikzpicture}
+}
+
+\gdef\my@background@section{%
+  \begin{tikzpicture}
+  \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+  \path[fill=fcolor,thick,opacity=0.4]
+    (0,0.35\paperheight) rectangle (\paperwidth,0.75\paperheight);
+  \path[draw=dcolor,thick] (0,0.35\paperheight) -- (\paperwidth,0.35\paperheight)
+                           (0,0.75\paperheight) -- (\paperwidth,0.75\paperheight);
+  \node[text width=\textwidth,text badly ragged] at (0.5\paperwidth,0.55\paperheight) {%
+    \begin{minipage}[c]{\textwidth}
+      \usebeamertemplate{section page content}%
+    \end{minipage}
+  };
+  \end{tikzpicture}
+}
+
+%% -------------------------- title page -----------------------------
+
+\defbeamertemplate{title page}{mobius}{%
+  \nointerlineskip
+  \begin{adjustbox}{width=\paperwidth,center}%
+    \my@background@title
+  \end{adjustbox}%
+}
+
+%% ----------------------- section and subsection --------------------
+
+% create new template for section
+\defbeamertemplate{section}{simple}{%
+  \insertsectionnumber.\hspace*{1ex}\insertsection%
+}
+
+\AtBeginSection[]{\begin{frame}[plain]{\sectionpage}\end{frame}}
+
+\defbeamertemplate{section page}{mobius}{%
+  \nointerlineskip
+  \begin{adjustbox}{width=\paperwidth,center}%
+    \my@background@section
+  \end{adjustbox}%
+}
+
+\defbeamertemplate{section page content}{simple}{
+  \begin{beamercolorbox}[wd=\textwidth,center]{section title}%
+    \usebeamerfont{section title}
+    \usebeamertemplate{section}%
+  \end{beamercolorbox}
+}
+
+%% ---------------------- headline and footline ----------------------
+
+\newif\ifmy@subsection \my@subsectionfalse
+
+\newcommand{\my@sectionentry}[5]{%
+  \hfill
+  \ifnum\c@section=#1%
+    \usebeamercolor{footline highlight}%
+  \else%
+    \usebeamercolor{footline}%
+  \fi%
+  \hyperlink{Navigation#3}{%
+    \colorbox{bg}{%
+      \hspace{0.2em}\rule[-1ex]{0pt}{3.25ex}\color{fg}#2\hspace{0.2em}%
+    }%
+  }%
+  \let\slideentry=\my@slideentry
+}
+
+\newcommand{\my@subsectionentry}[5]{\my@subsectiontrue}
+
+\newcommand{\my@slideentry}[6]{%
+  \ifmy@subsection
+    \usebeamercolor{footline}%
+    \def\my@box{$\circ$}%
+    \ifnum\c@section=#1%
+      \usebeamercolor{footline highlight}%
+      \ifnum\c@subsection=#2%
+        \def\my@box{$\bullet$}%
+      \fi
+    \fi
+    \beamer@link(#4){%
+      \colorbox{bg}{%
+        \rule[-1ex]{0pt}{3.25ex}\hspace{0.1em}\color{fg}\my@box\hspace{0.1em}%
+      }%
+    }%
+    \my@subsectionfalse
+  \fi
+}
+
+\defbeamertemplate{footline}{mobius}{%
+  % default height is 0.4pt, which is ignored by adobe reader, so we increase it by 0.2pt
+  {\color{dcolor}\hrule height 0.6pt}%
+  %\pgfsetfillopacity{0.6}%
+  \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex]{footline}%
+    \usebeamerfont{footline}%
+    \kern\beamer@leftmargin
+    \setlength{\fboxsep}{0pt}%
+    \let\sectionentry=\my@sectionentry
+    \let\beamer@subsectionentry=\my@subsectionentry
+    \hskip 0pt plus -1fill\dohead
+    \hskip 0pt plus 9fill\relax
+    \Acrobatmenu{GoToPage}{\insertframenumber{}/\inserttotalframenumber}%
+    \kern\beamer@rightmargin
+  \end{beamercolorbox}%
+}
+
+%% ------------------------- frame title -----------------------------
+
+\defbeamertemplate{frametitle}{simple}[1][]{%
+  \nointerlineskip
+  \begin{beamercolorbox}[wd=\paperwidth,sep=0pt,leftskip=\beamer@leftmargin,%
+                         rightskip=\beamer@rightmargin,#1]{frametitle}
+    \usebeamerfont{frametitle}%
+    \rule[-3.6mm]{0pt}{12mm}\insertframetitle\rule[-3.6mm]{0pt}{12mm}\par
+  \end{beamercolorbox}
+}
+
+%% --------------------------- font theme ----------------------------
+
+\setbeamerfont{title}{size=\LARGE}
+\setbeamerfont{subtitle}{size=\large}
+\setbeamerfont{author}{size=\large}
+\setbeamerfont{institute}{size=\normalsize}
+\setbeamerfont{date}{size=\normalsize}
+\setbeamerfont{section in toc}{size=\Large}
+\setbeamerfont{footline}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{block title}{size=\normalsize}
+
+\usefonttheme{professionalfonts}
+%\usepackage{arev}
+
+%\setlength{\parskip}{5pt plus 1pt minus 1pt}
+
+%% ---------------------------- color theme --------------------------
+
+% always use rgb colors in pdf files
+\substitutecolormodel{hsb}{rgb}
+
+\definecolor{red69}{Hsb}{0,0.6,0.9}
+\definecolor{yellow69}{Hsb}{60,0.6,0.9}
+\definecolor{yellow99}{Hsb}{60,0.9,0.9}
+\definecolor{green69}{Hsb}{120,0.6,0.9}
+\definecolor{azure53}{Hsb}{210,0.5,0.3}
+\definecolor{blue77}{Hsb}{240,0.7,0.7}
+\definecolor{blue88}{Hsb}{240,0.8,0.8}
+\definecolor{blue97}{Hsb}{240,0.9,0.7}
+\definecolor{purple94}{Hsb}{330,0.9,0.4}
+\definecolor{purple63}{Hsb}{320,0.6,0.3}
+
+\colorlet{text1}{white}
+\colorlet{back1}{blue77}
+\colorlet{accent1}{yellow69}
+\colorlet{accent2}{green69}
+\colorlet{accent3}{black}
+\colorlet{filler1}{accent1!40!back1}
+\colorlet{filler2}{accent2!40!back1}
+\colorlet{filler3}{accent3!40!back1}
+\colorlet{dcolor}{white}
+\colorlet{fcolor}{azure53}
+
+\setbeamercolor{normal text}{bg=purple94,fg=white}
+\setbeamercolor{structure}{fg=yellow99}
+\setbeamercolor{local structure}{fg=accent2}
+\setbeamercolor{footline}{bg=purple63,fg=white}
+\setbeamercolor{footline highlight}{parent=footline,bg=filler2}
+\setbeamercolor{navigation symbols}{bg=purple94}
+\setbeamercolor{navigation symbols dimmed}{fg=purple94}
+\setbeamercolor{title}{use=structure,fg=structure.fg}
+\setbeamercolor{subtitle}{fg=white}
+\setbeamercolor{author}{use=local structure,fg=local structure.fg}
+\setbeamercolor{institute}{fg=white}
+\setbeamercolor{date}{fg=white}
+\setbeamercolor{section in toc}{parent=title}
+\setbeamercolor{section in toc shaded}{parent=normal text}
+\setbeamercolor{frametitle}{parent=title}
+\setbeamercolor{block title}{fg=accent1,bg=back1!50!gray}
+\setbeamercolor{block body}{bg=back1!50!lightgray}
+\setbeamercolor{block title example}{fg=accent2,bg=back1!50!gray}
+\setbeamercolor{block body example}{bg=back1!50!lightgray}
+\setbeamercolor{block title alerted}{fg=accent3,bg=back1!50!gray}
+\setbeamercolor{block body alerted}{bg=back1!50!lightgray}
+
+%% ------------------------ select templates -------------------------
+
+\setbeamertemplate{background canvas}[default]
+\setbeamertemplate{background}[mobius]
+\setbeamertemplate{title page}[mobius]
+\setbeamertemplate{section page}[mobius]
+\setbeamertemplate{section page content}[simple]
+\setbeamertemplate{section}[simple]
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamertemplate{section in toc shaded}[default][100]
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[mobius]
+\setbeamertemplate{frametitle}[simple]
+\setbeamertemplate{itemize items}[default]
+\setbeamertemplate{enumerate items}[default]
+
+%% ----------------------- handout mode ------------------------------
+
+\mode<handout>{
+  \setbeamertemplate{background canvas}{}
+  \setbeamertemplate{background}{}
+  \colorlet{text1}{black}
+  \colorlet{back1}{white}
+  \colorlet{accent1}{purple94}
+  \colorlet{accent2}{teal!70!black}
+  \colorlet{accent3}{blue77}
+  \colorlet{dcolor}{gray}
+  \colorlet{fcolor}{white}
+  \setbeamercolor{normal text}{fg=black, bg=white}
+  \setbeamercolor{structure}{fg=purple94}
+  \setbeamercolor{title}{fg=purple94}
+  \setbeamercolor{subtitle}{fg=black}
+  \setbeamercolor{author}{fg=accent2}
+  \setbeamercolor{institute}{fg=black}
+  \setbeamercolor{date}{fg=black}
+  \setbeamercolor{section in toc}{fg=purple94}
+  \setbeamercolor{section in toc shaded}{fg=lightgray}
+  \setbeamercolor{section title}{fg=purple94}
+  \setbeamercolor{footline}{bg=white,fg=black}
+  \setbeamercolor{footline highlight}{fg=accent2,bg=white}
+}
+
+\mode
+<all>
+
+\makeatother

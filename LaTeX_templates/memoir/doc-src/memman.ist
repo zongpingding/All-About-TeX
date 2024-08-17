@@ -1,0 +1,16 @@
+% MakeIndex style file  memman.ist
+
+% @ is a valid character in some entries
+actual '?' % ? instead of @
+
+% output main entry <entry> as: \item \idxmark{<entry>}, 
+item_0  "\n\\item \\idxmark{"
+delim_0 "}, "
+% not forgetting the subitem case%    added 2008
+item_x1 "} \n \\subitem "
+
+% Wrap and uppercase head letters
+headings_flag 1 
+heading_prefix "\\doidxbookmark{"
+heading_suffix "}"
+

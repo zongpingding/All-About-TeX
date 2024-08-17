@@ -1,0 +1,159 @@
+% All rights to the corporate identity of University of Amsterdam and its elements
+% belong to the University of Amsterdam.
+% Please refer to the following page for further information:
+% https://extranet.uva.nl/en/a-z/content/corporate-communication/corporate-communication.html
+%
+% Copyright (c) 2015 Franz Geiger
+%
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+%
+% The above copyright notice and this permission notice shall be included in
+% all copies or substantial portions of the Software.
+%
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+% THE SOFTWARE.
+
+\mode<presentation>
+
+% Options: Language of university logo
+\DeclareOptionBeamer{logo}[NL]{\def\beamer@innerthemeUniversityOfAmsterdam@logo{#1}}
+\ExecuteOptionsBeamer{logo=ENG}
+\ProcessOptionsBeamer
+
+% Select logo according to option
+\logo{\includegraphics[width=37.5mm]{beamerthemeUniversityOfAmsterdam/logo/uva_logo_\beamer@innerthemeUniversityOfAmsterdam@logo.pdf}}
+
+% Rectangular blocks without shadow
+\setbeamertemplate{blocks}[default]
+
+% Style list items
+\defbeamertemplate*{itemize item}{University of Amsterdam}{\scriptsize\raise1.25pt\hbox{\color{black}$\blacksquare$}}
+\defbeamertemplate*{itemize subitem}{University of Amsterdam}{\tiny\raise1.5pt\hbox{\color{black}$\square$}}
+\defbeamertemplate*{itemize subsubitem}{UniversityOfAmsterdam}{\scriptsize\raise1pt\hbox{\color{black}$\bullet$}}
+
+
+\makeatletter
+% Define regular background
+\defbeamertemplate*{background}{University of Amsterdam}{%
+\ifbeamer@plainframe%
+\else % Only if frame is not plain
+	\begin{tikzpicture}[remember picture,overlay, every node/.style={inner sep=0,outer sep=0}]
+		% UvA logo
+		\node [anchor=north west, xshift=11.8pt, yshift=-11.2pt] (logo) at (0, 0) {\insertlogo};
+	
+		% Position of divide between logo and grey box in pt
+		\pgfmathsetmacro{\divide}{-35};
+		\pgfmathsetmacro{\dividelength}{118.3}
+
+		% Margin around box in pt
+		\pgfmathsetmacro{\margin}{11.5};
+
+		% Boordinates for box and line
+		\coordinate (boxstart) at (\margin pt, \divide pt);
+		\coordinate [xshift=-\margin pt, yshift=\margin pt] (boxend) at (current page.south east);
+		\coordinate (linestart) at (0pt, \divide pt);
+		\coordinate (lineend)  at (\dividelength pt, \divide pt);
+
+		% Grey box
+		\fill [bgarea] (boxstart) rectangle (boxend);
+
+		% Draw line below logo (after box in order to stay above)
+		\draw (lineend) -- (linestart);
+
+		% San Andreas crosses
+		\node [anchor=south east] (crosses) at (boxend) {\includegraphics[scale=0.1265, clip=true, trim={0pt 700pt 14pt 0pt}]{beamerthemeUniversityOfAmsterdam/backgrounds/crosses.pdf}};
+	\end{tikzpicture}%
+\fi
+}
+\makeatother
+
+% Style title page
+\defbeamertemplate*{title page}{University of Amsterdam}{%
+	% Make sure colors are loaded
+	{\usebeamercolor[bg]{title}}
+	% Draw title page
+	\begin{tikzpicture}[remember picture,overlay, every node/.style={inner sep=0,outer sep=0}]	
+		% Show UvA logo
+		\node [anchor=north west, xshift=11.8pt, yshift=-11.2pt] (logo) at (current page.north west) {\insertlogo};
+
+		% Position of line below logo in pt
+		\pgfmathsetmacro{\divide}{-35};
+		\pgfmathsetmacro{\dividelength}{118.3}
+
+		% Margin around boxes in pt
+		\pgfmathsetmacro{\margin}{11.5};
+
+		% Coordinates for box and line
+		\coordinate [yshift=-70pt] (boxstart) at (current page.north west);
+		\coordinate [xshift=-\margin pt, yshift=\margin pt] (boxend) at (current page.south east);
+		\coordinate [yshift=\divide pt] (linestart) at (current page.north west);
+		\coordinate [xshift=\dividelength pt, yshift=\divide pt] (lineend)  at (current page.north west);
+
+		% Main colored box
+		\fill [maincolor] (boxstart) rectangle (boxend);
+
+		% Draw line below logo (after box in order to stay above)
+		\draw (lineend) -- (linestart);
+
+		% San Andreas crosses
+		\node [xshift=-\margin pt, anchor=east] (crosses) at (current page.east) {\includegraphics[scale=0.1265, clip=true, trim={0pt 32pt 14pt 0pt}] {beamerthemeUniversityOfAmsterdam/backgrounds/crosses.pdf}};
+
+		% Box behind title
+		\coordinate [xshift=\margin pt, yshift=-29pt] (titlebgstart) at (current page.west);
+		\coordinate [yshift=12pt] (titlebgend) at (boxend);
+		\fill [title.bg] (titlebgstart) rectangle (titlebgend);
+
+		% Grey stripe below title
+		\coordinate [xshift=\margin pt, yshift=35pt] (greybarstart) at (current page.south west);
+		\coordinate [yshift=-6pt] (greybarend) at (titlebgend);
+		\fill [black, opacity=.35] (greybarstart) rectangle (greybarend);
+
+		% Title information
+		% Institute
+		\node [xshift=26.5pt, yshift=-5pt, anchor=north west] (institute) at (linestart) {\usebeamerfont{institute}\usebeamercolor[fg]{institute}\insertinstitute};
+
+		% Title and subtitle
+		\node [
+			xshift=10pt,
+			yshift=-10pt,
+			anchor=north west,
+			text width=\textwidth,
+			] (title) at (titlebgstart)
+		{ %
+			{%
+				\usebeamercolor[fg]{title}\usebeamerfont{title}%
+				\inserttitle\par
+			}
+			\vspace{1ex}
+			{%
+				\usebeamercolor[fg]{subtitle}\usebeamerfont{subtitle}%
+				% Insert author if no subtitle is given
+				\ifx\insertsubtitle\empty\insertauthor
+				\else\insertsubtitle\fi
+				\par
+			}
+		};
+
+		\pgfmathsetmacro{\authoranddatetop}{-3}
+		% Authors
+		\node [xshift=10pt, yshift=\authoranddatetop pt, anchor=north west] (author) at (greybarstart)
+		{\usebeamercolor[fg]{author}\usebeamerfont{author}
+			\ifx\insertsubtitle\empty\else\insertauthor\fi};
+
+		% Date
+		\node [xshift=\textwidth, yshift=\authoranddatetop pt, align=right, anchor=north east] (date) at (greybarstart)
+		{\usebeamercolor[fg]{date}\usebeamerfont{date}\insertdate};
+	\end{tikzpicture}%
+}
+
+\mode<all>

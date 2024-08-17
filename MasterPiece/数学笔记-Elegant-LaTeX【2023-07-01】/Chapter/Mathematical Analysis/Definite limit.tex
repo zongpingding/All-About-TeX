@@ -1,0 +1,63 @@
+\subsection{函数极限的定义证明}
+\newcommand{\Lim}[1]{\lim\limits_{x\to x_0}{#1}}
+
+
+\noindent\textbf{等价性}
+
+    证明:$\Lim{f(x)} = A \Leftrightarrow  \Lim{\left[f(x)-A\right]} = 0$
+
+\begin{proof}
+
+\textsf{1. 充分性}\par 
+函数极限的定义: $\Lim{f(x)} = A$, 即 $\forall \varepsilon >0, \exists \delta>0$, 
+当 $|x-x_0|<\delta$时， $|f(x)-A|<\varepsilon$\\
+\bigskip
+若有 $\Lim{[f(x)-A]} = 0$, 根据定义我们有:
+$\forall \varepsilon>0, \exists \delta>0, \mbox{当}|x-x_0|<\delta$ 时：
+\[
+    |g(x) -0|= |(f(x)-A)-0|=|f(x)-A|<\varepsilon
+\]
+上面就是函数 $f(x)$ 极限的定义了。 注:把 $f(x)-A$看作 $g(x)$
+
+\textsf{2. 必要性}\par 
+若 $\Lim{f(x)} = A$, $\forall \varepsilon>0, \exists \delta>0, \mbox{当}|x-x_0|<\delta$
+\[
+    |f(x)-A| = |(f(x)-A) -0| = |g(x) -0|< \varepsilon
+\] 
+上面就是函数 $g(x) = f(x)-A$ 极限的定义了。
+\textsf{证毕}
+$\square$
+\end{proof}
+
+\noindent\textbf{和的极限}
+
+\noindent 假设函数 $f(x), g(x) \mbox{在} x=x_0 $出的极限存在, 分别为 $A, B$.
+证明: $\Lim{[\alpha f(x)+\beta g(x)]} = \alpha A + \beta B$
+
+\begin{proof}
+
+    $\forall \varepsilon>0, \exists \delta>0, \mbox{当}|x-x_0|<\delta$ 时:
+    因为 $f(x), g(x)$在 $x=x_0$处均极限存在.所以在此条件($|x-x_0|<\delta$)下我们有:
+\begin{align*}
+    & | f(x) |< X\\
+    & |f(x)-f(x_0)| <\frac{\varepsilon}{2A} \\
+    & |g(x)-g(x_0)| <\frac{\varepsilon}{2B}
+\end{align*}
+于是我们有:
+\begin{align*}
+    |(\alpha f(x)+\beta g(x)) - (\alpha f(x_0)+\beta g(x_0))| 
+    &= |\alpha\cdot(f(x)-f(x_0)) + \beta\cdot(|g(x)-g(x_0)|)| \\
+    & \le \alpha\cdot|f(x)-f(x_0)| + \beta\cdot|g(x)-g(x_0)|\\
+    & \le A\cdot\frac{\varepsilon}{2A} + B\cdot\frac{\varepsilon}{2B}\\
+    & < \varepsilon  
+\end{align*}
+\textsf{证毕}
+$\square$
+
+\textsf{注：函数乘积的极限证明同理}\par 
+\[
+    | f(x)g(x)-AB|=| f(x)(g(x)-B)+B(f(x)-A)|<(X+ |B|)\varepsilon'  
+\]
+$\varepsilon'$的构造和上面同理
+
+\end{proof}

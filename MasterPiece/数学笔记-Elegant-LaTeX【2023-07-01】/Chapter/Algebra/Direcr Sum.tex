@@ -1,0 +1,94 @@
+\section{子空间为直和的几个等价条件}
+
+\subsection{证明思路}
+首先说明直和的几个等价条件:
+
+\begin{framed}
+\noindent
+\num{1} 定义：$V_1\oplus V_2$\\
+\num{2} 零向量 $\theta$ 的分解唯一\\
+\num{3} $V_1\bigcap V_2=\theta$\\
+\num{4} $\dim(V_1+V_2)=\dim(V_1)+\dim(V_2)$\\
+\num{5} 若\seq[n_1]{\alpha}和\seq[n_2]{\beta}分别为向量空间$V_1,V_2$的一组基,
+        那么\seq[n_1]{\alpha}~,~\seq[n_2]{\beta}是 $V_1+V_2$的一组基
+\end{framed} 
+
+\bigskip
+我们只需要证明：$1 \Rightarrow 2 \Rightarrow 3 \Rightarrow 4 \Rightarrow 5 \Rightarrow 1$即可
+（注：$\Rightarrow $表示能够推出）
+
+\begin{proof}{${1} \Rightarrow  {2}$}
+
+   当 $V_1\oplus V_2$时， $\theta = \alpha_1 +\alpha_2, ~~\alpha_1 \in V_1,\alpha_2\in V_2$的分解唯一\par 
+   又因为 $\alpha_1 = \alpha_2=\theta$是上述方程的一个解。\par 
+   因为解的唯一性，我们可以知道 $\alpha_1=\alpha_2=\theta$\par
+   于是我们可以得到： $\theta =\alpha_1+\alpha_2$，当且仅当 $\alpha_1=\alpha_2=\theta$时成立\par
+   证毕 $\square$
+\end{proof}
+
+\begin{proof}{${2} \Rightarrow {3}$}
+
+    $\forall \alpha \in V_1\bigcap V_2$, 因为 $V_1\bigcap V_2$为一个子空间, 所以 $-\alpha\in V_1\bigcap V_2$\par 
+    又因为子空间的封闭性,所以我们有 $\alpha+(-\alpha)=\theta\in V_1\bigcap V_2$.\par 
+    根据上面 ${1} \Rightarrow {2}$的证明我们可以知道:$\alpha =-\alpha=\theta$\par
+    最后根据 $\alpha$的任意性，可以知道 $v_1 \bigcap V_2=\theta$\par 
+    证毕 $\square$
+\end{proof}
+
+\bigskip
+\begin{proof}{${3} \Rightarrow {4}$}
+
+    根据维数公式，我们可以得到: $\dim(V_1+V_2) =\dim(V_1) + \dim(V_2) -\dim(V_1\bigcap V_2)$.
+    对于任意的 $\alpha\in V_1 \bigcap V_2$， 必然有 $\alpha =\theta$.(因为两个向量空间 $V_1, V_2$ 的交集为空集).
+    故此结论显然\par 
+    证毕 $\square$
+\end{proof}
+
+\bigskip
+\begin{proof}{ ${4} \Rightarrow {5}$ }
+
+    设\seq{\alpha},~\seq{\beta}分别为 $V_1, V_2$的基。根据子空间和的定义我们有:
+    \[
+        \seq[n_1]{\alpha},~\seq[n_2]{\beta}
+    \]
+    是 $V_1 +V_2$的一组基.设 $\forall \alpha\in V_1 +V_2$， 则:
+    \[
+        \alpha = \underbrace{\sum_{i=1}^{n_1}{k_i\alpha_i}}_{\in V_1} + \underbrace{\sum_{i=1}^{n_2}{l_i\beta_i}}_{\in V_2}  =\theta   
+    \]
+    根据 ${3} \Rightarrow {4}$的结论，我们可以知道:
+    \[
+        \sum_{i=1}^{n_1}{k_i\alpha_i} = \sum_{i=1}^{n_2}{l_i\beta_i}  =\theta
+    \]
+    同时，又因为 \seq[n_1]{\alpha}, \seq[n_2]{\beta}是向量空间 $V_1, V_2$的基，所以可以得到:
+    \[
+        k_i= l_i=0,~i \in \{1, 2, \cdots\}
+    \]
+    同时又因为 \im{\mathbf{span}(\alpha_i) + \mathbf{span}{(\beta_i)} = V_1 + V_2}，且 $\alpha_1, ~\beta_i$线性无关，所以可以得到结论\par 
+    证毕 $\square$
+\end{proof}
+
+\begin{proof}{${5} \Rightarrow {1}$}
+
+    设 $\forall \alpha  = \beta_i +\gamma_i \in V_1 + V_2,~ \beta_i\in V_1, \gamma_i \in V_2$.同时假设
+    \begin{align*}
+        \alpha =  \beta_1 + \gamma_1\\
+        \alpha = \beta_2 + \gamma_2        
+    \end{align*}
+
+    因为 $\alpha =\theta$, 所以可以得到：
+    \[
+        (\gamma_1-\gamma_2) +  (\beta_1 -\beta_2) = \theta    
+    \]
+    根据上面 ${1} \Rightarrow {2}$的结论可以知道:
+    \begin{align*}
+        \beta_1 = \beta_2\\
+        \gamma_1 = \gamma_2    
+    \end{align*}
+    于是乎，$\alpha$的分解就是唯一的\par 
+    证毕 $\square$
+\end{proof}
+
+
+\begin{formal}{blue!20}
+  {\bf 备注: }我们在证明的过程中多次用到 ${1} \Rightarrow {2}$的结论，但是这个并没有逻辑问题. 
+\end{formal}

@@ -1,0 +1,14 @@
+\documentclass{article}
+\usepackage{tkz-euclide}
+
+
+\begin{document}
+\begin{tikzpicture}
+  \tkzDefPoints{0/0/O, 2/0/A_3, -2/0/A_0}
+  \tkzDefPoint(60:2){B}
+  \tkzDefPoint(120:2){C}
+  \tkzDefPoint(-60:2){A_2}
+  \tkzDefPoint(-120:2){A_1}
+  \tkzDrawPolygon(A_0, A_1, A_2, A_3, B, C)
+\end{tikzpicture}
+\end{document}

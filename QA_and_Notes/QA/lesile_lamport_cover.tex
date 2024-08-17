@@ -1,0 +1,20 @@
+\documentclass{article}
+\usepackage[paperwidth = 18.42cm, paperheight = 22.86cm]{geometry}
+\usepackage{tikz}
+
+\definecolor{upper}{RGB}{75, 107, 166}
+\definecolor{lower}{RGB}{168, 180, 232}
+\begin{document}
+\begin{titlepage}
+  \begin{tikzpicture}[remember picture, overlay]
+    \fill[top color = upper, bottom color = lower] (current page.north west) rectangle (current page.south east);
+    \node[anchor = north, inner ysep = 10pt, text = white, scale = 2.5] (text-1) at (current page.north) {A Document Preparation System};
+    \node[yshift = -4cm, scale = 8, text = -yellow, font = \bfseries, shift = {(-.02, -.0075)}] (text-2) at (text-1.north) {\LaTeX};
+    \node[yshift = -4cm, scale = 8, text = yellow, font = \bfseries] at (text-1.north) {\LaTeX};
+    \node[align = left, text = white, shift = {(0, .75cm)}, font = \Large] at (text-2.south east) {USERES GUIDE AND \\ REFZREKCE MAGUAL};
+    \draw[fill = white] ([yshift = 5cm]current page.south east) -- ([xshift = -5cm]current page.south east) -- ++(3, 0) -- ++ (2, 2) -- cycle;
+    \node[align = left, rotate = 45, font = \Large] at ([shift = {(-1.75, 1.75)}]current page.south east) {Updated for \\ \LaTeXe};
+  \end{tikzpicture} 
+\end{titlepage}
+
+\end{document}

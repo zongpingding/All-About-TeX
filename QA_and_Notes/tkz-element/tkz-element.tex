@@ -1,0 +1,29 @@
+\documentclass{article}
+\usepackage{tkz-euclide}
+\usepackage{tkz-elements}
+
+
+
+
+\begin{document}
+\begin{tkzelements}
+  z.A = point : new ( 2 , 3 )
+  z.O = point : new ( 0 , 0 )
+  z.I = point : new ( 1 , 0 )
+\end{tkzelements}
+\hspace{\fill}
+
+\begin{tikzpicture}
+  \tkzGetNodes
+  \tkzInit[xmin=-4,ymin=-4,xmax=4,ymax=4]
+  \tkzDrawCircle[dashed,red](O,A)
+  \tkzPointShowCoord(A)
+  \tkzDrawPoint(A)
+  \tkzLabelPoint[above right](A){\normalsize $a+ib$}
+  \tkzDrawX\tkzDrawY
+  \tkzDrawSegment(O,A)
+  \tkzLabelSegment[above,anchor=south,sloped](O,A){ OA = modulus of $z_A$}
+  \tkzLabelAngle[anchor=west,pos=.5](I,O,A){$\theta$ = argument of $z_A$}
+\end{tikzpicture}
+
+\end{document}

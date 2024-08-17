@@ -1,0 +1,288 @@
+
+\newcommand{{\pr}}[1]{{\bf Problem #1}}
+\newcommand{\zs}[2]{\ensuremath{{#1}^{#2}}}
+\newcommand{\e}[1]{\ensuremath{\exp\{{#1}}}
+\newcommand{\fs}[2]{\ensuremath{\frac{#1}{#2}}}
+\newcommand{\dfs}[2]{ensuremath{\frac{\mathrm{d}#1}{\mathrm{d}#2}}}
+\newcommand{\pfs}[2]{\ensuremath{\frac{\partial #1}{\partial #2}}}
+\newcommand{\abs}[1]{\ensuremath{|#1|}}
+\newcommand{\dpb}[1]{\ensuremath{\displaystyle{#1}}}
+\newcommand{\imd}[2][1]{%
+\lower-.2em\hbox{
+    \scalebox{#1}[#1]{%
+    \ensuremath{\displaystyle{#2}}%
+}}}
+% \newcommand{\im}[1]{\ensuremath{\displaystyle{#1}}}
+% \newtheorem{theorem}{Theorem}
+% \newtheorem{lemma}{Lemma}
+% \newtheorem{proof}{Proof}
+% \newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{example}{Example}
+% \newtheorem{remark}{Remark}
+\newenvironment{pro}[1]{{\bf Problem #1}}{\par}
+
+\sector{Process of Poisson and Brownian}
+
+\begin{Definition}
+    Let $\{\xi (t),t\ge 0 \}$ be a stochastic process defined on a filtered probability space
+    $(\Omega,\mathcal{F} ,\{\mathcal{F} \}_{t\ge 0 },P)$.If
+    \begin{enumerate}
+        \item for $\forall t \ge 0,\xi (t) $ is $\mathcal{F}_t$-measure
+        \item for $\forall t\ge 0$,E\abs{\xi(t)} < $+\infty$
+        \item for $\forall 0\le s \le t,E(\xi(t) | \mathcal{F}_s ) = \xi(s)$a.s.
+    \end{enumerate}
+    then $\{\xi(t)\} $ is called an $\{\mathcal{F}\}$-martingale.   
+    
+    {\bf Remark:}对于上鞅和下鞅的情形,只需要将 $\mathit{3}$中的 $'='$分别改为$'<'$和$'>'$即可.
+\end{Definition}
+
+{\bf Recall}
+    {\it Let $\lambda$ > 0.A r.v. $\xi\sim P(\lambda)$ if
+    \[P(\xi =k) = \frac{\lambda^k}{k!}\exp(-\lambda k) \]}
+
+\begin{Definition}
+    A Poisson process $\{N(t),t\ge 0\}$ is a stochastic process with the following properties:
+    \begin{enumerate}
+        \item N(0) = 0
+        \item (Independent increments\footnotemark[1]) For $\forall\; 0\le s \le t,N(t) - N(s)$ is independent of $\mathcal{F}_s = \sigma (N(u),0\le u \le s)$
+        也就是说,从$s$时刻到$t$时刻的增量与s时刻之前的信息无关.
+        \item (stationary increments 平稳增量) For $\forall\; 0 \le s \le t,N(t)-N(s)\sim P(\lambda(t-s))$,i.e.
+
+            \[P(N(t)-N(s) = n)= \frac{(\lambda (t-s))^n}{n!}\mathrm{e}^{-\lambda(t-s)} \]
+        \item (Step function paths)The path N(t) ,$t\ge 0$ are increasing function of t changing only by jumps of size 1.
+        $N(t)-t$的图像是一个阶梯函数,相邻两段直接跳跃高度是1.
+    \end{enumerate}    
+\end{Definition}
+
+其中平稳增量\footnote[1]{Independent increments:独立增量; stationary increments:平稳增量}，稳定增量这两个性质用的很多，一定要注意。
+% \footnote[\vphantom{1}]{Independent increments:独立增量; stationary increments:平稳增量}
+
+\begin{theorem}
+    $\{x_n,n\ge 1 \}$ are i.i.d with the distribution \mbox{\rm Exp}($\lambda $).And $T_n \sim \Gamma  (n,\lambda) $    
+\end{theorem}
+\begin{proof}
+    It's obvious.
+\end{proof}
+
+\clearpage
+{\bf Some Fact}:\par
+1. Let $x_i$ is the waitting time from $N(i-1)$ to $N(i)$,we have $T_n = \sum_{i=1}^n x_i$\par
+2. $N(t) = \sup\{n\ge 0:T_n\le t\}$
+
+{\bf Note}\par
+\begin{enumerate}
+    \item "independent increments" mean that for $\forall n \ge 1$ and $0=t_0<t_1<\ldots<t_n$,the r.v.
+    $\{N(t_k) - N(t_{k-1}),k=1,2,\cdots,n \}$are independent.
+    \item  By defintion--(3), Let $s=0$),for $\forall t\ge 0$,we have
+    \[P(N(t) = k) = \frac{(\lambda t)^k}{k!} \mathrm{e}^{-\lambda t} \]
+    \item Two Formulas, by which will be used to prove.  
+        \begin{align*}
+            & W(t+s) - W(t)\sim N(0,s) \\
+            & {\rm If\;} \xi \sim N(\mu, \sigma^2), {\rm then\;} e^{\theta\cdot\xi} = e^{\mu\cdot\theta+\frac12\sigma^2\theta^2}
+        \end{align*}
+\end{enumerate}    
+
+
+
+
+
+\clearpage
+\subsection*{Exercise}{\it
+Let $\{N(t),t\ge 0 \}$ be a Poisson process with parameter $\lambda t$.Take natural filtered.
+\begin{enumerate}
+    \item[(i)] Find $P\{N(1)=1,N(2)=2\},P(N(2)=2|N(1)=1),\\
+        \hspace*{2em} E[N(t)\cdot N(t+s)],Cov(N(t),N(s)),{\imd[1.2]{\rho}_{N(t),N(s)}}$.
+    \item[(ii)] Show that $E[N(t)-\lambda t,t\ge 0]$ is a $ \{ \mathcal{F}_t|t>0 \}$-Martingale.
+\end{enumerate}
+}
+
+
+% $\bullet $ 1 Hello
+\subsection*{Solution}{\it
+%  \begin{align*}
+%    \bullet 1 \hspace*{2em} P\{N(1)=1,N(2)=2\} &= P(N(1) = 1,N(2)-N(1) = 1)\\
+%     &=P(N(1) = 1)P(N(2)-N(1) = 1) \\
+%     &= (\frac{\lambda}{1!} e^{-\lambda })^2 = \lambda ^2 e^{-2\lambda} 
+% \end{align*}
+
+% $\big |_{i=1}$
+
+% $\left(Hell\mathop{o}\limits^{\mathop{\bigg|}\limits^{+\infty}}\right)$
+
+% 常见的 mathop $\sum , \prod$
+
+\begin{enumerate}
+    \item we have
+        \begin{align*}
+            &\begin{aligned}
+                \bullet\; P\{N(1)=1,N(2)=2\} &= P(N(1) = 1,N(2)-N(1) = 1)\\
+                &=P(N(1) = 1)P(N(2)-N(1) = 1) \\
+                &= (\frac{\lambda}{1!} e^{-\lambda })^2 = \lambda ^2 e^{-2\lambda}  
+            \end{aligned}\\[1.2em]
+            &\begin{aligned}
+                \bullet\;P\{N(2) = 2|N(1) = 1\} = \frac{P(N(1) =1 ,N(2) =2)}{P(N(1) = 1)} = \lambda e^{-\lambda}
+            \end{aligned}\\[1.2em]
+            &\begin{aligned}
+                \bullet\;E[N(t)\cdot N(t+s)] &= E[N(t)\cdot (N(t+s)-N(t)+N(t))]\\
+                &=E[N(t)\cdot (N(t+s)-N(t))] + E[N(t)^2]\\
+                &=E[N(t)]\cdot E[N(t+s)-N(t)] + E[N(t)^2]\\
+                &=\lambda t\lambda s + \lambda t+(\lambda t)^2\\
+                &=\lambda t(\lambda t + \lambda s + 1)
+            \end{aligned}\\[1.2em]
+            &\begin{aligned} 
+                \bullet\;\mbox{If } s<t,then:\mathrm{Cov}(N(t),N(s)) &= \mathrm{Cov}(N(t)-N(s)+N(s),N(s))\\
+                &=\mathrm{Cov}(N(t)-N(s)+N(s),N(s))\\
+                &=\mathrm{Cov}(N(t)-N(s),N(s))+\mathrm{Cov}(N(s),N(s))\\
+                &=0 + \mathrm{Var}(N(s))\\
+                &= \lambda s
+            \end{aligned}\\
+            &\mbox{so then } \mathrm{Cov}(N(t),N(s)) = \lambda \min\{s,t \}\\
+            &\begin{aligned}
+                \bullet{}\;\rho_{\scriptscriptstyle N(t), N(s)} 
+                    = \frac{{\rm Cov}(N(t), N(s))}{\sqrt{{\rm Var}(N(t))\cdot {\rm Var}(N(s))}}
+                    = \frac{\min\{t, s\}}{\sqrt{s\cdot t}} 
+            \end{aligned}
+        \end{align*}
+    \item we have
+        \begin{align*}
+            &\begin{aligned}
+                \bullet\; \mbox{For } \forall t\ge 0 , N(t) - \lambda t \mbox{ is } \mathcal{F}_t\mbox{-measure}.    
+            \end{aligned}\\[1.2em]
+            &\begin{aligned}
+                \bullet\; \mbox{For }\forall t \ge 0,E\abs{N(t)-\lambda t}\le E[N(t)] + \lambda t  = 2\lambda t < \infty
+            \end{aligned}\\[1.2em]
+            &\begin{aligned}
+                \bullet\; \mbox{For } \forall 0 \le s \le t,\mbox{ we have }\\
+                E[N(t)-\lambda t|\mathcal{F}_s] 
+                &= E[N(t)|\mathcal{F}_s]  - \lambda t \\
+                &= E[N(t)-N(s)+N(s)|\mathcal{F}_s] -\lambda t\\
+                &= E[N(t)-N(s)|\mathcal{F}_s] + N(s) - \lambda t\\
+                &= \lambda (t-s) + N(s) - \lambda t\\
+                &= N(s) - \lambda s
+            \end{aligned}\\[1.2em]
+        \end{align*}     
+\end{enumerate}
+}
+
+\begin{Definition}
+    A stochastic process $\{W(t),t\ge 0\}$ is called a Brownian motion or Wiener process if 
+    \begin{enumerate}
+        \item W(0) = 0
+        \item (Independent increments) For $\forall\; 0\le s \le t,W(t) - W(s)$ is independent of $\mathcal{F}_s = \sigma (W(u),0\le u \le s)$.
+        \item (stationary increments) For $\forall\; 0 \le s \le t,W(t)-W(s)\sim N(0,t-s)$
+        \item (continuous sample paths) the sample paths t $\rightarrow$ W(t) are a.s. continuous
+    \end{enumerate}
+\end{Definition}
+
+{\bf Remarks}
+\begin{enumerate}
+    \item A Brownian motion $\{W(t),t\ge 0\}$ is a Markov process.In fact,
+    \begin{align*}
+        E[\mathrm{e}^{\theta W(t+s)} | \mathcal{F}_t] &=E[\mathrm{e} ^{\theta(W(t+s) - W(t) + W(t))} | \mathcal{F}_t]\\
+        &=E[\mathrm{e} ^{\theta(W(t+s) - W(t) )} ]\mathrm{e}^{\theta W(t)}\footnotemark[1]\\
+        &=\mathrm{e} ^{\frac{1}{2}\theta ^2 s + \theta W(t)}\\
+        &=E[\mathrm{e}^{\theta W(t+s)}|W(t)]
+    \end{align*} 
+    \item By(3.stationary increments),for $\forall t \ge 0$ ,we have $W(t)\sim N(0,t) $, and the following properties:
+    \begin{framed}
+        \hspace*{3em}
+        $\begin{aligned}
+            &E(W(t)) = 0,&  &E|W(t)| = \sqrt{\frac{2t}{\pi}}\\
+            &E[W^2(t)] = Var(W(t)) = t,& &E[W^4(t)] = 3t^2\\
+            &{\rm Cov}(W(t),W(s)) = \min \{s,t\},& &\rho_{\scriptscriptstyle W(t),W(s)} = \frac{\min\{s,t\}}{\sqrt{st}}
+        \end{aligned}$
+    \end{framed}
+    \item For $\forall\; 0\le s < t$,we have:
+    \[\alpha W(s) + \beta W(t) = (\alpha + \beta)W(s) + \beta (W(t) - W(s)) \sim N(0,(\alpha+\beta)^2s+\beta^2 (t-s)) \]
+    因为$W(s) \sim N(0,s),W(t)-W(s) \sim N(0,t-s)$,
+    且 $f(x)=\frac{1}{\sqrt{2\pi}\sigma}\mathrm{Exp}\{\frac{\left(x-\mu\right)^2}{2\sigma^2}\}\bigg|\mu=0$
+    \item 任意两个 Brownian motion联合 \lrr 二维正态分布(但是两个一般的正态分布就不能满足)
+\end{enumerate}
+
+
+
+\noindent{\bf Example 1}\par
+W(1) + W(2) = 2W(1) + W(2) - W(1)  $\sim $N(0,5)\par
+Thus $P(W(1) + W(2) \le 1) =\varPhi (\frac{1}{\sqrt{5}}) $ 
+
+\noindent{\bf Example 2}\par
+W(1) + W(2) + W(3) + W(4) = 4W(1) + 3(W(2)-W(1)) + 2(W(3)-W(2)) +W(4) - W(3) $\sim$ N(0,30)
+
+
+\begin{Definition}
+    A process is called Gaussian if all its finite-dimensional distribution
+are multivariate normal.
+\end{Definition}
+
+\begin{theorem}
+    A stochastic process $\{W(t),t\ge 0 \}$ is a Brownian motion $\Longleftrightarrow  \{W(t),t\ge 0 \}$ is a Gaussian process
+with $E[W(t)]$ = 0 and {\rm Cov}$(W(t),W(s))$ = $\min \{s,t\}$.
+\end{theorem}
+
+{\bf Exercise}:Let $\{W(t),W(s)   \}$be a B.M.Write $Z(t) = \frac{1}{c} W(c^2t)$,where c > 0 is a constant.Is $Z(t)$ a B.M.?
+
+{\bf Solution}:Yes.It's obvious that $\{Z(t),t\ge 0 \}$ is a Gaussian process.Moreover,
+\begin{itemize}
+    \item $ E[Z(t)] = \frac{1}{c} E(W(c^2 t))$ = 0
+    \item $ {\rm Cov}(Z(t),Z(s)) = \frac{1}{c^2}{\rm Cov}(W(c^2s),W(c^2t)) = \min\{t,s\}$ 
+\end{itemize}
+\subsection*{Sample paths of B.M.}
+Almost every sample path $W(T),0\le t \le T$ is:
+\begin{enumerate}
+    \item a continuous function of t 
+    \item not monotone in any interval,not differentiable at any point.
+    \item not differentiable at any point
+    \item Has infinite variation (无穷变差) on any interval,no matter how shall it is.
+    \item \mbox{[W,W](t) = t}.
+\end{enumerate}
+{\bf Theorem} Let $\{W(t),t\ge 0\}$ be a B.M.and $\mathcal{F}_t$ is natural filtered.Then the following process are all martingale:
+\begin{enumerate}
+    \item W(t).
+    \item $W(t)^2 - t$.
+    \item Z(t) := $\mathrm{e} ^{\theta W(t) - \frac{1}{2}\theta^2 t }$,where $\theta$ is a constant
+\end{enumerate}
+{\bf Proof}:(1)It's Obvious.
+(2).For $\forall t \ge 0,E|W(t)| = $
+(3).For $\forall $
+\begin{enumerate}
+    \item \begin{enumerate}
+        \item For $\forall t \ge 0,W(t)$ is $\mathcal{F}_t$-measure.
+        \item For $\forall t \ge 0,E\abs{W(t)}<\sqrt{\frac{2t}{\pi}} < \infty$
+        \item For $\forall 0 \le s \le t$ ,
+            \begin{align*}
+                E[W(t)\big|\mathcal{F}_s] 
+                &= E[W(t)-W(s)+W(s)\big|\mathcal{F}_s]\\
+                &= E[W(t)-W(s)\big|\mathcal{F}_s] + W(s)\\
+                &= W(s)\mbox{ a.s.}
+            \end{align*}
+    \end{enumerate}
+    \item \begin{enumerate}
+        \item For $\forall t \ge 0,W(t)^2 - t$ is $\mathcal{F}_t$-measure.
+        \item For $\forall t \ge 0,E|W(t)^2-t| < 2t < \infty $
+        \item For $\forall 0\le s < t$,we have
+        \begin{align*}
+            E[W(t)^2 - t\big|\mathcal{F}_s]&= E[(W(t)-W(s)+W(s))^ 2\big|\mathcal{F}_s ] - t\\
+            &=E[(W(t)-W(s))^2\big|\mathcal{F}_s]+ 2W(s)E[W(t)-W(s)\big|\mathcal{F}_s] + W(s)^2 - t\\
+            &=t-s+0+W(s)^2-t = W(s)^2 - s\mbox{ a.s.}
+        \end{align*}
+    \end{enumerate}
+    \item \begin{enumerate}
+        \item For $\forall t \ge 0 , Z(t)$ is $\mathcal{F}_t$-measure.
+        \item For $\forall t \ge 0,E|Z(t)| = E[e^{\theta W(t)}]\cdot e^{-\frac{1}{2}\theta^2 t } = 1 < \infty$
+        \item For $\forall 0\le s < t$,we have
+        \begin{align*}
+            E[Z(t)\big|\mathcal{F}_s] &= E[e^{\theta W(t)}\big|\mathcal{F}_s]\cdot e^{-\frac{1}{2}\theta^2t}\\
+            &= E[e^{\theta (W(t) - W(s))}]\cdot e^{\theta W(s) - \frac{1}{2}\theta ^2 t}\\
+            &= e^{\frac{1}{2}\theta^2(t-s)+\theta W(s) - \frac{1}{2}\theta^2 t}\\
+            &= e^{\theta W(s) - \frac{1}{2} \theta ^2s} = Z(s)
+        \end{align*}   
+    \end{enumerate}
+\end{enumerate}
+
+% \newcommand{\C}[1]{\ensuremath{\mathcal{#1}}}
+
+% \C{F}
+
+
+

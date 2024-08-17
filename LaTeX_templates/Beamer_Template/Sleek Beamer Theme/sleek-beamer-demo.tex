@@ -1,0 +1,588 @@
+% Author         : Pedro Ferreira (up201806093@up.pt)
+% Version        : 1.0
+% Created on     : 12.08.2022
+% Last Edited on : 14.08.2022
+
+% Adapted from HSRM theme by Benjamin Weiss
+% Copyright      : Copyright (c) 2013-2014 by Benjamin Weiss. All rights reserved.
+% License        : This file may be distributed and/or modified under the
+%                  GNU Public License.
+% Description    : HSRM beamer theme demonstration. Also includes a short 
+%                  Tutorial regarding the beamer class.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                    !!! Compile with LuaLaTex !!!
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[compress,aspectratio=169]{beamer}
+%--------------------------------------------------------------------------
+% Common packages
+%--------------------------------------------------------------------------
+\usepackage[british]{babel}
+\hypersetup{
+pdftitle={Sleek Beamer Theme},
+pdfsubject={Latex},
+pdfauthor={Pedro Paulo Carneiro Ferreira},
+pdfkeywords={Latex,Beamer}}
+
+\usepackage{graphicx}
+\usepackage{multicol}
+
+% Advanced table functions
+\usepackage{tabularx,ragged2e}
+\usepackage{booktabs}
+% Listings extension
+\usepackage{listings}
+\lstset{ %
+language=[LaTeX]TeX,
+basicstyle=\normalsize\ttfamily,
+keywordstyle=,
+numbers=left,
+numberstyle=\tiny\ttfamily,
+stepnumber=1,
+showspaces=false,
+showstringspaces=false,
+showtabs=false,
+breaklines=true,
+frame=tb,
+framerule=0.5pt,
+tabsize=4,
+framexleftmargin=0.5em,
+framexrightmargin=0.5em,
+xleftmargin=0.5em,
+xrightmargin=0.5em
+}
+
+%--------------------------------------------------------------------------
+% Load theme
+%--------------------------------------------------------------------------
+\usepackage{sleektheme/beamerthemesleek}
+\usetheme[]{sleek}
+
+\usepackage{sleektheme/dtklogos} % must be loaded after theme
+\usepackage{tikz}
+\usetikzlibrary{mindmap,backgrounds}
+
+%--------------------------------------------------------------------------
+% General presentation settings
+%--------------------------------------------------------------------------
+\title{Sleek Beamer Theme}
+\subtitle{Demonstration and short introduction to beamer \\ {\small Adapted from HSRM theme by Benjamin Weiss}}
+\date{Last Update: \today}
+\author{Pedro Ferreira}
+\institute{DEMEC\\ {\Medium FEUP}}
+
+%--------------------------------------------------------------------------
+% Notes settings
+%--------------------------------------------------------------------------
+\setbeameroption{show notes}
+
+\begin{document}
+%--------------------------------------------------------------------------
+% Titlepage
+%--------------------------------------------------------------------------
+
+\maketitle
+
+%\begin{frame}[plain]
+%	\titlepage
+%\end{frame}
+
+%--------------------------------------------------------------------------
+% Table of contents
+%--------------------------------------------------------------------------
+\section*{Structure}
+\begin{frame}{Structure}
+	% hideallsubsections is recommended for longer presentations
+	\tableofcontents[hideallsubsections]
+\end{frame}
+
+%--------------------------------------------------------------------------
+% Content
+%--------------------------------------------------------------------------
+\section{Introduction}
+
+\begin{frame}{What is Beamer?}
+	The beamer classes for \LaTeX\ are used to create presentations that are to be shown with a beamer. The text typesetting system creates PDF files that can be shown by a large number of programmes.
+	
+	The present theme was adapetd from HSRM theme by Benjamin Weiss and it makes the creation of slides (assuming basic knowledge of \LaTeX\ ) child's play.
+\end{frame}
+
+\begin{frame}{System requirements}
+	In order to successfully create presentations with this theme, the following requirements must be met by the system:
+	\begin{itemize}
+		\item LuaLaTeX must be used to typeset the slides.
+		\item Besides some standard packages, the packages \texttt{beamer}, \texttt{pgf} and \texttt{xcolor} must be installed.
+		\item The fonts \quoted{Flama-Light}, \quoted{Flama-Book} and \quoted{Flama-Medium} should be installed. Alternative: \quoted{Arial}\\\url{http://www.felicianotypefoundry.com/}
+	\end{itemize}
+\end{frame}
+
+\section{Tutorial}
+\begin{frame}[containsverbatim]{Basic structure of the document}
+The basic structure is simple:
+\begin{lstlisting}
+\documentclass[compress]{beamer}
+% Theme
+\usetheme{sleek}
+% General presentation settings 
+\title{Presentation title}
+\subtitle{Subtitle of the presentation}
+\author{Your name}
+\institute{Study area\University {\Medium RheinMain}}
+\begin{document}
+%Slides
+\end{document}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Theme options}
+To customise the presentation, the following options can be selected.
+\begin{table}[]
+	\begin{tabularx}{\linewidth}{l>{\raggedright}X}
+		\toprule
+		\textbf{Option} & \textbf{Effect} \tabularnewline
+		\midrule
+		\texttt{noflama} & If you do not have the Flama font you can switch to the Arial font with this option. \tabularnewline
+		\texttt{noserifmath} & Formulas are also set sans serif. \tabularnewline
+		\texttt{nosectionpages} & The section introduction pages will be hidden.\tabularnewline
+		\bottomrule
+	\end{tabularx}
+	\label{tab:options}
+\end{table}
+\end{frame}
+
+\begin{frame}{Primary colours}									
+All colours predefined are listed below and in the following slide. You may add more using the same code structure as in the \texttt{colors.tex} file.
+
+
+\begin{multicols}{2}
+
+\setbeamercolor{sleekmaincolorDemo}{fg=maincolor,bg=white}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,dp=0.7ex]{sleekmaincolorDemo}
+	\texttt{maincolor}
+\end{beamercolorbox}
+\setbeamercolor{sleekRedDemo}{fg=sleekRed,bg=white}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,dp=0.7ex]{sleekRedDemo}
+	\texttt{sleekRed}
+\end{beamercolorbox}
+\setbeamercolor{sleekRedDarkDemo}{fg=sleekRedDark,bg=white}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,dp=0.7ex]{sleekRedDarkDemo}
+	\texttt{sleekRedDark}
+\end{beamercolorbox}
+\setbeamercolor{sleekWarmGreyDarkDemo}{fg=sleekWarmGreyDark,bg=white}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,dp=0.7ex]{sleekWarmGreyDarkDemo}
+	\texttt{sleekWarmGreyDark}
+\end{beamercolorbox}
+\setbeamercolor{sleekWarmGreyLightDemo}{fg=sleekWarmGreyLight,bg=white}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,dp=0.7ex]{sleekWarmGreyLightDemo}
+	\texttt{sleekWarmGreyLight}
+\end{beamercolorbox}
+
+\setbeamercolor{sleekmaincolorDemoBg}{fg=white,bg=maincolor}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,leftskip=.5ex,dp=0.7ex]{sleekmaincolorDemoBg}
+	\texttt{maincolor}
+\end{beamercolorbox}
+\setbeamercolor{sleekRedDemoBg}{fg=white,bg=sleekRed}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,leftskip=.5ex,dp=0.7ex]{sleekRedDemoBg}
+	\texttt{sleekRed}
+\end{beamercolorbox}
+\setbeamercolor{sleekRedDarkDemoBg}{fg=white,bg=sleekRedDark}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,leftskip=.5ex,dp=0.7ex]{sleekRedDarkDemoBg}
+	\texttt{sleekRedDark}
+\end{beamercolorbox}
+\setbeamercolor{sleekWarmGreyDarkDemo}{fg=white,bg=sleekWarmGreyDark}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,leftskip=.5ex,dp=0.7ex]{sleekWarmGreyDarkDemo}
+	\texttt{sleekWarmGreyDark}
+\end{beamercolorbox}
+\setbeamercolor{sleekWarmGreyLightDemo}{fg=white,bg=sleekWarmGreyLight}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,leftskip=.5ex,dp=0.7ex]{sleekWarmGreyLightDemo}
+	\texttt{sleekWarmGreyLight}
+\end{beamercolorbox}
+
+\end{multicols}
+
+\end{frame}
+
+\begin{frame}{Secondary colours}
+\begin{multicols}{2}
+
+\setbeamercolor{sleekSec1Demo}{fg=sleekSec1,bg=white}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,dp=0.7ex]{sleekSec1Demo}
+	\texttt{sleekSec1}
+\end{beamercolorbox}
+\setbeamercolor{sleekSec1DarkDemo}{fg=sleekSec1Dark,bg=white}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,dp=0.7ex]{sleekSec1DarkDemo}
+	\texttt{sleekSec1Dark}
+\end{beamercolorbox}
+\setbeamercolor{sleekSec1CompDemo}{fg=sleekSec1Comp,bg=white}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,dp=0.7ex]{sleekSec1CompDemo}
+	\texttt{sleekSec1Comp}
+\end{beamercolorbox}
+\setbeamercolor{sleekSec1CompDarkDemo}{fg=sleekSec1CompDark,bg=white}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,dp=0.7ex]{sleekSec1CompDarkDemo}
+	\texttt{sleekSec1CompDark}
+\end{beamercolorbox}
+
+\setbeamercolor{sleekSec2Demo}{fg=sleekSec2,bg=white}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,dp=0.7ex]{sleekSec2Demo}
+	\texttt{sleekSec2}
+\end{beamercolorbox}
+\setbeamercolor{sleekSec2DarkDemo}{fg=sleekSec2Dark,bg=white}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,dp=0.7ex]{sleekSec2DarkDemo}
+	\texttt{sleekSec2Dark}
+\end{beamercolorbox}
+\setbeamercolor{sleekSec2CompDemo}{fg=sleekSec2Comp,bg=white}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,dp=0.7ex]{sleekSec2CompDemo}
+	\texttt{sleekSec2Comp}
+\end{beamercolorbox}
+\setbeamercolor{sleekSec2CompDarkDemo}{fg=sleekSec2CompDark,bg=white}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,dp=0.7ex]{sleekSec2CompDarkDemo}
+	\texttt{sleekSec2CompDark}
+\end{beamercolorbox}
+
+\setbeamercolor{sleekSec3Demo}{fg=sleekSec3,bg=white}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,dp=0.7ex]{sleekSec3Demo}
+	\texttt{sleekSec3}
+\end{beamercolorbox}
+\setbeamercolor{sleekSec3DarkDemo}{fg=sleekSec3Dark,bg=white}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,dp=0.7ex]{sleekSec3DarkDemo}
+	\texttt{sleekSec3Dark}
+\end{beamercolorbox}
+\setbeamercolor{sleekSec3CompDemo}{fg=sleekSec3Comp,bg=white}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,dp=0.7ex]{sleekSec3CompDemo}
+	\texttt{sleekSec3Comp}
+\end{beamercolorbox}
+\setbeamercolor{sleekSec3CompDarkDemo}{fg=sleekSec3CompDark,bg=white}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,dp=0.7ex]{sleekSec3CompDarkDemo}
+	\texttt{sleekSec3CompDark}
+\end{beamercolorbox}
+
+\setbeamercolor{sleekSec1DemoBg}{fg=white,bg=sleekSec1}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,leftskip=.5ex,dp=0.7ex]{sleekSec1DemoBg}
+	\texttt{sleekSec1}
+\end{beamercolorbox}
+\setbeamercolor{sleekSec1DarkDemoBg}{fg=white,bg=sleekSec1Dark}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,leftskip=.5ex,dp=0.7ex]{sleekSec1DarkDemoBg}
+	\texttt{sleekSec1Dark}
+\end{beamercolorbox}
+\setbeamercolor{sleekSec1CompDemoBg}{fg=white,bg=sleekSec1Comp}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,leftskip=.5ex,dp=0.7ex]{sleekSec1CompDemoBg}
+	\texttt{sleekSec1Comp}
+\end{beamercolorbox}
+\setbeamercolor{sleekSec1CompDarkDemoBg}{fg=white,bg=sleekSec1CompDark}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,leftskip=.5ex,dp=0.7ex]{sleekSec1CompDarkDemoBg}
+	\texttt{sleekSec1CompDark}
+\end{beamercolorbox}
+
+\setbeamercolor{sleekSec2DemoBg}{fg=white,bg=sleekSec2}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,leftskip=.5ex,dp=0.7ex]{sleekSec2DemoBg}
+	\texttt{sleekSec2}
+\end{beamercolorbox}
+\setbeamercolor{sleekSec2DarkDemoBg}{fg=white,bg=sleekSec2Dark}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,leftskip=.5ex,dp=0.7ex]{sleekSec2DarkDemoBg}
+	\texttt{sleekSec2Dark}
+\end{beamercolorbox}
+\setbeamercolor{sleekSec2CompDemoBg}{fg=white,bg=sleekSec2Comp}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,leftskip=.5ex,dp=0.7ex]{sleekSec2CompDemoBg}
+	\texttt{sleekSec2Comp}
+\end{beamercolorbox}
+\setbeamercolor{sleekSec2CompDarkDemoBg}{fg=white,bg=sleekSec2CompDark}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,leftskip=.5ex,dp=0.7ex]{sleekSec2CompDarkDemoBg}
+	\texttt{sleekSec2CompDark}
+\end{beamercolorbox}
+
+\setbeamercolor{sleekSec3Demo}{fg=white,bg=sleekSec3}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,leftskip=.5ex,dp=0.7ex]{sleekSec3Demo}
+	\texttt{sleekSec3}
+\end{beamercolorbox}
+\setbeamercolor{sleekSec3DarkDemo}{fg=white,bg=sleekSec3Dark}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,leftskip=.5ex,dp=0.7ex]{sleekSec3DarkDemo}
+	\texttt{sleekSec3Dark}
+\end{beamercolorbox}
+\setbeamercolor{sleekSec3CompDemo}{fg=white,bg=sleekSec3Comp}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,leftskip=.5ex,dp=0.7ex]{sleekSec3CompDemo}
+	\texttt{sleekSec3Comp}
+\end{beamercolorbox}
+\setbeamercolor{sleekSec3CompDarkDemo}{fg=white,bg=sleekSec3CompDark}
+\begin{beamercolorbox}[wd=\linewidth,ht=2ex,leftskip=.5ex,dp=0.7ex]{sleekSec3CompDarkDemo}
+	\texttt{sleekSec3CompDark}
+\end{beamercolorbox}
+
+\end{multicols}
+\end{frame}
+
+\begin{frame}[containsverbatim]{slide structure}
+Structure in Beamer is the same as in \LaTeX\ using \lstinline!section!, \lstinline!subsection!, etc. For slides the \lstinline!frame! environment is defined.
+
+The slide title can be passed directly to the \lstinline!frame! environment or set within the environment using \lstinline!\frametitle{slide title}!
+\begin{lstlisting}
+\section{My Section}
+\subsection{My Subsection}
+\begin{frame}
+\frametitle{slide title}
+% slide content
+\end{frame}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[containsverbatim]{title page and table of contents}
+The title page is created with 
+\begin{lstlisting}
+\maketitle
+\end{lstlisting}
+And the table of contents with
+\begin{lstlisting}
+\begin{frame}{outline}
+	\tableofcontents[hideallsubsections]
+\end{frame}
+\end{lstlisting}
+The option \lstinline!hideallsubsections! is useful for longer presentations to keep the table of contents compact.
+\end{frame}
+
+\subsection{Enumerations}
+\begin{frame}[containsverbatim]{enumerations}
+Enumerations are possible with the \lstinline!enumerate! and the \lstinline!itemize! environment.
+\begin{enumerate}
+	\item item 1
+	\item item 2
+	\begin{itemize}
+		\item point 1
+		\item point 2
+	\end{itemize}
+	\item point 3
+\end{enumerate}
+\end{frame}
+
+\subsection{Emphasis}
+\begin{frame}[containsverbatim]{emphasis}
+In the Beamer class, the function \lstinline!\alert! is defined to highlight individual words. Example:
+\begin{itemize}
+	\item \alert{highlighted text}
+\end{itemize}
+Additionally, \lstinline!\quoted! and \lstinline!\doublequoted! can be used, resulting in the following outputs:
+\begin{itemize}
+	\item[] \quoted{single quotation marks}
+	\item[] \doublequoted{Double quotation marks}
+\end{itemize}
+\end{frame}
+
+\subsection{Block structures}
+\begin{frame}[containsverbatim]{Simple block with enumeration}
+Block environments are defined in Beamer for structuring purposes.
+\begin{block}{Block with an enumeration}
+	\begin{itemize}
+		\item point 1
+		\item point 2
+	\end{itemize}
+\end{block}
+\begin{lstlisting}
+\begin{block}{block with a bullet}
+	\begin{itemize}
+		\item point 1
+		\item point 2
+	\end{itemize}
+\end{block}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[containsverbatim]{Alert Block}
+\begin{alertblock}{Alert Block}
+	An Alert Block is coloured with the first primary colour.
+\end{alertblock}
+\begin{lstlisting}
+\begin{alertblock}{alert block}
+An Alert Block is coloured with the first primary colour.
+\end{alertblock}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[containsverbatim]{Example Block}
+\begin{exampleblock}{Example Block}
+	An Example Block is coloured with the first secondary colour.
+\end{exampleblock}
+\begin{lstlisting}
+\begin{exampleblock}{Example Block}
+An example block is coloured with the first secondary colour.
+\end{exampleblock}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[containsverbatim]{block with other colour}
+\begingroup
+\setbeamercolor{block title}{bg=sleekSec2Dark}
+\setbeamercolor{block body}{fg=white,bg=sleekSec2}
+\begin{block}{Block with other colour}
+	Another secondary colour is used in this block.
+\end{block}
+\endgroup
+\begin{lstlisting}
+\begingroup
+\setbeamercolor{block title}{bg=sleekSec2Dark}
+\setbeamercolor{block body}{bg=sleekSec2}
+\begin{block}{block with other colour}
+	In this block, ...
+\end{block}
+\endgroup
+\end{lstlisting}
+\end{frame}
+
+\section{Example slides}
+\begin{frame}{other examples}
+Below are more example slides attached without additional explanation.
+
+Just have a look at the source code to see how the slides were created.
+\end{frame}
+\subsection{Images}
+\begin{frame}{photo with copyright}
+	\begin{figure}
+		\centering
+		\includegraphicscopyright[width=0.6\textwidth]{Images/photo.jpg}{Copyright by \href{http://netzlemming.deviantart.com/}{Netlemming}, \href{http://creativecommons.org/licenses/by-nc/3.0/}{CC BY-NC 3.0 License}}
+	\end{figure}
+\end{frame}
+\begin{frame}{plot with caption}
+	\begin{figure}
+		\centering
+		\input{Images/plot.tex}
+		\caption{LFE channel frequency spectrum}
+	\end{figure}
+\end{frame}
+
+\subsection{Tables}
+\begin{frame}{Table}
+\begin{table}[]
+	\caption{Selection of window function and their properties}
+	\begin{tabular}[]{lrrr}
+		\toprule
+		\textbf{Window}			& \multicolumn{1}{c}{\textbf{First side lobe}}	
+		                    & \multicolumn{1}{c}{\textbf{3\,dB bandwidth}}
+		                    & \multicolumn{1}{c}{\textbf{Roll-off}} \\
+		\midrule
+		Rectangular				& 13.2\,dB	& 0.886\,Hz/bin	& 6\,dB/oct		\\[0.25em]
+		Triangular				& 26.4\,dB	& 1.276\,Hz/bin	& 12\,dB/oct	\\[0.25em]
+		Hann					& 31.0\,dB	& 1.442\,Hz/bin	& 18\,dB/oct	\\[0.25em]
+		Hamming					& 41.0\,dB	& 1.300\,Hz/bin	& 6\,dB/oct		\\
+		\bottomrule
+	\end{tabular}
+	\label{tab:WindowFunctions}
+\end{table}
+\end{frame}
+
+\subsection{Formulas}
+\begin{frame}{Formulas}
+\begin{block}{Fourier Integral}
+\begin{equation*}
+F(\textrm{j}\omega) = \int\limits_{-\infty}^{\infty} f(t)\cdot\textrm{e}^{-\textrm{j}\omega t} dt
+\end{equation*}
+\end{block}
+\begin{block}{Factorial}
+\begin{equation*}
+	n! = 1\cdot 2 \cdot 3 \cdot\ldots\cdot n = \prod_{k=1}^n k
+\end{equation*}
+\end{block}
+\end{frame}
+
+\begin{frame}{Mindmap with TikZ}
+\centering
+% \resizebox{0.8\textheight}{!}{%
+\begin{tikzpicture}[scale=0.88]
+	%\tikzset{every child/.append style={level distance=250}}
+	\path[mindmap,concept color=sleekSec3Comp,text=sleekWarmGreyDark,yshift=3cm]
+	node[concept] {\TeX}
+	[clockwise from=-30]
+	child[concept color=sleekSec2Dark,text=white] { node[concept] {\textcolor{white}{XeTeX}} }
+	child[concept color=sleekSec1CompDark,text=white,yshift=0.1cm] { node[concept]{ConTex} }
+	child[concept color=sleekSec1Dark,text=white] { node[concept] {\LaTeX} };
+\end{tikzpicture}%
+% }
+\end{frame}
+
+\subsection{Footnote}
+\begin{frame}{Footnotes}
+	Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem \footnote{Lorem ipsum dolor sit amet} ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+\end{frame}
+
+\subsection{Notes}
+\begin{frame}{slide with associated notes slide}
+    This slide is for the audience.
+
+	The following programmes are suitable for its presentation:
+	\begin{itemize}
+		\item Splitshow (Mac OS X)\\url{https://code.google.com/p/splitshow/}
+		\item pdf-presenter (Windows)\\url{https://code.google.com/p/pdf-presenter/}
+	\end{itemize}
+\end{frame}
+
+\note{
+    Use this slide for your notes on the presentation.
+    
+	The following programmes are suitable for your presentation:
+	\begin{itemize}
+		\item Splitshow (Mac OS X)\\\url{https://code.google.com/p/splitshow/}
+		\item pdf-presenter (Windows)\\\url{https://code.google.com/p/pdf-presenter/}
+	\end{itemize} 
+}
+
+\subsection{Columns}
+\begin{frame}{Two columns}
+	\begin{multicols}{2}
+		Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+		\begin{itemize}
+        	\item one entry
+        	\item another entry
+		\end{itemize}
+	\end{multicols}
+\end{frame}
+
+\begin{frame}{Column break}
+	\begin{multicols}{2}
+		Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+		\columnbreak
+		\begin{itemize}
+        	\item one entry
+        	\item another entry
+		\end{itemize}
+	\end{multicols}
+\end{frame}
+
+\begin{frame}{References}
+	\begin{thebibliography}{10}
+    
+	\beamertemplatebookbibitems
+	\bibitem{Oppenheim2009}
+	Alan~V.~Oppenheim
+	\newblock \doublequoted{Discrete-Time Signal Processing}
+	\newblock Prentice Hall Press, 2009
+
+	\beamertemplatearticlebibitems
+	\bibitem{EBU2011}
+	European~Broadcasting~Union
+	\newblock \doublequoted{Specification of the Broadcast Wave Format (BWF)}
+	\newblock 2011
+  \end{thebibliography}
+\end{frame}
+
+\section{Outlook}
+\begin{frame}{To do}
+	\begin{itemize}
+		\item An option to a more complete footline needs to be added.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Questions, Comments, Contact}
+	The SLEEK theme is licensed under the \quoted{GNU Public License}. So it may be redistributed and modified as long as the license type is kept.
+	
+	Please feel free to contact me if you have any questions or comments.
+	\begin{itemize}
+		\item \href{mailto:up201806093@up.pt}{up201806093@up.pt}
+	\end{itemize}
+\end{frame}
+
+\end{document}
+
+
+
+
+
+

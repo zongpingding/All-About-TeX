@@ -1,0 +1,176 @@
+\ProvidesPackage{Slide}
+%% 一：底部导航条样式设置
+%  注：\useoutertheme{infolines} 在任一主题中添加底边导航条
+
+% 1. 样式1：author, title, 日期/帧序号
+\defbeamertemplate{footline}{FootlineTemplateI}{%
+	\leavevmode% 离开vmode，也就是离开竖直模式，进入水平模式
+	\hbox{%
+		\begin{beamercolorbox}[wd=.3\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+			\ifnum \the\value{page}>0 \usebeamerfont{author in head/foot}\insertshortauthor\fi
+		\end{beamercolorbox}%
+		\begin{beamercolorbox}[wd=.4\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+			\ifnum \the\value{page}>0 \usebeamerfont{title in head/foot}\insertshorttitle\fi
+		\end{beamercolorbox}%
+		\begin{beamercolorbox}[wd=0.3\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+			\ifnum \the\value{page}>0 \insertframenumber{} / \inserttotalframenumber\fi
+	\end{beamercolorbox}}%
+%	\vskip0pt%
+}
+
+% 使用样例1
+% \usepackage{Slide}
+% \setbeamertemplate{footline}[FootlineTemplateI]
+
+
+% 2. 样式2:只显示时间和帧序号
+\defbeamertemplate{footline}{FootlineTemplateII}{%
+	\leavevmode% 离开vmode，也就是离开竖直模式，进入水平模式
+	\hbox{%
+		\begin{beamercolorbox}[wd=.6\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+			\ifnum \the\value{page}>0 \usebeamerfont{author in head/foot}{}\fi
+		\end{beamercolorbox}%
+		\begin{beamercolorbox}[wd=0.4\paperwidth,ht=2.25ex,dp=1ex,right]{author in head/foot}%
+			\ifnum \the\value{page}>0\insertshortdate~~~\insertframenumber{}/\inserttotalframenumber~~~\fi
+	\end{beamercolorbox}}%
+%	\vskip0pt%
+}
+
+% 使用样例2
+% \usepackage{Slide}
+% \setbeamertemplate{footline}[FootlineTemplateII]
+
+
+%% 二：使用脚注
+% Fnote 环境带有两个参数，它们指定了脚步注的位置即相对于幻灯片的左上角。
+\newenvironment{Fnote}[2]{% 
+  \begin{textblock*}{\textwidth}(#1,#2) 
+      \footnotesize\it\bgroup\color{black!20!black}}
+      {\egroup\end{textblock*}} 
+
+
+%% 相关宏包引入
+% \documentclass[fontset=windows]{beamer}
+% 会警告fandol字体问题
+% 解决方法，把fotset放到引用ctex宏包时的选项
+
+% 多 LaTeX 分发版提供了色名集:svgnam.def, dvipsnam.def文件。
+% 要在 Beamer 中使用该扩展的色名集，请按以下方式调用 Beamer
+%% Beamer字体设置
+% normal text可以设定默认字体尺寸为 8、9、10、11、 12、14、17、20点
+% \documentclass[xcolor=dvipsnames, 7pt]{beamer}
+
+% Xcolor 能读取来自文件 svgnam.def 10 的更大的色名集
+% 要在 Beamer 中使用该扩展的色名集，请按以下方式调用 Beamer：
+% \documentclass[xcolor=svgnames]{beamer} 
+
+
+% 这样可能会与结构字体不协调，使用如下命令进行设置
+% \setbeamerfont{structure}{shape=\itshape}
+\RequirePackage[fontset=windows]{ctex}
+\RequirePackage{fontspec}
+% 抄录环境
+% 其实不论是 minted 还是 lstlisting 还是基本的 verbatim，
+% 这些「抄录」环境与 frame 联用时，统统都需要给 frame 加上
+%  fragile 参数，形如：
+\RequirePackage{listings}
+\RequirePackage{fancyvrb}
+% 使用规定好的标准大小
+\setbeamerfont{frametitle}{size=\large}
+% 使用自定义大小（不推荐）:格式：size*={⟨size in pt⟩}{⟨baselineskip⟩}
+% \setbeamerfont{frametitle}{size={\fontsize{6pt}{0pt}}}
+
+
+\RequirePackage{amsmath,amsthm,amssymb,amsfonts}
+% 粗体数学符号需要的
+% \usepackage{newtxtext,newtxmath}
+\RequirePackage{bm}
+\RequirePackage{amssymb}
+\setmainfont{TeX Gyre Termes} 
+% 消除字体警告
+% 1. Font shape `TU/lmr/b/it' in size <5> not available (Font)
+% 2. Font shape `TU/ptm/m/n‘ undefined (Font)
+% 会发出警告警告
+% 3. Font shape `TU/lmss/m/sc' in size <10> not available (Font)
+\RequirePackage{tcolorbox}
+\RequirePackage{tikz}
+\RequirePackage{pgfplots}
+% 首字下沉需要的宏包
+\RequirePackage{lettrine}
+% \usepackage{lstlistings}
+\RequirePackage[absolute,overlay]{textpos} 
+\usetikzlibrary{3d}
+\usetikzlibrary{decorations.pathreplacing, calligraphy}
+\pgfplotsset{compat=1.17}       %% pgf绘图的相关设置
+% \setbeamertemplate{footline}[NGEGFootlineTemplateI]
+% 注：此命令一定要紧跟在\usetheme{Theme-names}之后
+% 设置超链接的颜色为红色，但是会影响到目录和title的颜色
+% \hypersetup{colorlinks=true,linkcolor=red}
+% \hypersetup{colorlinks=true}
+%% 链接打开本地文件
+%  \href{run:./Portrait.png}{Test Extern Picture} 
+% \href{run:./6.gif}{Extern Vedio}
+
+
+%% 相关主题选择
+%% 1. 主题：以城市命名的
+% 入门主题
+% 可以指定水平条距罗切斯特幻灯片顶部边缘的高度
+% \usetheme[height=7mm]{Rochester}
+
+% 搭配方案一：仅仅只在底部显示信息
+% \usetheme{Madrid}
+
+% 搭配方案二：仅仅只在顶部一行显示信息(黑色)
+% \usetheme{Frankfurt}
+
+% 搭配方案三：在顶部和底部显示信息，顶部和底部为两行（蓝色）
+% \usetheme{Berlin}
+
+% 其他的单独主题：顶部两行，底部两行
+% \usetheme{Ilmenau} 
+% \usetheme{Dresden}
+
+% 组合方案
+% 使用自定义的样式增加原本的底部没有的一行
+\usetheme{Frankfurt}
+\setbeamertemplate{footline}[FootlineTemplateII]
+
+% 自定义beamer的其他样式
+% 更改列表环境的点样式
+\setbeamertemplate{items}[ball]
+% 圆角加阴影
+\setbeamertemplate{blocks}[rounded][shadow=true] 
+% 隐藏导航图标
+% \setbeamertemplate{navigation symbols}{} 
+% 底边导航条（footline）是幻灯片底部的狭窄长条，在这里，可以显示
+% 作者姓名、演示稿的标题、幻灯片序号、其它有用的信息。
+% 即：\useoutertheme{infolines} 必需放在\usetheme[height=7mm]{Rochester}之前。
+% 如果你搞反了顺序，幻灯片的标题将被删除。
+% 为了自定义footline，你需要自定义一个footline的模板
+% \setbeamertemplate{footline}[NGEGFootlineTemplate]
+% Beamer 幻灯片的尺寸是 128mm × 96mm。这个尺寸是固定的不能修改。
+% 然而，左右两侧的页边距（margins）却可以更改。左右两侧的页边距默认设定是 1cm 。
+% 在下面的例子中，我们将左右两侧的页边距分别更改为 6mm 和 2mm。
+% \setbeamersize{text margin left=6mm, text margin right=2mm}
+
+%% 2. 颜色主题：
+% 2.1 默认颜色主题
+\usecolortheme{default}
+% 2.2 支持RGB颜色指定
+% \usecolortheme[RGB={205,173,0}]{structure} 
+% 2.3 设置structure样式
+% 使用如下参数需要加上参数：\documentclass[xcolor=dvipsnames]{beamer}
+% \usecolortheme[named=Brown]{structure} 
+
+%% 设置前景色和背景色：幻灯片中的主体文本
+% \setbeamercolor{normal text}{fg=black!30}
+% \setbeamercolor{normal text}{bg=green!3}
+%% 设置结构色：幻灯片的页眉和页脚不是普通文本
+% \setbeamercolor{structure}{fg=purple} 
+
+%% 3. 字体的主题：默认为无衬线
+% 感觉除了数学公式外的确挺好看的
+% 但是衬线字体的公式效果更好
+\usefonttheme[onlymath]{serif}
+% \usefonttheme{serif}

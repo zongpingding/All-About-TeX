@@ -1,0 +1,2262 @@
+% \iffalse meta-comment
+%
+% Copyright (C) 2021-2023 by Jinwen XU
+% ------------------------------------
+%
+% This file may be distributed and/or modified under the conditions of the LaTeX
+% Project Public License, either version 1.3c of this license or (at your option)
+% any later version. The latest version of this license is in:
+%
+%    http://www.latex-project.org/lppl.txt
+%
+% \fi
+%
+%<*driver>
+\ProvidesFile{colorist.dtx}
+%</driver>
+\NeedsTeXFormat{LaTeX2e}[2022-06-01]
+%
+%<*colorart>
+\ProvidesExplClass
+  {colorart}
+  {2023/03/07} {}
+  {A colorful article style}
+
+\tl_const:Nn \l__colorclass_base_class_tl { article }
+%</colorart>
+%
+%<*colorbook>
+\ProvidesExplClass
+  {colorbook}
+  {2023/03/07} {}
+  {A colorful book style}
+
+\tl_const:Nn \l__colorclass_base_class_tl { book }
+%</colorbook>
+%
+%<*lebhart>
+\ProvidesExplClass
+  {lebhart}
+  {2023/03/07} {}
+  {A colorful article style}
+
+\tl_const:Nn \l__colorclass_base_class_tl { article }
+%</lebhart>
+%
+%<*beaulivre>
+\ProvidesExplClass
+  {beaulivre}
+  {2023/03/07} {}
+  {A colorful book style}
+
+\tl_const:Nn \l__colorclass_base_class_tl { book }
+%</beaulivre>
+%
+%<*colorist>
+\ProvidesExplPackage
+  {colorist}
+  {2023/03/07} {}
+  {A colorful style for articles and books}
+%</colorist>
+%
+%<*colorist-fancy>
+\ProvidesExplPackage
+  {colorist-fancy}
+  {2023/03/07} {}
+  {The fancy style of colorist}
+%</colorist-fancy>
+
+%<*class>
+
+\bool_new:N \l__colorclass_load_custom_font_file_bool
+\bool_set_false:N \l__colorclass_load_custom_font_file_bool
+
+%<*lebhart|beaulivre>
+\bool_new:N \l__colorclass_load_custom_font_file_latin_bool
+\bool_set_false:N \l__colorclass_load_custom_font_file_latin_bool
+
+\bool_new:N \l__colorclass_load_custom_font_file_cjk_bool
+\bool_set_false:N \l__colorclass_load_custom_font_file_cjk_bool
+
+\bool_new:N \l__colorclass_load_custom_font_file_math_bool
+\bool_set_false:N \l__colorclass_load_custom_font_file_math_bool
+%</lebhart|beaulivre>
+
+\keys_define:nn { colorclass }
+  {
+    , draft                   .bool_set:N         = \l__colorclass_fast_bool
+    , draft                   .initial:n          = { false }
+    , fast                    .bool_set:N         = \l__colorclass_fast_bool
+
+    , print                   .bool_set:N         = \l__colorclass_print_mode_bool
+    , print                   .initial:n          = { false }
+    , print mode              .bool_set:N         = \l__colorclass_print_mode_bool
+    , print~mode              .bool_set:N         = \l__colorclass_print_mode_bool
+    , print-mode              .bool_set:N         = \l__colorclass_print_mode_bool
+    , print version           .bool_set:N         = \l__colorclass_print_mode_bool
+    , print~version           .bool_set:N         = \l__colorclass_print_mode_bool
+    , print-version           .bool_set:N         = \l__colorclass_print_mode_bool
+
+%<*none>
+    , fancy                   .bool_set:N         = \l__colorclass_fancy_bool
+    , fancy                   .initial:n          = { false }
+%</none>
+
+    , load custom font file   .code:n             = {
+                                                      \bool_set_true:N \l__colorclass_load_custom_font_file_bool
+                                                      \str_set:Nn \l__colorclass_custom_font_file_str { #1 }
+%<*lebhart|beaulivre>
+                                                      \bool_set_true:N \l__colorclass_load_custom_font_file_latin_bool
+                                                      \str_set:Nn \l__colorclass_custom_font_file_latin_str { colorist.font.latin }
+                                                      \bool_set_true:N \l__colorclass_load_custom_font_file_cjk_bool
+                                                      \str_set:Nn \l__colorclass_custom_font_file_cjk_str   { colorist.font.cjk }
+                                                      \bool_set_true:N \l__colorclass_load_custom_font_file_math_bool
+                                                      \str_set:Nn \l__colorclass_custom_font_file_math_str  { colorist.font.math }
+%</lebhart|beaulivre>
+                                                    }
+    , load custom font file   .default:n          = { colorist.font }
+    , load~custom~font~file   .meta:n             = { load custom font file = { #1 } }
+    , load~custom~font~file   .default:n          = { colorist.font }
+    , load-custom-font-file   .meta:n             = { load custom font file = { #1 } }
+    , load-custom-font-file   .default:n          = { colorist.font }
+
+%<*lebhart|beaulivre>
+    , load custom latin font file   .code:n       = {
+                                                      \bool_set_true:N \l__colorclass_load_custom_font_file_latin_bool
+                                                      \str_set:Nn \l__colorclass_custom_font_file_latin_str { #1 }
+                                                    }
+    , load custom latin font file   .default:n    = { colorist.font.latin }
+    , load~custom~latin~font~file   .meta:n       = { load custom latin font file = { #1 } }
+    , load~custom~latin~font~file   .default:n    = { colorist.font.latin }
+    , load-custom-latin-font-file   .meta:n       = { load custom latin font file = { #1 } }
+    , load-custom-latin-font-file   .default:n    = { colorist.font.latin }
+
+    , load custom cjk font file     .code:n       = {
+                                                      \bool_set_true:N \l__colorclass_load_custom_font_file_cjk_bool
+                                                      \str_set:Nn \l__colorclass_custom_font_file_cjk_str { #1 }
+                                                    }
+    , load custom cjk font file     .default:n    = { colorist.font.cjk }
+    , load~custom~cjk~font~file     .meta:n       = { load custom cjk font file = { #1 } }
+    , load~custom~cjk~font~file     .default:n    = { colorist.font.cjk }
+    , load-custom-cjk-font-file     .meta:n       = { load custom cjk font file = { #1 } }
+    , load-custom-cjk-font-file     .default:n    = { colorist.font.cjk }
+
+    , load custom math font file    .code:n       = {
+                                                      \bool_set_true:N \l__colorclass_load_custom_font_file_math_bool
+                                                      \str_set:Nn \l__colorclass_custom_font_file_math_str { #1 }
+                                                    }
+    , load custom math font file    .default:n    = { colorist.font.math }
+    , load~custom~math~font~file    .meta:n       = { load custom math font file = { #1 } }
+    , load~custom~math~font~file    .default:n    = { colorist.font.math }
+    , load-custom-math-font-file    .meta:n       = { load custom math font file = { #1 } }
+    , load-custom-math-font-file    .default:n    = { colorist.font.math }
+%</lebhart|beaulivre>
+
+    , a4paper                 .bool_set:N         = \l__colorclass_a_four_paper_bool
+    , a4paper                 .initial:n          = { false }
+    , b5paper                 .bool_set:N         = \l__colorclass_b_five_paper_bool
+    , b5paper                 .initial:n          = { false }
+
+    , oneside                 .code:n             = { \PassOptionsToClass { \CurrentOption } { \l__colorclass_base_class_tl } }
+    , twoside                 .code:n             = { \PassOptionsToClass { \CurrentOption } { \l__colorclass_base_class_tl } }
+
+    , 11pt                    .code:n             = { \PassOptionsToClass { \CurrentOption } { \l__colorclass_base_class_tl } }
+    , 12pt                    .code:n             = { \PassOptionsToClass { \CurrentOption } { \l__colorclass_base_class_tl } }
+
+    , unknown                 .code:n             = {
+                                                      \PassOptionsToPackage { \CurrentOption } { colorist }
+                                                    }
+  }
+\ProcessKeyOptions [ colorclass ]
+
+\LoadClass{\l__colorclass_base_class_tl}
+
+
+\NewDocumentCommand \IfPrintModeTF { m m }
+  {
+    \bool_if:NTF \l__colorclass_print_mode_bool { #1 } { #2 }
+  }
+\NewDocumentCommand \IfPrintModeT { m }
+  {
+    \bool_if:NT \l__colorclass_print_mode_bool { #1 }
+  }
+\NewDocumentCommand \IfPrintModeF { m }
+  {
+    \bool_if:NF \l__colorclass_print_mode_bool { #1 }
+  }
+
+
+%%================================
+%%  Page layout
+%%================================
+\RequirePackage { silence }
+\WarningFilter { geometry } { Over-specification }
+
+\PassOptionsToPackage { heightrounded } { geometry }
+\RequirePackage { geometry }
+
+\geometry
+  {
+    papersize = { 8.5in, 11in },
+    total = { 6.500in, 9.130in },
+    centering,
+    footnotesep = 2em plus 2pt minus 2pt,
+    footskip = .5in,
+  }
+
+\bool_if:NT \l__colorclass_b_five_paper_bool
+  {
+    \geometry
+      {
+        b5paper,
+        total = { 5.535in, 8.160in },
+        centering,
+        footnotesep = 2em plus 2pt minus 2pt,
+        footskip = .5in,
+      }
+  }
+
+\bool_if:NT \l__colorclass_a_four_paper_bool
+  {
+    \geometry
+      {
+        a4paper,
+        total = { 6.500in, 9.685in },
+        centering,
+        footnotesep = 2em plus 2pt minus 2pt,
+        footskip = .5in,
+      }
+  }
+
+\bool_if:NT \l__colorclass_fast_bool
+  {
+    \PassOptionsToPackage { fast } { colorist }
+    \RequirePackage { draftwatermark }
+    \DraftwatermarkOptions { text = { \normalfont DRAFT }, color = paper!97!-paper }
+  }
+
+\RequirePackage { indentfirst }
+
+\RequirePackage { colorist }
+
+% \raggedbottom
+% \emergencystretch=2pt
+% \hfuzz=2pt
+% \vfuzz=2pt
+
+%%================================
+%%  Fonts
+%%================================
+\WarningFilter { latexfont } { Font~shape }
+\WarningFilter { latexfont } { Some~font  }
+
+\hook_gput_code:nnn { begindocument/before } { colorclass }
+  {
+    \IfPackageLoadedTF { biblatex }
+      {
+        \PassOptionsToPackage { biblatex } { embrac }
+      } {}
+    \RequirePackage { embrac }
+  }
+
+\cs_new_protected:Nn \__colorclass_load_file_or_config:Nnn
+  {
+    \bool_if:NT #1
+      {
+        \exp_args:Nx \file_if_exist:nT { #2 }
+          {
+            \exp_args:Nx \file_input:n { #2 }
+            \use_none:nn
+          }
+      }
+    \use:n { #3 }
+  }
+
+%<*lebhart|beaulivre>
+\cs_new_protected:Nn \__colorclass_if_font_exist:nnn
+  {
+    \bool_if:NTF \l__colorclass_fast_bool
+      { #3 }
+      { \fontspec_font_if_exist:nTF { #1 } { #2 } { #3 } }
+  }
+%</lebhart|beaulivre>
+
+\__colorclass_load_file_or_config:Nnn \l__colorclass_load_custom_font_file_bool { \l__colorclass_custom_font_file_str }
+  {
+    \RequirePackage { projlib-font }
+
+%<*colorart|colorbook>
+    \bool_if:NF \g_projlib_font_already_set_bool
+      {
+        \RequirePackage { mathpazo }
+        \RequirePackage { newpxtext }
+        \bool_if:NT \l__projlib_font_useosf_bool { \useosf }
+        \RequirePackage { amssymb }
+        \sys_if_engine_pdftex:F
+          {
+            \setsansfont { texgyreheros }
+              [
+                Extension      = .otf ,
+                Scale          = MatchUppercase ,
+                UprightFont    = *-regular ,
+                BoldFont       = *-bold ,
+                ItalicFont     = *-italic ,
+                BoldItalicFont = *-bolditalic ,
+              ]
+          }
+        % Adjusting the kerning of 'embrac' for 'newpxtext'
+        \hook_gput_code:nnn { begindocument/before } { colorclass }
+          {
+            \RenewEmph{[}{]}
+            \RenewEmph{(}{)}
+          }
+      }
+%</colorart|colorbook>
+%
+%<*lebhart|beaulivre>
+    \bool_if:NF \g_projlib_font_already_set_bool
+      {
+        \bool_if:NT \l__colorclass_fast_bool
+          {
+            \RequirePackage { mathpazo }
+          }
+
+        \PassOptionsToPackage { no-math,quiet } { fontspec }
+        \RequirePackage { fontspec }
+
+        \__colorclass_load_file_or_config:Nnn \l__colorclass_load_custom_font_file_latin_bool { \l__colorclass_custom_font_file_latin_str }
+          {
+            \bool_if:NTF \l__projlib_font_useosf_bool
+              {
+                \setmainfont { TeXGyrePagellaX }
+                  [
+                    Extension      = .otf,
+                    UprightFont    = *-Regular,
+                    BoldFont       = *-Bold,
+                    ItalicFont     = *-Italic,
+                    BoldItalicFont = *-BoldItalic,
+                    Numbers        = OldStyle ,
+                  ]
+                \setsansfont { texgyreheros }
+                  [
+                    Extension      = .otf ,
+                    Scale          = MatchUppercase ,
+                    UprightFont    = *-regular ,
+                    BoldFont       = *-bold ,
+                    ItalicFont     = *-italic ,
+                    BoldItalicFont = *-bolditalic ,
+                    Numbers        = OldStyle ,
+                  ]
+                % \setsansfont { SourceSansPro }
+                %   [
+                %     Extension      = .otf,
+                %     UprightFont    = *-Regular,
+                %     BoldFont       = *-Semibold,
+                %     ItalicFont     = *-RegularIt,
+                %     BoldItalicFont = *-SemiboldIt,
+                %     WordSpace      = {1.25, 1, 1} ,
+                %     Numbers        = OldStyle ,
+                %   ]
+              }
+              {
+                \setmainfont { TeXGyrePagellaX }
+                  [
+                    Extension      = .otf,
+                    UprightFont    = *-Regular,
+                    BoldFont       = *-Bold,
+                    ItalicFont     = *-Italic,
+                    BoldItalicFont = *-BoldItalic,
+                  ]
+                \setsansfont { texgyreheros }
+                  [
+                    Extension      = .otf ,
+                    Scale          = MatchUppercase ,
+                    UprightFont    = *-regular ,
+                    BoldFont       = *-bold ,
+                    ItalicFont     = *-italic ,
+                    BoldItalicFont = *-bolditalic ,
+                  ]
+                % \setsansfont { SourceSansPro }
+                %   [
+                %     Extension      = .otf,
+                %     UprightFont    = *-Regular,
+                %     BoldFont       = *-Semibold,
+                %     ItalicFont     = *-RegularIt,
+                %     BoldItalicFont = *-SemiboldIt,
+                %     WordSpace      = {1.25, 1, 1} ,
+                %   ]
+              }
+            \setmonofont { NewCMMono10 }
+              [
+                Scale          = 1.05 ,
+                Extension      = .otf,
+                UprightFont    = *-Regular,
+                BoldFont       = *-Bold,
+                ItalicFont     = *-Italic,
+                BoldItalicFont = *-BoldOblique,
+              ]
+
+            \projlib_language_set_linespacing_latin:n { \setstretch { 1.07 } }
+
+            \hook_gput_code:nnn { begindocument/before } { colorclass }
+              {
+                \RenewEmph{[}{]}
+                \RenewEmph{(}{)}
+              }
+          }
+      }
+
+
+    \PassOptionsToPackage { fontset = none, scheme = plain } { ctex }
+    \RequirePackage { ctex }
+
+
+    \__colorclass_load_file_or_config:Nnn \l__colorclass_load_custom_font_file_cjk_bool { \l__colorclass_custom_font_file_cjk_str }
+      {
+        \__colorclass_if_font_exist:nnn { SourceHanSerifSC-Regular }
+          {
+            \setCJKmainfont { SourceHanSerifSC }
+              [
+                UprightFont    = *-Regular,
+                BoldFont       = *-Bold,
+                ItalicFont     = *-Regular,
+                BoldItalicFont = *-Bold,
+              ]
+          }
+          {
+            \setCJKmainfont { FandolSong }
+              [
+                Extension      = .otf,
+                UprightFont    = *-Regular,
+                BoldFont       = *-Bold,
+                ItalicFont     = FandolKai-Regular ,
+                BoldItalicFont = FandolKai-Regular ,
+                BoldItalicFeatures = { FakeBold = 4 } ,
+              ]
+          }
+
+        \__colorclass_if_font_exist:nnn { SourceHanSansSC-Regular }
+          {
+            \setCJKsansfont { SourceHanSansSC }
+              [
+                UprightFont    = *-Regular,
+                BoldFont       = *-Bold,
+                ItalicFont     = *-Regular,
+                BoldItalicFont = *-Bold,
+              ]
+          }
+          {
+            \setCJKsansfont { FandolHei }
+              [
+                Extension      = .otf,
+                UprightFont    = *-Regular,
+                BoldFont       = *-Bold,
+                ItalicFont     = *-Regular,
+                BoldItalicFont = *-Bold,
+              ]
+          }
+
+        \__colorclass_if_font_exist:nnn { SourceHanMonoSC-Regular }
+          {
+            \setCJKmonofont { SourceHanMonoSC }
+              [
+                UprightFont    = *-Regular,
+                BoldFont       = *-Medium,
+                ItalicFont     = *-Regular,
+                BoldItalicFont = *-Medium,
+              ]
+          }
+          {
+            \setCJKmonofont { FandolFang-Regular.otf }
+              [
+                BoldFont       = * ,
+                BoldFeatures   = { FakeBold = 4 } ,
+                ItalicFont     = * ,
+                BoldItalicFont = * ,
+                BoldItalicFeatures = { FakeBold = 4 } ,
+              ]
+          }
+
+        \bool_if:NT \g__projlib_language_enabled_schinese_bool
+          {
+            \__colorclass_if_font_exist:nnn { SourceHanSerifSC-Regular }
+              {
+                \setCJKfamilyfont { SCmain } { SourceHanSerifSC }
+                  [
+                    UprightFont    = *-Regular,
+                    BoldFont       = *-Bold,
+                    ItalicFont     = *-Regular,
+                    BoldItalicFont = *-Bold,
+                  ]
+              }
+              {
+                \setCJKfamilyfont { SCmain } { FandolSong }
+                  [
+                    Extension      = .otf,
+                    UprightFont    = *-Regular,
+                    BoldFont       = *-Bold,
+                    ItalicFont     = FandolKai-Regular ,
+                    BoldItalicFont = FandolKai-Regular ,
+                    BoldItalicFeatures = { FakeBold = 4 } ,
+                  ]
+              }
+            \__colorclass_if_font_exist:nnn { SourceHanSansSC-Regular }
+              {
+                \setCJKfamilyfont { SCsans } { SourceHanSansSC }
+                  [
+                    UprightFont    = *-Regular,
+                    BoldFont       = *-Bold,
+                    ItalicFont     = *-Regular,
+                    BoldItalicFont = *-Bold,
+                  ]
+              }
+              {
+                \setCJKfamilyfont { SCsans } { FandolHei }
+                  [
+                    Extension      = .otf,
+                    UprightFont    = *-Regular,
+                    BoldFont       = *-Bold,
+                    ItalicFont     = *-Regular,
+                    BoldItalicFont = *-Bold,
+                  ]
+              }
+            \__colorclass_if_font_exist:nnn { SourceHanMonoSC-Regular }
+              {
+                \setCJKfamilyfont { SCmono } { SourceHanMonoSC }
+                  [
+                    UprightFont    = *-Regular,
+                    BoldFont       = *-Medium,
+                    ItalicFont     = *-Regular,
+                    BoldItalicFont = *-Medium,
+                  ]
+              }
+              {
+                \setCJKfamilyfont { SCmono } { FandolFang-Regular.otf }
+                  [
+                    BoldFont       = * ,
+                    BoldFeatures   = { FakeBold = 4 } ,
+                    ItalicFont     = * ,
+                    BoldItalicFont = * ,
+                    BoldItalicFeatures = { FakeBold = 4 } ,
+                  ]
+              }
+          }
+
+        \bool_if:NT \g__projlib_language_enabled_tchinese_bool
+          {
+            \__colorclass_if_font_exist:nnn { SourceHanSerifTC-Regular }
+              {
+                \setCJKfamilyfont { TCmain } { SourceHanSerifTC }
+                  [
+                    UprightFont    = *-Regular,
+                    BoldFont       = *-Bold,
+                    ItalicFont     = *-Regular,
+                    BoldItalicFont = *-Bold,
+                  ]
+              }
+              {
+                \setCJKfamilyfont { TCmain } { FandolSong }
+                  [
+                    Extension      = .otf,
+                    UprightFont    = *-Regular,
+                    BoldFont       = *-Bold,
+                    ItalicFont     = FandolKai-Regular ,
+                    BoldItalicFont = FandolKai-Regular ,
+                    BoldItalicFeatures = { FakeBold = 4 } ,
+                  ]
+              }
+            \__colorclass_if_font_exist:nnn { SourceHanSansTC-Regular }
+              {
+                \setCJKfamilyfont { TCsans } { SourceHanSansTC }
+                  [
+                    UprightFont    = *-Regular,
+                    BoldFont       = *-Bold,
+                    ItalicFont     = *-Regular,
+                    BoldItalicFont = *-Bold,
+                  ]
+              }
+              {
+                \setCJKfamilyfont { TCsans } { FandolHei }
+                  [
+                    Extension      = .otf,
+                    UprightFont    = *-Regular,
+                    BoldFont       = *-Bold,
+                    ItalicFont     = *-Regular,
+                    BoldItalicFont = *-Bold,
+                  ]
+              }
+            \__colorclass_if_font_exist:nnn { SourceHanMonoTC-Regular }
+              {
+                \setCJKfamilyfont { TCmono } { SourceHanMonoTC }
+                  [
+                    UprightFont    = *-Regular,
+                    BoldFont       = *-Medium,
+                    ItalicFont     = *-Regular,
+                    BoldItalicFont = *-Medium,
+                  ]
+              }
+              {
+                \setCJKfamilyfont { TCmono } { FandolFang-Regular.otf }
+                  [
+                    BoldFont       = * ,
+                    BoldFeatures   = { FakeBold = 4 } ,
+                    ItalicFont     = * ,
+                    BoldItalicFont = * ,
+                    BoldItalicFeatures = { FakeBold = 4 } ,
+                  ]
+              }
+          }
+
+        \bool_if:NT \g__projlib_language_enabled_japanese_bool
+          {
+            \__colorclass_if_font_exist:nnn { SourceHanSerif-Regular }
+              {
+                \setCJKfamilyfont { JPmain } { SourceHanSerif }
+                  [
+                    UprightFont    = *-Regular,
+                    BoldFont       = *-Bold,
+                    ItalicFont     = *-Regular,
+                    BoldItalicFont = *-Bold,
+                  ]
+              }
+              {
+                \setCJKfamilyfont { JPmain } { FandolSong }
+                  [
+                    Extension      = .otf,
+                    UprightFont    = *-Regular,
+                    BoldFont       = *-Bold,
+                    ItalicFont     = FandolKai-Regular ,
+                    BoldItalicFont = FandolKai-Regular ,
+                    BoldItalicFeatures = { FakeBold = 4 } ,
+                  ]
+              }
+            \__colorclass_if_font_exist:nnn { SourceHanSans-Regular }
+              {
+                \setCJKfamilyfont { JPsans } { SourceHanSans }
+                  [
+                    UprightFont    = *-Regular,
+                    BoldFont       = *-Bold,
+                    ItalicFont     = *-Regular,
+                    BoldItalicFont = *-Bold,
+                  ]
+              }
+              {
+                \setCJKfamilyfont { JPsans } { FandolHei }
+                  [
+                    Extension      = .otf,
+                    UprightFont    = *-Regular,
+                    BoldFont       = *-Bold,
+                    ItalicFont     = *-Regular,
+                    BoldItalicFont = *-Bold,
+                  ]
+              }
+            \__colorclass_if_font_exist:nnn { SourceHanMono-Regular }
+              {
+                \setCJKfamilyfont { JPmono } { SourceHanMono }
+                  [
+                    UprightFont    = *-Regular,
+                    BoldFont       = *-Medium,
+                    ItalicFont     = *-Regular,
+                    BoldItalicFont = *-Medium,
+                  ]
+              }
+              {
+                \setCJKfamilyfont { JPmono } { FandolFang-Regular.otf }
+                  [
+                    BoldFont       = * ,
+                    BoldFeatures   = { FakeBold = 4 } ,
+                    ItalicFont     = * ,
+                    BoldItalicFont = * ,
+                    BoldItalicFeatures = { FakeBold = 4 } ,
+                  ]
+              }
+          }
+
+        \cs_new:Nn \colorclass_cjk_sffamily: {}
+        \cs_new:Nn \colorclass_cjk_ttfamily: {}
+
+        \hook_gput_code:nnn { cmd/sffamily/after } { colorclass } { \colorclass_cjk_sffamily: }
+        \hook_gput_code:nnn { cmd/ttfamily/after } { colorclass } { \colorclass_cjk_ttfamily: }
+
+        \AddLanguageSetting [schinese]
+          {
+            \cs_set:Nn \colorclass_cjk_sffamily: { \CJKfamily { SCsans } }
+            \cs_set:Nn \colorclass_cjk_ttfamily: { \CJKfamily { SCmono } }
+            \CJKfamily { SCmain }
+          }
+        \AddLanguageSetting [tchinese]
+          {
+            \cs_set:Nn \colorclass_cjk_sffamily: { \CJKfamily { TCsans } }
+            \cs_set:Nn \colorclass_cjk_ttfamily: { \CJKfamily { TCmono } }
+            \CJKfamily { TCmain }
+          }
+        \AddLanguageSetting [japanese]
+          {
+            \cs_set:Nn \colorclass_cjk_sffamily: { \CJKfamily { JPsans } }
+            \cs_set:Nn \colorclass_cjk_ttfamily: { \CJKfamily { JPmono } }
+            \CJKfamily { JPmain }
+          }
+      }
+
+
+    \__colorclass_load_file_or_config:Nnn \l__colorclass_load_custom_font_file_math_bool { \l__colorclass_custom_font_file_math_str }
+      {
+        \bool_if:NF \g_projlib_font_already_set_bool
+          {
+            \RequirePackage { amssymb }
+            \bool_if:NF \l__colorclass_fast_bool
+              {
+                \PassOptionsToPackage { warnings-off = { mathtools-colon, mathtools-overbracket } } { unicode-math }
+                \RequirePackage { unicode-math }
+                \unimathsetup { math-style = ISO, partial = upright, nabla = upright }
+                \setmathfont { KpMath-Regular.otf }
+                \setmathfont { KpMath-Regular.otf }
+                  [
+                    range = \amalg ,
+                    Scale = 0.84625
+                  ]
+                \setmathfont { KpMath-Sans.otf }
+                  [
+                    range = { \sum }
+                  ]
+                \setmathfont { latinmodern-math.otf }
+                  [
+                    range = { frak, bffrak, \mitvarpi, \mupvarpi, \ast } ,
+                    Scale = 1.10
+                  ]
+                \setmathfont { texgyrepagella-math.otf }
+                  [
+                    range = { `(, `) } ,
+                    Scale = 1.10
+                  ]
+                \setmathfont { texgyrepagella-math.otf }
+                  [
+                    range = { \mathcomma, \mathsemicolon } ,
+                  ]
+                \setmathfont { texgyrepagella-math.otf }
+                  [
+                    range = { it / { Latin, latin }, bfit / { Latin, latin }, up / num, bfup / num }
+                  ]
+                \setmathfont { KpMath-Regular.otf } [ range = { cal, bfcal }, RawFeature=+ss01 ]
+                % \setmathfont { KpMath-Regular.otf } [ range = {} ]
+
+                % https://tex.stackexchange.com/a/646715
+                \sys_if_engine_luatex:T
+                  {
+                    \mathitalicsmode=1
+                  }
+
+                \hook_gput_code:nnn { begindocument } { colorclass }
+                  {
+                    \cs_gset_eq:NN \overline \wideoverbar
+                    \cs_gset_eq:NN \square \mdwhtsquare
+
+                    % https://tex.stackexchange.com/a/678611
+                    \newcommand{\limstrut}{\vrule depth0.2ex width 0pt}
+                    \renewcommand{\varprojlim}{\mathop{\underleftarrow{{\lim}\limstrut}}}
+                    \renewcommand{\varinjlim}{\mathop{\underrightarrow{{\lim}\limstrut}}}
+                  }
+
+                % https://tex.stackexchange.com/a/647789
+                \hook_gput_code:nnn { begindocument } { colorclass }
+                  {
+                    \NewCommandCopy\unicodevdots\vdots
+                    \RenewDocumentCommand{\vdots}{}{\mathrel{\loweredvdots}}
+                  }
+                \newcommand{\loweredvdots}{\mathpalette\loweredvdots@\relax}
+                \newcommand{\loweredvdots@}[2]{%
+                  \begingroup
+                  \sbox\z@{$\m@th#1\unicodevdots$}%
+                  \vrule width \z@ height 2.25\ht\z@ depth 0.012\ht\z@
+                  \raisebox{0.25\height}{\usebox\z@}%
+                  \endgroup
+                }
+
+                % https://tex.stackexchange.com/a/678998
+                \hook_gput_code:nnn { begindocument } { colorclass }
+                  {
+                    \NewCommandCopy\standarddashv\dashv
+                    \NewCommandCopy\standardvdash\vdash
+                    \RenewDocumentCommand{\dashv}{}{\mathrel{\mathpalette\raisesymbol\standarddashv}}
+                    \RenewDocumentCommand{\vdash}{}{\mathrel{\mathpalette\raisesymbol\standardvdash}}
+                  }
+                \newcommand{\raisesymbol}[2]{%
+                  \begingroup
+                  \sbox\z@{$\m@th#1A$}%
+                  \sbox\tw@{$\m@th#1#2$}%
+                  \raisebox{\dimexpr(\ht\z@-\ht\tw@)/2}{\usebox{\tw@}}%
+                  \endgroup
+                }
+
+                \RequirePackage { tikz-cd }
+                \tikzcdset { arrow~style = tikz, diagrams = { >={Stealth[round,length=3.4pt,width=6.15pt,inset=2.25pt]} } }
+
+                \box_new:N \l__colorclass_xarrows_above_box
+                \box_new:N \l__colorclass_xarrows_below_box
+                \dim_new:N \l__colorclass_xarrows_length_dim
+                \cs_new_protected:Nn \colorclass_xarrows_generic:nnnn
+                  % #3 = option of \tikz
+                  % #4 = edge of \draw
+                  {
+                    \hbox_set:Nn \l__colorclass_xarrows_below_box { \ensuremath { \scriptstyle #1 } }
+                    \hbox_set:Nn \l__colorclass_xarrows_above_box { \ensuremath { \scriptstyle #2 } }
+                    \dim_set:Nn \l__colorclass_xarrows_length_dim
+                      { \dim_eval:n { \dim_max:nn { \box_wd:N \l__colorclass_xarrows_below_box } { \box_wd:N \l__colorclass_xarrows_above_box } + 1em } }
+                    \mathrel
+                      {
+                        \tikz [ #3, line~width = .6pt, baseline = -.5ex, every~node/.style = { inner~sep = 0pt }, >={Stealth[round,length=3.4pt,width=6.15pt,inset=2.25pt]} ]
+                          \draw (0,0) #4
+                            node [ below = 3pt ] { \box_use:N \l__colorclass_xarrows_below_box }
+                            node [ above = 2pt ] { \box_use:N \l__colorclass_xarrows_above_box }
+                            ( \l__colorclass_xarrows_length_dim ,0) ;
+                      }
+                  }
+
+                \RenewDocumentCommand \xrightarrow { O{} m }
+                  {
+                    \colorclass_xarrows_generic:nnnn { #1 } { #2 } { -> } { -- }
+                  }
+                \RenewDocumentCommand \xleftarrow { O{} m }
+                  {
+                    \colorclass_xarrows_generic:nnnn { #1 } { #2 } { <- } { -- }
+                  }
+                \RenewDocumentCommand \xleftrightarrow { O{} m }
+                  {
+                    \colorclass_xarrows_generic:nnnn { #1 } { #2 } { <-> } { -- }
+                  }
+                \RenewDocumentCommand \xhookrightarrow { O{} m }
+                  {
+                    \colorclass_xarrows_generic:nnnn { #1 } { #2 } {} { edge [ commutative~diagrams/hookrightarrow ] }
+                  }
+                \RenewDocumentCommand \xhookleftarrow { O{} m }
+                  {
+                    \colorclass_xarrows_generic:nnnn { #1 } { #2 } {} { edge [ commutative~diagrams/hookleftarrow ] }
+                  }
+                \RenewDocumentCommand \xmapsto { O{} m }
+                  {
+                    \colorclass_xarrows_generic:nnnn { #1 } { #2 } {} { edge [ commutative~diagrams/mapsto ] }
+                  }
+                \NewDocumentCommand \xlongequal { O{} m }
+                  {
+                    \colorclass_xarrows_generic:nnnn { #1 } { #2 } {} { edge [ commutative~diagrams/equal ] }
+                  }
+                \NewDocumentCommand \xtwoheadrightarrow { O{} m }
+                  {
+                    \colorclass_xarrows_generic:nnnn { #1 } { #2 } {} { edge [ commutative~diagrams/twoheadrightarrow ] }
+                  }
+                \NewDocumentCommand \xtwoheadleftarrow { O{} m }
+                  {
+                    \colorclass_xarrows_generic:nnnn { #1 } { #2 } {} { edge [ commutative~diagrams/twoheadleftarrow ] }
+                  }
+
+                \cs_new_protected:Nn \colorclass_xarrows_double_generic:nnnnnn
+                  % #3 = option of \tikz
+                  % #4 = edge 1 of \draw
+                  % #5 = edge 2 of \draw
+                  % #6 = sep/2
+                  {
+                    \hbox_set:Nn \l__colorclass_xarrows_below_box { \ensuremath { \scriptstyle #1 } }
+                    \hbox_set:Nn \l__colorclass_xarrows_above_box { \ensuremath { \scriptstyle #2 } }
+                    \dim_set:Nn \l__colorclass_xarrows_length_dim
+                      { \dim_eval:n { \dim_max:nn { \box_wd:N \l__colorclass_xarrows_below_box } { \box_wd:N \l__colorclass_xarrows_above_box } + 1em } }
+                    \mathrel
+                      {
+                        \tikz [ #3, line~width = .6pt, baseline = -.5ex, every~node/.style = { inner~sep = 0pt }, >={Stealth[round,length=3.4pt,width=6.15pt,inset=2.25pt]} ]
+                          {
+                            \draw (0,#6) #4
+                              node [ below = 4pt+#6 ] { \box_use:N \l__colorclass_xarrows_below_box }
+                              ( \l__colorclass_xarrows_length_dim ,#6) ;
+                            \draw (0,-#6) #5
+                              node [ above = 3pt+#6 ] { \box_use:N \l__colorclass_xarrows_above_box }
+                              ( \l__colorclass_xarrows_length_dim ,-#6) ;
+                          }
+                      }
+                  }
+
+                \NewDocumentCommand \xrightrightarrows { O{} m }
+                  {
+                    \colorclass_xarrows_double_generic:nnnnnn { #1 } { #2 } {} { edge [ commutative~diagrams/rightarrow ] } { edge [ commutative~diagrams/rightarrow ] } { .2em }
+                  }
+
+                \NewDocumentCommand \xleftleftarrows { O{} m }
+                  {
+                    \colorclass_xarrows_double_generic:nnnnnn { #1 } { #2 } {} { edge [ commutative~diagrams/leftarrow ] } { edge [ commutative~diagrams/leftarrow ] } { .2em }
+                  }
+
+                \hook_gput_code:nnn { begindocument/end } { colorclass }
+                  {
+                    \RenewDocumentCommand \twoheadrightarrow {}
+                      {
+                        \colorclass_xarrows_generic:nnnn {
+                          \mathchoice { \,\, } { \, } { } { }
+                        } {} {} { edge [ commutative~diagrams/twoheadrightarrow ] }
+                      }
+                    \RenewDocumentCommand \twoheadleftarrow {}
+                      {
+                        \colorclass_xarrows_generic:nnnn {
+                          \mathchoice { \,\, } { \, } { } { }
+                        } {} {} { edge [ commutative~diagrams/twoheadleftarrow ] }
+                      }
+                  }
+              }
+          }
+      }
+%</lebhart|beaulivre>
+  }
+
+%<*lebhart|beaulivre>
+% https://tex.stackexchange.com/a/419287
+\char_set_catcode_active:n { `\· }
+\cs_new_protected:Npn · { \ensuremath\cdot }
+%</lebhart|beaulivre>
+
+%%================================
+%%  Graphics
+%%================================
+\RequirePackage { graphicx }
+\graphicspath { { images/ } }
+\RequirePackage { wrapfig }
+\RequirePackage { float }
+\RequirePackage { caption }
+\captionsetup { font = small }
+
+%%================================
+%%  Icing on the cake
+%%================================
+\bool_if:NT \l__colorclass_fast_bool { \endinput }
+
+\sys_if_engine_luatex:TF
+  {
+    \RequirePackage { lua-widow-control }
+    \lwcsetup { balanced }
+  }
+  {
+    \PassOptionsToPackage { all } { nowidow }
+    \RequirePackage { nowidow }
+  }
+
+% https://tex.stackexchange.com/a/641824
+\sys_if_engine_xetex:T
+  {
+    \RequirePackage { regexpatch }
+    \skip_new:N \g_colorclass_parfillskip_skip
+    \xpatchcmd{\@trivlist}{\@flushglue}{\g_colorclass_parfillskip_skip}{}{}
+    \hook_gput_code:nnn { begindocument } { colorclass }
+      {
+        \skip_gset:Nn \g_colorclass_parfillskip_skip { 0pt plus \dim_eval:n { \linewidth - 3em } }
+        \skip_gset_eq:NN \parfillskip \g_colorclass_parfillskip_skip
+      }
+  }
+%</class>
+%
+%
+%<*colorist>
+\keys_define:nn { colorist }
+  {
+    , draft             .bool_set:N         = \l__colorist_fast_bool
+    , draft             .initial:n          = { false }
+    , fast              .bool_set:N         = \l__colorist_fast_bool
+
+    , style             .str_set:N          = \l__colorist_style_str
+    , style             .initial:n          = { fancy }
+    , use-style         .str_set:N          = \l__colorist_style_str
+    , use~style         .str_set:N          = \l__colorist_style_str
+    , use style         .str_set:N          = \l__colorist_style_str
+    , fancy             .meta:n             = { style = fancy }
+
+    , use-boldface      .bool_set:N         = \l__colorist_use_boldface_bool
+    , use-boldface      .initial:n          = { false }
+    , use~boldface      .bool_set:N         = \l__colorist_use_boldface_bool
+    , use boldface      .bool_set:N         = \l__colorist_use_boldface_bool
+    , title-in-boldface .bool_set:N         = \l__colorist_use_boldface_bool
+    , title~in~boldface .bool_set:N         = \l__colorist_use_boldface_bool
+    , title in boldface .bool_set:N         = \l__colorist_use_boldface_bool
+    , title-in-bold     .bool_set:N         = \l__colorist_use_boldface_bool
+    , title~in~bold     .bool_set:N         = \l__colorist_use_boldface_bool
+    , title in bold     .bool_set:N         = \l__colorist_use_boldface_bool
+
+    , use-scshape       .bool_set:N         = \l__colorist_use_scshape_bool
+    , use-scshape       .initial:n          = { false }
+    , use~scshape       .bool_set:N         = \l__colorist_use_scshape_bool
+    , use scshape       .bool_set:N         = \l__colorist_use_scshape_bool
+    , title-in-scshape  .bool_set:N         = \l__colorist_use_scshape_bool
+    , title~in~scshape  .bool_set:N         = \l__colorist_use_scshape_bool
+    , title in scshape  .bool_set:N         = \l__colorist_use_scshape_bool
+
+    , runin             .bool_set:N         = \l__colorist_runin_bool
+    , runin             .initial:n          = { false }
+
+    , theorem-in-new-line .bool_set:N       = \l__colorist_theorem_in_new_line_bool
+    , theorem-in-new-line .initial:n        = { false }
+    , theorem~in~new~line .bool_set:N       = \l__colorist_theorem_in_new_line_bool
+    , theorem in new line .bool_set:N       = \l__colorist_theorem_in_new_line_bool
+
+    , unknown           .code:n             = {
+                                                \PassOptionsToPackage { \CurrentOption } { projlib-language }
+                                                \PassOptionsToPackage { \CurrentOption } { projlib-author }
+                                                \PassOptionsToPackage { \CurrentOption } { projlib-datetime }
+                                                \PassOptionsToPackage { \CurrentOption } { projlib-draft }
+                                                \PassOptionsToPackage { \CurrentOption } { projlib-font }
+                                                \PassOptionsToPackage { \CurrentOption } { projlib-logo }
+                                                \PassOptionsToPackage { \CurrentOption } { projlib-math }
+                                                \PassOptionsToPackage { \CurrentOption } { projlib-paper }
+                                                \PassOptionsToPackage { \CurrentOption } { projlib-theorem }
+                                              }
+  }
+\ProcessKeyOptions [ colorist ]
+
+\bool_new:N \l__colorist_is_book_bool
+\cs_if_exist:cTF { c@chapter }
+  {
+    \bool_set_true:N \l__colorist_is_book_bool
+  }
+  {
+    \bool_set_false:N \l__colorist_is_book_bool
+  }
+
+%%================================
+%%  Paper configuration
+%%================================
+\RequirePackage { projlib-paper }
+
+%%================================
+%%  Multi-language support
+%%================================
+\RequirePackage { projlib-language }
+
+%%================================
+%%  Loading the style
+%%================================
+\exp_args:No \RequirePackage { colorist- \l__colorist_style_str }
+%</colorist>
+%
+%<*style>
+\IfPackageLoadedTF { colorist } {}
+  {
+    \msg_new:nnn { \@currname }
+      { colorist-not-loaded }
+      { "#1"~is~an~internal~style~of~"colorist".~To~use~it,~you~must~load~the~package~"colorist"~first. }
+    \msg_warning:nnx { \@currname } { colorist-not-loaded } { \@currname }
+    \endinput
+  }
+
+%%================================
+%%  Title fonts
+%%================================
+\RequirePackage { relsize }
+\RequirePackage { anyfontsize }
+
+\NewCommandCopy \colorist_original_bfseries: \bfseries
+\bool_new:N \l_colorist_is_under_bfseries_bool
+\bool_set_false:N \l_colorist_is_under_bfseries_bool
+\RenewDocumentCommand \bfseries { }
+  {
+    \bool_if:NF \l_colorist_is_under_bfseries_bool
+      {
+        \colorlet{colorist-temp-color}{.}
+        \color{colorist-temp-color!90!paper}
+      }
+    \colorist_original_bfseries:
+    \bool_set_true:N \l_colorist_is_under_bfseries_bool
+  }
+\bool_if:NTF \l__colorist_use_boldface_bool
+  {
+    \cs_new:Nn \colorist_bfseries: { \bfseries }
+  }
+  {
+    \cs_new:Nn \colorist_bfseries: {}
+  }
+
+\bool_if:NTF \l__colorist_use_scshape_bool
+  {
+    \cs_new:Nn \colorist_scshape: { \scshape }
+  }
+  {
+    \cs_new:Nn \colorist_scshape: {}
+  }
+
+
+\tl_new:N \g_colorist_title_font_common_tl
+
+\tl_new:N \g_colorist_title_font_part_tl
+\tl_new:N \g_colorist_title_font_chapter_tl
+\tl_new:N \g_colorist_title_font_section_tl
+\tl_new:N \g_colorist_title_font_subsection_tl
+\tl_new:N \g_colorist_title_font_subsubsection_tl
+\tl_new:N \g_colorist_title_font_paragraph_tl
+
+%<*colorist-fancy>
+\tl_gset:Nn \g_colorist_title_font_common_tl        { \sffamily }
+\tl_gset:Nn \g_colorist_title_font_part_tl          { \colorist_bfseries: \g_colorist_title_font_common_tl }
+\tl_gset:Nn \g_colorist_title_font_chapter_tl       { \colorist_bfseries: \g_colorist_title_font_common_tl }
+\tl_gset:Nn \g_colorist_title_font_section_tl       { \colorist_bfseries: \g_colorist_title_font_common_tl }
+\tl_gset:Nn \g_colorist_title_font_subsection_tl    { \colorist_bfseries: \g_colorist_title_font_common_tl }
+\tl_gset:Nn \g_colorist_title_font_subsubsection_tl { \colorist_bfseries: \g_colorist_title_font_common_tl }
+\tl_gset:Nn \g_colorist_title_font_paragraph_tl     { \colorist_bfseries: \g_colorist_title_font_common_tl }
+%</colorist-fancy>
+
+%%================================
+%% Color
+%%================================
+%<*colorist-fancy>
+\definecolor{maintheme}{RGB}{70,130,180}
+\definecolor{forestgreen}{RGB}{21,122,81}
+\definecolor{lightorange}{RGB}{255,185,88}
+%</colorist-fancy>
+
+%%================================
+%%  Footer
+%%================================
+\RequirePackage { geometry }
+\RequirePackage { fancyhdr }
+\RequirePackage { extramarks }
+
+\hook_gput_code:nnn { begindocument/before } { colorist }
+  {
+    \fancyhfoffset { 0pt }
+  }
+
+\tl_new:N \l_colorist_leftmark_tl
+\tl_new:N \l_colorist_rightmark_tl
+
+\tl_set:Nn \l_colorist_leftmark_tl
+  {
+    \begin{minipage}[t]{.833\textwidth}
+      \lastleftmark
+    \end{minipage}
+  }
+\tl_set:Nn \l_colorist_rightmark_tl
+  {
+    \begin{minipage}[t]{.833\textwidth}
+      \filleft
+      \lastrightmark
+    \end{minipage}
+  }
+
+\fancypagestyle { fancy }
+  {
+    \fancyhf { }
+    \if@twoside
+      \fancyfoot[RO]
+        {
+          \sffamily
+          \textcolor { main-text!30!paper } { \small \l_colorist_rightmark_tl }
+          \rlap
+            {
+              \nobreakspace \nobreakspace \nobreakspace \nobreakspace
+              \textcolor { main-text!75!paper } { \colorist_bfseries: \thepage }
+            }
+        }
+      \fancyfoot[LE]
+        {
+          \leavevmode
+          \sffamily
+          \llap
+            {
+              \textcolor { main-text!75!paper } { \colorist_bfseries: \thepage }
+              \nobreakspace \nobreakspace \nobreakspace \nobreakspace
+            }
+          \textcolor { main-text!30!paper } { \l_colorist_leftmark_tl }
+        }
+    \else
+      \fancyfoot[R]
+        {
+          \sffamily
+          \textcolor { main-text!30!paper } { \small \l_colorist_rightmark_tl }
+          \rlap
+            {
+              \nobreakspace \nobreakspace \nobreakspace \nobreakspace
+              \textcolor { main-text!75!paper } { \colorist_bfseries: \thepage }
+            }
+        }
+    \fi
+    \renewcommand { \headrulewidth } { 0pt }
+  }
+\pagestyle { fancy }
+
+\fancypagestyle { plain }
+  {
+    \fancyhf { }
+    \if@twoside
+      \fancyfoot[RO]
+        {
+          \sffamily
+          \nobreakspace
+          \rlap
+            {
+              \nobreakspace \nobreakspace \nobreakspace \nobreakspace
+              \textcolor { main-text!75!paper } { \colorist_bfseries: \thepage }
+            }
+        }
+      \fancyfoot[LE]
+        {
+          \leavevmode
+          \sffamily
+          \llap
+            {
+              \textcolor { main-text!75!paper } { \colorist_bfseries: \thepage }
+              \nobreakspace \nobreakspace \nobreakspace \nobreakspace
+            }
+        }
+    \else
+      \fancyfoot[R]
+        {
+          \sffamily
+          \nobreakspace
+          \rlap
+            {
+              \nobreakspace \nobreakspace \nobreakspace \nobreakspace
+              \textcolor { main-text!75!paper } { \colorist_bfseries: \thepage }
+            }
+        }
+    \fi
+    \renewcommand { \headrulewidth } { 0pt }
+  }
+
+\bool_if:NTF \l__colorist_is_book_bool
+  {
+    \if@twoside
+        \renewcommand{\chaptermark}[1]{\markboth{\textsc{#1}}{}}
+    \else
+        \renewcommand{\chaptermark}[1]{\markboth{\textsc{#1}}{\textsc{#1}}}
+    \fi
+    \renewcommand*{\sectionmark}[1]{
+      \markright{\thesection\nobreakspace\nobreakspace#1}}
+  }
+  {
+    \if@twoside
+        \renewcommand*{\sectionmark}[1]{\markboth{\textsc{#1}}{}}
+    \else
+        \renewcommand*{\sectionmark}[1]{\markboth{\textsc{#1}}{\textsc{#1}}}
+    \fi
+  }
+
+\renewcommand*{\thefootnote}{\textcolor{main-text!45!paper}{\arabic{footnote}}}
+
+\bool_if:NT \l__colorist_is_book_bool
+  {
+    \hook_gput_code:nnn { cmd/frontmatter/before } { colorist }
+      {
+        \renewcommand*{\thefootnote}{\textcolor{main-text!45!paper}{\fnsymbol{footnote}}}
+      }
+    \hook_gput_code:nnn { cmd/mainmatter/before } { colorist }
+      {
+        \setcounter{footnote}{0}
+        \renewcommand*{\thefootnote}{\textcolor{main-text!45!paper}{\arabic{footnote}}}
+      }
+  }
+
+%%================================
+%%  Title format
+%%================================
+\RequirePackage [ explicit, newparttoc ] { titlesec }
+% \renewcommand{\bottomtitlespace}{.1\textheight}
+\PassOptionsToPackage { normalem } { ulem }
+\RequirePackage { ulem }
+
+\PassOptionsToPackage { many } { tcolorbox }
+\RequirePackage { tcolorbox }
+\bool_if:NT \l__colorist_fast_bool { \tcbstartdraftmode }
+
+\newcommand{\partstring}{\MakeUppercase{{\partname\nobreakspace\protect\thepart}}}
+
+\AddLanguageSetting
+  {
+    \renewcommand{\partstring}{\MakeUppercase{{\partname\nobreakspace\protect\thepart}}}
+  }
+\AddLanguageSetting [ schinese ]
+  {
+    \renewcommand{\partstring}{第 \nobreakspace\thepart\nobreakspace 部分}
+  }
+\AddLanguageSetting [ tchinese ]
+  {
+    \renewcommand{\partstring}{第 \nobreakspace\thepart\nobreakspace 部分}
+  }
+\AddLanguageSetting [ japanese ]
+  {
+    \renewcommand{\partstring}{第 \nobreakspace\thepart\nobreakspace 部}
+  }
+
+\bool_if:NTF \l__colorist_is_book_bool
+  {
+    \setcounter{secnumdepth}{3}
+
+    %% Part
+    \titleclass{\part}{top} % make part like a chapter
+    \titleformat{\part}[display]
+      { \g_colorist_title_font_part_tl \filleft}
+      {
+        \thispagestyle{empty}
+        \begin{tikzpicture}[remember~picture,overlay]
+          \fill[maintheme!10!paper] (current~page.north~west) rectangle (current~page.south~east);
+          \node at ($(current~page.north~west)+(15em,-15em)$) {\normalfont\textcolor{maintheme}{\scalebox{12}{\thepart}}};
+        \end{tikzpicture}
+      }
+      {1em}
+      {\fontsize{20}{24}\selectfont\MakeUppercase{#1}}
+    \titleformat{name=\part,numberless}[display]
+      {% \phantomsection\addcontentsline{toc}{part}{#1}%
+         \g_colorist_title_font_part_tl \filleft}
+      {
+        \thispagestyle{empty}
+        \begin{tikzpicture}[remember~picture,overlay]
+          \fill[maintheme!10!paper] (current~page.north~west) rectangle (current~page.south~east);
+          \node at ($(current~page.north~west)+(15em,-15em)$) {\normalfont\textcolor{maintheme}{\scalebox{12}{$*$}}};
+        \end{tikzpicture}
+      }
+      {1em}
+      {\fontsize{20}{24}\selectfont\MakeUppercase{#1}}
+    \titlespacing*{\part}{0pt}{5em}{6em}
+    %% Text after part
+    \newcommand{\parttext}[1]{
+        \vfill
+        \begin{flushright}
+            \begin{minipage}{0.833\textwidth}
+                \color{main-text!80!paper}\raggedleft#1
+            \end{minipage}
+        \end{flushright}
+        \vfill\vfill
+        \cleardoublepage
+    }
+
+    %% Chapter
+    % Numbered chapter title
+    \cs_new_protected:Nn \colorist_chapter_inner:nn
+      % #1 = number
+      % #2 = title
+      {
+        \tcbsidebyside[enhanced,sidebyside~adapt=right,sidebyside~align=bottom,
+        colback=paper,frame~hidden,
+        segmentation~code={
+            \filldraw[maintheme] (segmentation.north)
+                -- ($(segmentation.east)-(12pt,0)$)
+                -- ($(segmentation.west)+(12pt,0)$)
+                -- (segmentation.south);}
+        ]{\filleft#2}{\normalfont\textcolor{maintheme}{\scalebox{4}{#1}}}
+      }
+    % Numberless chapter title
+    \cs_new_protected:Nn \colorist_chapter_inner:n
+      % #1 = title
+      {
+        \begin{tcolorbox}[
+            enhanced,
+            width = 0.67\textwidth,
+            colback=paper,frame~hidden,
+            halign=center]
+            #1
+            \vspace{-.6em}
+            \begin{center}
+                \begin{tikzpicture}
+                    \filldraw[maintheme] (-4em,0) -- (4em,0) -- (0,-.1em) -- (0,.1em);
+                \end{tikzpicture}
+            \end{center}
+        \end{tcolorbox}
+      }
+
+    \titleformat{name=\chapter}
+      { \g_colorist_title_font_chapter_tl \colorist_scshape:\huge} % Format
+      {} % Label
+      {0mm} % Sep
+      { \colorist_chapter_inner:nn { \thechapter } { #1 } } % Before-code
+    \titlespacing*{name=\chapter}
+      {0em}{*2}{0em} % {left}{before-sep}{after-sep}
+
+    \titleformat{name=\chapter, numberless}
+      {\filcenter \g_colorist_title_font_chapter_tl \colorist_scshape:\huge}
+      {}
+      {0mm}
+      { \colorist_chapter_inner:n { #1 } }
+    \titlespacing*{name=\chapter, numberless}
+      {0em}{*2}{0em}
+
+    %% Section
+    \titleformat{\section}
+      {\color{maintheme} \g_colorist_title_font_section_tl \large}
+      {\thesection}{.75em}{#1}
+
+    %% Subsection
+    \titleformat{\subsection}
+      { \g_colorist_title_font_subsection_tl }{\thesubsection}{.75em}
+      {#1}
+  }
+  {
+    %% Part
+    \titleformat{\part}[display]
+      { \g_colorist_title_font_part_tl \filleft}
+      {\partstring}
+      {.3em}
+      {\fontsize{16}{0}\selectfont\MakeUppercase{#1}}
+    \titleformat{name=\part,numberless}[display]
+      {% \phantomsection\addcontentsline{toc}{part}{#1}
+         \g_colorist_title_font_part_tl \filleft}
+      {\phantom{\MakeUppercase{\partname}}}
+      {.3em}
+      {\fontsize{16}{0}\selectfont\MakeUppercase{#1}}
+    %% Text after part
+    \newcommand{\parttext}[1]
+      {
+        \begin{flushright}
+            \begin{minipage}{0.833\textwidth}
+                \color{main-text!80!paper}\raggedleft#1
+            \end{minipage}
+        \end{flushright}
+      }
+
+    %% Section
+    \titleformat{\section}
+      {\color{maintheme} \g_colorist_title_font_section_tl \large}
+      {\thesection}{.75em}{\colorist_scshape: #1}
+
+    %% Subsection
+    \titleformat{\subsection}
+      { \g_colorist_title_font_subsection_tl }{\thesubsection}{.75em}
+      {#1}
+  }
+
+%% Subsubsection
+%<*colorist-fancy>
+\bool_if:NTF \l__colorist_runin_bool
+  {
+    \titleformat{\subsubsection}[runin]
+      {\color{main-text!70!paper} \g_colorist_title_font_subsubsection_tl }
+      {\thesubsubsection}
+      {.5em}
+      {#1.}
+      [\hspace*{.3em}]
+  }
+  {
+    \titleformat{\subsubsection}
+      {\color{main-text!70!paper} \g_colorist_title_font_subsubsection_tl }
+      {\thesubsubsection}
+      {.5em}
+      {#1}
+  }
+%</colorist-fancy>
+
+%% Paragraph
+\titleformat{\paragraph}[runin]
+  {\color{main-text!50!paper} \g_colorist_title_font_paragraph_tl }{\theparagraph}{1em}{#1}
+
+\titlespacing{\section}{0pt}{1\baselineskip plus .5\baselineskip minus .2\baselineskip}{.6\baselineskip plus .3\baselineskip minus .2\baselineskip}
+\titlespacing{\subsection}{0pt}{.75\baselineskip plus .3\baselineskip minus .2\baselineskip}{.4\baselineskip plus .2\baselineskip minus .1\baselineskip}
+\bool_if:NTF \l__colorist_runin_bool
+  {
+    \titlespacing{\subsubsection}{0pt}{.5\baselineskip plus .2\baselineskip minus .1\baselineskip}{0pt}
+  }
+  {
+    \titlespacing{\subsubsection}{0pt}{.5\baselineskip plus .2\baselineskip minus .1\baselineskip}{.3\baselineskip plus .2\baselineskip minus .1\baselineskip}
+  }
+
+%%================================
+%%  ToC format
+%%================================
+\RequirePackage { titletoc }
+\titlecontents{part}
+  [0em]
+  {\addvspace{1.5pc}\large\filcenter\sffamily \colorist_bfseries: }
+  {\textcolor{maintheme}{\bfseries\thecontentslabel}\nopagebreak\\\nopagebreak\uppercase}
+  {}
+  {} % without page number
+  [\addvspace{.5pc}]
+
+\bool_if:NTF \l__colorist_is_book_bool
+  {
+    \titlecontents{chapter}
+      [2em] % i.e., 0em (part) + 2em
+      {\addvspace{1pc} \color{maintheme} \normalfont \sffamily \colorist_bfseries: \colorist_scshape: }
+      {\contentslabel[ \raisebox{-.03\baselineskip}{ \large \normalfont \sffamily \colorist_bfseries: \thecontentslabel } ]{2em}}
+      {\hspace*{-2em}}
+      {\titlerule*[10pt]{\parbox{3pt}{\hspace*{-.25pt}\textcolor{main-text!15!paper}{.}}}\color{maintheme}\normalfont\sffamily\contentspage}
+    \titlecontents{section}
+      [5.25em] % i.e., 2em (chapter) + 2.75em + 0.5em
+      {\addvspace{.3pc}\normalfont\color{main-text}\sffamily}
+      {\contentslabel{2.75em}}
+      {\hspace*{-2.75em}}
+      {\titlerule*[10pt]{\parbox{3pt}{\textcolor{main-text!15!paper}{.}}}\color{main-text}\contentspage}
+    \titlecontents{subsection}
+      [9em] % i.e., 5.25em (section) + 3.5em + 0.25em
+      {\addvspace{.15pc}\normalfont\color{main-text!60!paper}\sffamily}
+      {\contentslabel{3.50em}}
+      {\hspace*{-3.50em}}
+      {\titlerule*[10pt]{\parbox{3pt}{\textcolor{main-text!15!paper}{.}}}\color{main-text!60!paper}\contentspage}
+    \titlecontents{subsubsection}
+      [13em] % i.e., 9em (subsection) + 3.75em + 0.25em
+      {\normalfont\color{main-text!45!paper}\sffamily}
+      {\contentslabel{3.75em}}
+      {\hspace*{-3.75em}}
+      {\titlerule*[10pt]{\parbox{3pt}{\textcolor{main-text!15!paper}{.}}}\color{main-text!45!paper}\contentspage}
+  }
+  {
+    \titlecontents{section}
+      [2em] % i.e., 0em (part) + 2em
+      {\addvspace{.3pc} \color{maintheme} \normalfont \sffamily \colorist_scshape: }
+      {\contentslabel[ { \normalfont \sffamily \thecontentslabel } ]{1.75em}}
+      {\hspace*{-1.75em}}
+      {\titlerule*[10pt]{\parbox{3pt}{\textcolor{main-text!15!paper}{.}}}\color{maintheme}\normalfont\sffamily\contentspage}
+    \titlecontents{subsection}
+      [5em] % i.e., 2em (section) + 2.5em + 0.5em
+      {\addvspace{.15pc}\normalfont\sffamily}
+      {\contentslabel{2.5em}}
+      {\hspace*{-2.5em}}
+      {\titlerule*[10pt]{\parbox{3pt}{\textcolor{main-text!15!paper}{.}}}\color{main-text!45!paper}\contentspage}
+    \titlecontents{subsubsection}
+      [9em] % i.e., 5em (subsection) + 3.25em + 0.75em
+      {\normalfont\sffamily}
+      {\contentslabel{3.25em}}
+      {\hspace*{-3.25em}}
+      {\titlerule*[10pt]{\parbox{3pt}{\textcolor{main-text!15!paper}{.}}}\color{main-text!45!paper}\contentspage}
+  }
+
+%%================================
+%%  Lists
+%%================================
+\PassOptionsToPackage { inline } { enumitem }
+\RequirePackage { enumitem }
+\setlistdepth{10}
+\setlist{noitemsep, topsep=.33\topsep-.5\parskip}
+% \setlist{topsep = .1\baselineskip, parsep=0pt, itemsep=.05\baselineskip}
+\setlist[enumerate]{labelsep=*, leftmargin=*}
+\setlist[enumerate,1]{label = \normalfont\arabic*$\mskip-.5mu\big)$,
+    ref = \normalfont\color{.!45!paper}\arabic*$\mskip-.5mu\big)$}
+\setlist[enumerate,2]{label = \normalfont\emph{\roman*}$\mskip-.5mu\big)$,
+    ref = \normalfont\color{.!45!paper}\arabic{enumi}.\emph{\roman*}$\mskip-.5mu\big)$}
+\setlist[enumerate,3]{label = \normalfont\emph{\alph*}$\mskip-.5mu\big)$,
+    ref = \normalfont\color{.!45!paper}\arabic{enumi}.\emph{\roman{enumii}}.\emph{\alph*}$\mskip-.5mu\big)$}
+\setlist[description]{font=\normalfont\colorist_bfseries:}
+
+\renewlist{itemize}{itemize}{10}
+\setlist[itemize]{leftmargin=*,label=\textcolor{.!27!paper}{$\cdot$}}
+\AddLanguageSetting { \setlist[itemize,1]{label=\textcolor{.!27!paper}{$\bullet$},leftmargin=\maxof{\parindent}{1.5em}} }
+\AddLanguageSetting [french] { \setlist[itemize,1]{label=\textcolor{.!39!paper}{\rule[.2\baselineskip]{.8em}{.75pt}},leftmargin=\maxof{\parindent}{1.5em}} }
+\setlist[itemize,2]{label=\textcolor{.!27!paper}{\rule[.2\baselineskip]{.55em}{.75pt}}}
+% \setlist[itemize,3]{label=\textcolor{.!27!paper}{$\diamond$}}
+\setlist[itemize,3]{label=\textcolor{.!27!paper}{$\circ$}}
+\setlist[itemize,4]{label=\textcolor{.!27!paper}{$\ast$}}
+
+%%================================
+%%  Blank page
+%%================================
+\projlib_langauge_define_multilingual_text:Nn \bl@nkpagetext
+  {
+    , EN = This~page~is~intentionally~left~blank
+    , FR = Cette~page~est~intentionnellement~laissée~vide
+    , DE = Diese~Seite~wurde~absichtlich~leer~gelassen
+    , IT = Questa~pagina~è~stata~lasciata~vuota~intenzionalmente
+    , PT = Esta~página~foi~intencionalmente~deixada~em~branco
+    , BR = Esta~página~foi~intencionalmente~deixada~em~branco
+    , ES = Esta~página~se~ha~dejado~intencionadamente~en~blanco
+    , CN = \ziju{0.2} 此页为有意留为空白
+    , TC = \ziju{0.2} 此頁為有意留為空白
+    , JP = このページは意図的に空白にしてあります
+    , RU = Эта~страница~намеренно~оставлена~пустой
+  }
+\renewcommand{\cleardoublepage}{
+  \relax
+  \clearpage
+  \if@twoside\ifodd\c@page\relax\else
+  \thispagestyle{empty}
+  \hook_gput_next_code:nn { shipout/background }
+    {
+      \put(0.5\paperwidth,-0.5\paperheight){
+      \makebox[0pt]{\large\color{main-text!10!paper}\g_colorist_title_font_common_tl\bl@nkpagetext}}
+    }
+  \null\newpage\fi\fi
+}
+
+%%================================
+%%  Index
+%%================================
+\RequirePackage { imakeidx }
+\makeindex[intoc]
+
+\RequirePackage { silence }
+\ExplSyntaxOff
+\WarningFilter{latex}{Writing or overwriting file}
+\begin{filecontents*}[overwrite]{\jobname.mst}
+delim_0 "\\IndexDotfill " % Filler between section heading and page number
+delim_1 "\\IndexDotfill " % Filler between subsection heading and page number
+headings_flag 1
+heading_prefix "\\IndexHeading{"
+heading_suffix "}\n"
+\end{filecontents*}
+\ExplSyntaxOn
+
+\projlib_langauge_define_multilingual_text:Nn \index_symbols_name
+  {
+    , EN = Symbols
+    , FR = Symboles
+    , DE = Symbole
+    , IT = Simboli
+    , PT = Símbolos
+    , BR = Símbolos
+    , ES = Símbolos
+    , CN = 符号
+    , TC = 符號
+    , JP = 記号
+    , RU = Символы
+  }
+
+\newcommand*{\IndexDotfill}
+  {
+    \null\nobreak
+    \leaders \hbox to .67em {\hss \textcolor{main-text!15!paper}{.} \hss} \hskip1em plus1fill
+  }
+\newcommand*{\IndexLinebreak}
+  {
+    \nobreakspace\textcolor{main-text!45!paper}{\raisebox{.4ex}{.}\raisebox{.2ex}{.}}
+    \item\hspace*{\hangindent}
+    \textcolor{main-text!45!paper}{\raisebox{.45ex}{.}\raisebox{.25ex}{.}}\:
+    \unskip
+  }
+% % Below is another version that can produce a better automatic result,
+% % however if you are willing to make some manual interventions, you would be able to get even better result,
+% % thus this version is only left here for reference
+% \newcommand*{\IndexDotfill}
+%   {
+%     \leaders \hbox to .67em {\hss \textcolor{main-text!15!paper}{.} \hss}\hfil
+%     \penalty0\vadjust{}
+%     \leaders \hbox to .67em {\hss \textcolor{main-text!15!paper}{.} \hss}\hskip1em plus1fill
+%   }
+% \newcommand*{\IndexLinebreak}{~}
+% \hook_gput_code:nnn { cmd/theindex/after } { colorist } { \rightskip=1pc \parfillskip=-\rightskip }
+
+\newcommand*{\IndexHeading}[1]
+  {
+    \str_if_eq:nnTF { #1 } { Symbols }
+      { \tl_set:Nn \l_tmpa_tl { \index_symbols_name } }
+      { \tl_set:Nn \l_tmpa_tl { #1 } }
+    \tikz\node[
+      rounded~corners=5pt,
+      draw=maintheme,
+      fill=maintheme!10,
+      line~width=1pt,
+      inner~sep=5pt,
+      align=center,
+      font=\large\sffamily\colorist_bfseries:,
+      minimum~width=\linewidth-\pgflinewidth,
+    ] { \l_tmpa_tl };
+    \nopagebreak
+    \par
+    \vspace{.3\baselineskip}
+  }
+
+\renewcommand*{\indexspace}
+  {
+    \par
+    \vspace{2pc plus .5pc minus .3pc}
+  }
+
+% Prevent column break before the first sub-entry in the index
+% See https://tex.stackexchange.com/a/132415
+\bool_new:N \l__colorist_if_first_subitem_bool
+\renewcommand*{\@idxitem}
+  {
+    \par\hangindent40\p@
+    \bool_set_true:N \l__colorist_if_first_subitem_bool
+  }
+\renewcommand*{\subitem}
+  {
+    \par\hangindent40\p@
+    \bool_if:NT \l__colorist_if_first_subitem_bool
+      {
+        \nobreak
+        \bool_set_false:N \l__colorist_if_first_subitem_bool
+      }
+    \hspace*{20\p@}
+  }
+
+\hook_gput_code:nnn { begindocument/before } { colorist }
+  {
+    \bool_if:NF \l__colorist_fast_bool
+      {
+        \hook_gput_code:nnn { cmd/printindex/before } { colorist } { \bookmarksetup{startatroot} }
+      }
+  }
+
+%%================================
+%%  Draft mark
+%%================================
+\RequirePackage { projlib-draft }
+
+%%================================
+%% Icons
+%%================================
+\RequirePackage { tikz }
+\NewDocumentCommand \colorist_icon_ideabulb:w { O{0.15} m }
+  % #1 = scale
+  % #2 = color
+  {
+    \scalebox{#1}{
+    \begin{tikzpicture}
+        \filldraw[draw=#2,fill=#2] (0,0) circle [radius=1cm];
+        \filldraw[draw=paper,fill=paper,rounded~corners=0.8pt]
+            [rotate=20] (-0.26,-0.66) rectangle (-0.06,-0.6)
+            [xshift=-0.4mm,yshift=1mm] (-0.26,-0.66) rectangle (0.02,-0.6)
+            [xshift=0.4mm,yshift=1mm] (-0.26,-0.66) rectangle (-0.06,-0.6);
+        \draw[draw=paper,line~width=0.7mm] (-0.18,-0.46)
+            .. controls (-0.18,-0.28) and (-0.28,-0.12) ..(-0.4,0.1)
+            .. controls (-0.55,0.4) and (-0.3,0.64) ..(0,0.64)
+            .. controls (0.3,0.64) and (0.55,0.4) ..(0.4,0.1)
+            .. controls (0.28,-0.12) and (0.18,-0.28) ..(0.18,-0.46);
+    \end{tikzpicture}}
+  }
+
+\NewDocumentCommand \colorist_icon_questionmark:w { O{0.15} m }
+  % #1 = scale
+  % #2 = color
+  {
+    \scalebox{#1}{
+    \begin{tikzpicture}
+        \filldraw[draw=#2,fill=#2] (0,0) circle [radius=1cm];
+        \filldraw[paper,yshift=0.5mm,scale=0.9] (-0.4,0.1) circle [radius=0.77mm];
+        \draw[draw=paper,line~width=1.5mm,yshift=0.5mm,scale=0.9] (-0.4,0.1)
+            .. controls (-0.55,0.4) and (-0.3,0.64) ..(0,0.64)
+            .. controls (0.3,0.64) and (0.55,0.4) ..(0.4,0.1)
+            .. controls (0.28,-0.12) and (0.05,-0.28) ..(0.05,-0.3)
+            .. controls (0,-0.36) and (0.0,-0.45) ..(0.0,-0.5);
+        \fill[fill=paper,rounded~corners=0.6mm]
+            (-0.09,-0.75) rectangle (0.09,-0.53);
+    \end{tikzpicture}}
+  }
+
+%%================================
+%%  Theorems
+%%================================
+\RequirePackage { mathtools }
+\RequirePackage { amsthm }
+
+% Change equation numbers to gray
+% \def\tagform@#1{\maketag@@@{\textcolor{main-text!39!paper}{(\ignorespaces#1\unskip\@@italiccorr)}}}
+\def\tagform@#1{\maketag@@@{\textcolor{.!39!paper}{(\ignorespaces#1\unskip\@@italiccorr)}}}
+
+\PassOptionsToPackage { nopatch = eqnum } { microtype }
+
+
+\bool_if:NTF \l__colorist_theorem_in_new_line_bool
+  {
+    \newtheoremstyle{simple}
+      {}{}
+      {\normalfont}{}
+      {\normalfont}{}
+      {0pt}
+      {
+        \rlap{\vbox{\hbox{\parbox{\linewidth}{
+          {\thmname{#1}\thmnumber{\nobreakspace #2}}
+          {\color{main-text!50!paper}\thmnote{\hspace{.4em}$($#3$)$}}
+        }}\hbox{\strut}\vspace{0pt}}}
+      }
+  }
+  {
+    \newtheoremstyle{simple}
+      {}{}
+      {\normalfont}{}
+      {\normalfont}{}
+      {0pt}
+      {{\thmname{#1}\nobreakspace\thmnumber{#2}}
+        {\color{main-text!50!paper}\thmnote{\hspace{.4em}$($#3$)$}}\nobreakspace\nobreakspace{\normalfont\textcolor{main-text!27!paper}{---}}\nobreakspace\nobreakspace}
+  }
+
+\newcommand{\customqedsymbol}{
+  \makebox[1em]{\color{.!27!paper}\rule[-0.1em]{.95em}{.95em}}}
+\let\qedsymbol\customqedsymbol
+
+% The style of the theorem-like environment that will be wrapped into the color box
+\bool_if:NTF \l__colorist_theorem_in_new_line_bool
+  {
+    \newtheoremstyle{basic}
+      {}{}
+      {\normalfont}{}
+      {}{}
+      {0pt}
+      {
+        \rlap{\vbox{\hbox{\parbox{\linewidth}{
+          {\thmname{#1}\nobreakspace\thmnumber{\textup{#2}}}
+          \thmnote{\normalfont\sffamily\color{main-text}\nobreakspace(#3)}
+        }}\hbox{\strut}\vspace{0pt}}}
+      }
+  }
+  {
+    \newtheoremstyle{basic}
+      {0pt}{0pt}{\normalfont}{0pt}
+      {}{\;}{0.25em}
+      {{\thmname{#1}\nobreakspace\thmnumber{\textup{#2}}}
+      \thmnote{\normalfont\sffamily\color{main-text}\nobreakspace(#3)}}
+  }
+
+\theoremstyle{basic}
+
+% The style of remark-like environments
+\newtheoremstyle{emphasis}
+    {0pt}{0pt}{\itshape}{0pt}{}{}{0pt}
+    {\thmnote{\normalfont\sffamily\color{main-text}#3\hspace*{0.5em}}}
+
+% Custom proof style
+\renewenvironment{proof}[1][\proofname]{\par
+  \pushQED{\qed}
+  \normalfont \topsep6\p@\@plus6\p@\relax
+  \trivlist
+  \item[\hskip\labelsep
+        \itshape \sffamily \colorist_bfseries:
+    #1\hspace{.4em}
+    \textcolor{main-text!27!paper}{$|$}]\ignorespaces
+}{%
+  \popQED\endtrivlist\@endpefalse
+}
+
+\bool_if:NTF \l__colorist_fast_bool
+  {
+    \RequirePackage { hyperref }
+    \hypersetup { draft }
+  }
+  {
+    \RequirePackage { hyperref }
+    \RequirePackage { bookmark }
+    \hypersetup{ hidelinks, linktoc = all }
+    \bookmarksetup{ numbered }
+    \renewcommand\Hy@numberline[1]{#1.~}
+    % https://tex.stackexchange.com/a/1821
+    % Add the bookmark of ToC
+    \bool_if:NTF \l__colorist_is_book_bool
+      {
+        \hook_gput_code:nnn { cmd/tableofcontents/before } { colorist }
+          {
+            \if@openright\cleardoublepage\else\clearpage\fi
+            \pdfbookmark[0]{\contentsname}{toc}
+          }
+      }
+      {
+        \hook_gput_code:nnn { cmd/tableofcontents/before } { colorist }
+          {
+            \pdfbookmark[1]{\contentsname}{toc}
+          }
+      }
+  }
+
+% \PassOptionsToPackage { simplename } { projlib-theorem }
+
+\PassOptionsToPackage
+  {
+    theorem style = {
+      , remark = emphasis
+      , observation = emphasis
+    }
+  }
+  { projlib-theorem }
+
+\RequirePackage { projlib-theorem }
+
+\tl_gset:Nn \g_crthm_combined_name_sep_tl { \textcolor{main-text}{-} }
+
+\SetTheorem { proof, proof* } { qed-symbol = { \customqedsymbol } }
+
+\SetTheorem { theorem, lemma, proposition, corollary, property, axiom, construction, theorem-with-name }
+  {
+    name style = {
+      heading style = { \color{orange}\colorist_bfseries:\g_colorist_title_font_common_tl\textsc }
+    }
+  }
+
+\SetTheorem { definition, assumption, convention, hypothesis, notation }
+  {
+    name style = {
+      heading style = { \color{forestgreen}\colorist_bfseries:\g_colorist_title_font_common_tl\textsc }
+    }
+  }
+
+\SetTheorem { application, claim, example, exercise, fact, problem, question, recall }
+  {
+    name style = {
+      heading style = { \color{main-text}\colorist_bfseries:\g_colorist_title_font_common_tl\textsc }
+    }
+  }
+
+\SetTheorem { conjecture }
+  {
+    name style = {
+      heading style = { \color{purple}\colorist_bfseries:\g_colorist_title_font_common_tl\textsc }
+    }
+  }
+
+
+\bool_if:NF \l__projlib_theorem_complexname_bool
+  {
+    \SetTheorem { theorem, lemma, proposition, corollary, property, axiom, construction, theorem-with-name }
+      {
+        name style = {
+          , crefname style = { \color{orange}\colorist_bfseries:\g_colorist_title_font_common_tl\textsc }
+          , Crefname style = { \color{orange}\colorist_bfseries:\g_colorist_title_font_common_tl\textsc }
+          , numbering style = { \color{orange}\colorist_bfseries:\g_colorist_title_font_common_tl }
+        }
+      }
+
+    \SetTheorem { definition, assumption, convention, hypothesis, notation }
+      {
+        name style = {
+          , crefname style = { \color{forestgreen}\colorist_bfseries:\g_colorist_title_font_common_tl\textsc }
+          , Crefname style = { \color{forestgreen}\colorist_bfseries:\g_colorist_title_font_common_tl\textsc }
+          , numbering style = { \color{forestgreen}\colorist_bfseries:\g_colorist_title_font_common_tl }
+        }
+      }
+
+    \SetTheorem { application, claim, example, exercise, fact, problem, question, recall }
+      {
+        name style = {
+          , crefname style = { \color{main-text}\colorist_bfseries:\g_colorist_title_font_common_tl\textsc }
+          , Crefname style = { \color{main-text}\colorist_bfseries:\g_colorist_title_font_common_tl\textsc }
+          , numbering style = { \color{main-text}\colorist_bfseries:\g_colorist_title_font_common_tl }
+        }
+      }
+
+    \SetTheorem { conjecture }
+      {
+        name style = {
+          , crefname style = { \color{purple}\colorist_bfseries:\g_colorist_title_font_common_tl\textsc }
+          , Crefname style = { \color{purple}\colorist_bfseries:\g_colorist_title_font_common_tl\textsc }
+          , numbering style = { \color{purple}\colorist_bfseries:\g_colorist_title_font_common_tl }
+        }
+      }
+  }
+
+
+\RequirePackage { marginnote }
+\RequirePackage { ifoddpage }
+\cs_new_protected:Nn \colorist_mpar_adjust:n
+  {
+    \renewcommand* { \marginnotevadjust } { #1 }
+  }
+\hook_gput_code:nnn { env/remark/begin } { colorist }
+  {
+    \if@twoside\checkoddpage
+        \ifoddpage\reversemarginpar\fi
+    \else
+        \reversemarginpar
+    \fi
+    \colorist_mpar_adjust:n {-.25em}
+    \marginnote{
+      \colorist_icon_ideabulb:w [0.3] {orange}
+      \bool_if:NTF \l__colorist_is_book_bool
+        {
+          \hspace*{-.2em}
+        }
+        {
+          \hspace*{-.5em}
+        }
+    }
+    \normalmarginpar
+  }
+\hook_gput_code:nnn { env/conjecture/begin } { colorist }
+  {
+    \if@twoside\checkoddpage
+        \ifoddpage\reversemarginpar\fi
+    \else
+        \reversemarginpar
+    \fi
+    \bool_if:NTF \l__colorist_theorem_in_new_line_bool
+      {
+        \colorist_mpar_adjust:n {-.75em}
+        \null
+      }
+      {
+        \colorist_mpar_adjust:n {-.25em}
+      }
+    \marginnote{
+      \colorist_icon_questionmark:w [0.3] {purple}
+      \bool_if:NTF \l__colorist_is_book_bool
+        {
+          \hspace*{-.2em}
+        }
+        {
+          \hspace*{-.5em}
+        }
+    }
+    \normalmarginpar
+  }
+
+\ExplSyntaxOff
+\RequirePackage{iftex}
+\ifXeTeX
+\def\pgfsys@hboxsynced#1{%
+{%
+    \pgfsys@beginscope%
+    \setbox\pgf@hbox=\hbox{%
+    \hskip\pgf@pt@x%
+    \raise\pgf@pt@y\hbox{%
+        \pgf@pt@x=0pt%
+        \pgf@pt@y=0pt%
+        \special{pdf: content q}%
+        \pgflowlevelsynccm%
+        \pgfsys@invoke{q -1 0 0 -1 0 0 cm}%
+        \special{pdf: content -1 0 0 -1 0 0 cm q}
+        % translate to original coordinate system
+        \pgfsys@invoke{0 J [] 0 d}% reset line cap and dash
+        \wd#1=0pt%
+        \ht#1=0pt%
+        \dp#1=0pt%
+        \box#1%
+        \pgfsys@invoke{n Q Q Q}%
+    }%
+    \hss%
+    }%
+    \wd\pgf@hbox=0pt%
+    \ht\pgf@hbox=0pt%
+    \dp\pgf@hbox=0pt%
+    \pgfsys@hbox\pgf@hbox%
+    \pgfsys@endscope%
+}}
+\fi
+\ExplSyntaxOn
+
+
+\cs_new_protected:Nn \colorist_add_colorbox:nn
+  % #1 = list of environments
+  % #2 = settings of tcolorbox
+  {
+    \clist_map_inline:nn { #1 }
+      {
+        \__colorist_add_colorbox_do:nn { ##1 } { #2 }
+        \__colorist_add_colorbox_do:nn { ##1* } { #2 }
+      }
+  }
+\cs_new_protected:Nn \__colorist_add_colorbox_do:nn
+  % #1 = name of environment
+  % #2 = settings of tcolorbox
+  {
+    \tcolorboxenvironment { #1 } { #2 }
+  }
+
+\colorist_add_colorbox:nn { theorem, lemma, proposition, corollary, property, axiom, construction, definition-corollary, definition-proposition, definition-theorem, theorem-with-name }
+  {
+    enhanced~jigsaw, breakable, lines~before~break=3,
+    left=3.5mm, right=3.5mm,
+    colback=main-text!3!paper,
+    opacityframe=0.9, colframe=orange, arc=.7mm
+  }
+
+  \colorist_add_colorbox:nn { definition, assumption, convention, hypothesis, notation, corollary-definition, proposition-definition, theorem-definition }
+  {
+    enhanced~jigsaw, breakable, lines~before~break=3,
+    left=4mm, right=4mm, top=1mm, bottom=1mm,
+    colback=lightorange!10!paper, boxrule=0pt, frame~hidden,
+    borderline~west={1.5mm}{0mm}{forestgreen}, arc=.7mm
+  }
+
+\colorist_add_colorbox:nn { application, claim, example, fact, recall }
+  {
+    enhanced~jigsaw, breakable, lines~before~break=3,
+    colback=main-text!5!paper,
+    boxrule=0pt, frame~hidden, arc=.7mm
+  }
+
+\colorist_add_colorbox:nn { conjecture }
+  {
+    enhanced~jigsaw, breakable, lines~before~break=3,
+    left=3.5mm, right=3.5mm,
+    colback=main-text!3!paper,
+    opacityframe=0.7, colframe=purple, arc=.7mm
+  }
+
+\colorist_add_colorbox:nn { problem }
+  {
+    enhanced~jigsaw, breakable, lines~before~break=3,
+    colback=yellow!25!paper,
+    boxrule=0pt, frame~hidden, arc=.7mm
+  }
+
+\colorist_add_colorbox:nn { question, exercise, remark, observation }
+  {
+    enhanced~jigsaw, breakable, lines~before~break=3,
+    oversize,
+    top=0mm, bottom=0mm,
+    opacityframe=0, opacityback=0
+  }
+
+% Connect adjacent definition-like environments
+% From https://tex.stackexchange.com/a/587023
+\NewDocumentCommand \AfterEnvEnd { +m }
+  { \colorist_after_env_end:nw { #1 } }
+\cs_new_protected:Npn \colorist_after_env_end:nw #1 #2
+       \if@ignore\@ignorefalse\ignorespaces\fi
+  { #2 \if@ignore\@ignorefalse\ignorespaces\fi #1 }
+\NewDocumentCommand \ScanEnv { s m +m +m }
+  {
+    \IfBooleanTF { #1 }
+      { \colorist_scan_env_ignore_par:nTF }
+      { \colorist_scan_env:nTF }
+      { #2 } { #3 } { #4 }
+  }
+\cs_new_protected:Npn \colorist_scan_env:nTF
+  { \__colorist_scan_env:NnTF \c_false_bool }
+\cs_new_protected:Npn \colorist_scan_env_ignore_par:nTF
+  { \__colorist_scan_env:NnTF \c_true_bool }
+\tl_new:N \l__colorist_collected_tl
+\cs_new_protected:Npn \__colorist_scan_env:NnTF #1 #2 #3 #4
+  {
+    \tl_clear:N \l__colorist_collected_tl
+    \peek_analysis_map_inline:n
+      {
+        \tl_put_right:Nn \l__colorist_collected_tl { ##1 }
+        \int_compare:nNnTF { "##3 } = { 0 }
+          {
+            \exp_args:No \token_if_eq_meaning:NNTF { ##1 } \begin
+              { \peek_analysis_map_break:n { \__colorist_chk_env:nTFn { #2 } { #3 } { #4 } } }
+              {
+                \bool_lazy_and:nnF { #1 }
+                    { \exp_args:No \token_if_eq_meaning_p:NN { ##1 } \par }
+                  { \__colorist_scan_env_end:n { #4 } }
+              }
+          }
+          { \int_compare:nNnF { "##3 } = { 10 } { \__colorist_scan_env_end:n { #4 } } }
+      }
+  }
+\cs_new_protected:Npn \__colorist_scan_env_end:n #1
+  { \peek_analysis_map_break:n { \__colorist_reinsert_tokens:nn { #1 } { } } }
+\cs_new_protected:Npn \__colorist_reinsert_tokens:nn #1 #2
+  {
+    \use:x
+      {
+        \tl_clear:N \exp_not:N \l__colorist_collected_tl
+        \exp_not:n { #1 } \l__colorist_collected_tl #2
+      }
+  }
+\cs_new_protected:Npn \__colorist_chk_env:nTFn #1 #2 #3 #4
+  {
+    \exp_args:Nx \__colorist_reinsert_tokens:nn
+      { \str_if_eq:nnTF { #1 } { #4 } { \exp_not:n { #2 } } { \exp_not:n { #3 } } } { { #4 } }
+  }
+
+\cs_new_protected:Nn \colorist_add_scan_env:n
+  {
+    \clist_map_inline:nn { #1 }
+      {
+        \__colorist_add_scan_env_do:n { ##1 }
+      }
+  }
+\cs_new_protected:Nn \__colorist_add_scan_env_do:n
+  {
+    \tl_const:cn { l__colorist_scan_env_ #1 _tl }
+      {
+        \AfterEnvEnd
+          {
+            \ScanEnv* { #1 }
+              { \vspace { -1.15\baselineskip } }
+              {
+                \ScanEnv* { #1* }
+                  { \vspace { -1.15\baselineskip } }
+                  {}
+              }
+          }
+      }
+    \hook_gput_code:nnn { env/#1/end } { colorist } { \tl_use:c { l__colorist_scan_env_ #1 _tl } }
+    \hook_gput_code:nnn { env/#1*/end } { colorist } { \tl_use:c { l__colorist_scan_env_ #1 _tl } }
+  }
+
+\colorist_add_scan_env:n { definition, assumption, convention, hypothesis, notation }
+
+\theoremstyle{simple}
+
+
+\NewDocumentEnvironment { emphasis } { }
+  {
+    \enlargethispage{2mm}
+    \begin{tcolorbox}
+        [
+          enhanced ~ jigsaw, enforce~breakable, oversize,
+          % nobeforeafter,
+          left = 1em, right=0mm, top=.5mm, bottom=0mm, boxrule=0pt,
+          colback=maintheme!3!paper, frame ~ hidden,
+          borderline ~ west = {.15em} {0mm} {maintheme, double, double ~ distance=.12em},
+          arc = 0.2mm,
+        ]
+  }
+  {
+    \end{tcolorbox}
+  }
+
+\hook_gput_code:nnn { env/quote/begin } { colorist } { \small }
+
+%%================================
+%%  Title block style
+%%================================
+\bool_if:NTF \l__colorist_is_book_bool
+  {
+    \hook_gput_code:nnn { package/projlib-author/after } { colorist }
+      {
+        \tl_gset:Nn \g__projlib_author_font_author_tl      { \normalfont \colorist_scshape: }
+        \tl_gset:Nn \g__projlib_author_font_institute_tl   { \large \normalfont }
+        \tl_gset:Nn \g__projlib_author_font_address_tl     { \large \normalfont \itshape }
+        \tl_gset:Nn \g__projlib_author_font_curraddr_tl    { \large \normalfont \itshape }
+        \tl_gset:Nn \g__projlib_author_font_email_tl       { \large \normalfont \ttfamily }
+      }
+
+    \RequirePackage { projlib-titlepage }
+    \RenewDocumentCommand \maketitle { O{} }
+      {
+        \ProjLibTitlePage[#1]
+          {
+            , title  = \@title
+            , author = \@author
+            , date   = \@date
+          }
+      }
+  }
+  {
+%<*colorist-fancy>
+    \renewcommand{\@maketitle}
+      {
+        \begin{center}
+            \color{maintheme}
+            {\Large\sffamily\colorist_scshape: \colorist_bfseries: \@title}\\\bigskip
+            \color{main-text!80!paper}
+            {\colorist_scshape:\@author}\par\smallskip
+            {\@date}
+        \end{center}
+        \medskip
+      }
+%</colorist-fancy>
+
+    \hook_gput_code:nnn { cmd/maketitle/after } { colorist } { \thispagestyle{fancy} }
+
+%%================================
+%%  Abstract style
+%%================================
+%<*colorist-fancy>
+    \renewenvironment{abstract}
+    {\small{\centerline{\textsc{ \colorist_bfseries: \sffamily\abstractname}}\vspace{-0.3\baselineskip}}
+        \color{main-text!80!paper}\begin{quotation}}
+    {\end{quotation}\medskip}
+%</colorist-fancy>
+
+%%================================
+%%  Keyword environment
+%%================================
+    \DefineMultilingualText { \keywordname }
+      {
+        EN = Keywords                               ,
+        FR = Mots~clés                              ,
+        DE = Schlüsselwörter                        ,
+        IT = Parole~chiave                          ,
+        PT = Palavras~chave                         ,
+        BR = Palavras~chave                         ,
+        ES = Palabras~clave                         ,
+        CN = 关键词                                 ,
+        TC = 關鍵詞                                 ,
+        JP = キーワード                             ,
+        RU = Ключевые~слова                         ,
+      }
+
+%<*colorist-fancy>
+    \newenvironment{keyword}
+    {\small\centerline{{ \colorist_bfseries: \sffamily\keywordname}}\vspace{-0.3\baselineskip}
+        \color{main-text!80!paper}\begin{center}}
+    {\end{center}\medskip}
+%</colorist-fancy>
+  } % end of \bool_if:NTF \l__colorist_is_book_bool
+
+%%================================
+%%  Simulate features of amsart
+%%================================
+\PassOptionsToPackage { amsfashion } { projlib-author }
+\RequirePackage { projlib-author }
+%</style>
+
+\endinput

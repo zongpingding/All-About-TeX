@@ -1,0 +1,21 @@
+Willow Tree Book Class
+v1.03
+28 September 2021
+
+Authors: 
+Ben McKay
+
+Maintainer: 
+Ben McKay
+
+E-mail: 
+b.mckay@ucc.ie
+
+Licence: 
+Released under the LaTeX Project Public License v1.3c or later.
+See http://www.latex-project.org/lppl.txt
+
+The willowtreebook class is a simple book class, which I use for lecture notes.
+It actually just selects options for the more sophisticated memoir class.
+
+Changes: fixed typo in user manual.

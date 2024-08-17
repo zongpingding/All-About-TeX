@@ -1,0 +1,40 @@
+\mode<presentation>
+
+% Requirement
+\RequirePackage{tikz}
+\RequirePackage{pifont} 
+\RequirePackage{graphicx} 
+
+\RequirePackage{fontawesome5}
+
+\usetikzlibrary{positioning}
+
+\let\oldding\ding% Store old \ding in \oldding
+\renewcommand{\ding}[2][1]{\scalebox{#1}{\oldding{#2}}}% Scale \oldding via optional argument
+
+
+%\newcommand{\partnerlogo}{} % print second log
+\DeclareOptionBeamer{partnerlogo}{\newcommand{\partnerlogo}{#1}}
+
+\newcommand{\@titlepagenumber}{1}
+\DeclareOptionBeamer{titlepagenumber}{\renewcommand{\@titlepagenumber}{#1}}
+
+\newif\if@enableSectionInterframe
+\@enableSectionInterframefalse
+\DeclareOptionBeamer{enablesectioninterframe}{\@enableSectionInterframetrue}
+
+\newif\if@enableSubSectionInterframe
+\@enableSubSectionInterframefalse
+\DeclareOptionBeamer{enablesubsectioninterframe}{\@enableSubSectionInterframetrue}
+
+\ProcessOptionsBeamer
+
+% Settings
+\useinnertheme{BetterIMTAtlantique}
+\useoutertheme{BetterIMTAtlantique}
+\usecolortheme{BetterIMTAtlantique}
+\usefonttheme{BetterIMTAtlantique}
+
+\setbeamertemplate{navigation symbols}{}
+
+\mode<all>

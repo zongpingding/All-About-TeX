@@ -1,0 +1,82 @@
+% \documentclass[11pt]{article}
+% \usepackage{xcoffins}
+% \usepackage{lipsum}
+% \usepackage{framed}
+
+
+% \begin{document}
+% \NewCoffin\my
+% \SetVerticalCoffin\my{\linewidth}{\lipsum[1]}
+
+% \begin{framed}
+%     \lipsum[1-2]
+% \end{framed} 
+
+% \vspace*{2em}
+% \noindent\TypesetCoffin\my
+% \end{document}
+
+
+
+\documentclass[11pt]{article}
+% \usepackage[margin=4cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+% \usepackage{color}
+\usepackage{lipsum}
+\pagestyle{empty}
+
+\newbox\boxhead
+\newbox\boxtail
+\newbox\boxtemp
+
+\newdimen\dimtemp
+
+\def\boxsplit{%
+  % total height of original box
+  \dimtemp\ht\boxtail
+  \advance\dimtemp\dp\boxtail
+  % split original box in order to retrieve its first line
+  \setbox\boxhead\vsplit\boxtail to 0pt
+  % fix the height of the first line
+  \setbox\boxhead\vbox{\unvbox\boxhead}%
+  % restore original size
+  \setbox\boxtemp\vbox{\copy\boxhead\copy\boxtail}%
+  \advance\dimtemp-\ht\boxtemp
+  \advance\dimtemp-\dp\boxtemp
+  \advance\dimtemp\dp\boxhead
+  \dp\boxhead\dimtemp
+}
+
+\newenvironment{mybox}{%
+  \ifhmode\par\fi
+  \setbox\boxtail\vbox\bgroup
+}{%
+  \egroup
+  {%
+    \noindent
+    \fboxsep 0pt
+    \splittopskip 0pt
+    \baselineskip 0pt
+    \lineskiplimit 0pt
+    \lineskip 0pt
+    \vfuzz\maxdimen
+    \leavevmode
+    \loop
+      \ifvoid\boxtail
+      \else
+        \boxsplit
+        % \colorbox{blue}{\hbox to \linewidth{\box\boxhead}\hfil}%
+        \hbox to \linewidth{\box\boxhead}\hfil%
+        \hfil
+        \repeat
+  }%
+}
+
+\begin{document}
+
+\begin{mybox}
+  \lipsum[1-5]
+\end{mybox}
+
+\end{document}

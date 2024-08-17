@@ -1,0 +1,300 @@
+\documentclass[fontset=windows, 12pt]{article}
+\usepackage[test]{Article}
+% \usepackage[test]{CmdAndEnv}
+
+
+\newcommand{\baa}[1]{I eat #1{}. }
+%% <==>
+\NewDocumentCommand{\bab}{m}{I eat #1{}. }
+% m表示\bab命令接受一个标准的latex参数（必须给出的参数）
+% g表示该参数是一个可选参数，并且用{}界定其范围。未给定，时默认为-NoValue-
+% o(不是0)，表示标准可选.使用[]给出
+% {}，使用{}给出
+
+% 一个复杂的命令
+\NewDocumentCommand{\foo}{mg}{
+    \IfNoValueTF{#2}%   翻译：如果#2是Novalue
+        {One parameter: #1{}.}
+        {Two parameter3: #1{}, #2{}.}
+}
+
+% 另一个复杂的命令
+\NewDocumentCommand{\foob}{oom}{%
+    Text with #3 and perhaps \textcolor{blue}{#1} and \textcolor{red}{#2}%
+}
+
+% 自定义一个复杂的环境:不能够使用o ---> 原因：
+\NewDocumentEnvironment{Test}{O{dft1}O{dft2}m}%
+    {%
+        \ifthenelse{\isempty{#1}}
+        {%
+            \ttfamily
+            \noindent This is \#1:~ dft1\\
+            This is \#2:~ #2\\
+            This is \#3:~ #3 
+        }
+        {%
+            \ttfamily
+            \noindent This is \#1:~ #1\\
+            This is \#2:~ #2\\
+            This is \#3:~ #3
+        }
+    }{}
+
+% 使用xifthen做判断
+\newcommand{\optarg}[1][]{%
+    \ifthenelse{\isempty{#1}}%
+    {}% if #1 is empty
+    {(((#1)))}% if #1 is not empty
+}
+
+% 使用{}进行复合赋值(分割)
+\newcommandx\gougu[3][1={a=2},2=b,3=c,usedefault]
+    {#1^2 + #2^2 = #3^2}
+
+
+\title{自定义宏包}
+\author{\calligra Eurekax}
+\date{\today}
+\begin{document}
+\maketitle
+\section{自定义宏}
+
+\subsection{NewDocumentCommand}
+
+\begin{formal}[blue!5]{blue}
+    \baa{Mouse}\\
+    \bab{Fish}
+\end{formal}
+
+\begin{formal}[blue!5]{blue}
+    \foo{hello}\\
+    \foo{Hello}{world}
+\end{formal}
+
+\begin{formal}[blue!5]{blue}
+    \foob{第一个必选参数}\\
+    \foob[第一个可选参数]{第一个必选参数}\\
+    \foob[第一个可选参数][第二个可选参数]{第一个必选参数}
+\end{formal}
+
+
+
+\subsection{NewDocumentEnvironment}
+\begin{formal}{green}
+    \begin{Test}{第一个必选参数}
+    \end{Test}
+\end{formal}
+
+\begin{formal}{green}
+    \begin{Test}[第一个可选参数]{第一个必选参数}
+    \end{Test}
+\end{formal}
+
+\begin{formal}{green}
+    % 使用*来占位
+    \begin{Test}[][第二个可选参数]{第一个必选参数}
+    \end{Test}
+\end{formal}
+
+\begin{formal}{green}
+    \begin{Test}[第一个可选参数][第二个可选参数]{第一个必选参数}
+    \end{Test}
+\end{formal}
+
+\subsection{新方式宏参数指定}
+\begin{formal}[yellow!5]{yellow}
+    \begin{center}
+        \ttfamily
+        \begin{tabular}{l|llllp{8em}}
+            参数指定 & 输入值 & \#1 & \#2 & \#3\\
+            \hline\\
+            m~m & \{foo\}\{bar\} & foo & bar\\
+            o~m & \{foo\} & -Novalue & foo\\
+            o~o~m & [foo]\{bar\} & foo & -Novalue- & bar\\
+            o~o~m & [foo][bar]{Need} & foo & bar & Need\\
+            O\{dft1\}~O\{dft2\}~m & \{foo\} & dft1 & dft2 & foo\\
+            m~O\{default\} & \{foo\} & foo & default\\
+            m~O\{default\} & \{foo\}[bar] & foo & bar\\
+            m~O\{default\} & [bar] & 报错
+        \end{tabular}
+    \end{center}
+\end{formal}
+
+\section{宏定义进阶}
+\subsection{(类似)关键字参数:xargs}
+    \begin{align}
+        \gougu\\ 
+        \gougu[3][4][5]\\ 
+        \gougu[][d]\\ 
+        \gougu[][][g] 
+    \end{align}
+
+\subsection{条件判断:xifthen}
+Testing \verb|\optarg|: \optarg% prints nothing
+
+Testing \verb|\optarg[]|: \optarg[]% prints nothing
+
+Testing \verb|\optarg[test]|: \optarg[test]% prints (((test)))
+
+\subsection{宏包可选参数}
+\begin{formal}{red}
+    Option选择命令的使用: \verb |\usepackage[test]{Article}|\\
+    \testcmd{}
+\end{formal}
+
+\section{重写绘图宏包}
+\subsection{重写plott命令}
+\begin{formal}{blue}
+    原始代码:
+\begin{verbatim}
+\begin{Plot}{scale=0.8}{>=stealth}
+    \plott{blue!40, thick}{-1:4}{\x*\x-2*\x-1}
+    \plott{red, thick}{0:pi}{3*sin(\x r)}
+\end{Plot}
+\end{verbatim}
+
+    \noindent 运行结果:
+    \begin{center}
+        \begin{Plot}{scale=0.8}{>=stealth}
+            \plott{blue!40, thick}{-3:4}{0.3*\x+1}
+            \plott{red, thick, samples=200}{0:pi}{3*sin(4*\x r)}
+        \end{Plot}
+    \end{center}
+\end{formal}
+
+\begin{formal}{red}
+    简化后代码:
+\begin{verbatim}
+\plot{exp(-\x)*sin(2*\x)+ln(\x)*cos(\x)}[0:4]    
+\end{verbatim}  
+
+    \noindent 运行结果:
+    \begin{center}
+        \begin{TikAxis}{scale=0.5}
+            \plot[red, thick]{exp(-\x)*sin(2*\x)+ln(\x)*cos(\x)}[0.2:5]
+        \end{TikAxis}
+    \end{center}
+\end{formal}
+\newpage
+
+\subsection{重写polarplott}
+\begin{formal}{blue}
+    原始代码:\\
+    \verb |\polarplott{scale=2}{red, domain=0:720}{0.01/pi*\t}|
+
+    \noindent 运行结果：
+    \begin{center}
+        \polarplott{scale=2}{red, domain=0:720}{0.01/pi*\t}             
+    \end{center}
+\end{formal}
+
+\begin{formal}{red}
+简化后代码：
+\begin{verbatim}
+\polarplot{sin(2*\t)}
+\polarplot[scale=2]{sin(2*\t)}
+\polarplot[][blue, thick, domain=0:180]{sin(2*\t)}
+\end{verbatim}
+运行结果：
+    \begin{center}
+        \polarplot{sin(2*\t)}
+        \polarplot[scale=2]{sin(2*\t)}
+        \polarplot[][blue, thick, domain=0:180]{sin(2*\t)}
+    \end{center}
+\end{formal}
+
+\newpage
+\subsection{重写paraplott(绘制二维参数方程)}
+\begin{formal}{blue}
+    原始代码:
+\begin{verbatim}
+\paraplott{scale=1}{{10*cos(t)}, {sin(t)}}{thick, color=blue}{}    
+\end{verbatim}
+
+    \noindent 运行结果:
+    \begin{center}
+        \paraplott{scale=1}{{3*cos(t)}, {sin(t)}}{thick, color=blue}{}   
+    \end{center}
+\end{formal}
+\begin{formal}{red}
+    简化后代码：
+\begin{verbatim}
+\paraplot{{3*cos(t)}, {sin(t)}}
+\paraplot[scale=0.3]{{3*cos(t)}, {sin(t)}}
+\paraplot[scale=0.3]{{3*cos(t)}, {sin(t)}}[0:1.5*pi]
+\end{verbatim}
+    \noindent 运行结果：
+    \begin{center}
+        \paraplot{{3*cos(t)}, {sin(t)}}
+        \paraplot[scale=0.3]{{3*cos(t)}, {sin(t)}}
+        \paraplot[scale=0.4]{{3*cos(t)}, {sin(t)}}[0:1.5*pi]
+    \end{center}
+\end{formal}
+
+\newpage
+\subsection{重写paraplotzz(绘制三维参数方程)}
+
+\begin{formal}{blue}
+    原始代码：
+\begin{verbatim}
+\paraplotzz{scale=0.5} 
+    {{sin(deg(t))},{cos(deg(t))},{t}} 
+    {}
+    {view = {60}{90},axis lines = center}
+\end{verbatim}
+
+    \noindent 绘制结果
+    \begin{center}
+        \paraplotzz{scale=0.5} 
+            {{sin(deg(t))},{cos(deg(t))},{t}}
+            {thick, red}
+            {view = {60}{30},axis lines = center}  
+    \end{center}
+\end{formal}
+
+\begin{formal}{red}
+    简化后代码: 
+\begin{verbatim}
+\paraplotz{{sin(deg(t))}, {cos(deg(t))}}
+\paraplotz[scale=0.3]{{sin(deg(t))}, {cos(deg(t))}}
+\paraplotz[scale=0.5]{{sin(deg(t))}, {cos(deg(t))}}[-2*pi:2*pi]
+\end{verbatim}
+
+    \noindent 运行结果：
+    \begin{center}
+        \paraplotz{{sin(deg(t))}, {cos(deg(t))}}
+        \paraplotz[scale=0.3]{{sin(deg(t))}, {cos(deg(t))}}
+        \paraplotz[scale=0.5]{{sin(deg(t))}, {cos(deg(t))}}[-2*pi:2*pi]
+    \end{center}
+\end{formal}
+
+\newpage
+\subsection{重写plotzz(三维绘图)}
+
+\begin{formal}{blue}
+    原始代码：
+\begin{verbatim}
+\plotzz{}{sin(deg(sqrt(x^2+y^2)))/sqrt(x^2+y^2)}{surf}{}{图例}
+\end{verbatim}
+
+    \noindent 运行结果:
+    \begin{center}
+        \plotzz{}{sin(deg(sqrt(x^2+y^2)))/sqrt(x^2+y^2)}{surf}{}{图例}
+    \end{center}
+\end{formal}
+
+\begin{formal}{red}
+    简化后代码:
+\begin{verbatim}
+\plotz[scale=1.5]{sin(deg(sqrt(x^2+y^2)))/sqrt(x^2+y^2)}[mesh]   
+\end{verbatim}
+
+    \noindent 运行结果：
+    \begin{center}
+        \plotz[scale=1.5]{sin(deg(sqrt(x^2+y^2)))/sqrt(x^2+y^2)}[mesh]
+    \end{center}
+\end{formal}
+
+
+\end{document}

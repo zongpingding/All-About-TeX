@@ -1,0 +1,154 @@
+\documentclass{willowtreebook}
+\Title{The Willow Tree Book Class 1.03}
+\Author{Benjamin \scotsMc{}Kay}
+\Colophon{Released under the \LaTeX{} Public Project License 1.3c}
+\BibliographyFile{willowtreebook}
+\usepackage{fancyvrb}
+\usepackage{inconsolata}
+\begin{document}
+\includegraphics[width=\textwidth]{willow-2.jpg}%
+\chapter{Preface}
+The Willow Tree Book class is a simplified derivative of the \verb!memoir! book class.
+I use it for my lecture notes.
+The document you are reading is in the Willow Tree Book class.
+\afterpreface
+\chapter{Use}
+Here is a typical book using the Willow Tree Book class:
+\begin{Verbatim}[frame=leftline]
+\documentclass{willowtreebook}
+\Title{Odyssey}
+\Author{Homer}
+\BibliographyFile{odyssey} 		
+	% The name of the .bib file, without file extension.
+\begin{document}
+\chapter{Preface}
+This is the preface to my book.
+\afterpreface
+\chapter{We meet Odysseus}
+Tell me, O muse, of that ingenious hero
+    % The rest of the text goes here.
+Thus spoke Minerva, and Ulysses obeyed her gladly. Then Minerva assumed
+the form and voice of Mentor, and presently made a covenant of peace
+between the two contending parties.
+\par\bigskip\noindent
+THE END
+	% End the document without loading the bibliography
+	% or the index, or the list of notation.
+\end{document}
+\end{Verbatim}
+Compile with \verb!latex! or \verb!pdflatex!.
+\chapter{Definitions, Problems and Theorems}
+\section{Definitions}
+We can define a term like \emph{hamster}\define{hamster}, or say that the term hamster\SubIndex{hamster} appears again later.
+\begin{Verbatim}[frame=leftline]
+\chapter{Definitions, Problems and Theorems}
+\section{Definitions}
+We can define a term like \emph{hamster}\define{hamster}, 
+or say that the term hamster\SubIndex{hamster} appears again later.
+\end{Verbatim}
+Compile, for a book called \verb!filename.tex!, with
+\begin{Verbatim}[frame=leftline]
+	makeindex filename
+\end{Verbatim}
+We add notation like when we use a variable called \(\omega\),
+we put it in the list of notation.%
+\Notation{omega}{\omega}{A variable called $\omega$}
+\begin{Verbatim}
+We add notation like when we use a variable called \(\omega\),
+we put it in the list of notation.%
+\Notation{omega}{\omega}{A variable called $\omega$}
+\end{Verbatim}
+If you use notation, compile with
+\begin{Verbatim}[frame=leftline]
+	makeindex -s notation.gst -o not.gls not.glo  
+\end{Verbatim}
+\section{Problems}
+\begin{problem}{label.for.the.first.problem}
+What is the point of your life?
+\end{problem}
+\begin{answer}{label.for.the.first.problem}
+Your life is pointless.
+\end{answer}
+In problem~\ref{problem:label.for.the.first.problem}, we can clearly see ...
+\begin{Verbatim}[frame=leftline]
+		% We add problems by:
+\begin{problem}{label.for.the.first.problem}
+What is the point of your life?
+\end{problem}
+		% and answers by:
+\begin{answer}{label.for.the.first.problem}
+Your life is pointless.
+\end{answer}
+In problem~\ref{problem:label.for.the.first.problem}, we can clearly see ...
+\end{Verbatim}
+\chapter{Citations}
+Our bibliography file looks like
+\VerbatimInput[frame=leftline]{willowtreebook.bib}
+We can cite works from the bibliography, like Homer~\cite{Homer:Iliad}, p. 12.
+\begin{Verbatim}[frame=leftline]
+We can cite works from the bibliography, like Homer~\cite{Homer:Iliad}, p. 12.
+\end{Verbatim}
+Compile with \verb!bibtex!.
+\section{Theorems}
+You have the usual theorem environments, like \texttt{amsthm}.
+\begin{theorem}[Pythagoras]
+In any triangle with sides of lengths \(a,b,c\), \(a^2+b^2=c^2\) just when the angle opposite the side of length \(c\) is a right angle.
+\end{theorem}
+\begin{Verbatim}[frame=leftline]
+\begin{theorem}[Pythagoras]
+In any triangle with sides of lengths \(a,b,c\), 
+\(a^2+b^2=c^2\) just when the angle opposite the 
+side of length \(c\) is a right angle.
+\end{theorem}
+\end{Verbatim}
+\newpage
+\section{Examples}
+I often want to present an example, and make clear where it starts and stops.
+\begin{example}
+The integral 
+\[
+\int e^{x^2}x\,dx
+\]
+is evaluated by substituting \(u=x^2\), so
+\[
+\int e^{x^2}x\,dx=\int e^u \frac{du}{2}.
+\]
+\end{example}
+\begin{Verbatim}[frame=leftline]
+\begin{example}
+The integral 
+\[
+\int e^{x^2}x\,dx
+\]
+is evaluated by substituting \(u=x^2\), so
+\[
+\int e^{x^2}x\,dx=\int e^u \frac{du}{2}.
+\]
+\end{example}
+\end{Verbatim}
+\section{Preambles}
+We can put some \LaTeX{} code before the hints:
+\begin{Verbatim}[frame=leftline]
+\RenewDocumentCommand\hintsPreamble{}{
+\par\noindent{}
+\textit{When you are describing, \\ 
+A shape, or sound, or tint; \\ 
+Don't state the matter plainly, \\ 
+But put it in a hint; \\
+And learn to look at all things, \\ 
+With a sort of mental squint.}
+\par\noindent{}---\ {Lewis Carroll}}
+\end{Verbatim}
+\RenewDocumentCommand\hintsPreamble{}{\par\noindent{}\textit{When you are describing, \\ A shape, or sound, or tint; \\ Don't state the matter plainly, \\ But put it in a hint; \\\ And learn to look at all things, \\ With a sort of mental squint.}\par\noindent{}---\ {Lewis Carroll}}
+or before the bibliography:
+\begin{Verbatim}[frame=leftline]
+\RenewDocumentCommand\bibliographyPreamble{}{
+\par\noindent
+\textit{If those books are in agreement with the Quran, 
+we have no need of them; 
+and if these are opposed to the Quran, 
+destroy them.}
+\par\noindent{}---\ {Omar}}
+\end{Verbatim}
+\RenewDocumentCommand\bibliographyPreamble{}{\par\noindent\textit{If those books are in agreement with the Quran, we have no need of them; and if these are opposed to the Quran, destroy them.}\par\noindent{}---\ {Omar}}
+\end{document}

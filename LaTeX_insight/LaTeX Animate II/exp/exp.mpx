@@ -1,0 +1,148 @@
+% Written by metapost version 2.02
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="LibertineMathMI";
+_s("G",_n1,1.00000,-0.2989,0.0000,);
+setbounds _p to (0,-0.0548)--(5.3250,-0.0548)--
+ (5.3250,4.3337)--(0,4.3337)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="LibertineMathMI";
+_s("~",_n1,1.00000,-0.5977,0.0000,);
+setbounds _p to (0,-2.3263)--(4.9962,-2.3263)--
+ (4.9962,4.3337)--(0,4.3337)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="LibertineMathMI";
+_s("~",_n1,1.00000,-0.5977,0.0000,);
+_n7="txmiaX";
+_s("=",_n7,1.00000,7.7636,0.0000,);
+_s("4",_n1,1.00000,16.0801,0.0000,);
+_n9="LibertineMathMI7";
+_s("G",_n9,0.73000,20.5593,3.6164,);
+setbounds _p to (0,-2.3263)--(25.4901,-2.3263)--
+ (25.4901,6.7801)--(0,6.7801)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="LibertineMathMI";
+_s("=",_n1,1.00000,-0.3985,0.0000,);
+_n7="txmiaX";
+_s("=",_n7,1.00000,7.8782,0.0000,);
+_n12="LinLibertineT-tlf-ot1--base";
+_s("1",_n12,1.00000,16.5434,0.0000,);
+setbounds _p to (0,-0.0548)--(21.1760,-0.0548)--
+ (21.1760,6.1320)--(0,6.1320)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="LibertineMathMI";
+_s("=",_n1,1.00000,-0.3985,0.0000,);
+_n7="txmiaX";
+_s("=",_n7,1.00000,7.8782,0.0000,);
+_n12="LinLibertineT-tlf-ot1--base";
+_s("2",_n12,1.00000,16.5434,0.0000,);
+setbounds _p to (0,-0.0548)--(21.1760,-0.0548)--
+ (21.1760,6.1320)--(0,6.1320)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="LibertineMathMI";
+_s("=",_n1,1.00000,-0.3985,0.0000,);
+_n7="txmiaX";
+_s("=",_n7,1.00000,7.8782,0.0000,);
+_n12="LinLibertineT-tlf-ot1--base";
+_s("3",_n12,1.00000,16.5434,0.0000,);
+setbounds _p to (0,-0.1146)--(21.1760,-0.1146)--
+ (21.1760,6.1320)--(0,6.1320)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="LibertineMathMI";
+_s("=",_n1,1.00000,-0.3985,0.0000,);
+_n7="txmiaX";
+_s("=",_n7,1.00000,7.8782,0.0000,);
+_n12="LinLibertineT-tlf-ot1--base";
+_s("4",_n12,1.00000,16.5434,0.0000,);
+setbounds _p to (0,-0.0548)--(21.1760,-0.0548)--
+ (21.1760,6.1320)--(0,6.1320)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="LibertineMathMI";
+_s("=",_n1,1.00000,-0.3985,0.0000,);
+_n7="txmiaX";
+_s("=",_n7,1.00000,7.8782,0.0000,);
+_n12="LinLibertineT-tlf-ot1--base";
+_s("5",_n12,1.00000,16.5434,0.0000,);
+setbounds _p to (0,-0.1146)--(21.1760,-0.1146)--
+ (21.1760,6.1320)--(0,6.1320)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="LibertineMathMI";
+_s("=",_n1,1.00000,-0.3985,0.0000,);
+_n7="txmiaX";
+_s("=",_n7,1.00000,7.8782,0.0000,);
+_n12="LinLibertineT-tlf-ot1--base";
+_s("6",_n12,1.00000,16.5434,0.0000,);
+setbounds _p to (0,-0.1146)--(21.1760,-0.1146)--
+ (21.1760,6.1320)--(0,6.1320)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="LibertineMathMI";
+_s("=",_n1,1.00000,-0.3985,0.0000,);
+_n7="txmiaX";
+_s("=",_n7,1.00000,7.8782,0.0000,);
+_n12="LinLibertineT-tlf-ot1--base";
+_s("7",_n12,1.00000,16.5434,0.0000,);
+setbounds _p to (0,-0.1146)--(21.1760,-0.1146)--
+ (21.1760,6.1320)--(0,6.1320)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="LibertineMathMI";
+_s("=",_n1,1.00000,-0.3985,0.0000,);
+_n7="txmiaX";
+_s("=",_n7,1.00000,7.8782,0.0000,);
+_n12="LinLibertineT-tlf-ot1--base";
+_s("8",_n12,1.00000,16.5434,0.0000,);
+setbounds _p to (0,-0.1146)--(21.1760,-0.1146)--
+ (21.1760,6.1320)--(0,6.1320)--cycle;
+_p endgroup
+mpxbreak

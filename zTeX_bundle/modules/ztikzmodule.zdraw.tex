@@ -1,0 +1,278 @@
+\ProvidesExplFile{ztikzmodule.zdraw.tex}{2024/06/15}{1.0.0}{l3draw~module~for~ztikz}
+
+
+
+
+
+% ----------------------------------------------
+%                  set up                
+% ----------------------------------------------
+\RequirePackage{l3draw}
+\tl_new:N \g__ztikz_zdraw_unit_tl
+\tl_gset:Nn \g__ztikz_zdraw_unit_tl {em}
+\newcommand{\zdrawSetUnit}[1]{
+  \tl_gset:Nn \g__ztikz_zdraw_unit_tl {#1}
+}
+% default=0.4pt
+\newcommand{\zdrawSetPathWidth}[1]{
+  \dim_set:Nn \l_draw_default_linewidth_dim {#1}
+}
+
+
+
+
+
+% ----------------------------------------------
+%                define colors                
+% ----------------------------------------------
+% pre-defined:black, white, red, green, blue, cyan, magenta, yellow
+% new-defined:orange, teal, purple, pink, aqua, tan, brown, gray
+\NewDocumentCommand{\newcolor}{mmm}{
+  \color_set:nnn {#1}{#2}{#3}
+}
+\color_set:nnn {orange}{HTML}{FFA500}
+\color_set:nnn {teal}{HTML}{008080}
+\color_set:nnn {purple}{HTML}{800080}
+\color_set:nnn {pink}{HTML}{FFC0CB}
+\color_set:nnn {aqua}{HTML}{00FFFF}
+\color_set:nnn {tan}{HTML}{D2B48C}
+\color_set:nnn {brown}{HTML}{A52A2A}
+\color_set:nnn {gray}{HTML}{808080}
+
+
+
+
+
+% ----------------------------------------------
+%                core utils                
+% ----------------------------------------------
+% arg split 
+\cs_generate_variant:Nn \int_step_inline:nnn {nen}
+\cs_generate_variant:Nn \seq_set_split:Nnn {cnn}
+\cs_set:Npn \args_split_cs:nn #1#2 {
+  \seq_if_exist:cF {l_#2_seq}{
+    \seq_new:c {l_#2_seq}
+  }
+  \seq_set_split:cnn {l_#2_seq}{,}{#1}
+  \int_step_inline:nen {1}{\seq_count:c {l_#2_seq}}{
+    \tl_set:Nn \l_tmpa_tl {l__arg_#2_\int_to_roman:n{##1}}
+    \exp_args:Nfo \tl_if_exist:cF {\tl_use:N \l_tmpa_tl}{
+      \tl_new:c {\tl_use:N \l_tmpa_tl}
+    }
+    \tl_set:ce {\tl_use:N \l_tmpa_tl}{\seq_item:cn {l_#2_seq}{##1}}
+  }
+}
+
+
+
+
+
+% ----------------------------------------------
+%                 zdraw layer               
+% ----------------------------------------------
+%% draw env 
+\NewDocumentEnvironment{zdraw}{O{}}{\ExplSyntaxOn\draw_begin:}{\draw_end:\ExplSyntaxOff}
+\NewDocumentEnvironment{zscope}{O{}}{\draw_path_scope_begin:}{\draw_path_scope_end:}
+
+%% cmd alias
+% point/line
+\cs_new_eq:NN \moveto \draw_path_moveto:n
+\cs_new_eq:NN \lineto \draw_path_lineto:n
+\cs_new_eq:NN \scolor \color_stroke:n
+\cs_new_eq:NN \fcolor \color_fill:n
+
+% base vector
+\cs_new_eq:NN \xvec   \draw_xvec:n
+\cs_new_eq:NN \yvec   \draw_yvec:n
+% both follows ref (0, 0)
+\cs_new_eq:NN \polar  \draw_point_polar:nn 
+\cs_new_eq:NN \coor   \draw_point_vec:nn  
+
+% shape and text
+\cs_new_eq:NN \rec \draw_path_rectangle_corners:nn
+\cs_new_eq:NN \cir \draw_path_circle:nn
+\cs_new_eq:NN \newtext    \coffin_new:N
+\cs_new_eq:NN \sethtext   \hcoffin_set:Nn
+\cs_new_eq:NN \setvtext   \vcoffin_set:Nnn
+\cs_new_eq:NN \scaletext  \coffin_scale:Nnn
+\cs_new_eq:NN \puttext    \draw_coffin_use:Nnnn
+
+% path operation
+% scope
+\cs_new_eq:NN \bg \draw_path_scope_begin:
+\cs_new_eq:NN \eg \draw_path_scope_end:
+% segement connect
+\cs_new_eq:NN \capbutt   \draw_cap_butt:
+\cs_new_eq:NN \caproun   \draw_cap_round:
+\cs_new_eq:NN \caprect   \draw_cap_rectangle:
+\cs_new_eq:NN \closepath \draw_path_close:
+% transformatio
+\cs_new_eq:NN \shift     \draw_transform_shift:n
+\cs_new_eq:NN \xscale    \draw_transform_xscale:n
+\cs_new_eq:NN \yscale    \draw_transform_yscale:n
+\cs_new_eq:NN \trans     \draw_transform_matrix:nnnn
+\NewDocumentCommand{\usepath}{O{draw}}{
+  \draw_path_use_clear:n {#1}
+}
+
+
+
+
+
+% ----------------------------------------------
+%                function draw                
+% ----------------------------------------------
+% \function_plot:nnn {<function>}{<domain>}{<style>}
+% functin = {<function>}
+% domain  = {<x-start>, <x-step>, <x-end>, <y-min>, <y-max>}
+% style   = {<unit>, <action>, <color-1>, <color-2>, <gradient-axis>}
+\cs_generate_variant:Nn \fp_step_inline:nnnn {eeen}
+\cs_set:Npn \function_plot:nnn #1#2#3 {
+  % => split arg
+  \args_split_cs:nn {#2}{domain}
+  \args_split_cs:nn {#3}{style}
+  % => draw function 
+  \draw_begin:
+    % normal part
+    \str_case:VnT \l__arg_style_ii {
+      {stroke}{\exp_args:Nx \color_stroke:n {\tl_use:N \l__arg_style_iii}}
+      {draw}{\exp_args:Nx \color_stroke:n {\tl_use:N \l__arg_style_iii}}
+      {fill}{\exp_args:Nx \color_fill:n {\tl_use:N \l__arg_style_iii}}
+      {clip}{\relax}
+    }{
+      % => start point
+      \tl_set:Nn \l_tmpa_tl {#1}
+      \tl_replace_all:Nne \l_tmpa_tl {x}{(\tl_use:N \l__arg_domain_i)}
+      \draw_path_moveto:n {\l__arg_domain_i\l__arg_style_i, \l_tmpa_tl\l__arg_style_i}
+      % loop to draw path
+      \fp_step_inline:eeen {\l__arg_domain_i}{\l__arg_domain_ii}{\l__arg_domain_iii}{
+          \tl_set:Nn \l_tmpa_tl {#1}
+          \tl_replace_all:Nnn \l_tmpa_tl {x}{(##1)}
+          \draw_path_lineto:n {##1 \l__arg_style_i, \l_tmpa_tl \l__arg_style_i}
+      }
+      \draw_path_use_clear:n {\l__arg_style_ii}
+    }
+    % shade plot part
+    \str_if_eq:VnT \l__arg_style_ii {shade}{
+      % start and end point for 'y-axis gradient'
+      \tl_if_eq:VnT \l__arg_style_v {y}{
+        \tl_if_exist:cF {l__start_tl}{
+          \tl_new:N \l__start_tl
+          \tl_new:N \l__end_tl
+        } 
+        \tl_set:Nx \l__start_tl {\l__arg_domain_iv}
+        \tl_set:Nx \l__end_tl {\l__arg_domain_v}
+      }
+      % loop to plot segements
+      \fp_step_inline:eeen {\l__arg_domain_i}{\l__arg_domain_ii}{\fp_eval:n {\l__arg_domain_iii-\l__arg_domain_ii}}{
+          \tl_set:Nn \l_tmpa_tl {#1}
+          \tl_set:Nn \l_tmpb_tl {#1}
+          \tl_replace_all:Nnn \l_tmpa_tl {x}{(##1)}
+          \tl_replace_all:Nnn \l_tmpb_tl {x}{(##1+\l__arg_domain_ii)}
+          \str_case:VnF \l__arg_style_v {
+            {x}{\color_gradient:xxx {
+                \fp_eval:n {(##1-\l__arg_domain_i)*(100/(\l__arg_domain_iii-\l__arg_domain_i))}
+              }{\l__arg_style_iii}{\l__arg_style_iv}}
+            {y}{\color_gradient:xxx {
+                \fp_eval:n {(\l_tmpa_tl-\l__start_tl)*(100/(\l__end_tl-\l__start_tl))}
+              }{\l__arg_style_iii}{\l__arg_style_iv}}
+          }{\relax}
+          \draw_path_moveto:n {##1 \l__arg_style_i, \l_tmpa_tl \l__arg_style_i}
+          \draw_path_lineto:n {(##1+\l__arg_domain_ii) \l__arg_style_i, \l_tmpb_tl \l__arg_style_i}
+          % \draw_cap_rectangle:
+          \draw_cap_round:
+          \draw_path_use_clear:n {draw}
+      }
+    }
+  \draw_end:
+}
+
+% color gradient
+\cs_set:Npn \color_gradient:nnn #1#2#3 {
+  \fp_compare:nNnTF {#1}>{100}{
+    \exp_args:Nx \color_select:n {#2!\fp_eval:n{abs(#1)/(\l__arg_domain_v-\l__arg_domain_iv)}!#3} 
+  }{
+    \fp_compare:nNnTF {#1}<{0}{
+      \exp_args:Nx \color_select:n {#2!\fp_eval:n{abs(#1)/(\l__arg_domain_v-\l__arg_domain_iv)}!#3} 
+    }{\color_select:n {#2!#1!#3}}
+  }
+}
+\cs_generate_variant:Nn \color_gradient:nnn {xxx}
+
+% plot functions interface
+\keys_define:nn { ztikz/zdraw/zplot }{
+  action        .tl_set:N   = \l__ztikz_zdraw_zplot_action_tl,
+  action        .initial:n  = {draw},
+  domain        .tl_set:N   = \l__ztikz_zdraw_zplot_domain_tl,
+  domain        .initial:n  = {-5, 0.1, 5},
+  range         .tl_set:N   = \l__ztikz_zdraw_zplot_range_tl,
+  range         .initial:n  = {-5, 5},
+  startColor    .tl_set:N   = \l__ztikz_zdraw_zplot_startColor_tl,
+  startColor    .initial:n  = {black},
+  endColor      .tl_set:N   = \l__ztikz_zdraw_zplot_endColor_tl,
+  endColor      .initial:n  = {white},
+  axis          .tl_set:N   = \l__ztikz_zdraw_zplot_axis_tl,
+  axis          .initial:n  = {y}
+}
+\cs_generate_variant:Nn \function_plot:nnn {nxx}
+\NewDocumentCommand\zplot{ O{}m }{
+  \group_begin:
+  \keys_set:nn { ztikz/zdraw/zplot } { #1 }
+  \function_plot:nxx
+    {#2}
+    {\l__ztikz_zdraw_zplot_domain_tl, \l__ztikz_zdraw_zplot_range_tl}
+    {
+      \g__ztikz_zdraw_unit_tl, \l__ztikz_zdraw_zplot_action_tl, 
+      \l__ztikz_zdraw_zplot_startColor_tl, \l__ztikz_zdraw_zplot_endColor_tl,
+      \l__ztikz_zdraw_zplot_axis_tl
+    }
+  \group_end:
+}
+
+
+
+
+
+% ----------------------------------------------
+%                gradient rule               
+% ----------------------------------------------
+\cs_generate_variant:Nn \fp_step_inline:nnnn {nnxn}
+\cs_set_nopar:Npn \gradient_rule:nnn #1#2#3 {
+  \args_split_cs:nn {#1}{dim}
+  \args_split_cs:nn {#2}{color}
+  \draw_begin:
+  \fp_step_inline:nnxn {0}{#3}{\l__arg_dim_i}{
+    \draw_scope_begin:
+      \exp_args:Nx \color_select:n {\l__arg_color_ii!\fp_eval:n {##1*100/\l__arg_dim_i}!\l__arg_color_i} 
+      \exp_args:Nnx \draw_path_rectangle_corners:nn 
+        {(##1) \g__ztikz_zdraw_unit_tl, 0 \g__ztikz_zdraw_unit_tl}
+        {(##1+#3) \g__ztikz_zdraw_unit_tl, \l__arg_dim_ii \g__ztikz_zdraw_unit_tl}
+      \draw_path_use_clear:n {fill, draw}
+    \draw_scope_end:
+  }
+  \draw_end:
+}
+
+% gradient rule interface
+\keys_define:nn { ztikz/zdraw/zrule }{
+  width         .tl_set:N   = \l__ztikz_zdraw_zplot_width_tl,
+  width         .initial:n  = {1},
+  height        .tl_set:N   = \l__ztikz_zdraw_zplot_height_tl,
+  height        .initial:n  = {1},
+  startColor    .tl_set:N   = \l__ztikz_zdraw_zrule_startColor_tl,
+  startColor    .initial:n  = {black},
+  endColor      .tl_set:N   = \l__ztikz_zdraw_zrule_endColor_tl,
+  endColor      .initial:n  = {white},
+  step          .fp_set:N   = \l__ztikz_zdraw_zrule_step_fp,
+  step          .initial:n  = {0.25}
+}
+\cs_generate_variant:Nn \gradient_rule:nnn {xxx}
+\NewDocumentCommand\zrule{O{}O{}}{
+  \group_begin:
+  \keys_set:nn { ztikz/zdraw/zrule } { #1 }
+  \gradient_rule:xxx 
+    {\l__ztikz_zdraw_zplot_width_tl, \l__ztikz_zdraw_zplot_height_tl}
+    {\l__ztikz_zdraw_zrule_startColor_tl, \l__ztikz_zdraw_zrule_endColor_tl}
+    {\l__ztikz_zdraw_zrule_step_fp}
+  \group_end:
+}

@@ -1,0 +1,54 @@
+%---------------------------------------------------------------------
+% Fonts
+%---------------------------------------------------------------------
+
+% General
+
+% Declare fontfamilys
+\if@doNoFlama%
+	% Sans serif math option
+	\if@doSans%
+		% sans serif math %
+		\usepackage[no-math]{fontspec}%	
+		\setmainfont{Arial}%
+	\else%
+		% serif math %
+		\usepackage{fontspec}%	
+		\usefonttheme[onlymath]{serif}%
+	\fi%
+	\newfontfamily\Light{Arial}%
+	\newfontfamily\Book{Arial-Bold}%
+	\newfontfamily\Medium{Arial-Bold}%
+	\setsansfont{Arial}%
+\else%
+	% Sans serif math option
+	\if@doSans%
+		\usepackage[no-math]{fontspec}%	
+		\setmainfont{Flama-Light}%
+	\else%
+		\usepackage{fontspec}%	
+		\usefonttheme[onlymath]{serif}%
+	\fi%
+	\newfontfamily\Light[ Path =  sleektheme/font/ ]{Flama-Light}%
+	\newfontfamily\Book[ Path = sleektheme/font/ ]{Flama-Book}%
+	\newfontfamily\Medium[ Path =  sleektheme/font/ ]{Flama-Medium}%
+	\setsansfont[ Path =  sleektheme/font/ ]{Flama-Light}%
+\fi%
+
+\renewcommand\UrlFont{\Medium}
+% Titlepage
+\setbeamerfont{title}{family=\Light,size=\fontsize{20}{20}}
+\setbeamerfont{subtitle}{family=\Light,size=\fontsize{12}{14}}
+\setbeamerfont{date}{size=\fontsize{8}{10}}
+\setbeamerfont{author}{size=\fontsize{12}{15}}
+\setbeamerfont{institute}{size=\fontsize{8}{10}}
+% Section
+\setbeamerfont{section title}{size=\LARGE}
+% Content
+\setbeamerfont{frametitle}{family=\Light,size=\large}
+\setbeamerfont{copyright text}{family=\Light,size=\tiny}
+\setbeamerfont{block title}{family=\Book,size=\large}
+\setbeamerfont{block title alerted}{family=\Book,size=\large}
+\setbeamerfont{alerted text}{family=\Medium}
+% Captions
+\setbeamerfont{caption name}{family=\Book}

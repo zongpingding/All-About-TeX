@@ -1,0 +1,55 @@
+
+\documentclass[12pt]{article}
+\PassOptionsToPackage{quiet}{fontspec}
+\usepackage[a4paper, total={6.5in, 10in}]{geometry}
+\usepackage[format=hang,font=small,textfont=it]{caption}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{ctex}
+\usepackage{lmodern}
+\usepackage{float}
+\usepackage{pifont}
+\usepackage{graphicx}
+% \usepackage{graphics}
+% 报错就换成下边的这个插图宏包
+\usepackage{xcolor}
+\usepackage[nottoc]{tocbibind}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proof}{Proof}[section]
+\newtheorem{thm}{定理}
+\newcommand\degree{^\circ}
+\usepackage[usenames,dvipsnames]{pstricks}
+\usepackage{pstricks-add}
+\usepackage{epsfig}
+\usepackage{pst-grad} % For gradients
+\usepackage{pst-plot} % For axes
+\usepackage[space]{grffile} % For spaces in paths
+\usepackage{etoolbox} % For spaces in paths
+% \makeatletter % For spaces in paths
+% \patchcmd\Gread@eps{\@inputcheck#1 }{\@inputcheck"#1"\relax}{}{}
+% \makeatother
+
+
+\begin{document}
+    \clearpage
+	
+	\begin{figure}[t]
+	\psscalebox{1.0 1.0} % Change this value to rescale the drawing.
+	{
+	\begin{pspicture}(0,-9.435437)(12.584502,3.6303606)
+		\definecolor{colour0}{rgb}{1.0,0.7019608,0.7019608}
+		\definecolor{colour1}{rgb}{1.0,1.0,0.3019608}
+		\definecolor{colour2}{rgb}{0.6,0.8,0.8}
+		\definecolor{colour3}{rgb}{0.5019608,0.6,1.0}
+		\rput(1.5933303,-2.2403007){\psrotate(2.4352305, 2.4352305){-20.0}{\psgrid[gridwidth=0.028222222, subgridwidth=0.014111111, gridlabels=6.0pt, unit=2.4352305cm, subgridcolor=gray](0,0)(0,0)(2,2)}
+		\psset{unit=1.0cm}}
+		\psrotate(2.688338, -6.747101){-60.0}{\psframe[linecolor=black, linewidth=0.04, fillstyle=gradient, gradlines=2000, gradbegin=colour0, gradend=colour1, dimen=outer](4.656338,-4.779101)(0.720338,-8.715101)}
+		\psdiamond[linecolor=black, linewidth=0.04, dimen=outer](10.896338,0.36489916)(1.072,1.9760001)
+		\psdiamond[linecolor=colour2, linewidth=0.04, fillstyle=hlines, hatchwidth=0.028222222, hatchangle=0.0, hatchsep=0.1411111, dimen=outer, gangle=-91.366264](9.648338,-6.7221007)(1.8560001,2.937)
+		\psline[linecolor=black, linewidth=0.04, fillstyle=solid,fillcolor=colour3](4.896338,0.42089918)(5.280338,0.9968992)(8.192338,1.4448992)(11.440338,-0.60310084)(10.720338,-4.859101)(5.536338,-6.299101)(3.9043381,-2.0111008)(4.944338,0.48489916)(4.960338,0.48489916)
+		\rput[bl](10.240338,-3.035101){hello }
+		\end{pspicture}
+	}
+	\end{figure}
+\end{document}}

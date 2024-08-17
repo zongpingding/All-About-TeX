@@ -1,0 +1,12 @@
+<snippet>
+	<content><![CDATA[
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=3 in]{${1:filename}}
+	\caption{${2:Caption}.}
+	\label{fig:${3:label}}
+\end{figure}
+]]></content>
+	<tabTrigger>bfig</tabTrigger>
+	<scope>text.tex.latex</scope>
+</snippet>

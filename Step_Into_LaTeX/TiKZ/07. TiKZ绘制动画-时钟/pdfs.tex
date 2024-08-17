@@ -1,0 +1,37 @@
+\documentclass[tikz,border=2pt]{standalone}
+\usepackage{amsmath}
+\usepackage[Symbol]{upgreek}
+\everymath{\displaystyle}
+\begin{document}
+	\foreach \x in {0,6,...,354}
+	{
+	\begin{tikzpicture}[scale=1.3]
+	\filldraw[fill=gray!20](0,0)circle(4.1cm);
+	\filldraw[fill=white](0,0)circle(4cm);
+	\foreach \x in {6,12,...,360}
+	\draw(\x:4)--(\x:3.8);
+	\foreach \x in {0,30,...,330}
+	\draw[ultra thick](\x:4)--(\x:3.8);
+	\node at (0:3.3){$[\ln\mathrm e^\uppi]$};
+	\node at (30:3.3){$\sum_{i=0}^\infty\frac1{2^i}$};
+	\node at (60:3.3){$\lim_{x\to0}\frac x{\sin x}$};
+	\node at (90:3.3){$\mathrm C_{(16)}$};
+	\node at (120:3.3){$\begin{vmatrix}
+	3&1\\1&4
+	\end{vmatrix}$};
+	\node at (150:3.3){$\mathrm C_5^2$};
+	\node at (180.7:3){$\frac1{(\arctan 2\sqrt2)'}$};
+	\node at (210:3.3){$2^{\log_327}$};
+	\node at (240:3.2){$\int_1^23x^2\,\mathrm dx$};
+	\node at (270:3.3){$3!$};
+	\node at (300:3.2){$\frac\uppi{\arccos\frac12}{+}\frac\uppi{\arcsin1}$};
+	\node at (-30:3){$\min\left\{\left|4x+\frac1x\right|\right\}$};
+	\draw (0,0)circle(0.15);
+	\draw[line width=4.5pt,rotate=-\x/720](90:2)--(-90:0.7);
+	\draw[line width=2.5pt,rotate=-\x/60](-90:3.3)--(90:0.65);
+	\draw[line width=2.5pt,rotate=-\x](-90:1.1)--(-90:0.4);
+	\draw[thick,rotate=-\x](-90:0.4)--(90:3.5);
+
+	\end{tikzpicture}
+	}
+\end{document}

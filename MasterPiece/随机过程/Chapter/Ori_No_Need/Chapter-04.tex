@@ -1,0 +1,269 @@
+\newcommand{\sg}{\ensuremath{\sigma}}
+
+
+\section{Mind Map}
+
+The Mind map of this Chapter is as follows
+\begin{align}
+    E(\xi|B) \lr E(\xi|\eta=y_i) \lr E(\xi|\eta) \lr E(\xi|\sg(\eta)) 
+    \lr E(\xi|\C{G}) \notag
+\end{align}
+
+\remark For some sub \sg-field \C{G} $\in$ \C{F}
+
+\s{2.1}{Conditioning on Events}
+
+\begin{definition}
+    For any $\xi \in \C{L}^1[\om, \C{F}, P]$ and $\A B\in\C{F}$ such that $P(B)>0$, the 
+    Conditional Expectation of $\xi$ given by $B$ is defined by
+    \begin{align}
+        E(\xi|B) = \frac{E(\xi\F{1}_B)}{P(B)} = \frac{\dis\int_{B}^{}{\xi \mathrm{d}p}}{P(B)}\hspace*{3em}
+        \lrr E(\xi\F{1}_B) = E(\xi|B)\cdot P(B)\notag
+    \end{align}
+
+    \remark\\
+    (1) Taking $B=\om$ we have $\dis E(\xi|\om) = \frac{E(\xi\F{1}_\om)}{P(\om)} = E(\xi)$ \\
+    (2) If $\xi(\omega) = \F{1}_A(\omega) = \left\{
+    \begin{aligned}
+        & 1, & \omega \in A\\
+        & 0, & \omega \notin A
+    \end{aligned}\right.$
+    ,\quad then $\dis E(\F{1}_A|B) = \frac{E(\F{1}_A\F{1}_B)}{P(B)} = \frac{E(\F{1}_{A\cap B})}{P(B)} = \frac{P(A\cap B)}{P(B)} =P(A|B)$
+\end{definition} 
+
+\emp{Example 2.1}
+
+Three coins, 10p, 20p and 50p are tossed. The values of those coins that land
+heads up are added to work out the total amount $\xi$. What is the expected total
+amount $\xi$ given that two coins have landed heads up?
+
+\emp{Solution}
+
+$\om = \{(HHH),(HHT), (HTH),(THH), (HTT), (THT), (TTH), (TTT)\}$, this is the sample space.
+"H" $\lr$ 'Head', \qquad "T" $\lr$ 'Tail'
+
+Then all possible values of $\xi$ are:
+
+\noindent$\xi(HHH) = 80, \xi(HHT) = 30, \xi(HTH) = 60, 
+\xi(THH) = 70, \xi(HTT) = 10, \xi(THT) = 20$\\
+$\xi(TTH) = 50, \xi(TTT) = 0$
+
+Write $B$ = \{All Coins have land Heads Up\}$ = \{(HHT), (HTH), (THH)\}$, We have
+\begin{align*}
+    E(\xi\F{1}_B) = \frac18\left(\xi(HHT)+\xi(HTH)+\xi(THH)\right) = \frac18 (30+60+70) = 20
+\end{align*}
+
+Thus, $\dis E(\xi|B) = \frac{E(\xi\F{1}_B)}{P(B)} = \frac{20}{\frac38} = \frac{160}{3}$
+
+\newpage
+
+\s{2.2}{Conditioning on a Discreate r.v.}
+
+Let $\eta$ be a discreate r.v. with values $y_1, y_2, \cdots, y_i, \cdots$, the table as follows:
+
+\begin{center}
+    \begin{tabular}{c|ccccc}
+        $\eta$ & $y_1$ & $y_2$ & $\cdots$ & $y_i$ & $\cdots$ \\
+        \hline
+        $P$ & $P(\eta = y_1)$ & $P(\eta = y_1)$ & $\cdots$ & $P(\eta = y_1)$ & $\cdots$ \\  
+    \end{tabular}    
+\end{center}
+
+
+\emp{Notice:} $\dis E(\xi|\eta =y_k) = E(\xi |\{\eta=y_k\})$ 
+
+\begin{definition}
+    Let $\xi \in \C{L}^1(\om, \C{F}, P)$ and $\eta$ be a  discreate r.v. .Then
+    the Conditioning of $\xi$ given $\eta$ is r.v. .$E(\xi|\eta)$  such that
+    \begin{align}
+        E(\xi|\eta)(\omega) = E(\xi|\eta=y_k)\ if\ \eta(\omega) = y_k
+    \end{align}
+    That's To say if $\eta$ is given, Then $\xi$ is \textbf{Only}
+\end{definition}
+
+
+\remark
+\begin{center}
+    \begin{tabular}{c|ccccc}
+        $E(\xi|\eta)$ & $E(\xi|\eta=y_1)$ & $E(\xi|\eta=y_2)$ & $\cdots$ & $E(\xi|\eta=y_i)$ & $\cdots$ \\
+        \hline
+        $P$ & $P(\eta = y_1)$ & $P(\eta = y_1)$ & $\cdots$ & $P(\eta = y_1)$ & $\cdots$ \\  
+    \end{tabular} 
+\end{center}
+
+\emp{Example 2.2}
+
+Three coins 10p, 20p, 50p; $\xi=$ the total amount shown by the Three coins.
+$\eta=$ the total amount shown by the 10p and 20p coins \textbf{Only}. Then Find out 
+The $E(\xi|\eta)$\,?
+
+\emp{Solution}
+
+It's Clear that $\eta$ is a discreate r.v. with all possible values $0, 10, 20, 30$ and 
+
+\vspace*{1em}
+$
+\begin{aligned}
+    & \{\eta=0\} = \{(TTH), (TTT)\} \lrr P(\eta=0) = \frac14\\
+    & \{\eta=0\} = \{(HTH), (HTT)\} \lrr P(\eta=10) = \frac14\\
+    & \{\eta=0\} = \{(THH), (THT)\} \lrr P(\eta=20) = \frac14\\
+    & \{\eta=0\} = \{(HHH), (HHT)\} \lrr P(\eta=30) = \frac14\\
+\end{aligned}
+$
+
+\emp{Moreover}
+
+\noindent$
+\left\{
+\begin{aligned}
+    & E(\xi|\F{1}_{\{\eta=0\}}) = \frac{1}{8} \left(\xi(TTH)+\xi(TTT)\right)\\
+    & E(\xi|\F{1}_{\{\eta=10\}}) = \frac{1}{8} \left(\xi(HTH)+\xi(HTT)\right)\\
+    & E(\xi|\F{1}_{\{\eta=20\}}) = \frac{1}{8} \left(\xi(THH)+\xi(THT)\right)\\
+    & E(\xi|\F{1}_{\{\eta=30\}}) = \frac{1}{8} \left(\xi(HHH)+\xi(HHT)\right)
+\end{aligned}
+\right.
+\lrr
+\left\{
+\begin{aligned}
+    & E(\xi|\eta=0) = \frac{E(\xi\F{1}_{\{\eta=0\}})}{P(\eta=0)} = \frac{\frac{50}{8}}{\frac{1}{4}} = 25\\
+    & E(\xi|\eta=10) = \frac{E(\xi\F{1}_{\{\eta=10\}})}{P(\eta=10)} = \frac{\frac{70}{3}}{\frac{1}{4}} = 35\\
+    & E(\xi|\eta=20) = \frac{E(\xi\F{1}_{\{\eta=20\}})}{P(\eta=20)} = \frac{\frac{90}{8}}{\frac{1}{4}} = 45\\
+    & E(\xi|\eta=30) = \frac{E(\xi\F{1}_{\{\eta=30\}})}{P(\eta=30)} = \frac{\frac{110}{8}}{\frac{1}{4}} = 55
+\end{aligned}
+\right.
+$
+
+\emp{FurtherMore}
+\begin{center}
+    \begin{tabular}{p{6em}|p{6em}p{6em}p{6em}p{6em}}
+        $E(\xi|\eta)$ & 25 & 35 & 45 & 55 \\
+        \hline
+        $P$ & $\frac14$ & $\frac14$ & $\frac14$ & $\frac14$\\  
+    \end{tabular} 
+\end{center}
+
+\newpage
+From the Table before, We can conclude a general Formula
+\begin{align}
+    E(E(\xi|\eta)) = E(\xi)
+\end{align}
+
+\emp{Example 2.3}
+
+$\C{L}[\om, \C{F}, P]$ be a Probability space, where $\om = [0, 1],\ \C{F} = \C{B}([0, 1])$,
+$P = $ Lebesgue measure on $[0, 1]$, Define two r.v.'s on $om$ as follows:
+\begin{align*}
+    &  \xi(x) = 2x^2, x \in [0, 1]
+    & \eta(x) = 
+    \left\{
+        \begin{aligned}
+            & 1, x\in [0, \frac{1}{3}]\\
+            & 2, x\in (\frac13, \frac23]\\
+            & 0, x\in (\frac23, 1]
+        \end{aligned}
+    \right.
+\end{align*}
+
+\emp{Solution}\\
+(1) if $x\in [0, \frac13]$, then $\dis E(\xi|\eta)(x) = E(\xi|\eta=1) = \frac{E(\xi\F{1}_{\{\eta=1\}})}{P(\eta=1)} = \frac{\int_{0}^{\frac13}{2x^2 \mathrm{d}x}}{\frac13} = \frac{2}{27}$\\
+(2) if $x\in (\frac13, \frac23]$, then $\dis E(\xi|\eta)(x) = E(\xi|\eta=2) = \frac{E(\xi\F{1}_{\{\eta=2\}})}{P(\eta=2)} = \frac{\int_{0}^{\frac13}{2x^2 \mathrm{d}x}}{\frac23-\frac13} = \frac{14}{27}$\\
+(3) if $x\in (\frac23, 1]$, then $\dis E(\xi|\eta)(x) = E(\xi|\eta=0) = \frac{E(\xi\F{1}_{\{\eta=0\}})}{P(\eta=0)} = \frac{\int_{0}^{\frac13}{2x^2 \mathrm{d}x}}{1-\frac23} = \frac{38}{27}$
+
+\emp{Moreover}
+\begin{center}
+    \begin{tabular}{p{6em}|p{6em}p{6em}p{6em}}
+        $E(\xi|\eta)$ & $\frac{2}{27}$ & $\frac{14}{27}$ & $\frac{38}{27}$ \\
+        \hline
+        $P$ & $\frac13$ & $\frac13$ & $\frac13$\\  
+    \end{tabular} 
+\end{center}
+
+\emp{Some property}
+
+\begin{enumerate}[(i)]
+    \item $E(a\xi+b\eta|\zeta) = aE(\xi|\zeta)+bE(\eta|\zeta)$
+    \item If $\eta = \F{C(onstant)}$, then $E(\xi|\eta) = E(\xi)$
+    \item $\xi$ and $\eta$ are independent $\lrr E(\xi|\eta) = E(\xi)$
+    \item $E(\F{1}_A\F{1}_B)(\omega) = 
+        \left\{
+            \begin{aligned}
+                & P(A|B),&\omega\in B\\
+                & P(A|B^c), &\omega \notin B
+            \end{aligned}
+        \right.
+    $
+    \item $\dis E(E(\xi|\eta)) = E(\xi)$
+\end{enumerate}
+
+\emp{Proposition 2.1}
+
+If $\xi \in \C{L}^1[\om, \C{F}, P]$ and $\eta$ be a discreate r.v., then
+\begin{enumerate}[(i)]
+    \item $E(\xi|\eta)$ is $\sg(\eta)$-measurable $\lrr E(\xi|\eta)$ {\kaishu 的取值由} $\eta$ {\kaishu 所唯一确定} 
+    \item For $\dis \A A \in \sg(\eta), \quad \int_{A}^{}{E(\xi|\eta) \mathrm{d}p} = \int_{A}^{}{\xi \mathrm{d}p}$
+\end{enumerate}
+
+\begin{proof}
+    suppose that $\eta$ has {\bf countablly many}  pairwise disjoint values $y_1, y_2, \cdots$
+
+    Then $\{\eta = y_i\}\cap\{\eta=y_j\} = \ns\,(i\neq j)$ and $\dis \bigcup_{i=1}^{+\infty}\{\eta=y_i\} = \om$, if $\eta(\omega) = y_k$, Then, 
+
+    $E(\xi|\eta)(\omega) = E(\xi|\eta=y_k)$, which means that $E(\xi|\eta)$ is $\sg(\eta)$-measurable
+\end{proof}
+
+\emp{Moreover}
+
+For each $i$, we have
+\begin{align*}
+    \int_{\{\eta=y_i\}}^{}{E(\xi|\eta) \mathrm{d}p} 
+    & = \int_{\{\eta=y_i\}}^{}{E(\xi|\eta=y_i) \mathrm{d}p} \\
+    & = E(\xi|\eta=y_i)\cdot P(\eta=y_i) = E(\xi|\F{1}_{\{\eta=y_i\}}) \\
+    & = \int_{\{\eta=y_i\}}^{}{\xi \mathrm{d}p}
+\end{align*}
+
+\emp{Notice:} $\dis E(\xi|\F{1}_A) = \int_{A}^{}{\xi \mathrm{d}p}$
+
+For general, $A\in \sg(\eta)$, Write $A = \bigcup_{k=1}^{+\infty}{\{\eta=y_{i_k}\}}$, Then 
+\begin{align}
+    \int_{A}^{}{E(\xi|\eta) \mathrm{d}p} 
+    & = \int_{\bigcup\limits_{k=1}^{+\infty}{\{\eta=y_{i_k}\}}}^{}{E(\xi|\eta) \mathrm{d}p} = \sum_{k=1}^{+\infty}{\int_{\bigcup\limits_{k=1}^{+\infty}{\{\eta=y_{i_k}\}}}^{}{E(\xi|\eta) \mathrm{d}}p}\notag \\
+    & = \sum_{k=1}^{+\infty}{\int_{\bigcup\limits_{k=1}^{+\infty}{\{\eta=y_{i_k}\}}}^{}{\xi \mathrm{d}}p} = \int_{A}^{}{\xi \mathrm{d}p}
+\end{align}
+
+\emp{Notice:} If $A\cap B=\ns$, then $\dis \int_{A\cup B}^{}{\xi \mathrm{d}p} = \int_{A}^{}{\xi \mathrm{d}}p + \int_{B}^{}{\xi \mathrm{d}p}$
+
+\newpage
+\s{2.3}{Conditioning on an Arbitrary r.v.\quad($E(\xi|\eta)$)}
+
+\begin{definition}
+    Let $\xi \in \C{L}^1[\om, \C{F}, P]$ and $\eta$ be an Arbitrary r.v. . Then the Expectation 
+    of $\xi$ given $\eta$ is defined to be a r.v. $E(\xi\eta)$ such that
+    \begin{enumerate}[(i)]
+        \item $E(\xi|\eta)$ is $\sg(\eta)$-measurable
+        \item For $\dis \A A \in \sg(\eta), \int_{A}^{}{E(\xi|\eta) \mathrm{d}}p = \int_{A}^{}{\xi \mathrm{d}p}$.
+        i.e., $E(\F{1}_AE(\xi|\eta)) = E(\F{1}_A\xi)$
+    \end{enumerate}
+
+    \remark \\
+    (1) $E(\F{1}_A|\eta) = P(A|\eta)$.\\
+    (2) $\xi=\xi'$ a.s. $\lrr E(\xi|\eta) = E(\xi'|\eta)$ a.s.
+\end{definition}
+
+\begin{lemma}
+    Let $(\om, \C{F}, P)$ be a Probability space and $\C{G} \in \C{F}$ be a sub $\sg$-field.
+    If $\xi$ is a \C{G}-measurable r.v. and for any $B \in \C{F}$
+    \begin{align*}
+        \int_{B}^{}{\xi \mathrm{d}p} = 0
+    \end{align*}  
+    Then $\xi = 0$ a.s. 
+\end{lemma}
+
+\remark If $\xi$ and $\eta$ are two \C{G}-measurable r.v.'s and for any $B\in \C{G}$
+\begin{align*}
+    \int_{B}^{}{\xi \mathrm{d}p} = \int_{B}^{}{\eta \mathrm{d}p}
+\end{align*}
+then $\xi = \eta$ a.s.
+
+\emp{Notice:} In fact, $\dis \int_{B}^{}{(\xi-\eta)}{ \mathrm{d}p} = 0,\quad \lrr$\quad we have $\xi - \eta = 0$ a.s.
+
+

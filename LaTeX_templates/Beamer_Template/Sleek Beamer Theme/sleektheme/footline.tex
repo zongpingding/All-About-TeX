@@ -1,0 +1,29 @@
+%---------------------------------------------------------------------
+% Footline
+%---------------------------------------------------------------------
+\usenavigationsymbolstemplate{}
+\setbeamertemplate{footline}
+{%
+\begin{beamercolorbox}[wd=\textwidth,ht=3ex,dp=1.5ex,leftskip=0.3cm,rightskip=0.3cm]{structure}%
+\hfill\usebeamerfont{page number in head/foot}%
+\insertframenumber%
+\end{beamercolorbox}%
+}
+
+% % Footline WIP
+% \setbeamertemplate{footline}
+% {
+%   \leavevmode%
+%   \hbox{%
+%   \begin{beamercolorbox}[wd=0.33\paperwidth,ht=2.25ex,dp=1ex,leftskip=0.3cm]{author in head/foot}%
+%     \usebeamerfont{author in head/foot}\insertshortauthor
+%   \end{beamercolorbox}%
+%   \begin{beamercolorbox}[wd=0.34\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+%     \usebeamerfont{title in head/foot}\insertshorttitle
+%   \end{beamercolorbox}%
+%   \begin{beamercolorbox}[wd=0.33\paperwidth,ht=2.25ex,dp=1ex,leftskip=0.3cm,rightskip=0.3cm]{title in head/foot}%
+%   \hfill\usebeamerfont{page number in head/foot}%
+%   \insertframenumber{} / \inserttotalframenumber%
+%   \end{beamercolorbox}}%
+%   \vskip0pt%
+% }

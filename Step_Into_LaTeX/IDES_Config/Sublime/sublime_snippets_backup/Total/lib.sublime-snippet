@@ -1,0 +1,8 @@
+<snippet>
+	<content><![CDATA[
+efficiency, MHz, Megahertz,  
+]]></content>
+	<tabTrigger>lib</tabTrigger>
+	<scope>text.tex.latex</scope>
+</snippet>
+

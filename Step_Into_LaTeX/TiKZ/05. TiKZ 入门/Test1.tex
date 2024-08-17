@@ -1,0 +1,53 @@
+\documentclass[fontset=windows]{article}
+\PassOptionsToPackage{quiet}{xeCJK}
+\usepackage{ctex}
+\usepackage{tikz}
+
+% pgfplot需要的宏包
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.8}
+\usetikzlibrary{arrows.meta}    % 画箭头用的包
+
+%% 一些有用的宏包
+\usepackage{tkz-base, tkz-euclide}
+\usepackage[hidelinks]{hyperref}
+
+\begin{document}
+\begin{tikzpicture}[scale=.8]
+    \tkzDefPoint(3,3){c}
+    \tkzDefPoint(6,3){a0}
+    \tkzRadius=1 cm
+    \tkzDrawCircle[R](c,\tkzRadius)
+    \foreach \an in {0,10,...,350}{
+    \tkzDefPointBy[rotation=center c angle \an](a0)
+    \tkzGetPoint{a}
+    \tkzDefTangent[from with R = a](c,\tkzRadius)
+    \tkzGetPoints{e}{f}
+    \tkzDrawLines[color=magenta](a,f a,e)
+    \tkzDrawSegments(c,e c,f)
+    }%
+\end{tikzpicture}
+\begin{tikzpicture}[scale=.75,rotate=-30]
+    \tkzDefPoint(0,0){O}
+    \tkzDefPoint(4,-5){A}
+    \tkzDefIntSimilitudeCenter(O,3)(A,1)
+    \tkzGetPoint{I}
+    \tkzExtSimilitudeCenter(O,3)(A,1)
+    \tkzGetPoint{J}
+    \tkzDefTangent[from with R= I](O,3 cm)
+    \tkzGetPoints{D}{E}
+    \tkzDefTangent[from with R= I](A,1 cm)
+    \tkzGetPoints{D'}{E'}
+    \tkzDefTangent[from
+    with R= J](O,3 cm)
+    \tkzGetPoints{F}{G}
+    \tkzDefTangent[from with R= J](A,1 cm)
+    \tkzGetPoints{F'}{G'}
+    \tkzDrawCircle[R,fill=red!50,opacity=.3](O,3 cm)
+    \tkzDrawCircle[R,fill=blue!50,opacity=.3](A,1 cm)
+    \tkzDrawSegments[add = .5 and .5,color=red](D,D' E,E')
+    \tkzDrawSegments[add= 0 and 0.25,color=blue](J,F J,G)
+    \tkzDrawPoints(O,A,I,J,D,E,F,G,D',E',F',G')
+    \tkzLabelPoints[font=\scriptsize](O,A,I,J,D,E,F,G,D',E',F',G')
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,15 @@
+<snippet>
+	<content><![CDATA[
+\begin{figure}[!htb]
+\begin{minipage}[t]{$1\linewidth}
+	$2
+\end{minipage}
+\hfill
+\begin{minipage}[t]{$1\linewidth}
+	$3
+\end{minipage}
+\end{figure}
+]]></content>
+	<tabTrigger>sbp</tabTrigger>
+	<scope>text.tex.latex</scope>
+</snippet>

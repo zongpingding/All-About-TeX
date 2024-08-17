@@ -1,0 +1,79 @@
+\newcommand{\fuzhu}{
+    独立性介绍了三个方面：\\
+    （1） 两事件的之间的独立性 
+    （2） 随机变量之间的独立性 
+    （3） $\sigma$ 域之间的独立性  
+}
+
+\newpage
+\s{1.3}{Conditional Probability and Independence}
+
+
+\begin{definition}
+    \begin{align*}
+        P(A|B) & = \frac{P(AB)}{P(B)}, \quad (If\ P(A) > 0) \\
+        {\color{red} \lrr } & 
+        P(\bigcap_{i=1}^{n}{A_i}) = P(A_1)\cdot P(A_2|A_1) \cdot P(A_3|A_1A_2)\cdots P(A_n|A_1A_2\cdots A_{n-1})        
+    \end{align*}
+\end{definition}
+
+\begin{definition}
+    \im{\mathbf{The\ Total\ Probability\ formular}}:
+    \begin{align*}
+        P(A) = \sum_{i=1}^{+\infty}{P(A|B_i)} = \sum_{i=1}^{+\infty}{P(A|B_i)\cdot P(B_i)}
+    \end{align*} 
+    where \im{B_i\cap B_j=\ns, (i\neq j), \bigcup_{i=1}^{\infty}{B_i} = \ns, P(B_i)\ge 0}  
+\end{definition}
+
+
+
+\begin{definition}
+    A and B are independent \equ \im{P(AB) = P(A)\cdot P(B) \equ P(B|A) = P(B)}
+\end{definition}
+\remark (1) Some conditions:
+\begin{enumerate}[(i)]
+    \item  $A$ and $B$ are independent
+    \item \equ $A$ and $B^c$ are independent
+    \item \equ $A^c$ and $B$ are independent
+    \item \equ $A^c$ and $B^c$ are independent
+\end{enumerate} 
+
+(2) We say that $n$ events $A_1, A_2,\cdots, A_n$ are independent if
+\begin{align*}
+    P(\bigcap_{i=1}^{k}{A_{i_k}}) = \prod_{i=1}^{k}{P(A_{i_k})}
+\end{align*}
+for any indices $i\le i_1 \le i_2 \le \cdots \le i_k \le n, k = 2, 3, \cdots, n$
+
+
+\begin{definition}
+    \mbox{}\\
+    (1) Two r.v.'s $\xi$ and $\eta$ are independent \\
+    \equ $P(\xi \in A, \eta \in B) = P(\xi \in A)\cdot P(\eta\in B), \A A, B \in \C{B}(\rr)$ \\
+    \equ $P(\xi \le x, \eta \le y) = P(\xi \le x)\cdot P((\eta \le y)), \A x, y \in |R$
+
+    We say that $n$ r.v.'s \seqxi\ are independent if 
+    \begin{align*}
+        P(\xi_1\in B_1, \xi_2\in B_2, \cdots, \xi_n\in B_n) = P(\xi_1\in B_1)\cdot P(\xi_2\in B_2) \cdots P(\xi_n\in B_n) 
+    \end{align*}  
+\end{definition}
+
+
+\begin{definition}
+    Two $\sigma$-fields $\C{A, B}$ contained in \C{F} are called independent if
+    any two events $A \in \C{A}, B \in \C{B}$ are independent.
+
+    Similarly, any finite number of $\sigma$-fields $\C{A}_1, \C{A}_2, \cdots, \C{A}_n$ contained in 
+    \C{F} are called independent if any $n$ events $A\in \C{A}_1, \cdots, A_n\in \C{A}_n$ are independent.
+\end{definition}
+
+\emp{Fact} Two r.v.'s  $\xi, \eta$ are independent \equ $\sigma(\xi)$ and $\sigma(\eta)$ are independent. 
+
+\emp{Proof} Notice that $\sigma(\xi) = \sigma\biggl(\bigl\{\{\xi \in A\}: A\in \C{B}(|R)\bigr\}\biggr)$
+
+ We have that $\xi$ and $\eta$ are independent\\
+ \equ \im{\{\xi \in A\} and \{\xi \in B\}} are independent for any $A, B \in \C{B}(\rr)$\\
+ \equ \im{\sigma(\xi) and \sigma(\eta)} are independent.
+
+\vspace*{3em}
+A New Chapter Are Coming\footnote[1]{\fuzhu}...
+

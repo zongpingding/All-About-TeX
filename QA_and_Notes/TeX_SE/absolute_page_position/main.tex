@@ -1,0 +1,18 @@
+\documentclass{beamer}
+\usepackage{tikz}
+
+
+\begin{document}
+\begin{tikzpicture}[overlay, remember picture]
+  \node[xshift=0\paperwidth, yshift=0\paperheight]
+    at (current page.south east){\fbox{foo 1}};
+  \node[xshift=-.25\paperwidth, yshift=.25\paperheight]
+    at (current page.south east){\fbox{foo 2}};
+  \node[xshift=-.5\paperwidth, yshift=.5\paperheight]
+    at (current page.south east){\fbox{foo 3}};
+  \node[xshift=-.75\paperwidth, yshift=.75\paperheight]
+    at (current page.south east){\fbox{foo 4}};
+  \node[xshift=-1\paperwidth, yshift=1\paperheight]
+    at (current page.south east){\fbox{foo 5}};
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,70 @@
+\documentclass[12pt]{article}
+\usepackage{pstricks,pst-node,pst-plot,pst-tools,pst-text}
+\usepackage{animate}
+\usepackage{media9}
+
+%writing timeline to external file
+\begin{filecontents}{metro.txt}
+::0x0,1 : annotRM['click'].callAS('play');
+::2
+::3
+::4
+::5
+::6
+::7
+::8
+::9
+::10
+::11
+::12
+::13
+::14
+::15
+::16
+::17
+::18
+::19
+::20
+::21
+::22
+::23
+::24
+::25
+::26 : annotRM['click'].callAS('play');
+\end{filecontents}
+
+\begin{document}
+
+\begin{center}
+  %loading metronome macros from external file
+  \input{files/pstmetronome}
+  %
+  %sound inclusion: click.mp3
+  \makebox[0pt][r]{\includemedia[
+    width=1ex,height=1ex,
+    label=click,
+    addresource=click.mp3,
+    activate=pageopen,transparent,noplaybutton,
+    flashvars={source=click.mp3&hideBar=true}
+  ]{}{APlayer.swf}}%
+  %
+  %animated metronome
+  \begin{animateinline}[
+    controls,
+    width=0.7\linewidth,
+    palindrome,
+    begin={\begin{pspicture}(-9.5,-5)(9.5,15)},
+    end={\end{pspicture}},
+    timeline=metro.txt
+  ]{25}
+    %metronome without pendulum
+    \metronomebody
+  \newframe
+    %half period of pendulum swing (26 frames)
+    \multiframe{26}{i=0+4}{
+      \pendulum{\i}
+    }
+  \end{animateinline}
+\end{center}
+
+\end{document}

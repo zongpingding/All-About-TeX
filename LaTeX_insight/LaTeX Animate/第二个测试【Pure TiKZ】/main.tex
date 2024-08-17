@@ -1,0 +1,79 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{animate}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\tikzset{global scale/.style={
+    scale=#1,
+    every node/.append style={scale=#1}
+  }
+}
+\tikzset{global xscale/.style={
+    xscale=#1,
+    every node/.append style={xscale=#1}
+  }
+}
+\tikzset{global yslant/.style={
+    yslant=#1,
+    every node/.append style={yslant=#1}
+  }
+}
+\newcommand{\twodimdrawcontent}[2]{%
+\useasboundingbox (0, -6) rectangle (16.1, 3);
+\begin{scope}[global yslant = -0.6, xshift = 1cm, yshift = -1cm]
+  \node (A) at (0, 0) {};
+  \node (B) at (3, 0) {};
+  \node (C) at (3, 3) {};
+  \node (D) at (0, 3) {};
+  \draw (0,0) grid (3,3);
+\end{scope}
+\node[anchor = north, xscale = 2] at (2, -5) {Kernel};
+
+\begin{scope}[xshift = 6cm, global yslant = -0.6, yshift = -2cm]
+  \node (E) at (0cm + #1cm, 2cm - #2cm) {};
+  \node (F) at (3cm + #1cm, 2cm - #2cm) {};
+  \node (G) at (3cm + #1cm, 5cm - #2cm) {};
+  \node (H) at (0cm + #1cm, 5cm - #2cm) {};
+  \draw[fill, blue!20] (0cm + #1cm, 2cm - #2cm) rectangle (3cm + #1cm, 5cm - #2cm);
+  \draw[fill, blue!50] (1cm + #1cm, 3cm - #2cm) rectangle (2cm + #1cm, 4cm - #2cm);
+  \draw (0,0) grid (5,5);
+\end{scope}
+\node[anchor = north, xshift = 6cm, xscale = 2] at (2, -5) {Input};
+
+\begin{scope}[xshift = 12cm, global yslant = -0.6, xshift = 1cm, yshift = -1cm]
+  \node (I) at (0.5cm + #1cm, 2.5cm - #2cm) {};
+  \draw[fill, red!20] (0cm + #1cm, 2cm - #2cm) rectangle (1cm + #1cm, 3cm - #2cm);
+  \draw (0,0) grid (3, 3);
+\end{scope}
+\node[anchor = north, xshift = 12cm, xscale = 2] at (2, -5) {Output};
+
+\draw[dashed, blue] (A.center) -- (E.center);
+\draw[dashed, blue] (B.center) -- (F.center);
+\draw[dashed, blue] (C.center) -- (G.center);
+\draw[dashed, blue] (D.center) -- (H.center);
+
+\draw[dashed, red] (E.center) -- (I.center);
+\draw[dashed, red] (F.center) -- (I.center);
+\draw[dashed, red] (G.center) -- (I.center);
+\draw[dashed, red] (H.center) -- (I.center);
+}
+\begin{document}
+\begin{animateinline}[
+    loop,autopause,controls,
+    buttonsize=1.2em,
+    buttonbg=0.6:0.6:1,buttonfg=0.2:0.2:1,
+    begin={\begin{tikzpicture}[global scale = 0.7, global xscale = 0.5, on grid]},
+    end={\end{tikzpicture}}]{1.8}
+    \multiframe{3}{icol=0+1}{%
+      \xdef\icol{\icol}
+      \xdef\irow{0}
+      \whiledo{\lengthtest{\irow sp < 2sp}}{
+        \twodimdrawcontent{\irow}{\icol}
+        \newframe
+        \pgfmathsetmacro{\irow}{\irow + 1}
+        \xdef\irow{\irow}
+      }
+      \twodimdrawcontent{\irow}{\icol}
+    }
+\end{animateinline}
+\end{document}

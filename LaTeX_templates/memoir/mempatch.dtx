@@ -1,0 +1,1079 @@
+% \iffalse meta-comment
+%
+% mempatch.dtx
+% Author: Peter Wilson (Herries Press) herries dot press at earthlink dot net
+% Maintainer: Lars Madsen (daleif at math dot au dot dk)
+% Copyright 2001 --- 2010 Peter R. Wilson
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either
+% version 1.3c of this license or (at your option) any 
+% later version.
+% The latest version of the license is in
+%    http://www.latex-project.org/lppl.txt
+% and version 1.3c or later is part of all distributions of
+% LaTeX version 2008/05/04 or later.
+%
+% This work has the LPPL maintenance status "maintained".
+%
+% This work consists of the files listed in the README file.
+%
+% 
+% \fi
+% \CheckSum{610}
+%
+% \def\dtxfile{\texttt{mempatch.dtx}}
+% \def\fileversion{v1.0} \def\filedate{2003/10/04}
+% \def\fileversion{v1.1} \def\filedate{2003/10/07}
+% \def\fileversion{v1.2} \def\filedate{2003/11/16}
+% \def\fileversion{v2.0a} \def\filedate{2004/02/19}
+% \def\fileversion{v2.1} \def\filedate{2004/03/01}
+% \def\fileversion{v2.3} \def\filedate{2004/03/28}
+% \def\fileversion{v2.4} \def\filedate{2004/04/26}
+% \def\fileversion{v2.5} \def\filedate{2004/04/27}
+% \def\fileversion{v2.6} \def\filedate{2004/04/30}
+% \def\fileversion{v2.7} \def\filedate{2004/05/10}
+% \def\fileversion{v2.8} \def\filedate{2004/05/13}
+% \def\fileversion{v3.0} \def\filedate{2004/12/14}
+% \def\fileversion{v3.1} \def\filedate{2004/12/19}
+% \def\fileversion{v3.2} \def\filedate{2005/01/01}
+% \def\fileversion{v3.3} \def\filedate{2005/01/17}
+% \def\fileversion{v3.4} \def\filedate{2005/01/18}
+% \def\fileversion{v3.5} \def\filedate{2005/02/01}
+% \def\fileversion{v3.6} \def\filedate{2005/02/07}
+% \def\fileversion{v3.7} \def\filedate{2005/02/26}
+% \def\fileversion{v3.8} \def\filedate{2005/03/06}
+% \def\fileversion{v3.9} \def\filedate{2005/03/23}
+% \def\fileversion{v3.10} \def\filedate{2005/05/16}
+% \def\fileversion{v3.11} \def\filedate{2005/05/23}
+% \def\fileversion{v3.12} \def\filedate{2005/06/06}
+% \def\fileversion{v4.1} \def\filedate{2005/10/06}
+% \def\fileversion{v4.1h} \def\filedate{2005/11/15}
+% \def\fileversion{v4.2} \def\filedate{2005/11/21}
+% \def\fileversion{v4.3} \def\filedate{2005/12/13}
+% \def\fileversion{v4.4} \def\filedate{2006/01/21}
+% \def\fileversion{v4.4a} \def\filedate{2006/01/23}
+% \def\fileversion{v4.5} \def\filedate{2006/08/08}
+% \def\fileversion{v4.6} \def\filedate{2006/12/11}
+% \def\fileversion{v4.7} \def\filedate{2006/12/23}
+% \def\fileversion{v4.8} \def\filedate{2007/01/22}
+% \def\fileversion{v4.9} \def\filedate{2007/12/14}
+% \def\fileversion{v4.9a} \def\filedate{2007/12/24}
+% \def\fileversion{v4.9a+} \def\filedate{2007/12/31}
+% \def\fileversion{v5.0} \def\filedate{2008/05/26}
+% \def\fileversion{v5.0} \def\filedate{2008/06/02}
+% \def\fileversion{v5.1} \def\filedate{2008/07/11}
+% \def\fileversion{v6.0} \def\filedate{2008/07/23}
+% \def\fileversion{v6.0a} \def\filedate{2008/08/23}
+% \def\fileversion{v6.0b} \def\filedate{2009/01/18}
+% \def\fileversion{v6.0c} \def\filedate{2009/02/06}
+% \def\fileversion{v6.0d} \def\filedate{2009/07/12}
+% \def\fileversion{v6.0e} \def\filedate{2009/07/21}
+% \def\fileversion{v6.0f} \def\filedate{2009/07/24}
+% \def\fileversion{v6.0g} \def\filedate{2010/04/19}
+%
+% \title{The LaTeX \Lpack{memoir} class for configurable book 
+%        typesetting: Code patches\thanks{This
+%        file (\dtxfile) has version number \fileversion, last revised
+%        \filedate.}}
+%
+% \author{%
+% Peter Wilson\thanks{\texttt{herries dot press at earthlink dot net}}\\
+% The Herries Press
+% }
+% \date{\filedate}
+% \maketitle
+%
+%  ^^A \MakeShortVerb{\=}
+%
+% \begin{abstract}
+% The \Lpack{memoir} class is designed for typesetting
+% general books such as novels, biographies, histories, 
+% and so on, although as it supports all the functionality of the 
+% standard \Lpack{book} class it can also be used for technical writing.
+% It provides more functions than the standard class as well as 
+% presenting a more friendly interface for the book designer.
+% It can also simulate the typesetting style of the standard \Lpack{article}
+% class.
+%
+%    Because of its newness not all packages work well with \Lpack{memoir}.
+% Also, as more users beat on it, subtle flaws are discovered in \Lpack{memoir}
+% itself. Patching code is supplied to resolve known problems.
+%
+%    Code is also provided for new functionality that will later be 
+% folded into the class code.
+% \end{abstract}
+%
+% \tableofcontents
+% \listoftables
+%
+% \StopEventually{}
+%
+% 
+%
+% \section{Introduction}
+%
+% This document provides the commented source for packages that patch
+% the LaTeX \Lpack{memoir} class~\cite{MEMOIR}. 
+% This class is designed for typesetting
+% general books such as novels, biographies, histories, 
+% and so on. It has all the functionality of the standard \Lpack{book}
+% class and, as well as providing some extra functions, also provides
+% a more friendly interface for the document designer. As it can encompass
+% everything that the \Lpack{book} class provides it may also be used
+% for technical writing.
+%
+%
+%    Section~\ref{sec:docstrip} describes some
+% administrative elements and code for general use later in the 
+% specification.
+% The macros forming the package files are defined in section~\ref{sec:hyper}
+% and in section~\ref{sec:class} onwards.
+% 
+% This manual is typeset according to the conventions of the
+% \LaTeX{} \textsc{docstrip} utility which enables the automatic
+% extraction of the \LaTeX{} macro source files~\cite{GOOSSENS94}.
+%
+%
+% \section{A driver for this document} \label{sec:docstrip}
+%
+% The next series of code contains the documentation driver file for
+% \LaTeX, i.e., the file that will produce the documentation you are
+% currently reading. This will be extracted from this file by the 
+% \textsc{docstrip} program.
+%
+%    \begin{macrocode}
+%<*driver>
+\documentclass[twoside]{ltxdoc}
+\usepackage{url}
+%    \end{macrocode}
+%
+%    We do want an index, using linenumbers, but not update information.
+%    \begin{macrocode}
+\makeatletter
+  \@mparswitchfalse
+\makeatother
+\EnableCrossrefs
+\CodelineIndex
+%% \RecordChanges
+%    \end{macrocode}
+% Don't use the default Short Verb.
+%    \begin{macrocode}
+\AtBeginDocument{\DeleteShortVerb{\|}}
+%    \end{macrocode}
+% We had better have page headings to aid navigation, but I don't
+% like Uppercased titles.
+%    \begin{macrocode}
+\renewcommand{\MakeUppercase}[1]{#1}
+\pagestyle{headings}
+%    \end{macrocode}
+% Need more space for ToC subsection numbers
+%    \begin{macrocode}
+\makeatletter
+\renewcommand*{\l@subsection}{\@dottedtocline{2}{1.5em}{3.2em}}
+
+%    \end{macrocode}
+%    We may use many \file{docstrip} modules so we set the
+%    \texttt{StandardModuleDepth} counter to 1.
+%    \begin{macrocode}
+\setcounter{StandardModuleDepth}{1}
+%    \end{macrocode}
+%    Some commonly used abbreviations
+%    \begin{macrocode}
+\newcommand*{\Lopt}[1]{\textsf {#1}}            % typeset an option
+\newcommand*{\file}[1]{\texttt {#1}}            % typeset a file
+\newcommand*{\Lcount}[1]{\textsl {\small#1}}    % typeset a counter
+\newcommand*{\pstyle}[1]{\textsl {#1}}          % typeset a pagestyle
+\newcommand*{\Lenv}[1]{\texttt {#1}}            % typeset an environment
+\newcommand*{\Lpack}[1]{\textsf {#1}}           % typeset a package
+\newcommand*{\ctt}{\textsc{ctt}}
+\newcommand{\Lclass}[1]{\textsf{#1}}
+\newcommand{\ledmac}{ledmac}
+\newcommand{\Ledmac}{\Lpack{\ledmac}}
+\newcommand{\edmac}{\texttt{EDMAC}}
+\newcommand{\tabmac}{\texttt{TABMAC}}
+\newcommand{\PWcomment}[1]{}
+\newenvironment{PW}{\itshape}{}
+\renewenvironment{PW}{\sffamily}{}
+\newcommand{\texbook}{\textit{TeXbook}}
+\newcommand{\thetexbook}{\textit{The TeXbook}}
+\newcommand{\egstart}{}
+\newcommand{\egmid}{}
+\newcommand{\egend}{}
+\renewcommand{\egstart}{%
+   \par
+   \begingroup
+   \centering
+   \begin{minipage}{0.45\textwidth}}
+\renewcommand{\egmid}{%
+   \end{minipage}\hfill\begin{minipage}{0.45\textwidth}}
+\renewcommand{\egend}{%
+   \end{minipage}\par\endgroup}
+%    \end{macrocode}
+%    We want the full details printed.
+%    \begin{macrocode}
+\begin{document}
+\DocInput{mempatch.dtx}
+\PrintIndex
+%% \PrintChanges
+\end{document}
+%</driver>
+%    \end{macrocode}
+%
+% 
+% \DoNotIndex{\',\.,\@M,\@@input,\@addtoreset,\@arabic,\@badmath}
+% \DoNotIndex{\@centercr,\@cite}\
+% \DoNotIndex{\@dotsep,\@empty,\@gobble,\@gobbletwo,\@ignoretrue}
+% \DoNotIndex{\@input,\@ixpt,\@m}
+% \DoNotIndex{\@minus,\@ne,\@nil,\@nomath,\@plus,\@set@topoint}
+% \DoNotIndex{\@tempboxa,\@tempcnta,\@tempdima,\@tempdimb}
+% \DoNotIndex{\@tempswafalse,\@tempswatrue,\@viipt,\@viiipt,\@vipt}
+% \DoNotIndex{\@vpt,\@warning,\@xiipt,\@xipt,\@xivpt,\@xpt,\@xviipt}
+% \DoNotIndex{\@xxpt,\@xxvpt,\\,\ ,\addpenalty,\addtolength,\addvspace}
+% \DoNotIndex{\advance,\Alph,\alph}
+% \DoNotIndex{\arabic,\ast,\begin,\begingroup,\bfseries,\bgroup,\box}
+% \DoNotIndex{\bullet}
+% \DoNotIndex{\cdot,\cite,\CodelineIndex,\cr,\day,\DeclareOption}
+% \DoNotIndex{\def,\DisableCrossrefs,\divide,\DocInput,\documentclass}
+% \DoNotIndex{\DoNotIndex,\egroup,\ifdim,\else,\fi,\em,\endtrivlist}
+% \DoNotIndex{\EnableCrossrefs,\end,\endgroup}
+% \DoNotIndex{\endlist,\everycr,\everypar,\ExecuteOptions,\expandafter}
+% \DoNotIndex{\fbox}
+% \DoNotIndex{\filedate,\filename,\fileversion,\fontsize,\framebox,\gdef}
+% \DoNotIndex{\global,\halign,\hbox,\hfil,\hfill,\hrule}
+% \DoNotIndex{\hsize,\hskip,\hspace,\hss,\if@tempswa,\ifcase,\or,\fi,\fi}
+% \DoNotIndex{\ifhmode,\ifvmode,\ifnum,\iftrue,\ifx,\fi,\fi,\fi,\fi,\fi}
+% \DoNotIndex{\input}
+% \DoNotIndex{\jobname,\kern,\leavevmode,\let}
+% \DoNotIndex{\list,\llap,\long,\m@ne,\m@th}
+% \DoNotIndex{\month,\newcommand,\newcounter,\newenvironment}
+% \DoNotIndex{\NeedsTeXFormat,\newdimen}
+% \DoNotIndex{\newlength,\newpage,\nobreak,\noindent,\null,\number}
+% \DoNotIndex{\numberline,\OldMakeindex,\OnlyDescription,\p@}
+% \DoNotIndex{\par,\paragraph,\paragraphmark,\parfillskip}
+% \DoNotIndex{\penalty,\PrintChanges,\PrintIndex,\ProcessOptions}
+% \DoNotIndex{\protect,\ProvidesClass}
+% \DoNotIndex{\refstepcounter,\relax,\renewcommand,\reset@font}
+% \DoNotIndex{\rightskip,\rlap,\rmfamily,\roman}
+% \DoNotIndex{\roman,\secdef,\selectfont,\setbox,\setcounter,\setlength}
+% \DoNotIndex{\settowidth,\sfcode,\skip,\sloppy,\slshape,\space}
+% \DoNotIndex{\symbol,\the,\trivlist,\typeout,\tw@,\undefined,\uppercase}
+% \DoNotIndex{\usecounter,\usefont,\usepackage,\vfil,\vfill,\viiipt}
+% \DoNotIndex{\viipt,\vipt,\vskip,\vspace}
+% \DoNotIndex{\wd,\xiipt,\year,\z@}
+% \DoNotIndex{\@namedef,\@nameuse,\csname,\endcsname}
+%
+%
+%
+% \section{Patches for hyperref and friends} \label{sec:hyper}
+%
+% The \Lpack{hyperref} package~\cite{HYPERREF} is a marvel of macro coding but it does
+% seem to have a habit of not working too well with classes or packages
+% that contain anything out of the
+% ordinary.
+%
+%    \begin{macrocode}
+%<*hyper>
+%    \end{macrocode}
+%
+%
+% The \Lpack{memhfixc} package provides \Lpack{hyperref} related temporary 
+% fixes and extensions for version v1.618 of the \Lpack{memoir} class.
+% \begin{itemize}
+% \item  hyperref fix for part and chapter entries in the ToC (v1.0)
+%  \item Other fixes as and when
+% \end{itemize}
+% Only use this package in conjunction with the hyperref package. 
+% Call the package without options after the hyperref package as:
+% \begin{verbatim}
+% \documentclass[...]{memoir}
+% ...
+% \usepackage[...]{hyperref}
+% \usepackage{memhfixc}
+% \end{verbatim}
+%
+%    \begin{macrocode}
+%%
+%% The memhfixc package provides hyperref related temporary 
+%% fixes and extensions for versions v1.618 and later of the memoir class.
+%%     o hyperref fix for part and chapter entries in the ToC (v1.0)
+%%     o Other fixes as and when
+%% 
+%% Only use this package in conjunction with the hyperref package. 
+%% Call the package without options after the hyperref package as:
+%% \documentclass[...]{memoir}
+%% ...
+%% \usepackage[...]{hyperref}
+%% \usepackage{memhfixc}
+%%
+%% With thanks to Heiko Oberdiek, if you use hyperref dated 2006/11/15
+%% or later, memhfixc will be automatically loaded after hyperref.
+%%
+%% With the new hooking system from 2020+ memhfixc is automatically
+%% added after loading hyperref with the memoir class
+%%
+%% Version 1.20  2022/11/17
+%% Version 1.19  2021/06/16
+%% Version 1.18  2019/10/24
+%% Version 1.17  2013/05/30
+%% Version 1.16  2013/05/16
+%% Version 1.15  2010/08/17
+%% Version 1.14  2010/06/10
+%% Version 1.13  2010/04/19
+%% Version 1.12  2009/02/06
+%% Version 1.11  2009/01/18
+%% Version 1.10  2008/08/23
+%% Version 1.9  2006/11/22
+%% Version 1.8  2006/01/21
+%% Version 1.7  2005/11/15
+%% Version 1.6  2004/05/13
+%% Version 1.5  2003/10/14
+%% Version 1.4  2003/09/26
+%% Version 1.3  2003/02/20
+%% Version 1.2  2003/02/02
+%% Version 1.1  2003/01/22
+%% Version 1.0  2002/10/22
+%%
+%    \end{macrocode}
+% 
+%
+%    \begin{macrocode}
+\ProvidesPackage{memhfixc}[2022/11/17 v1.20 nameref/hyperref package fixes for memoir class]
+%    \end{macrocode}
+%
+% \begin{macro}{\M@hfixcfinish}
+% The \Lpack{memhfixc} package is only useful with the memoir class
+%    \begin{macrocode}
+\let\M@hfixcfinish\relax
+\@ifclassloaded{memoir}{}%
+                       {\let\M@hfixcfinish\endinput
+                        \typeout{No memoir class: memhfixc does nothing}}
+\M@hfixcfinish
+
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Patches for nameref}
+%
+% \changes{v1.13}{2010/04/19}{Rewritten to help fix a race condition}
+% 
+% The nameref package changes \cs{@sect} and \cs{label} so we bring
+% back the memoir stuff. We have earlier been using
+% \verb?\AtBeginDocument? plus \verb?\@ifpackageloaded{nameref}? to
+% add our changes to \Lpack{nameref}. But this is not a good solution,
+% as \Lpack{hyperref} can delay \Lpack{nameref} loading using
+% \verb?\AtBeginDocument{\usepackage{nameref}}? \emph{and} add thiis
+% \emph{after} \Lpack{memhfixc} is loaded. A better solution is to use
+% \verb?\AtEndPackage?, then it does not matter how far after
+% \Lpack{memhfixc} \Lpack{nameref} is loaded.
+%
+% \changes{v1.13}{2010/04/19}{Code in the next part have been changed
+% to match \cs{AtEndPackage}}
+%    \begin{macrocode}
+\AtEndPackage{nameref}{%
+%    \end{macrocode}
+
+% \begin{macro}{\M@sect}
+% \begin{macro}{\NR@sectm@m}
+% The \Lpack{nameref} package~\cite{NAMEREF} fiddles with \cs{@sect} (which memoir replaces
+%  by \cs{M@sect}). 
+%    \begin{macrocode}
+  \@ifundefined{NR@sectm@m}{% haven't fiddled with \M@sect
+    \typeout{Redoing nameref's sectioning}
+    \let\NR@sectm@m\M@sect
+    \def\M@sect##1##2##3##4##5##6[##7][##8]##9{%
+      \setcounter{section@level}{##2}%
+      \def\@currentlabelname{##7}%
+      \NR@sectm@m{##1}{##2}{##3}{##4}{##5}{##6}[{##7}][{##8}]{\Sectionformat{##9}{##2}}}%
+  }%
+  {% \NR@sectm@m has already been defined
+  }%
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+%
+%
+% \begin{macro}{\label}
+% \begin{macro}{\MNR@label}
+% The \Lpack{nameref} package replaces \cs{label}, which (which memoir has added to).
+%  Make the memoir addition again.
+%
+%    \begin{macrocode}
+  \@ifundefined{MNR@label}{% haven't fiddled with \label
+    \typeout{Redoing nameref's label}
+    \let\MNR@label\label
+    \def\label##1{\@bsphack\begingroup
+      \protected@edef\@currentlabel{\protect\M@TitleReference
+        {\@currentlabel}{\M@currentTitle}}%
+      \MNR@label{##1}%
+      \endgroup \@esphack}%
+    \let\MNR@old@caption\@caption
+    \long\def\@caption##1[##2]##3{%
+      \MNR@old@caption{##1}[{##2}]{##3}%
+      \def\@currentlabelname{##2}%
+      \M@gettitle{##2}%
+    }%
+  }%
+  {% \MNR@label has already been defined
+  }%
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\nameref}
+%   We use \cs{titleref} to provide the same functionality as
+%   \cs{nameref}, so as not to confuse users, we let \cs{nameref} be
+%   an alias for \cs{titleref}.
+%    \begin{macrocode}
+\DeclareRobustCommand\nameref{\@ifstar{\@mem@titlerefnolink}{\@mem@titleref}}
+%    \end{macrocode}
+% \end{macro}
+%
+%    \begin{macrocode}
+}% end of AtEndPackage
+%    \end{macrocode}
+
+
+%
+% We are done unless the \Lpack{hyperref} package has been loaded
+%    \begin{macrocode}
+%% We are done unless the hyperref package has been loaded
+\@ifpackageloaded{hyperref}{}{\let\M@hfixcfinish\endinput}
+\M@hfixcfinish
+
+%    \end{macrocode}
+%
+% \subsection{Patches for hyperref}
+%
+% \begin{macro}{\H@old@sbook}
+% \begin{macro}{\@sbook}
+%  Possibly this will provide some hyperref bookmarks support for
+% the \cs{book*} document division (see page
+% 206 in the \textit{Hypertext marks in LaTeX} manual that I processed
+% on 2002/10/23 (cunningly it was internally dateless). It is based on
+% hyperref's code for \cs{@spart}, which uses \cs{H@old@spart} to hold
+% its original definition.
+%    \begin{macrocode}
+\let\H@old@sbook\@sbook
+\def\@sbook#1{%
+  \H@old@sbook{#1}%
+  \Hy@GlobalStepCount\Hy@linkcounter
+  \xdef\@currentHref{book*.\the\Hy@linkcounter}%
+  \Hy@raisedlink{\hyper@anchorstart{\@currentHref}\hyper@anchorend}%
+}
+
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\Hy@captionsenglish}
+% \begin{macro}{\HyLang@english}
+% Not sure what these do. I do know I have one version of \Lpack{hyperref}
+% that defines \cs{Hy@captionsenglish} and a later one that
+% defines \cs{HyLang@english} instead.
+%    \begin{macrocode}
+\@ifundefined{Hy@captionsenglish}{}{%
+  \g@addto@macro{\Hy@captionsenglish}{\def\bookautorefname{Book}}}
+\@ifundefined{HyLang@english}{}{%
+  \g@addto@macro{\HyLang@english}{\def\bookautorefname{Book}}}
+
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\Hy@captionsgerman}
+% \begin{macro}{\HyLang@german}
+%    \begin{macrocode}
+\@ifundefined{Hy@captionsgerman}{}{%
+  \g@addto@macro{\Hy@captionsgerman}{\def\bookautorefname{Buch}}}
+\@ifundefined{HyLang@german}{}{%
+  \g@addto@macro{\HyLang@german}{\def\bookautorefname{Buch}}}
+
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\Hy@captionsportuges}
+% \begin{macro}{\HyLang@portuges}
+%    \begin{macrocode}
+\@ifundefined{Hy@captionsportuges}{}{%
+  \g@addto@macro{\Hy@captionsportuges}{\def\bookautorefname{Livro}}}
+\@ifundefined{HyLang@portuges}{}{%
+  \g@addto@macro{\HyLang@portuges}{\def\bookautorefname{Livro}}}
+
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\Hy@captionsspanish}
+% \begin{macro}{\HyLang@spanish}
+%    \begin{macrocode}
+\@ifundefined{Hy@captionsspanish}{}{%
+  \g@addto@macro{\Hy@captionsspanish}{\def\bookautorefname{Libro}}}
+\@ifundefined{HyLang@spanish}{}{%
+  \g@addto@macro{\HyLang@spanish}{\def\bookautorefname{Libro}}}
+
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\Hy@captionsafrikaans}
+% \begin{macro}{\HyLang@afrikaans}
+%    \begin{macrocode}
+\@ifundefined{Hy@captionsafrikaans}{}{%
+  \g@addto@macro{\Hy@captionsafrikaans}{\def\bookautorefname{Boek}}}
+\@ifundefined{HyLang@afrikaans}{}{%
+  \g@addto@macro{\HyLang@afrikaans}{\def\bookautorefname{Boek}}}
+
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\bookautorefname}
+%    \begin{macrocode}
+\providecommand{\bookautorefname}{Book}
+
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@@writetorep}
+% Change \Lpack{hyperref}'s \cs{@@writetorep} as memoir uses \cs{partnumberline} and 
+% \cs{chapternumberline} as well as the normal \cs{numberline}
+% \changes{v1.9}{2006/11/22}{\cs{@@writetorep} now in hyperref 2006/11/15}
+%    \begin{macrocode}
+\@ifpackagelater{hyperref}{2006/11/15}{%
+}{%
+\def\@@writetorep#1#2#3#4#5{%
+  \begingroup
+    \def\Hy@tempa{#5}%
+    \ifx\Hy@tempa\Hy@bookmarkstype
+      \edef\Hy@level{#4}%
+      \ifx\Hy@levelcheck Y%
+        \@tempcnta\Hy@level\relax
+        \advance\@tempcnta by -1
+        \ifnum\Hy@currentbookmarklevel<\@tempcnta
+          \advance\@tempcnta by -\Hy@currentbookmarklevel\relax
+          \advance\@tempcnta by 1
+          \Hy@Warning{%
+            Difference (\the\@tempcnta) between bookmark levels is %
+            greater \MessageBreak than one, level fixed%
+          }%
+          \@tempcnta\Hy@currentbookmarklevel
+          \advance\@tempcnta by 1
+          \edef\Hy@level{\the\@tempcnta}%
+        \fi
+      \else
+        \global\let\Hy@levelcheck Y%
+      \fi
+      \global\let\Hy@currentbookmarklevel\Hy@level
+      \@tempcnta\Hy@level\relax
+      \expandafter\xdef\csname Parent\Hy@level\endcsname{#3}%
+      \advance\@tempcnta by -1
+      \edef\Hy@tempa{#3}
+      \edef\Hy@tempb{\csname Parent\the\@tempcnta\endcsname}%
+      \ifx\Hy@tempa\Hy@tempb
+        \Hy@Warning{%
+          The anchor of a bookmark and its parent's must not%
+          \MessageBreak be the same. Added a new anchor%
+        }%
+        \phantomsection
+      \fi
+      \ifHy@bookmarksnumbered
+        \let\numberline\Hy@numberline
+        \let\booknumberline\Hy@numberline     % <- added
+        \let\partnumberline\Hy@numberline     % <- added
+        \let\chapternumberline\Hy@numberline  % <- added
+      \else
+        \let\numberline\@gobble
+        \let\booknumberline\@gobble           % <- added
+        \let\partnumberline\@gobble           % <- added
+        \let\chapternumberline\@gobble        % <- added
+      \fi
+      \pdfstringdef\Hy@tempa{#2}%
+      \protected@write\@outlinefile{}{%
+        \protect\BOOKMARK
+          [\Hy@level][\@bookmarkopenstatus{\Hy@level}]{#3}%
+          {\Hy@tempa}{\Hy@tempb}%
+      }%
+    \fi
+  \endgroup}
+}
+
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\M@sect}
+% \Lpack{hyperref} fix for memoir's redefinition of \cs{@sect}
+% \changes{v1.14}{2010/06/10}{At some point hyperref changed the way
+% it changed \cs{@sect} such that the link target goes above the
+% section title. Here we bring memoir back up to speed}
+% The change being made is quite simple. We use \cs{M@sect} and it
+% takes 9 args not the standard 8.
+% \changes{v1.15}{2010/08/17}{Fixed typo, 8 -> \#8}
+%    \begin{macrocode}
+\@ifundefined{H@old@sectm@m}{% haven't fiddled with \M@sect
+  \let\H@old@sectm@m\M@sect
+  \def\M@sect#1#2#3#4#5#6[#7][#8]#9{%
+    \ifnum #2>\c@secnumdepth%
+      \expandafter\@firstoftwo%
+    \else%
+      \expandafter\@secondoftwo%
+    \fi%
+    {%
+      \Hy@MakeCurrentHrefAuto{section*}%
+      \setlength{\Hy@SectionHShift}{#3}%
+      \begingroup
+      \toks@{\H@old@sectm@m{#1}{#2}{#3}{#4}{#5}{#6}[{#7}][{#8}]}%
+      \toks\tw@\expandafter{%
+        \expandafter\Hy@SectionAnchorHref\expandafter{\@currentHref}%
+        #9%
+      }%
+      \edef\x{\endgroup%
+        \the\toks@{\the\toks\tw@}%
+      }\x%
+    }{%
+      \H@old@sectm@m{#1}{#2}{#3}{#4}{#5}{#6}[{#7}][{#8}]{#9}%
+    }%
+  }%
+}%
+{% already fiddled \M@sect 
+}
+
+%    \end{macrocode}
+% \end{macro}
+% ^^A moved addition to \@resets@pp to memoir proper
+%
+% ^^A moved addition to \@resets@ppsub and \endsubappendices to memoir proper
+%
+% \begin{macro}{\cftaddtitleline}
+% \begin{macro}{\cftaddnumtitleline}
+% \Lpack{hyperref} fix for memoir's add to contents macros
+%      (discovered by Martin Siegumfeldt, \ctt{} 2003/09/25
+%       \textit{`Combinig [sic] Tocloft and hyperref'}
+%    \begin{macrocode}
+\renewcommand{\cftaddtitleline}[4]{%
+  \addtocontents{#1}{\protect\contentsline{#2}{#3}{#4}{\@currentHref}}}
+\renewcommand{\cftaddnumtitleline}[5]{\addtocontents{#1}{%
+  \protect\contentsline{#2}{\protect\numberline{#3}#4}{#5}{\@currentHref}}}
+
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\caption}
+% Yet another little jolly (fixed in version 1.5). \Lpack{hyperref}'s
+% \verb?\def? of \verb?\caption? cunningly messes up \Lpack{memoir}'s,
+% thereby screwing up the labels for subcaptions.
+%    \begin{macrocode}
+\let\m@moldhypcaption\caption
+\renewcommand{\caption}{\donemaincaptiontrue\m@moldhypcaption}
+
+%    \end{macrocode}
+% \end{macro}
+%
+%    More tweaks are needed for continued captions and sidecaptions.
+% The need for these discovered by 
+% \v{Z}arko F \v{C}u\v{c}ej\footnote{\texttt{zarko.cucej@uni-mb.si}}
+% (for \cs{contcaption}) and by 
+% J{\o}rgen Larsen\footnote{\texttt{jl@ruc.dk}} (for \cs{sidecaption}),
+% and by Eitan Gurari (for \texttt{tex4ht}).
+% \changes{v1.7}{2005/11/15}{Added tweaks for \cs{contcaption},
+%                \cs{sidecaption} and \cs{sidecontcaption}}
+%
+% \begin{macro}{\c@memhycontfloat}
+% \begin{macro}{\thememhycontfloat}
+% \begin{macro}{\theHmemhycontfloat}
+% We need an extra marker for continued captions.
+% \changes{v1.7}{2005/11/15}{Added extra counter for continued captions}
+% \changes{v1.10}{2008/08/23}{Fixed \cs{theHmemhycontfloat} undefined
+%          problem (courtsesy Eitan Gurari)}
+%    \begin{macrocode}
+\newcounter{memhycontfloat}
+\renewcommand*{\thememhycontfloat}{\arabic{memhycontfloat}}
+\providecommand*{\theHmemhycontfloat}{}
+\renewcommand*{\theHmemhycontfloat}{\arabic{memhycontfloat}}
+\setcounter{memhycontfloat}{0}
+
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\contcaption}
+% Tweak the \cs{contcaption} macro.
+% 
+% \changes{v1.18}{2019/10/24}{Added a \cs{par} to get rid of a
+% sporadic space comming from \cs{refstepcounter} under hyperref}
+%    \begin{macrocode}
+\renewcommand{\contcaption}{%
+  \par%
+  \refstepcounter{memhycontfloat}%
+  \addtocounter{\@captype}{\m@ne}\H@refstepcounter{\@captype}%
+  \@contcaption\@captype}
+
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\endsidecaption}
+% Tweak the \texttt{sidecaption} environment. I don't know why it 
+% works but it took a lot of time trying all sorts of combinations
+% of commands to get it to do so (if it really does).
+%    \begin{macrocode}
+\def\endsidecaption{%
+  \m@mscapend@fbox
+  \H@refstepcounter{\@captype}%
+  \hyper@makecurrent{\@captype}%
+  \m@mscaplabel
+%    \end{macrocode}
+% \changes{v1.17}{2013/05/30}{Forgot to add \cs{m@mscapcheckside}}
+%    \begin{macrocode}
+  \m@mscapcheckside %<--- added 2013/05/30
+  \begin{lrbox}{\m@mscap@capbox}%
+    \begin{minipage}[c]{\sidecapwidth}%
+      \sidecapstyle
+      \@caption\@captype[\m@mscap@fortoc]{\m@mscap@forcap}%
+    \end{minipage}%
+  \end{lrbox}%
+  \m@mscapopboxes}
+
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\sidecontcaption}
+% \begin{macro}{\endsidecontcaption}
+% Tweaks for the \texttt{sidecontcaption} environment. Again it was 
+% a miss, miss, \ldots hit method to get something that appears 
+% to work.
+%    \begin{macrocode}
+\renewcommand*{\sidecontcaption}{%
+  \refstepcounter{memhycontfloat}%
+  \@sidecontcaption}
+\def\endsidecontcaption{%
+  \m@mscapend@fbox
+  \addtocounter{\@captype}{\m@ne}\H@refstepcounter{\@captype}%
+  \hyper@makecurrent{memhycontfloat}%
+  \m@mscaplabel
+%    \end{macrocode}
+% \changes{v1.17}{2013/05/30}{Forgot to add \cs{m@mscapcheckside}}
+%    \begin{macrocode}
+  \m@mscapcheckside %<--- added 2013/05/30
+  \begin{lrbox}{\m@mscap@capbox}%
+    \begin{minipage}[c]{\sidecapwidth}%
+      \sidecapstyle
+      \@contcaption\@captype{\m@mscap@forcap}%
+    \end{minipage}%
+  \end{lrbox}%
+  \m@mscapopboxes}
+
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@mem@titlerefnolink}
+%   \Lpack{hyperref} provide a \cs{ref*} command that does not give a
+%   hyperlink under \Lpack{hyperref}, we extend \cs{titleref} to
+%   support it.
+%    \begin{macrocode}
+\def\@mem@titlerefnolink#1{\begingroup \let\numberline\@gobble
+  \let\M@TitleReference\@mem@theTR % interrupt recursion of \ref
+  \ref*{#1}\endgroup}
+
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\printpageinnoteshyperref}
+% When \Lpack{hyperref} is active, page references in the page notes
+% list looks better with a specialised macro. The macro is provided
+% within the class, and here we activate it.
+%    \begin{macrocode}
+\AtBeginDocument{%
+    \let\printpageinnotes\printpageinnoteshyperref%
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@footnotemark}
+%  \changes{v1.16}{2013/05/08}{Slight change to hyperfootnotes redefinition of \cs{@footnotemark}}
+%   When \Lpack{hyperref} is loaded with the \texttt{hyperfootnotes}
+%   options, then \cs{@footnotemark} is overwritten, and our added
+%   feature which automatically separate multiple footnotes with
+%   commas is lost. It is however very easy to resurrect.
+%    \begin{macrocode}
+\ifHy@hyperfootnotes
+ \def\@footnotemark{%
+    \leavevmode
+    \ifhmode\edef\@x@sf{\the\spacefactor}%
+      \m@mmf@check% <--- added
+    \nobreak\fi
+    \stepcounter{Hfootnote}%
+    \global\let\Hy@saved@currentHref\@currentHref
+    \hyper@makecurrent{Hfootnote}%
+    \global\let\Hy@footnote@currentHref\@currentHref
+    \global\let\@currentHref\Hy@saved@currentHref
+    \hyper@linkstart{link}{\Hy@footnote@currentHref}%
+    \@makefnmark
+    \hyper@linkend
+    \m@mmf@prepare% <--- added
+    \ifhmode\spacefactor\@x@sf\fi
+    \relax
+  }%
+\fi
+
+%    \end{macrocode}
+%   
+% \end{macro}
+%
+% \changes{v1.16}{2013/05/14}{Added fix for \cs{@starttoc}}
+% \changes{v1.20}{2022/11/17}{Patch removed, by 2022 hyperref no longer change \cs{@starttoc}}
+% ^^A \begin{macro}{\@starttoc}
+% ^^A In memoir we altered \cs{@starttoc} such that \cs{tableofcontents}
+% ^^A could be used multiple times. \Lpack{hyperref} resets this. So here
+% ^^A is our reset of that reset.
+%    \begin{macrocode}
+ % patch removed as per 2022 hyperref does not touch \@starttoc
+ % \Hy@AtBeginDocument{%
+ %   \ifx\hyper@last\@undefined
+ %    \def\@starttoc#1{%
+ %      \begingroup\makeatletter
+ %        \IfFileExists{\jobname.#1}{%
+ %          \Hy@WarningNoLine{%
+ %            old #1 file detected, not used; run LaTeX again%
+ %          }%
+ %        }{}%
+ %        \if@filesw
+%    \end{macrocode}
+% ^^A We rewrite this part to match our definition. The rest is a copy
+% ^^A from \texttt{hyperref.sty}.
+%    \begin{macrocode}
+ %        \AtEndDocument{%
+ %          \expandafter\ifx\csname tf@#1\endcsname\relax
+ %            \expandafter\newwrite\csname tf@#1\endcsname
+ %            \immediate\openout \csname tf@#1\endcsname \jobname.#1\relax
+ %          \fi
+ %        }
+ %        \fi
+ %        \@nobreakfalse
+ %     \endgroup
+ %    }%
+ %  \fi
+ % }
+
+%    \end{macrocode}
+% ^^A  \end{macro}
+%
+% \changes{v3.6k}{2013/05/16}{Added hyperref support for page notes}
+% In order to enable hyperlinks for page notes, we need a few extra
+% things. First of all we only enable hyperlinked page noted if hyper
+% footnotes are enabled, seems a good choice.
+%    \begin{macrocode}
+\ifHy@hyperfootnotes
+%    \end{macrocode}
+% Record the current hyperref anchor in the page note data.
+%    \begin{macrocode}
+  \let\m@m@pnwrite@fourtharg\m@m@pnwrite@fourtharg@hyperref
+%    \end{macrocode}  
+% Make the note typesetter use the anchor data.
+%    \begin{macrocode}
+  \let\pagenoteanchor\pagenotehyperanchor
+%    \end{macrocode}  
+% Fill in two hook responsable for turning the note marker in the text
+% into a hyperlink. The code is more or less copied from
+% \Lpack{hyperref}'s footnote handling.
+%    \begin{macrocode}
+  \newcounter{Hpagenote}
+  \@namedef{mem@pnmm@start@hook}{%
+    \stepcounter{Hpagenote}%
+    \global\let\Hy@saved@currentHref\@currentHref
+    \hyper@makecurrent{Hpagenote}%
+    \global\let\Hy@pagenote@currentHref\@currentHref 
+    \global\let\@currentHref\Hy@saved@currentHref
+    \hyper@linkstart{link}{\Hy@pagenote@currentHref}%
+  }
+  \@namedef{mem@pnmm@end@hook}{\hyper@linkend}
+\fi
+
+%    \end{macrocode}
+%
+%
+% \subsection{Patch after \Lpack{hypcap}}
+%
+% The \Lpack{hypcap} package can help with some hyperref anchor placement in
+% figure refences. But it also requires every figure or table to have
+% a caption, thus it does not understand our \cmd{\contcaption} command.
+%
+% \changes{v3.7i}{2019/10/26}{added patch for \cmd{\contcaption} when
+% \Lpack{hypcap} is loaded}
+%    \begin{macrocode}
+\AtEndPackage{hypcap}{%
+  \long\def\@@contcaption##1##2{%
+  \par
+  \begingroup
+     \@parboxrestore
+     \if@minipage
+       \@setminipage
+     \fi
+     \global\@capstartfalse% added  
+     \normalsize
+     \@makecaption{\csname fnum@##1\endcsname}{\ignorespaces ##2}\par
+  \endgroup}
+}
+%    \end{macrocode}
+%
+% The end of the \Lpack{hyperref} related patches.
+%
+%    \begin{macrocode}
+%</hyper>
+%    \end{macrocode}
+%
+%
+% \section{Patches for the class code}     \label{sec:class}
+%
+% At this date, 2008/07/23, with the simultaneous release of memoir v1.6180339 
+% and the patch file, by definition there are no patches.
+%
+% As of 2018, we no longer generate \Lpack{mempatch}.
+% 
+% \subsection{Identification} \label{sec:id}
+%
+% \changes{v2.0}{2004/01/31}{No code in mempatch.sty}
+% \changes{v2.1}{2004/02/12}{Code now required in mempatch.sty}
+% \changes{v2.1a}{2004/02/19}{Extra pagestyle code for handling \cs{linespread}}
+% \changes{v2.4}{2004/04/26}{Removed extraneous spaces}
+% \changes{v2.4+}{2004/04/26}{Stopped noting general changes}
+% 
+%    \begin{macrocode}
+%<*patch>
+%    \end{macrocode}
+%
+% ^^A \typeout{mempatch.sty 2002/12/12 v1.1 Patches for memoir class v1.3a}
+% ^^A \typeout{mempatch.sty 2003/01/06 v1.2 Patches for memoir class v1.3a}
+% ^^A \typeout{mempatch.sty 2003/01/22 v1.3 Patches for memoir class v1.3a}
+% ^^A \typeout{mempatch.sty 2003/02/13 v1.4 Patches for memoir class v1.3a}
+% ^^A \typeout{mempatch.sty 2003/04/26 v1.5 Patches for memoir class v1.3a}
+% ^^A \typeout{mempatch.sty 2003/06/28 v1.6 Patches for memoir class v1.3a}
+% ^^A \typeout{mempatch.sty 2003/07/23 v1.7 Patches for memoir class v1.3a}
+% ^^A \typeout{mempatch.sty 2003/09/16 v1.8 Patches for memoir class v1.3a}
+% ^^A \typeout{mempatch.sty 2003/10/06 v1.8a Patches for memoir class v1.3a}
+% ^^A \typeout{mempatch.sty 2003/11/16 v1.9 Patches for memoir class v1.3a}
+% ^^A \typeout{mempatch.sty 2004/01/31 v2.0 Patches for memoir class v1.6}
+% ^^A \typeout{mempatch.sty 2004/02/12 v2.1 Patches for memoir class v1.6}
+% ^^A \typeout{mempatch.sty 2004/02/19 v2.1a Patches for memoir class v1.6}
+% ^^A \typeout{mempatch.sty 2004/03/01 v2.2 Patches for memoir class v1.6}
+% ^^A \typeout{mempatch.sty 2004/03/28 v2.3 Patches for memoir class v1.61}
+% ^^A \typeout{mempatch.sty 2004/04/26 v2.3 Patches for memoir class v1.61}
+% ^^A \typeout{mempatch.sty 2004/04/27 v2.3a Patches for memoir class v1.61}
+% ^^A \typeout{mempatch.sty 2004/04/30 v2.3b Patches for memoir class v1.61}
+% ^^A \typeout{mempatch.sty 2004/05/10 v2.3c Patches for memoir class v1.61}
+% ^^A \typeout{mempatch.sty 2004/05/14 v2.3d Patches for memoir class v1.61}
+% ^^A \typeout{mempatch.sty 2004/12/14 v3.0 Patches for memoir class v1.61}
+% ^^A \typeout{mempatch.sty 2004/12/19 v3.1 Patches for memoir class v1.61}
+% ^^A \typeout{mempatch.sty 2005/01/01 v3.2 Patches for memoir class v1.61}
+% ^^A \typeout{mempatch.sty 2005/01/17 v3.3 Patches for memoir class v1.61}
+% ^^A \typeout{mempatch.sty 2005/01/18 v3.4 Patches for memoir class v1.61}
+% ^^A \typeout{mempatch.sty 2005/02/01 v3.5 Patches for memoir class v1.61}
+% ^^A \typeout{mempatch.sty 2005/02/07 v3.6 Patches for memoir class v1.61}
+% ^^A \typeout{mempatch.sty 2005/02/26 v3.7 Patches for memoir class v1.61}
+% ^^A \typeout{mempatch.sty 2005/03/06 v3.8 Patches for memoir class v1.61}
+% ^^A \typeout{mempatch.sty 2005/03/23 v3.9 Patches for memoir class v1.61}
+% ^^A \typeout{mempatch.sty 2005/05/16 v3.10 Patches for memoir class v1.61}
+% ^^A \typeout{mempatch.sty 2005/05/23 v3.11 Patches for memoir class v1.61}
+% ^^A \typeout{mempatch.sty 2005/06/06 v3.12 Patches for memoir class v1.61}
+% ^^A \typeout{mempatch.sty 2005/09/25 v4.0 Patches for memoir class v1.618}
+% ^^A \ProvidesFile{mempatch.sty}[2005/10/06 v4.1 Patches for memoir class v1.618]
+% ^^A \ProvidesFile{mempatch.sty}[2005/11/21 v4.2 Patches for memoir class v1.618]
+% ^^A \ProvidesFile{mempatch.sty}[2005/12/13 v4.3 Patches for memoir class v1.618]
+% ^^A \ProvidesFile{mempatch.sty}[2006/01/21 v4.4 Patches for memoir class v1.618]
+% ^^A \ProvidesFile{mempatch.sty}[2006/01/23 v4.4a Patches for memoir class v1.618]
+% ^^A \ProvidesFile{mempatch.sty}[2006/07/10 v4.5 Patches for memoir class v1.618]
+% ^^A \ProvidesFile{mempatch.sty}[2006/08/08 v4.5 Patches for memoir class v1.618]
+% ^^A \ProvidesFile{mempatch.sty}[2006/12/11 v4.6 Patches for memoir class v1.618]
+% ^^A \ProvidesFile{mempatch.sty}[2006/12/23 v4.7 Patches for memoir class v1.618]
+% ^^A \ProvidesFile{mempatch.sty}[2007/01/22 v4.8 Patches for memoir class v1.618]
+% ^^A \ProvidesFile{mempatch.sty}[2007/12/14 v4.9 Patches for memoir class v1.618]
+%
+% ^^A \ProvidesFile{mempatch.sty}[2007/12/24 v4.9a Patches for memoir class v1.618]
+% ^^A \ProvidesFile{mempatch.sty}[2007/12/31 v4.9a+ Patches for memoir class v1.618]
+% ^^A \ProvidesFile{mempatch.sty}[2008/05/26 v5.0 Patches for memoir class v1.61803]
+% ^^A \ProvidesFile{mempatch.sty}[2008/07/11 v5.1 Patches for memoir class v1.618033]
+%    \begin{macrocode}
+\ProvidesPackage{mempatch}[2009/07/24 v6.0f Patches for memoir class v1.6180339]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%   Version 6.0 was released simultaneously with version 1.6180339 
+%%% of memoir.
+%%% By definition there were no patches.
+%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%    \end{macrocode}
+%
+%
+% The end of the patch file.
+%
+%    \begin{macrocode}
+%</patch>
+%    \end{macrocode}
+%
+%
+% \bibliographystyle{alpha}
+% \begingroup
+% \raggedright
+% \begin{thebibliography}{GMSN94A}
+%
+%
+% \bibitem[GMS94]{GOOSSENS94}
+% Michel Goossens, Frank Mittelbach, and Alexander Samarin.
+% \newblock \emph{The LaTeX Companion}.
+% \newblock Addison-Wesley Publishing Company, 1994.
+%
+%
+% \bibitem[Rah01]{NAMEREF}
+% Sebastian Rahtz.
+% \newblock \emph{Section name references in LaTeX}.
+% \newblock January 2001.
+% \newblock (Available from CTAN in
+%            \texttt{/macros/latex/contrib/hyperref})
+%
+% \bibitem[Rah02]{HYPERREF}
+% Sebastian Rahtz.
+% \newblock \emph{Hypertext marks in LaTeX}.
+% \newblock March 2002.
+% \newblock (Available from CTAN in
+%            \texttt{/macros/latex/contrib/hyperref})
+%
+% \bibitem[Wil08]{MEMOIR}
+% Peter Wilson.
+% \newblock \emph{The LaTeX \Lpack{memoir} class for configurable 
+%                 typesetting: Source code}.
+% \newblock July 2008.
+% \newblock (Available from CTAN in
+%            \texttt{macros/latex/contrib/memoir})
+%
+%
+% \end{thebibliography}
+% \endgroup
+%
+% \Finale
+%
+\endinput
+
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

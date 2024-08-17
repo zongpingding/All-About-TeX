@@ -1,0 +1,73 @@
+% -*- coding: utf-8 -*-
+
+\documentclass[11pt,xcolor={rgb}]{beamer}
+
+\usetheme{lagrange}
+
+\usepackage{arev}
+
+\usepackage{listings}
+
+\lstset{
+  basicstyle=\ttfamily\color{accent2},
+  frame=single,
+}
+
+\begin{document}
+
+\title{Beamer Theme Lagrange}
+\author{Author Name}
+\institute{Institute Name}
+\occasion{Some Conference}
+
+\begin{frame}[plain]
+\titlepage
+\end{frame}
+
+\section{Introduction}
+
+\begin{frame}
+\frametitle{Introduction}
+Beamer theme Lagrange is inspired by these two themes
+\begin{itemize}
+  \item Pdfscreen theme Overlay4
+  \item Keynote theme Drafting
+\end{itemize}
+\vfill
+CTAN lion drawing by Duane Bibby; thanks to www.ctan.org.
+\end{frame}
+
+\section{First Example}
+
+\begin{frame}[fragile=singleslide]
+\frametitle{First Example}
+The following is a simple example
+\begin{lstlisting}
+\documentclass[xcolor={rgb}]{beamer}
+
+\usetheme{lagrange}
+
+\begin{document}
+
+\begin{frame}
+ Hello Beamer!
+\end{frame}
+
+\end{document}
+\end{lstlisting}
+Note that you \textcolor{accent3}{need to} use \lstinline!xcolor={rgb}! option for this theme.
+\end{frame}
+
+\section{Customization}
+
+\begin{frame}[fragile=singleslide]
+\frametitle{Customization}
+To change vertical spaces between lines in TOC pages,
+you could redefine these two commands:
+\begin{lstlisting}
+\renewcommand{\sectionintochideskip}{10pt}
+\renewcommand{\sectionintocshowskip}{6pt}
+\end{lstlisting}
+\end{frame}
+
+\end{document}

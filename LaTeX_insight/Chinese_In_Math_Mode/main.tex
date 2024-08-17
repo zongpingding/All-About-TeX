@@ -1,0 +1,51 @@
+\documentclass[10pt]{article}
+\PassOptionsToPackage{quiet}{fontspec}
+\usepackage[a4paper, total={6.5in, 10in}]{geometry}
+\usepackage{amsmath}
+\usepackage{lipsum}
+\usepackage{zhlipsum}
+\usepackage[math]{anttor}
+% 开启数学环境的中文支持
+\usepackage{ctex}
+\xeCJKsetup{CJKmath=true}
+\setCJKmathfont{STSong}
+
+% fc-list :lang=zh 的结果：
+% C:/texlive/2021/texmf-dist/fonts/opentype/public/fandol/FandolFang-Regular.otf: FandolFang,FandolFang R:style=Regular
+% C:/texlive/2021/texmf-dist/fonts/opentype/public/fandol/FandolHei-Bold.otf: FandolHei:style=Bold
+% C:/Windows/fonts/STSONG.TTF: STSong,σìÄµûçσ«ïΣ╜ô:style=Regular
+% C:/Windows/fonts/FZSTK.TTF: FZShuTi,µû╣µ¡úΦêÆΣ╜ô:style=Regular
+% C:/Windows/fonts/simsun.ttc: NSimSun,µû░σ«ïΣ╜ô:style=Regular,σ╕╕Φºä
+% C:/Windows/fonts/Dengb.ttf: DengXian,τ¡ëτ║┐:style=Bold
+% C:/Windows/fonts/SIMLI.TTF: LiSu,ΘÜ╢Σ╣ª:style=Regular
+% 于是可用的中文字体为: FandolFang, FandolHei, STSong, FZShuTi, NSimSun, FangSong, DengXian等
+
+% \setCJKfamilyfont{FamilyName2}[Path=../fonts/]{FanMengWenRouNaiLaoTi.ttf}
+\setmainfont[Path=../fonts/]{palatino.ttf}
+\setCJKmainfont[Path=../fonts/]{FanMengWenRouNaiLaoTi.ttf}
+
+\begin{document}
+
+\section{英文字体}
+% 插入1段英文假文
+\lipsum[1] 
+
+\section{中文字体}
+% 插入1段中文假文
+\zhlipsum[1] 
+
+\section{数学字体}
+普通情况(English): 
+\begin{align}
+    \sum_{i=1}^{+\infty}{\frac{1}{i^2}} = \frac{\pi^2}{6}
+\end{align}
+
+在公式中使用中文(Chinese): 
+\begin{align}
+    \sum_{i=1}^{+正无穷}{\frac{1}{i^2}} = \frac{\pi^2}{6}
+\end{align}
+
+
+
+
+\end{document}

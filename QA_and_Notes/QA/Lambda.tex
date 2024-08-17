@@ -1,0 +1,23 @@
+\documentclass{article}
+\usepackage{amsmath}
+
+\begin{document}
+\catcode`L=0
+\let\Lambda\relax
+\newcommand{Lambda}[2][1]{%
+  \let\tmp\relax
+  \newcommand\tmp[#1]{#2}\tmp
+  \catcode`L=12
+}
+\vspace*{10em}
+
+
+
+Lambda{#1, \textbf{#1}}{Hello}
+
+\begin{align}
+  Lambda{a_{#1} #1}{E_2}\\
+  Lambda[2]{#1+#2, #2}{E_1}{E_2}
+\end{align}
+
+\end{document}

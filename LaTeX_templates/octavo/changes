@@ -1,0 +1,14 @@
+Octavo, a documentclass for LaTeX
+
+2 July 2003. Version 1.0.
+	First release
+
+10 October 2004. Version 1.1.
+	Changed the equation numbering so that it runs continuously
+	throughout the entire text.
+
+7 March 2007. Version 1.2.
+	Changed positioning of the textblock by returning hoffset and
+	voffset to their standard values, and by subtracting the 1 inch
+	from topmargin, oddsidemargin and evensidemargin. This ensures
+	compatibility with the crop package.

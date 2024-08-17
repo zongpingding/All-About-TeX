@@ -1,0 +1,53 @@
+\documentclass[fontset=windows, 12pt]{article}
+\usepackage{Article}
+
+
+%% 只需要使用相关的宏包即可，数学公式的字体会自动设置
+% \usepackage{cmbright}
+% \usepackage[math]{anttor}
+% \usepackage{kmath,kerkis}
+% \usepackage[garamond]{mathdesign}
+% \usepackage{ccfonts,eulervm}
+% \usepackage[math]{iwona}
+% \usepackage[math]{kurier}
+\usepackage{mathpazo}
+
+
+
+
+%% 英文字体
+\usepackage[urw-garamond]{mathdesign}
+% \usepackage[T1]{fontenc}
+
+
+
+% 测试公式
+% \begin{align}
+%     \frac{2}{2\pi i}\int_{\gamma}^{f}{ dx}\sum_{k=1}^{m}{n(\gamma;a_k)Res(f;a_k)}
+% \end{align}
+
+
+\begin{document}
+    
+    \begin{tformal}[blue]{公式字体切换}
+
+        使用宏包 默认字体 更改文章中数学公式的字体，具体样例如下：
+    \begin{align}
+        \frac{2}{2\pi i}\int_{\gamma}^{f}{ dx}\sum_{k=1}^{m}{n(\gamma;a_k)Res(f;a_k)}
+    \end{align}
+
+    \end{tformal}
+
+    \begin{tformal}[red]{英文字体}
+        Our universe is a wild and wonderful place. Join NASA astronauts, 
+        scientists, and engineers on a new adventure each week — 
+        all you need is your curiosity. 
+        上面普通的英文字体看腻了可以换一个英文字体.如下:
+        \normalfont{
+            Our universe is a wild and wonderful place. Join NASA astronauts, 
+        scientists, and engineers on a new adventure each week — 
+        all you need is your curiosity. 
+        }
+
+    \end{tformal}
+\end{document}

@@ -1,0 +1,2041 @@
+% \iffalse meta-comment
+%
+% Copyright (C) 2021-2022 by Jinwen XU
+% ------------------------------------
+%
+% This file may be distributed and/or modified under the conditions of the LaTeX
+% Project Public License, either version 1.3c of this license or (at your option)
+% any later version. The latest version of this license is in:
+%
+%    http://www.latex-project.org/lppl.txt
+%
+% \fi
+%
+%<*driver>
+\ProvidesFile{colorist-doc.dtx}
+%</driver>
+%
+%<colorist-doc>\documentclass[title in boldface, title in scshape, simple name]{colorart}
+%<lebhart-doc-cn,lebhart-doc-en,lebhart-doc-fr>\documentclass[title in boldface, title in scshape, simple name]{lebhart}
+%<beaulivre-doc-cn,beaulivre-doc-en,beaulivre-doc-fr>\documentclass[title in boldface, title in scshape, simple name]{beaulivre}
+
+%%================================
+%% Import toolkit
+%%================================
+\usepackage{ProjLib}
+\usepackage{longtable}  % breakable tables
+\usepackage{hologo}     % more TeX logo
+\usetikzlibrary{calc}
+
+\usepackage{blindtext}
+
+%<colorist-doc,lebhart-doc-en,beaulivre-doc-en>\UseLanguage{English}
+%<lebhart-doc-cn,beaulivre-doc-cn>\UseLanguage{Chinese}
+%<lebhart-doc-fr,beaulivre-doc-fr>\UseLanguage{French}
+
+%%================================
+%% For typesetting code
+%%================================
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{setspace}
+\definecolor{code-main}{RGB}{70,130,180}
+\definecolor{code-expl3}{RGB}{240,50,60}
+\definecolor{code-option}{RGB}{40,110,20}
+\definecolor{code-keys}{RGB}{100,130,150}
+\definecolor{code-comment}{RGB}{20,120,80}
+\definecolor{code-background}{gray}{0.99}
+\lstset{
+    language = [LaTeX]TeX,
+    basicstyle = \ttfamily,
+    keywordstyle = \color{code-main},
+    commentstyle = \color{code-comment},
+    showstringspaces = false,
+    breaklines = true,
+    frame = lines,
+    backgroundcolor = \color{code-background},
+    flexiblecolumns = true,
+    escapeinside = {(*}{*)},
+    alsoletter = {_,:},
+    % numbers = left,
+    % firstnumber = last,
+    numberstyle = \scriptsize\ttfamily,
+    stepnumber = 1,
+    numbersep = 5pt,
+}
+\newcommand{\meta}[1]{$\langle${\normalfont\itshape#1}$\rangle$}
+\lstset{% LaTeX2 commands
+    classoffset = 0,
+    texcsstyle =* \color{code-main},
+    moretexcs =
+      {
+        linenumbers,nolinenumbers,
+        part,parttext,chapter,section,subsection,subsubsection,
+        frontmatter,mainmatter,backmatter,
+        tableofcontents,
+        href,
+        color,
+        NameTheorem,CreateTheorem,
+        cref,
+        ProjLib,
+        DNF,
+        UseLanguage,UseOtherLanguage,AddLanguageSetting,
+        maketitle,address,curraddr,email,keywords,subjclass,thanks,dedicatory,TheDate,
+        qedhere,
+      }
+}
+\lstset{% LaTeX3 commands
+    classoffset = 1,
+    texcsstyle =* \color{code-expl3},
+    moretexcs =
+      {
+      }
+}
+\lstnewenvironment{code}{\setstretch{1.05}}{\vspace{-.3\baselineskip}\vspace{-.5\parskip}}
+\lstnewenvironment{code*}{\setstretch{1.05}\lstset{numbers=left}}{\vspace{-.3\baselineskip}\vspace{-.5\parskip}}
+
+\newcommand{\classoption}[1]{\texttt{\textcolor{code-option}{#1}}}
+\newcommand{\packageoption}[1]{\texttt{\textcolor{code-option}{#1}}}
+\newcommand{\commandoption}[1]{\texttt{\textcolor{code-keys}{#1}}}
+
+%%================================
+%% tip
+%%================================
+\usepackage[many]{tcolorbox}
+%<lebhart-doc-cn,beaulivre-doc-cn>\newenvironment{tip}[1][提示]{%
+%<colorist-doc,lebhart-doc-en,beaulivre-doc-en>\newenvironment{tip}[1][Tip]{%
+%<lebhart-doc-fr,beaulivre-doc-fr>\newenvironment{tip}[1][Astuce]{%
+    \begin{tcolorbox}[breakable,
+        enhanced,
+        width = \textwidth,
+        colback = paper, colbacktitle = paper,
+        colframe = gray!50, boxrule=0.2mm,
+        coltitle = black,
+        fonttitle = \sffamily,
+        attach boxed title to top left = {yshift=-\tcboxedtitleheight/2, xshift=.5cm},
+        boxed title style = {boxrule=0pt, colframe=paper},
+        before skip = 0.3cm,
+        after skip = 0.3cm,
+        top = 3mm,
+        bottom = 3mm,
+        title={\scshape\sffamily #1}]%
+}{\end{tcolorbox}}
+
+%%================================
+%% Names
+%%================================
+\providecommand{\colorist}{\textsf{colorist}}
+\providecommand{\colorart}{\textsf{colorart}}
+\providecommand{\colorbook}{\textsf{colorbook}}
+\providecommand{\lebhart}{\textsf{lebhart}}
+\providecommand{\beaulivre}{\textsf{beaulivre}}
+
+%%================================
+%% Titles
+%%================================
+%<*colorist-doc,lebhart-doc-en,lebhart-doc-cn,lebhart-doc-fr>
+\let\LevelOneTitle\section
+\let\LevelTwoTitle\subsection
+\let\LevelThreeTitle\subsubsection
+%</colorist-doc,lebhart-doc-en,lebhart-doc-cn,lebhart-doc-fr>
+%
+%<*beaulivre-doc-en,beaulivre-doc-cn,beaulivre-doc-fr>
+\let\LevelOneTitle\chapter
+\let\LevelTwoTitle\section
+\let\LevelThreeTitle\subsection
+%</beaulivre-doc-en,beaulivre-doc-cn,beaulivre-doc-fr>
+
+%%================================
+%% Main text
+%%================================
+\begin{document}
+
+\def\PackageVersion{2022/09/03}
+
+%<*colorist-doc>
+\title{{\normalfont\bfseries\color{main-text}\colorist{}}\\write your articles or books in a colorful way}
+\author{Jinwen XU}
+\thanks{Corresponding to: \texttt{\colorist{} \PackageVersion}}
+\email{\href{mailto:ProjLib@outlook.com}{ProjLib@outlook.com}}
+\date{\TheDate{\PackageVersion}[only-year-month], in Paris}
+
+\maketitle
+%</colorist-doc>
+%
+%<*lebhart-doc-en>
+\title{{\normalfont\bfseries\color{main-text}\lebhart{}}\\write your articles in a colorful way}
+\author{Jinwen XU}
+\thanks{Corresponding to: \texttt{\lebhart{} \PackageVersion}}
+\email{\href{mailto:ProjLib@outlook.com}{ProjLib@outlook.com}}
+\date{\TheDate{\PackageVersion}[only-year-month], in Paris}
+
+\maketitle
+%</lebhart-doc-en>
+%
+%<*beaulivre-doc-en>
+\frontmatter
+
+\TitlePage [ color = { main = forestgreen!75!black, back = forestgreen!10!yellow!30 } ]
+  {
+    , title     = \beaulivre{}
+    , subtitle  = {
+                    \textsc{Write your books in \\a colorful way}\\[20pt]
+                    \smaller[3] Corresponding to: \texttt{\beaulivre{} \PackageVersion}
+                  }
+    , author    = Jinwen XU
+    , date      = {\TheDate{\PackageVersion}[only-year-month], in Paris}
+  }
+%</beaulivre-doc-en>
+%
+%<*lebhart-doc-cn>
+\title{{\normalfont\bfseries\color{main-text}\lebhart{}}\\以多彩的方式排版你的文章}
+\author{许锦文}
+\thanks{对应版本. \texttt{\lebhart{} \PackageVersion}}
+\email{\href{mailto:ProjLib@outlook.com}{ProjLib@outlook.com}}
+\date{\TheDate{\PackageVersion}[only-year-month]，巴黎}
+
+\maketitle
+%</lebhart-doc-cn>
+%
+%<*beaulivre-doc-cn>
+\frontmatter
+
+\TitlePage [ color = { main = forestgreen!75!black, back = forestgreen!10!yellow!30 } ]
+  {
+    , title     = \beaulivre{}
+    , subtitle  = {
+                    \textsc{以多彩的方式排版你的图书}\\[20pt]
+                    \smaller[3] 对应版本. \texttt{\beaulivre{} \PackageVersion}
+                  }
+    , author    = 许锦文
+    , date      = {\TheDate{\PackageVersion}[only-year-month]，巴黎}
+  }
+%</beaulivre-doc-cn>
+%
+%<*lebhart-doc-fr>
+\title{{\normalfont\bfseries\color{main-text}\lebhart{}}\\écrivez vos articles de manière colorée}
+\author{Jinwen XU}
+\thanks{Correspondant à : \texttt{\lebhart{} \PackageVersion}}
+\email{\href{mailto:ProjLib@outlook.com}{ProjLib@outlook.com}}
+\date{\TheDate{\PackageVersion}[only-year-month], à Paris}
+
+\maketitle
+%</lebhart-doc-fr>
+%
+%<*beaulivre-doc-fr>
+\frontmatter
+
+\TitlePage [ color = { main = forestgreen!75!black, back = forestgreen!10!yellow!30 } ]
+  {
+    , title     = \beaulivre{}
+    , subtitle  = {
+                    \textsc{Écrivez vos livres \\de manière colorée}\\[20pt]
+                    \smaller[3] Correspondant à : \texttt{\beaulivre{} \PackageVersion}
+                  }
+    , author    = Jinwen XU
+    , date      = {\TheDate{\PackageVersion}[only-year-month], à Paris}
+  }
+%</beaulivre-doc-fr>
+
+
+
+%<*colorist-doc>
+\begin{abstract}
+    \colorist{} is a series of styles and classes for you to typeset your articles or books in a colorful manner. The original intention in designing this series was to write drafts and notes that look colorful yet not dazzling. With the help of the \ProjLib{} toolkit, also developed by the author, the classes provided here have multi-language support, preset theorem-like environments with clever reference support, and many other functionalities. Notably, using these classes, one can organize the author information in the \AmS{} fashion, makes it easy to switch to journal classes later for publication.
+
+    Finally, this documentation is typeset using the \colorart{} class (with the option \classoption{use boldface}). You can think of it as a short introduction and demonstration.
+\end{abstract}
+%</colorist-doc>
+%
+%<*lebhart-doc-en>
+\begin{abstract}
+    \lebhart{} is a member of the \colorist{} class series. Its name is taken from German word ``lebhaft'' (``vividly''), combined with the first three letters of ``artikel'' (``article''). The entire collection includes \colorart{} and \lebhart{} for typesetting articles and \colorbook{} and \beaulivre{} for typesetting books. My original intention in designing this series was to write drafts and notes that look colorful yet not dazzling.
+
+    \lebhart{} has multi-language support, including Chinese (simplified and traditional), English, French, German, Italian, Japanese, Portuguese (European and Brazilian), Russian and Spanish. These languages can be switched seamlessly in a single document. Due to the usage of custom fonts, \lebhart{} requires \hologo{XeLaTeX} or \hologo{LuaLaTeX} to compile.
+
+    This documentation is typeset using \lebhart{} (with the option \classoption{use boldface}). You can think of it as a short introduction and demonstration.
+\end{abstract}
+%</lebhart-doc-en>
+%
+%<*lebhart-doc-cn>
+\begin{abstract}
+    \lebhart{} 是 \colorist{} 文档类系列的成员之一，其名称取自于德文的lebhaft (活泼)，并取了artikel (文章)的前三个字母组合而成。整个 \colorist{} 系列包含用于排版文章的 \colorart{}、\lebhart{} 以及用于排版书的 \colorbook{}、\beaulivre{}。我设计这一系列的初衷是为了撰写草稿与笔记，使之多彩而不缭乱。
+
+    \lebhart{} 支持英语、法语、德语、意大利语、葡萄牙语、巴西葡萄牙语、西班牙语、简体中文、繁体中文、日文、俄文，并且同一篇文档中这些语言可以很好地协调。由于采用了自定义字体，需要用 \hologo{XeLaTeX} 或 \hologo{LuaLaTeX} 引擎进行编译。
+
+    这篇说明文档即是用 \lebhart{} 排版的 (使用了参数 \classoption{use boldface})，你可以把它看作一份简短的说明与演示。
+\end{abstract}
+%</lebhart-doc-cn>
+%
+%<*lebhart-doc-fr>
+\begin{abstract}
+    \lebhart{} fait partie de la série de classes \colorist{}, dont le nom est tiré du mot allemand «~lebhaft~» (animé), combiné avec les trois premières lettres de «~artikel~» (article) . L'ensemble de la collection comprend \colorart{} et \lebhart{} pour la composition d'articles, et \colorbook{} et \beaulivre{} pour celle des livres. Mon intention initiale en les concevant était d'écrire des brouillons et des notes qui ont l'air coloré mais pas éblouissant.
+
+    \lebhart{} prend en charge plusieurs langues, notamment le chinois (simplifié et traditionnel), l'anglais, le français, l'allemand, l'italien, le japonais, le portugais (européen et brésilien), le russe et l'espagnol. Ces langues peuvent être commutées de manière transparente dans un seul document. En raison de l'utilisation de polices personnalisées, \lebhart{} demande soit \hologo{XeLaTeX} soit \hologo{LuaLaTeX} pour la compilation.
+
+    Cette documentation est composée à l'aide de \lebhart{} (avec l'option \classoption{use boldface}). Vous pouvez le considérer comme une courte introduction et une démonstration.
+\end{abstract}
+%</lebhart-doc-fr>
+
+
+
+%<*beaulivre-doc-en>
+\chapter{Preface}
+
+\beaulivre{} is a member of the \colorist{} class series. Its name is taken from French words ``beau'' (for ``beautiful'') and ``livre'' (for ``book''). The entire collection includes \colorart{} and \lebhart{} for typesetting articles and \colorbook{} and \beaulivre{} for typesetting books. My original intention in designing this series was to write drafts and notes that look colorful yet not dazzling.
+
+\beaulivre{} has multi-language support, including Chinese (simplified and traditional), English, French, German, Italian, Japanese, Portuguese (European and Brazilian), Russian and Spanish. These languages can be switched seamlessly in a single document. Due to the usage of custom fonts, \lebhart{} requires \hologo{XeLaTeX} or \hologo{LuaLaTeX} to compile.
+
+This documentation is typeset using \beaulivre{} (with the option \classoption{use boldface}). You can think of it as a short introduction and demonstration.
+
+\bigskip
+\begin{tip}
+    Multi-language support, theorem-like environments, draft marks and some other features are provided by the \ProjLib{} toolkit. Here we only briefly discuss how to use it with this document class. For more detailed information, you can refer to the documentation of \ProjLib{}.
+\end{tip}
+%</beaulivre-doc-en>
+%
+%<*beaulivre-doc-cn>
+\chapter{前言}
+
+\beaulivre{} 是 \colorist{} 文档类系列的成员之一，其名称取自于法文的beau (美丽)，以及livre (书)，由二者组合而成。整个 \colorist{} 系列包含用于排版文章的 \colorart{}、\lebhart{} 以及用于排版书的 \colorbook{}、\beaulivre{}。我设计这一系列的初衷是为了撰写草稿与笔记，使之多彩而不缭乱。
+
+\beaulivre{} 支持英语、法语、德语、意大利语、葡萄牙语、巴西葡萄牙语、西班牙语、简体中文、繁体中文、日文、俄文，并且同一篇文档中这些语言可以很好地协调。由于采用了自定义字体，需要用 \hologo{XeLaTeX} 或 \hologo{LuaLaTeX} 引擎进行编译。
+
+这篇说明文档即是用 \beaulivre{} 排版的 (使用了参数 \classoption{use boldface})，你可以把它看作一份简短的说明与演示。
+
+\bigskip
+\begin{tip}
+    多语言支持、定理类环境、未完成标记等功能是由 \ProjLib{} 工具箱提供的，这里只给出了将其与本文档类搭配使用的要点。如需获取更详细的信息，可以参阅 \ProjLib{} 的说明文档。
+\end{tip}
+%</beaulivre-doc-cn>
+%
+%<*beaulivre-doc-fr>
+\chapter{Préface}
+
+\beaulivre{} fait partie de la série de classes \colorist{}, dont le nom est tiré des mots «~beau~» et «~livre~». L'ensemble de la collection comprend \colorart{} et \lebhart{} pour la composition d'articles, et \colorbook{} et \beaulivre{} pour celle des livres. Mon intention initiale en les concevant était d'écrire des brouillons et des notes qui ont l'air coloré mais pas éblouissant.
+
+\beaulivre{} prend en charge plusieurs langues, notamment le chinois (simplifié et traditionnel), l'anglais, le français, l'allemand, l'italien, le japonais, le portugais (européen et brésilien), le russe et l'espagnol. Ces langues peuvent être commutées de manière transparente dans un seul document. En raison de l'utilisation de polices personnalisées, \beaulivre{} demande soit \hologo{XeLaTeX} soit \hologo{LuaLaTeX} pour la compilation.
+
+Cette documentation est composée à l'aide de \beaulivre{} (avec l'option \classoption{use boldface}). Vous pouvez le considérer comme une courte introduction et une démonstration.
+
+\bigskip
+\begin{tip}
+    La prise en charge multilingue, les environnements de type théorème, les marques de brouillon et quelques autres fonctionnalités sont fournis par la boîte à outils \ProjLib{}. Ici, nous ne discutons que brièvement de la façon de l'utiliser avec cette classe de document. Pour plus d'informations, veuillez vous référer à la documentation de \ProjLib{}.
+\end{tip}
+%</beaulivre-doc-fr>
+
+
+
+\begin{tip}
+    This documentation has not been fully up-to-date with the new \texttt{expl3} version of this class series. Some options or commands introduced here might be obsolete.
+\end{tip}
+
+
+
+%<colorist-doc,lebhart-doc-cn,lebhart-doc-en,lebhart-doc-fr>\setcounter{tocdepth}{2}
+\tableofcontents
+
+
+
+%<*beaulivre-doc-en>
+\mainmatter
+
+\part{Instruction}
+\parttext{You can add some introductory text here via \lstinline|\\parttext|\meta{text}.}
+%</beaulivre-doc-en>
+%
+%<*beaulivre-doc-cn>
+\mainmatter
+
+\part{说明}
+\parttext{可以通过 \lstinline|\\parttext|\meta{text} 在这里添加一些说明}
+%</beaulivre-doc-cn>
+%
+%<*beaulivre-doc-fr>
+\mainmatter
+
+\part{Instruction}
+\parttext{Vous pouvez ajouter quelque texte d'introduction ici via \lstinline|\\parttext|\meta{text}.}
+%</beaulivre-doc-fr>
+
+
+
+%<*colorist-doc,lebhart-doc-en,beaulivre-doc-en>
+\medskip
+\LevelOneTitle*{Before you start}
+%<colorist-doc,lebhart-doc-en>\addcontentsline{toc}{section}{Before you start}
+%<beaulivre-doc-en>\addcontentsline{toc}{chapter}{Before you start}
+%
+In order to use the package or classes described here, you need to:
+\begin{itemize}
+    \item install TeX Live or MikTeX of the latest possible version, and make sure that \texttt{colorist} and \texttt{projlib} are correctly installed in your \TeX{} system.
+%<colorist-doc>    \item download and install the required fonts if needed.
+%<!colorist-doc>    \item download and install the required fonts, see the section "On the default fonts".
+    \item be familiar with the basic usage of \LaTeX{}, and know how to compile your document with \hologo{pdfLaTeX}, \hologo{XeLaTeX} or \hologo{LuaLaTeX}.
+\end{itemize}
+%</colorist-doc,lebhart-doc-en,beaulivre-doc-en>
+%
+%<*lebhart-doc-cn,beaulivre-doc-cn>
+\medskip
+\LevelOneTitle*{开始之前}
+%<colorist-doc,lebhart-doc-en>\addcontentsline{toc}{section}{开始之前}
+%<beaulivre-doc-en>\addcontentsline{toc}{chapter}{开始之前}
+%
+为了使用这篇文档中提到的文档类，你需要：
+\begin{itemize}
+    \item 安装一个尽可能新版本的 TeX Live 或 MikTeX 套装，并确保 \texttt{colorist} 和 \texttt{projlib} 被正确安装在你的 \TeX 封装中。
+    \item 下载并安装所需的字体，参考“关于默认字体”这一节。
+    \item 熟悉 \LaTeX{} 的基本使用方式，并且知道如何用 \hologo{pdfLaTeX}、\hologo{XeLaTeX} 或 \hologo{LuaLaTeX} 编译你的文档。
+\end{itemize}
+%</lebhart-doc-cn,beaulivre-doc-cn>
+%
+%<*lebhart-doc-fr,beaulivre-doc-fr>
+\LevelOneTitle*{Avant de commencer}
+%<lebhart-doc-fr>\addcontentsline{toc}{section}{Avant de commencer}
+%<beaulivre-doc-fr>\addcontentsline{toc}{chapter}{Avant de commencer}
+
+Pour utiliser les classes de documents décrites ici, vous devez :
+\begin{itemize}
+      \item installer TeX Live ou MikTeX de la dernière version possible, et vous assurer que \texttt{colorist} et \texttt{projlib} sont correctement installés dans votre système \TeX{}.
+      \item télécharger et installer les polices requises, voir «~À propos des polices par défaut~».
+      \item être familiarisé avec l'utilisation de base de \LaTeX{}, et savoir comment compiler vos documents avec \hologo{pdfLaTeX}, \hologo{XeLaTeX} ou \hologo{LuaLaTeX}.
+\end{itemize}
+%</lebhart-doc-fr,beaulivre-doc-fr>
+
+
+
+%<*colorist-doc>
+\LevelOneTitle{Introduction}
+
+\colorist{} is a series of styles and classes for you to typeset your articles or books in a colorful manner. The original intention in designing this series was to write drafts and notes that look colorful yet not dazzling.
+
+The entire collection includes \verb|colorist.sty|, which is the main style shared by all of the following classes; \verb|colorart.cls| for typesetting articles and \verb|colorbook.cls| for typesetting books. They compile with any major \TeX{} engine, with native support to English, French, German, Italian, Portuguese (European and Brazilian) and Spanish typesetting via \lstinline|\UseLanguage| (see the instruction below for detail).
+
+You can also found \lebhart{} and \beaulivre{} on CTAN. They are the enhanced version of \colorart{} and \colorbook{} with unicode support. With this, they can access to more beautiful fonts, and additionally have native support for Chinese, Japanese and Russian typesetting. On the other hand, they need to be compiled with \hologo{XeLaTeX} or \hologo{LuaLaTeX} (not \hologo{pdfLaTeX}).
+
+With the help of the \ProjLib{} toolkit, also developed by the author, the classes provided here have multi-language support, preset theorem-like environments with clever reference support, and many other functionalities such as draft marks, enhanced author information block, mathematical symbols and shortcuts, etc. Notably, using these classes, one can organize the author information in the \AmS{} fashion, makes it easy to switch to journal classes later for publication. For more detailed information, you can refer to the documentation of \ProjLib{} by running \lstinline|texdoc projlib| in the command line.
+%</colorist-doc>
+
+
+
+%<*colorist-doc>
+\LevelOneTitle{Usage and examples}
+
+\LevelTwoTitle{How to load it}
+You can directly use \colorart{} or \colorbook{} as your document class. In this way, you can directly begin writing your document, without having to worry about the configurations.
+
+\begin{code}
+\documentclass{colorart} (*{\normalfont or}*) \documentclass{colorbook}
+\end{code}
+
+\begin{tip}
+    You may wish to use \lebhart{} or \beaulivre{} instead, which should produce better result. All the examples later using \colorart{} or \colorbook{} can be adopted to \lebhart{} and \beaulivre{} respectively, without further modification.
+\end{tip}
+
+You can also use the default classes \textsf{article} or \textsf{book}, and load the \colorist{} package. This way, only the basic styles are set, and you can thus use your preferred fonts and page layout. All the features mentioned in this article are provided.
+
+\begin{code}
+\documentclass{article} (*{\normalfont or}*) \documentclass{book}
+\usepackage{colorist}
+\end{code}
+%</colorist-doc>
+%
+%<*lebhart-doc-en>
+\LevelOneTitle{Usage and examples}
+
+\LevelTwoTitle{How to load it}
+
+One only needs to put
+
+\begin{code}
+\documentclass{lebhart}
+\end{code}
+as the first line to use the \lebhart{} class. Please note that you need to use either \hologo{XeLaTeX} or \hologo{LuaLaTeX} engine to compile.
+%</lebhart-doc-en>
+%
+%<*beaulivre-doc-en>
+\LevelOneTitle{Usage and examples}
+
+\LevelTwoTitle{How to load it}
+
+One only needs to put
+
+\begin{code}
+\documentclass{beaulivre}
+\end{code}
+as the first line to use the \beaulivre{} class. 
+
+\begin{tip}[Attention]
+    You need to use either \hologo{XeLaTeX} or \hologo{LuaLaTeX} engine to compile.
+\end{tip}
+%</beaulivre-doc-en>
+%
+%<*lebhart-doc-cn>
+\LevelOneTitle{使用示例}
+
+\LevelTwoTitle{如何加载}
+
+只需要在第一行写：
+
+\begin{code}
+\documentclass{lebhart}
+\end{code}
+
+即可使用 \lebhart{} 文档类。请注意，要使用 \hologo{XeLaTeX} 或 \hologo{LuaLaTeX} 引擎才能编译。
+%</lebhart-doc-cn>
+%
+%<*beaulivre-doc-cn>
+\LevelOneTitle{使用示例}
+
+\LevelTwoTitle{如何加载}
+
+只需要在第一行写：
+
+\begin{code}
+\documentclass{beaulivre}
+\end{code}
+
+即可使用 \beaulivre{} 文档类。
+
+\begin{tip}[请注意]
+    要使用 \hologo{XeLaTeX} 或 \hologo{LuaLaTeX} 引擎才能编译。
+\end{tip}
+%</beaulivre-doc-cn>
+%
+%<*lebhart-doc-fr>
+\LevelOneTitle{Utilisation et exemples}
+
+\LevelTwoTitle{Comment l'ajouter}
+
+Il suffit simplement de mettre
+
+\begin{code}
+\documentclass{lebhart}
+\end{code}
+
+comme première ligne pour utiliser la classe \lebhart{}. Veuillez noter que vous devez utiliser le moteur \hologo{XeLaTeX} ou \hologo{LuaLaTeX} pour compiler.
+%</lebhart-doc-fr>
+%
+%<*beaulivre-doc-fr>
+\LevelOneTitle{Utilisation et exemples}
+
+\LevelTwoTitle{Comment l'ajouter}
+
+Il suffit simplement de mettre
+
+\begin{code}
+\documentclass{beaulivre}
+\end{code}
+
+comme première ligne pour utiliser la classe \beaulivre{}.
+
+\begin{tip}[Attention]
+    Vous devez utiliser le moteur \hologo{XeLaTeX} ou \hologo{LuaLaTeX} pour compiler.
+\end{tip}
+%</beaulivre-doc-fr>
+
+
+
+%<*colorist-doc>
+\LevelTwoTitle{Example - \colorart}
+
+Let's first look at a complete example of \colorart{} (the same works for \lebhart{}).
+%</colorist-doc>
+%
+%<*lebhart-doc-en,beaulivre-doc-en>
+\LevelTwoTitle{Example - A complete document}
+
+Let's first look at a complete document.
+%</lebhart-doc-en,beaulivre-doc-en>
+%
+%<*lebhart-doc-cn,beaulivre-doc-cn>
+\LevelTwoTitle{一篇完整的文档示例}
+
+首先来看一段完整的示例。
+%</lebhart-doc-cn,beaulivre-doc-cn>
+%
+%<*lebhart-doc-fr,beaulivre-doc-fr>
+\LevelTwoTitle{Exemple - Un document complet}
+
+Regardons d'abord un document complet.
+%</lebhart-doc-fr,beaulivre-doc-fr>
+
+
+
+%<*colorist-doc,lebhart-doc-cn,lebhart-doc-en,lebhart-doc-fr>
+\begin{code*}
+%<colorist-doc>\documentclass{colorart}
+%<lebhart-doc-cn,lebhart-doc-en,lebhart-doc-fr>\documentclass{lebhart}
+\usepackage{ProjLib}
+
+\UseLanguage{French}
+
+\begin{document}
+
+\title{(*\meta{title}*)}
+\author{(*\meta{author}*)}
+\date{\TheDate{2022-04-01}}
+
+\maketitle
+
+\begin{abstract}
+    Ceci est un résumé. \DNF<(*\meta{some hint}*)>
+\end{abstract}
+\begin{keyword}
+    AAA, BBB, CCC, DDD, EEE
+\end{keyword}
+
+\section{Un théorème}
+
+\begin{theorem}\label{thm:abc}
+    Ceci est un théorème.
+\end{theorem}
+Référence du théorème: \cref{thm:abc} 
+
+\end{document}
+\end{code*}
+%</colorist-doc,lebhart-doc-cn,lebhart-doc-en,lebhart-doc-fr>
+
+
+
+%<*beaulivre-doc-cn,beaulivre-doc-en,beaulivre-doc-fr>
+\begin{code*}
+\documentclass{beaulivre}
+\usepackage{ProjLib}
+
+\UseLanguage{French}
+
+\begin{document}
+
+\frontmatter
+
+\begin{titlepage}
+    (*\meta{code for titlepage}*)
+\end{titlepage}
+
+\tableofcontents
+
+\mainmatter
+
+\part{(*\meta{part title}*)}
+\parttext{(*\meta{text after part title}*)}
+
+\chapter{(*\meta{chapter title}*)}
+
+\section{(*\meta{section title}*)}
+
+\DNF<(*\meta{some hint}*)>
+
+\begin{theorem}\label{thm:abc}
+    Ceci est un théorème.
+\end{theorem}
+Référence du théorème: \cref{thm:abc} 
+
+\backmatter
+
+...
+
+\end{document}
+\end{code*}
+%</beaulivre-doc-cn,beaulivre-doc-en,beaulivre-doc-fr>
+
+
+
+%<*colorist-doc,lebhart-doc-en,beaulivre-doc-en>
+If you find this example a little complicated, don't worry. Let's now look at this example piece by piece.
+%</colorist-doc,lebhart-doc-en,beaulivre-doc-en>
+%
+%<*lebhart-doc-cn,beaulivre-doc-cn>
+如果你觉得这个例子有些复杂，不要担心。现在我们来一点点地观察这个例子。
+%</lebhart-doc-cn,beaulivre-doc-cn>
+%
+%<*lebhart-doc-fr,beaulivre-doc-fr>
+Si vous trouvez cela un peu compliqué, ne vous inquiétez pas. Examinons maintenant cet exemple pièce par pièce.
+%</lebhart-doc-fr,beaulivre-doc-fr>
+
+
+
+%<*colorist-doc>
+\LevelThreeTitle{Initialization}
+
+\begin{code}
+\documentclass{colorart}
+\usepackage{ProjLib}
+\end{code}
+
+Initialization is straightforward. The first line loads the document class \colorart{}, and the second line loads the \ProjLib{} toolkit to obtain some additional functionalities. 
+%</colorist-doc>
+%
+%<*lebhart-doc-en>
+% \clearpage
+\LevelThreeTitle{Initialization}
+
+\begin{code}
+\documentclass{lebhart}
+\usepackage{ProjLib}
+\end{code}
+
+Initialization is straightforward. The first line loads the document class \lebhart{}, and the second line loads the \ProjLib{} toolkit to obtain some additional functionalities. 
+%</lebhart-doc-en>
+%
+%<*beaulivre-doc-en>
+\LevelThreeTitle{Initialization}
+
+\begin{code}
+\documentclass{beaulivre}
+\usepackage{ProjLib}
+\end{code}
+
+Initialization is straightforward. The first line loads the document class \beaulivre{}, and the second line loads the \ProjLib{} toolkit to obtain some additional functionalities. 
+%</beaulivre-doc-en>
+%
+%<*lebhart-doc-cn>
+\bigskip
+\LevelThreeTitle{初始化部分}
+
+\begin{code}
+\documentclass{lebhart}
+\usepackage{ProjLib}
+\end{code}
+
+初始化部分很简单：第一行加载文档类 \lebhart{}，第二行加载 \ProjLib{} 工具箱，以便使用一些附加功能。
+%</lebhart-doc-cn>
+%
+%<*beaulivre-doc-cn>
+\LevelThreeTitle{初始化部分}
+
+\begin{code}
+\documentclass{beaulivre}
+\usepackage{ProjLib}
+\end{code}
+
+初始化部分很简单：第一行加载文档类 \beaulivre{}，第二行加载 \ProjLib{} 工具箱，以便使用一些附加功能。
+%</beaulivre-doc-cn>
+%
+%<*lebhart-doc-fr>
+\bigskip
+\LevelThreeTitle{Initialisation}
+
+\begin{code}
+\documentclass{lebhart}
+\usepackage{ProjLib}
+\end{code}
+
+L'initialisation est simple. La première ligne ajoute la classe de document \lebhart{}, et la deuxième ligne ajoute la boîte à outils \ProjLib{} pour obtenir des fonctionnalités supplémentaires.
+%</lebhart-doc-fr>
+%
+%<*beaulivre-doc-fr>
+\LevelThreeTitle{Initialisation}
+
+\begin{code}
+\documentclass{beaulivre}
+\usepackage{ProjLib}
+\end{code}
+
+L'initialisation est simple. La première ligne ajoute la classe de document \beaulivre{}, et la deuxième ligne ajoute la boîte à outils \ProjLib{} pour obtenir des fonctionnalités supplémentaires.
+%</beaulivre-doc-fr>
+
+
+
+%<*colorist-doc,lebhart-doc-en,beaulivre-doc-en>
+\LevelThreeTitle{Set the language}
+
+\begin{code}
+\UseLanguage{French}
+\end{code}
+
+This line indicates that French will be used in the document (by the way, if only English appears in your article, then there is no need to set the language). You can also switch the language in the same way later in the middle of the text. Supported languages include Simplified Chinese, Traditional Chinese, Japanese, English, French, German, Spanish, Portuguese, Brazilian Portuguese and Russian%
+%<colorist-doc>\footnote{The language Simplified Chinese, Traditional Chinese, Japanese and Russian requires Unicode support, thus the classes \lebhart{} or \beaulivre{}.}%
+.%
+
+For detailed description of this command and more related commands, please refer to the section on the multi-language support.
+%</colorist-doc,lebhart-doc-en,beaulivre-doc-en>
+%
+%<*lebhart-doc-cn,beaulivre-doc-cn>
+\LevelThreeTitle{设定语言}
+
+\begin{code}
+\UseLanguage{French}
+\end{code}
+
+这一行表明文档中将使用法语（如果你的文章中只出现英语，那么可以不需要设定语言）。你也可以在文章中间用同样的方式再次切换语言。支持的语言包括简体中文、繁体中文、日文、英语、法语、德语、西班牙语、葡萄牙语、巴西葡萄牙语、俄语。
+
+对于这一命令的详细说明以及更多相关命令，可以参考后面关于多语言支持的小节。
+%</lebhart-doc-cn,beaulivre-doc-cn>
+%
+%<*lebhart-doc-fr,beaulivre-doc-fr>
+\LevelThreeTitle{Choisir la langue}
+
+\begin{code}
+\UseLanguage{French}
+\end{code}
+
+Cette ligne indique que le français sera utilisé dans le document (d'ailleurs, si seul l'anglais apparaît dans votre article, alors il n'est pas nécessaire de choisir la langue). Vous pouvez également changer de langue de la même manière plus tard au milieu du texte. Les langues prises en charge sont les suivantes : chinois simplifié, chinois traditionnel, japonais, anglais, français, allemand, espagnol, portugais, portugais brésilien et russe.
+
+Pour une description détaillée de cette commande et d'autres commandes associées, veuillez vous référer à la section sur le support multilingue.
+%</lebhart-doc-fr,beaulivre-doc-fr>
+
+
+
+%<*colorist-doc,lebhart-doc-en>
+\LevelThreeTitle{Title, author information, abstract and keywords}
+
+\begin{code}
+\title{(*\meta{title}*)}
+\author{(*\meta{author}*)}
+\date{\TheDate{2022-04-01}}
+\maketitle
+
+\begin{abstract}
+    (*\meta{abstract}*)
+\end{abstract}
+\begin{keyword}
+    (*\meta{keywords}*)
+\end{keyword}
+\end{code}
+
+This part begins with the title and author information block. The example shows the basic usage, but in fact, you can also write:
+
+\begin{code}
+\author{(*\meta{author 1}*)}
+\address{(*\meta{address 1}*)}
+\email{(*\meta{email 1}*)}
+\author{(*\meta{author 2}*)}
+\address{(*\meta{address 2}*)}
+\email{(*\meta{email 2}*)}
+...
+\end{code}
+
+In addition, you may also write in the \AmS{} fashion, i.e.:
+
+\begin{code}
+\title{(*\meta{title}*)}
+\author{(*\meta{author 1}*)}
+\address{(*\meta{address 1}*)}
+\email{(*\meta{email 1}*)}
+\author{(*\meta{author 2}*)}
+\address{(*\meta{address 2}*)}
+\email{(*\meta{email 2}*)}
+\date{\TheDate{2022-04-01}}
+\subjclass{*****}
+\keywords{(*\meta{keywords}*)}
+
+\begin{abstract}
+    (*\meta{abstract}*)
+\end{abstract}
+
+\maketitle
+\end{code}
+%</colorist-doc,lebhart-doc-en>
+%
+%<*lebhart-doc-cn>
+\LevelThreeTitle{标题，作者信息，摘要与关键词}
+
+\begin{code}
+\title{(*\meta{title}*)}
+\author{(*\meta{author}*)}
+\date{\TheDate{2022-04-01}}
+\maketitle
+
+\begin{abstract}
+    (*\meta{abstract}*)
+\end{abstract}
+\begin{keyword}
+    (*\meta{keywords}*)
+\end{keyword}
+\end{code}
+
+开头部分是标题和作者信息块。这个例子中给出的是最基本的形式，事实上你还可以这样写：
+
+\begin{code}
+\author{(*\meta{author 1}*)}
+\address{(*\meta{address 1}*)}
+\email{(*\meta{email 1}*)}
+\author{(*\meta{author 2}*)}
+\address{(*\meta{address 2}*)}
+\email{(*\meta{email 2}*)}
+...
+\end{code}
+
+另外，你还可以采用 \AmS{} 文档类的写法：
+
+\begin{code}
+\title{(*\meta{title}*)}
+\author{(*\meta{author 1}*)}
+\address{(*\meta{address 1}*)}
+\email{(*\meta{email 1}*)}
+\author{(*\meta{author 2}*)}
+\address{(*\meta{address 2}*)}
+\email{(*\meta{email 2}*)}
+\date{\TheDate{2022-04-01}}
+\subjclass{*****}
+\keywords{(*\meta{keywords}*)}
+
+\begin{abstract}
+    (*\meta{abstract}*)
+\end{abstract}
+
+\maketitle
+\end{code}
+%</lebhart-doc-cn>
+%
+%<*lebhart-doc-fr>
+\LevelThreeTitle{Titre, informations sur l'auteur, résumé et mots-clés}
+
+\begin{code}
+\title{(*\meta{title}*)}
+\author{(*\meta{author}*)}
+\date{\TheDate{2022-04-01}}
+\maketitle
+
+\begin{abstract}
+    (*\meta{abstract}*)
+\end{abstract}
+\begin{keyword}
+    (*\meta{keywords}*)
+\end{keyword}
+\end{code}
+
+Cette partie commence par le titre et le bloc d'informations sur l'auteur. L'exemple montre l'utilisation de base, mais en fait, vous pouvez également écrire comme :
+
+\begin{code}
+\author{(*\meta{author 1}*)}
+\address{(*\meta{address 1}*)}
+\email{(*\meta{email 1}*)}
+\author{(*\meta{author 2}*)}
+\address{(*\meta{address 2}*)}
+\email{(*\meta{email 2}*)}
+...
+\end{code}
+
+De plus, vous pouvez également écrire à la manière \AmS{}, c'est-à-dire :
+
+\begin{code}
+\title{(*\meta{title}*)}
+\author{(*\meta{author 1}*)}
+\address{(*\meta{address 1}*)}
+\email{(*\meta{email 1}*)}
+\author{(*\meta{author 2}*)}
+\address{(*\meta{address 2}*)}
+\email{(*\meta{email 2}*)}
+\date{\TheDate{2022-04-01}}
+\subjclass{*****}
+\keywords{(*\meta{keywords}*)}
+
+\begin{abstract}
+    (*\meta{abstract}*)
+\end{abstract}
+
+\maketitle
+\end{code}
+%</lebhart-doc-fr>
+
+
+
+%<*colorist-doc,lebhart-doc-en,beaulivre-doc-en>
+\LevelThreeTitle{Draft marks}
+
+\begin{code}
+\DNF<(*\meta{some hint}*)>
+\end{code}
+
+When you have some places that have not yet been finished yet, you can mark them with this command, which is especially useful during the draft stage.
+%</colorist-doc,lebhart-doc-en,beaulivre-doc-en>
+%
+%<*lebhart-doc-cn,beaulivre-doc-cn>
+\LevelThreeTitle{未完成标记}
+
+\begin{code}
+\DNF<(*\meta{some hint}*)>
+\end{code}
+当你有一些地方尚未完成的时候，可以用这条指令标记出来，它在草稿阶段格外有用。
+%</lebhart-doc-cn,beaulivre-doc-cn>
+%
+%<*lebhart-doc-fr,beaulivre-doc-fr>
+\LevelThreeTitle{Marques de brouillon}
+
+\begin{code}
+\DNF<(*\meta{some hint}*)>
+\end{code}
+Lorsque vous avez des endroits qui ne sont pas encore finis, vous pouvez les marquer avec cette commande, ce qui est particulièrement utile lors de la phase de brouillon.
+%</lebhart-doc-fr,beaulivre-doc-fr>
+
+
+
+%<*colorist-doc,lebhart-doc-en,beaulivre-doc-en>
+\LevelThreeTitle{Theorem-like environments}
+
+\begin{code}
+\begin{theorem}\label{thm:abc}
+    Ceci est un théorème.
+\end{theorem}
+Référence du théorème: \cref{thm:abc}
+\end{code}
+
+Commonly used theorem-like environments have been pre-defined. Also, when referencing a theorem-like environment, it is recommended to use \lstinline|\cref{|\meta{label}\texttt{\}} --- in this way, there is no need to explicitly write down the name of the corresponding environment every time.
+%</colorist-doc,lebhart-doc-en,beaulivre-doc-en>
+%
+%<*lebhart-doc-cn,beaulivre-doc-cn>
+\LevelThreeTitle{定理类环境}
+
+\begin{code}
+\begin{theorem}\label{thm:abc}
+    Ceci est un théorème.
+\end{theorem}
+Référence du théorème: \cref{thm:abc}
+\end{code}
+
+常见的定理类环境可以直接使用。在引用的时候，建议采用智能引用 \lstinline|\cref{|\meta{label}\lstinline|}|——这样就不必每次都写上相应环境的名称了。
+%</lebhart-doc-cn,beaulivre-doc-cn>
+%
+%<*lebhart-doc-fr,beaulivre-doc-fr>
+\LevelThreeTitle{Environnements de type théorème}
+
+\begin{code}
+\begin{theorem}\label{thm:abc}
+    Ceci est un théorème.
+\end{theorem}
+Référence du théorème: \cref{thm:abc}
+\end{code}
+
+Les environnements de type théorème couramment utilisés ont été prédéfinis. De plus, lors du référencement d'un environnement de type théorème, il est recommandé d'utiliser \lstinline|\cref{|\meta{label}\texttt{\}} --- de cette manière, il ne serait pas nécessaire d'écrire explicitement le nom de l'environnement correspondant à chaque fois.
+%</lebhart-doc-fr,beaulivre-doc-fr>
+
+
+
+%<*colorist-doc,lebhart-doc-en>
+\begin{tip}
+If you wish to switch to the standard class later, just replace the first two lines with:
+
+\begin{code}
+\documentclass{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage[palatino,amsfashion]{ProjLib}
+\end{code}
+
+or to use the \AmS{} class:
+
+\begin{code}
+\documentclass{amsart}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage[palatino]{ProjLib}
+\end{code}
+
+\end{tip}
+%</colorist-doc,lebhart-doc-en>
+%
+%<*lebhart-doc-cn>
+\begin{tip}
+如果你之后想要切换到标准文档类，只需要把前两行换为：
+
+\begin{code}
+\documentclass{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage[palatino,amsfashion]{ProjLib}
+\end{code}
+
+或者使用 \AmS{} 文档类：
+
+\begin{code}
+\documentclass{amsart}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage[palatino]{ProjLib}
+\end{code}
+
+\end{tip}
+%</lebhart-doc-cn>
+%
+%<*lebhart-doc-fr>
+\begin{tip}
+Si vous souhaitez utiliser la classe standard à la place plus tard, remplacez simplement les deux premières lignes par :
+
+\begin{code}
+\documentclass{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage[palatino,amsfashion]{ProjLib}
+\end{code}
+
+ou utilisez la classe \AmS{} :
+
+\begin{code}
+\documentclass{amsart}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage[palatino]{ProjLib}
+\end{code}
+%<lebhart-doc-fr>\vspace{-.5\baselineskip}
+\end{tip}
+%</lebhart-doc-fr>
+
+
+
+%<*unused>
+
+%<*colorist-doc,lebhart-doc-en>
+\begin{tip}
+If you like the current document class, but want a more ``plain'' style, then you can use the option \classoption{classical}, like this:
+
+\begin{code}
+%<colorist-doc>\documentclass[classical]{colorart}
+%<lebhart-doc-en>\documentclass[classical]{lebhart}
+\end{code}
+\end{tip}
+%</colorist-doc,lebhart-doc-en>
+%
+%<*lebhart-doc-cn>
+\begin{tip}
+如果你喜欢这个文档类，但又希望使用一种更加中规中矩的样式，那么不妨使用 \classoption{classical} 选项，就像这样：
+
+\begin{code}
+%<colorist-doc>\documentclass[classical]{colorart}
+%<lebhart-doc-cn>\documentclass[classical]{lebhart}
+\end{code}
+\end{tip}
+%</lebhart-doc-cn>
+%
+%<*lebhart-doc-fr>
+\begin{tip}
+Si vous aimez la classe de document actuelle, mais que vous souhaitez un style plus «~simple~», vous pouvez utiliser l'option \classoption{classical}, comme ceci :
+
+\begin{code}
+%<colorist-doc>\documentclass[classical]{colorart}
+%<lebhart-doc-fr>\documentclass[classical]{lebhart}
+\end{code}
+%<lebhart-doc-fr>\vspace{-.5\baselineskip}
+\end{tip}
+%</lebhart-doc-fr>
+
+%</unused>
+
+
+
+%<*colorist-doc>
+\vspace{1.5\baselineskip}
+\LevelTwoTitle{Example - \colorbook}
+
+Now let's look at an example of \colorbook{} (the same works for \beaulivre{}).
+
+\begin{code*}
+\documentclass{colorbook}
+\usepackage{ProjLib}
+
+\UseLanguage{French}
+
+\begin{document}
+
+\frontmatter
+
+\begin{titlepage}
+    (*\meta{code for titlepage}*)
+\end{titlepage}
+
+\tableofcontents
+
+\mainmatter
+
+\part{(*\meta{part title}*)}
+\parttext{(*\meta{text after part title}*)}
+
+\chapter{(*\meta{chapter title}*)}
+
+\section{(*\meta{section title}*)}
+
+...
+
+\backmatter
+
+...
+
+\end{document}
+\end{code*}
+
+There is no much differences with \colorart{}, only that the title and author information should be typeset within the \texttt{titlepage} environment. Currently no default titlepage style is given, since the design of the title page is a highly personalized thing, and it is difficult to achieve a result that satisfies everyone.
+
+\bigskip
+In the next section, we will go through the options available.
+%</colorist-doc>
+
+
+
+%<*lebhart-doc-en,beaulivre-doc-en>
+%<lebhart-doc-en>% \clearpage
+\LevelOneTitle{On the default fonts}
+By default, this document class uses Palatino Linotype as the English main font; Source Han Serif, Source Han Sans and Source Han Mono as the Chinese main font, sans serif font and typewriter font; and partially uses Neo Euler as the math font. You need to download and install these fonts by yourself. The Source Han font series can be downloaded at \url{https://github.com/adobe-fonts} (It is recommended to download the Super-OTC version, so that the download size is smaller). Neo Euler can be downloaded at \url{https://github.com/khaledhosny/euler-otf}. When the corresponding font is not installed, the font that comes with TeX Live will be used instead, and the effect may be discounted.
+
+In addition, Source Code Pro is used as the English sans serif font, New Computer Modern Mono as the English monospace font, as well as some symbols in the mathematical fonts of Asana Math, Tex Gyre Pagella Math, and Latin Modern Math. These fonts are already available in TeX Live or MikTeX, which means you don't need to install them yourself.
+
+%<*beaulivre-doc-en>
+\begin{itemize}
+    \item English main font. \textsf{English sans serif font}. \texttt{English typewriter font}.
+    \item 简体中文主要字体，\textsf{简体中文无衬线字体}，\texttt{简体中文等宽字体}
+    \item \UseOtherLanguage{TC}{繁體中文主要字體，\textsf{繁體中文無襯線字體}，\texttt{繁體中文等寬字體}}
+    \item \UseOtherLanguage{JP}{日本語のメインフォント、\textsf{日本語のサンセリフフォント}、\texttt{日本語の等幅フォント}}
+    \item Math demonstration: \( \alpha, \beta, \gamma, \delta, 1,2,3,4, a,b,c,d \), \[\mathrm{li}(x)\coloneqq \int_2^{\infty} \frac{1}{\log t}\,\mathrm{d}t \]
+\end{itemize}
+%</beaulivre-doc-en>
+%</lebhart-doc-en,beaulivre-doc-en>
+%
+%<*lebhart-doc-cn,beaulivre-doc-cn>
+%<lebhart-doc-cn>\bigskip
+\LevelOneTitle{关于默认字体}
+本文档类中默认使用 Palatino Linotype 作为英文主字体，思源宋体、思源黑体、思源等宽作为中文主字体、无衬线字体以及等宽字体，并部分使用了 Neo Euler 作为数学字体。这些字体需要用户自行下载安装。其中，思源字体系列可在 \url{https://github.com/adobe-fonts} 下载 (推荐下载 Super-OTC 版本，这样下载的体积较小)。Neo Euler可以在 \url{https://github.com/khaledhosny/euler-otf} 下载。在没有安装相应的字体时，将采用TeX Live中自带的字体来代替，效果可能会有所折扣。
+
+另外，还使用了 Source Code Pro 作为英文无衬线字体、New Computer Modern Mono 作为英文等宽字体，以及 Asana Math、Tex Gyre Pagella Math、Latin Modern Math 数学字体中的部分符号。这些字体在 TeX Live 或 MikTeX 中已经提供，无需自行下载安装。
+
+%<*beaulivre-doc-cn>
+\begin{itemize}
+    \item English main font. \textsf{English sans serif font}. \texttt{English typewriter font}.
+    \item 简体中文主要字体，\textsf{简体中文无衬线字体}，\texttt{简体中文等宽字体}
+    \item \UseOtherLanguage{TC}{繁體中文主要字體，\textsf{繁體中文無襯線字體}，\texttt{繁體中文等寬字體}}
+    \item \UseOtherLanguage{JP}{日本語のメインフォント、\textsf{日本語のサンセリフフォント}、\texttt{日本語の等幅フォント}}
+    \item 数学示例： \( \alpha, \beta, \gamma, \delta, 1,2,3,4, a,b,c,d \), \[\mathrm{li}(x)\coloneqq \int_2^{\infty} \frac{1}{\log t}\,\mathrm{d}t \]
+\end{itemize}
+%</beaulivre-doc-cn>
+%</lebhart-doc-cn,beaulivre-doc-cn>
+%
+%<*lebhart-doc-fr,beaulivre-doc-fr>
+\LevelOneTitle{À propos des polices par défaut}
+Par défaut, cette classe de document utilise Palatino Linotype comme police anglaise principale; Source Han Serif, Source Han Sans et Source Han Mono comme police chinoise principale, sans empattement et monospace; et utilise partiellement Neo Euler comme police mathématique. Vous devez télécharger et installer ces polices vous-même. La série de polices Source Han peut être téléchargée sur \url{https://github.com/adobe-fonts} (il est recommandé de télécharger la version Super-OTC, afin que la taille de téléchargement soit plus petite). Neo Euler peut être téléchargé sur \url{https://github.com/khaledhosny/euler-otf}. Lorsque la police correspondante n'est pas installée, la police fournie avec TeX Live sera utilisée à la place et l'effet peut être réduit.
+
+De plus, Source Code Pro est utilisé comme police anglaise sans empattement, New Computer Modern Mono comme police anglaise monospace, ainsi que certains symboles dans les polices mathématiques Asana Math, Tex Gyre Pagella Math et Latin Modern Math. Ces polices sont déjà disponibles dans TeX Live ou MikTeX, ce qui signifie que vous n'avez pas besoin de les installer vous-même.
+
+%<*beaulivre-doc-fr>
+\begin{itemize}
+    \item English main font. \textsf{English sans serif font}. \texttt{English typewriter font}.
+    \item 简体中文主要字体，\textsf{简体中文无衬线字体}，\texttt{简体中文等宽字体}
+    \item \UseOtherLanguage{TC}{繁體中文主要字體，\textsf{繁體中文無襯線字體}，\texttt{繁體中文等寬字體}}
+    \item \UseOtherLanguage{JP}{日本語のメインフォント、\textsf{日本語のサンセリフフォント}、\texttt{日本語の等幅フォント}}
+    \item Démonstration de maths : \( \alpha, \beta, \gamma, \delta, 1,2,3,4, a,b,c,d \), \[\mathrm{li}(x)\coloneqq \int_2^{\infty} \frac{1}{\log t}\,\mathrm{d}t \]
+\end{itemize}
+%</beaulivre-doc-fr>
+%</lebhart-doc-fr,beaulivre-doc-fr>
+
+
+
+%<*colorist-doc,lebhart-doc-en,beaulivre-doc-en>
+%<colorist-doc>% \clearpage
+\LevelOneTitle{The options}
+
+%<colorist-doc>\colorist{} offers the following options:
+%<lebhart-doc-en>\lebhart{} offers the following options:
+%<beaulivre-doc-en>\beaulivre{} offers the following options:
+
+\begin{itemize}[label=,leftmargin=1.25em,itemindent=-1.25em]
+    \item The language options \classoption{EN} / \classoption{english} / \classoption{English}, \classoption{FR} / \classoption{french} / \classoption{French}, etc.
+        \begin{itemize}
+            \item For the option names of a specific language, please refer to \meta{language name} in the next section. The first specified language will be used as the default language.
+            \item The language options are optional, mainly for increasing the compilation speed. Without them the result would be the same, only slower.
+        \end{itemize}
+    \item \classoption{draft} or \classoption{fast}
+        \begin{itemize}
+            \item The option \verb|fast| enables a faster but slightly rougher style, main differences are:
+            \begin{itemize}
+                \item Use simpler math font configuration;
+                \item Do not use \textsf{hyperref};
+                \item Enable the fast mode of \ProjLib{} toolkit.
+            \end{itemize}
+        \end{itemize}
+    \begin{tip}
+        During the draft stage, it is recommended to use the \verb|fast| option to speed up compilation. When in \verb|fast| mode, there will be a watermark ``DRAFT'' to indicate that you are currently in the draft mode.
+    \end{tip}
+%<*lebhart-doc-en,beaulivre-doc-en>
+    \item \classoption{a4paper} or \classoption{b5paper}
+        \begin{itemize}
+            \item Paper size options. The default paper size is 8.5in $\times$ 11in.
+        \end{itemize}
+    \item \classoption{palatino}, \classoption{times}, \classoption{garamond}, \classoption{noto}, \classoption{biolinum} ~$|$~ \classoption{useosf}
+        \begin{itemize}
+            \item Font options. As the name suggest, font with corresponding name will be loaded.
+            \item The \classoption{useosf} option is used to enable the old-style figures.
+        \end{itemize}
+%</lebhart-doc-en,beaulivre-doc-en>
+    \item \classoption{use boldface}
+        \begin{itemize}
+            \item Allow boldface. When this option is enabled, the main title, the titles of all levels and the names of theorem-like environments will be bolded.
+        \end{itemize}
+    \item \classoption{runin}
+        \begin{itemize}
+            \item Use the ``runin'' style for \lstinline|\subsubsection|
+        \end{itemize}
+    \item \classoption{nothms}
+        \begin{itemize}
+            \item Pure text mode. Do not load theorem-like environments.
+        \end{itemize}
+%<lebhart-doc-en>% \clearpage
+    \item \classoption{nothmnum}, \classoption{thmnum} or \classoption{thmnum=}\meta{counter}
+        \begin{itemize}
+            \item Theorem-like environments will not be numbered / numbered in order 1, 2, 3... / numbered within \meta{counter}. If no option is used, they will be numbered within \texttt{chapter} (book) or \texttt{section} (article).
+        \end{itemize}
+    \item \classoption{regionalref}, \classoption{originalref}
+        \begin{itemize}
+            \item When referencing, whether the name of the theorem-like environment changes with the current language. The default is \classoption{regionalref}, \emph{i.e.}, the name corresponding to the current language is used; for example, when referencing a theorem-like environment in English context, the names "Theorem, Definition..." will be used no matter which language context the original environment is in. If \classoption{originalref} is enabled, then the name will always remain the same as the original place; for example, when referencing a theorem written in the French context, even if one is currently in the English context, it will still be displayed as ``Théorème''.
+            \item In \classoption{fast} mode, the option \classoption{originalref} will have no effect.
+        \end{itemize}
+\end{itemize}
+%</colorist-doc,lebhart-doc-en,beaulivre-doc-en>
+
+%<*colorist-doc>
+Additionally, \colorart{} and \colorbook{} offers the following options:
+\begin{itemize}[label=,leftmargin=1.25em,itemindent=-1.25em]
+    \item \classoption{a4paper} or \classoption{b5paper}
+        \begin{itemize}
+            \item Optional paper size. The default paper size is 8.5in $\times$ 11in.
+        \end{itemize}
+    \item \classoption{palatino}, \classoption{times}, \classoption{garamond}, \classoption{noto}, \classoption{biolinum} ~$|$~ \classoption{useosf}
+        \begin{itemize}
+            \item Font options. As the name suggest, font with corresponding name will be loaded.
+            \item The \classoption{useosf} option is used to enable the old-style figures.
+        \end{itemize}
+\end{itemize}
+%</colorist-doc>
+%
+%<*beaulivre-doc-en>
+\bigskip
+In addition, the commonly used \classoption{oneside} and \classoption{twoside} options are also available. Two-page layout is used by default.
+%</beaulivre-doc-en>
+%
+%<*lebhart-doc-cn,beaulivre-doc-cn>
+%<lebhart-doc-cn>% \clearpage
+\LevelOneTitle{选项}
+
+%<lebhart-doc-cn>\lebhart{} 文档类有下面几个选项：
+%<beaulivre-doc-cn>\beaulivre{} 文档类有下面几个选项：
+
+\begin{itemize}[label=,leftmargin=1.25em,itemindent=-1.25em]
+    \item 语言选项 \classoption{EN} / \classoption{english} / \classoption{English}、\classoption{FR} / \classoption{french} / \classoption{French}，等等
+        \begin{itemize}
+            \item 具体选项名称可参见下一节的 \meta{language name}。第一个指定的语言将作为默认语言。
+            \item 语言选项不是必需的，其主要用途是提高编译速度。不添加语言选项时效果是一样的，只是会更慢一些。
+        \end{itemize}
+    \item \classoption{draft} 或 \classoption{fast}
+        \begin{itemize}
+            \item 你可以使用选项 \verb|fast| 来启用快速但略微粗糙的样式，主要区别是：
+            \begin{itemize}
+                \item 使用较为简单的数学字体设置；
+                \item 不启用超链接；
+                \item 启用 \ProjLib{} 工具箱的快速模式。
+            \end{itemize}
+        \end{itemize}
+    \begin{tip}
+        在文章的撰写阶段，建议使用 \verb|fast| 选项以加快编译速度，改善写作时的流畅度。使用 \verb|fast| 模式时会有“DRAFT”字样的水印，以提示目前处于草稿阶段。
+    \end{tip}
+    \item \classoption{a4paper} 或 \classoption{b5paper}
+        \begin{itemize}
+            \item 可选的纸张大小。默认的纸张大小为 8.5in $\times$ 11in。
+        \end{itemize}
+    \item \classoption{palatino}、\classoption{times}、\classoption{garamond}、\classoption{noto}、\classoption{biolinum} ~$|$~ \classoption{useosf}
+        \begin{itemize}
+            \item 字体选项。顾名思义，会加载相应名称的字体。
+            \item \classoption{useosf} 选项用来启用“旧式”数字。
+        \end{itemize}
+    \item \classoption{use boldface}
+        \begin{itemize}
+            \item 允许加粗。启用这一选项时，题目、各级标题、定理类环境名称会被加粗。
+        \end{itemize}
+    \item \classoption{runin}
+        \begin{itemize}
+            \item \lstinline|\subsubsection| 采用 ``runin'' 风格。
+        \end{itemize}
+    \item \classoption{nothms}
+        \begin{itemize}
+            \item 纯文本模式，不加载定理类环境。
+        \end{itemize}
+%<beaulivre-doc-cn>% \clearpage
+    \item \classoption{nothmnum}、\classoption{thmnum} 或 \classoption{thmnum=}\meta{counter}
+        \begin{itemize}
+            \item 定理类环境均不编号 / 按照 1、2、3 顺序编号 / 在 \meta{counter} 内编号。在没有使用任何选项的情况下将按照 \texttt{chapter} (书) 或 \texttt{section} (文章) 编号。
+        \end{itemize}
+    \item \classoption{regionalref}、\classoption{originalref}
+        \begin{itemize}
+            \item 在智能引用时，定理类环境的名称是否随当前语言而变化。默认为 \classoption{regionalref}，即引用时采用当前语言对应的名称；例如，在中文语境中引用定理类环境时，无论原环境处在什么语境中，都将使用名称“定理、定义……”。若启用 \classoption{originalref}，则引用时会始终采用定理类环境所处语境下的名称；例如，在英文语境中书写的定理，即使稍后在中文语境下引用时，仍将显示为 Theorem。
+            \item 在 \classoption{fast} 模式下，\classoption{originalref} 将不起作用。
+        \end{itemize}
+\end{itemize}
+%</lebhart-doc-cn,beaulivre-doc-cn>
+%
+%<*beaulivre-doc-cn>
+\bigskip
+另外，排版图书时常用的 \classoption{oneside}、\classoption{twoside} 选项也是可以使用的。默认采用双页排版。
+%</beaulivre-doc-cn>
+%
+%<*lebhart-doc-fr,beaulivre-doc-fr>
+\LevelOneTitle{Les options}
+
+%<lebhart-doc-fr>\lebhart{} propose les options suivantes :
+%<beaulivre-doc-fr>\beaulivre{} propose les options suivantes :
+
+\begin{itemize}[label=,leftmargin=1.25em,itemindent=-1.25em]
+    \item Les options de langue \classoption{EN} / \classoption{english} / \classoption{English}, \classoption{FR} / \classoption{french} / \classoption{French}, etc.
+        \begin{itemize}
+            \item Pour les noms d'options d'une langue spécifique, veuillez vous référer à \meta{language name} dans la section suivante. La première langue spécifiée sera considérée comme la langue par défaut.
+            \item Les options de langue ne sont pas nécessaires, elles servent principalement à augmenter la vitesse de compilation. Sans eux, le résultat serait le même, justement plus lent.
+        \end{itemize}
+    \item \classoption{draft} ou \classoption{fast}
+        \begin{itemize}
+            \item L'option \verb|fast| permet un style plus rapide mais légèrement plus rugueux, les principales différences sont :
+            \begin{itemize}
+                \item Utilisez une configuration de police mathématique plus simple ;
+                \item N'utilisez pas \textsf{hyperref} ;
+                \item Activez le mode rapide de la boîte à outils \ProjLib{}.
+            \end{itemize}
+        \end{itemize}
+    \begin{tip}
+        Pendant la phase de brouillon, il est recommandé d'utiliser le \verb|fast| option pour accélérer la compilation. Quand dans \verb|fast| mode, il y aura un filigrane ``DRAFT'' pour indiquer que vous êtes actuellement en mode brouillon.
+    \end{tip}
+    \item \classoption{a4paper} ou \classoption{b5paper}
+        \begin{itemize}
+            \item Options de format de papier. Le format de papier par défaut est 8.5 pouces $\times$ 11 pouces.
+        \end{itemize}
+    \item \classoption{palatino}, \classoption{times}, \classoption{garamond}, \classoption{noto}, \classoption{biolinum} ~$|$~ \classoption{useosf}
+        \begin{itemize}
+            \item Options de police. Comme son nom l'indique, la police avec le nom correspondant sera utilisée.
+            \item L'option \classoption{useosf} est pour activer les chiffres à l'ancienne.
+        \end{itemize}
+    \item \classoption{use boldface}
+        \begin{itemize}
+            \item Afficher les titres en gras. Lorsque cette option est utilisée, le titre principal, les titres de tous les niveaux et les noms des environnements de type théorème seront en gras.
+        \end{itemize}
+    \item \classoption{runin}
+        \begin{itemize}
+            \item Utilisez le style «~runin~» pour \lstinline|\subsubsection|
+        \end{itemize}
+    \item \classoption{nothms}
+        \begin{itemize}
+            \item Mode texte pur. Ne pas définir les environnements de type théorème.
+        \end{itemize}
+    \item \classoption{nothmnum}, \classoption{thmnum} ou \classoption{thmnum=}\meta{counter}
+        \begin{itemize}
+            \item Les environnements de type théorème ne seront pas numérotés / numérotés dans l'ordre 1, 2, 3... / numérotés dans \meta{counter}. Si aucune option n'est utilisée, ils seront numérotés dans \texttt{chapter} (livre) ou \texttt{section} (article).
+        \end{itemize}
+    \item \classoption{regionalref}, \classoption{originalref}
+        \begin{itemize}
+            \item Lors du référencement, si le nom de l'environnement de type théorème change avec la langue actuelle. Par défaut \classoption{regionalref} est activé, c'est-à-dire que le nom correspondant à la langue courante est utilisé ; par exemple, lors du référencement d'un environnement de type théorème dans un contexte français, les noms «~Théorème, Définition ...~» seront utilisés quel que soit le contexte linguistique dans lequel se trouve l'environnement d'origine. Si \classoption{originalref} est activé, alors le nom restera toujours le même que l'environnement d'origine ; par exemple, lors du référencement d'un théorème écrit dans le contexte français, même si l'on est actuellement dans le contexte anglais, il sera toujours affiché comme «~Théorème~». 
+            \item En mode \classoption{fast}, l'option \classoption{originalref} n'aura aucun effet.
+        \end{itemize}
+\end{itemize}
+%</lebhart-doc-fr,beaulivre-doc-fr>
+%
+%<*beaulivre-doc-fr>
+\bigskip
+De plus, les options \classoption{oneside} et \classoption{twoside} couramment utilisées lors de la composition de livres sont également disponibles. La disposition recto-verso est utilisée par défaut.
+%</beaulivre-doc-fr>
+
+
+
+%<*colorist-doc,lebhart-doc-en,beaulivre-doc-en>
+\LevelOneTitle{Instructions by topic}
+
+\LevelTwoTitle{Language configuration}
+
+%<colorist-doc>\colorart{} has multi-language support, including English, French, German, Italian, Portuguese (European and Brazilian) and Spanish. The language can be selected by the following macros:
+%<lebhart-doc-en>\lebhart{} has multi-language support, including Chinese (simplified and traditional), English, French, German, Italian, Japanese, Portuguese (European and Brazilian), Russian and Spanish. The language can be selected by the following macros:
+%<beaulivre-doc-en>\beaulivre{} has multi-language support, including Chinese (simplified and traditional), English, French, German, Italian, Japanese, Portuguese (European and Brazilian), Russian and Spanish. The language can be selected by the following macros:
+
+\begin{itemize}
+    \item \lstinline|\UseLanguage{|\meta{language name}\lstinline|}| is used to specify the language. The corresponding setting of the language will be applied after it. It can be used either in the preamble or in the main body. When no language is specified, ``English'' is selected by default.
+    \item \lstinline|\UseOtherLanguage{|\meta{language name}\lstinline|}{|\meta{content}\lstinline|}|, which uses the specified language settings to typeset \meta{content}. Compared with \lstinline|\UseLanguage|, it will not modify the line spacing, so line spacing would remain stable when CJK and Western texts are mixed.
+\end{itemize}
+
+\meta{language name} can be (it is not case sensitive, for example, \texttt{French} and \texttt{french} have the same effect):
+\begin{itemize}
+    \item Simplified Chinese: \texttt{CN}, \texttt{Chinese}, \texttt{SChinese} or \texttt{SimplifiedChinese}
+    \item Traditional Chinese: \texttt{TC}, \texttt{TChinese} or \texttt{TraditionalChinese}
+    \item English: \texttt{EN} or \texttt{English}
+    \item French: \texttt{FR} or \texttt{French}
+    \item German: \texttt{DE}, \texttt{German} or \texttt{ngerman}
+    \item Italian: \texttt{IT} or \texttt{Italian}
+    \item Portuguese: \texttt{PT} or \texttt{Portuguese}
+    \item Portuguese (Brazilian): \texttt{BR} or \texttt{Brazilian}
+    \item Spanish: \texttt{ES} or \texttt{Spanish}
+    \item Japanese: \texttt{JP} or \texttt{Japanese}
+    \item Russian: \texttt{RU} or \texttt{Russian}
+\end{itemize}
+
+\medskip
+In addition, you can also add new settings to selected language:
+\begin{itemize}
+    \item \lstinline|\AddLanguageSetting{|\meta{settings}\lstinline|}|
+    \begin{itemize}
+        \item Add \meta{settings} to all supported languages.
+    \end{itemize}
+    \item \lstinline|\AddLanguageSetting(|\meta{language name}\lstinline|){|\meta{settings}\lstinline|}|
+    \begin{itemize}
+        \item Add \meta{settings} to the selected language \meta{language name}.
+    \end{itemize}
+\end{itemize}
+For example, \lstinline|\AddLanguageSetting(German){\color{orange}}| can make all German text displayed in orange (of course, one then need to add \lstinline|\AddLanguageSetting{\color{black}}| in order to correct the color of the text in other languages).
+%</colorist-doc,lebhart-doc-en,beaulivre-doc-en>
+%
+%<*lebhart-doc-cn,beaulivre-doc-cn>
+%<lebhart-doc-cn>% \clearpage
+\LevelOneTitle{具体说明}
+
+\LevelTwoTitle{语言设置}
+
+%<lebhart-doc-cn>\lebhart{} 提供了多语言支持，包括英语、法语、德语、意大利语、葡萄牙语、巴西葡萄牙语、西班牙语、简体中文、繁体中文、日文、俄文。可以通过下列命令来选定语言：
+%<beaulivre-doc-cn>\beaulivre{} 提供了多语言支持，包括英语、法语、德语、意大利语、葡萄牙语、巴西葡萄牙语、西班牙语、简体中文、繁体中文、日文、俄文。可以通过下列命令来选定语言：
+\begin{itemize}
+    \item \lstinline|\UseLanguage{|\meta{language name}\lstinline|}|，用于指定语言，在其后将使用对应的语言设定。
+    \begin{itemize}
+        \item 既可以用于导言部分，也可以用于正文部分。在不指定语言时，默认选定 “English”。
+    \end{itemize}
+    \item \lstinline|\UseOtherLanguage{|\meta{language name}\lstinline|}{|\meta{content}\lstinline|}|，用指定的语言的设定排版 \meta{content}。
+    \begin{itemize}
+        \item 相比 \lstinline|\UseLanguage|，它不会对行距进行修改，因此中西文字混排时能保持行距稳定。
+    \end{itemize}
+\end{itemize}
+
+\meta{language name} 有下列选择 (不区分大小写，如 \texttt{French} 或 \texttt{french} 均可)：
+\begin{itemize}
+    \item 简体中文：\texttt{CN}、\texttt{Chinese}、\texttt{SChinese} 或 \texttt{SimplifiedChinese}
+    \item 繁体中文：\texttt{TC}、\texttt{TChinese} 或 \texttt{TraditionalChinese}
+    \item 英文：\texttt{EN} 或 \texttt{English}
+    \item 法文：\texttt{FR} 或 \texttt{French}
+    \item 德文：\texttt{DE}、\texttt{German} 或 \texttt{ngerman}
+    \item 意大利语：\texttt{IT} 或 \texttt{Italian}
+    \item 葡萄牙语：\texttt{PT} 或 \texttt{Portuguese}
+    \item 巴西葡萄牙语：\texttt{BR} 或 \texttt{Brazilian}
+    \item 西班牙语：\texttt{ES} 或 \texttt{Spanish}
+    \item 日文：\texttt{JP} 或 \texttt{Japanese}
+    \item 俄文：\texttt{RU} 或 \texttt{Russian}
+\end{itemize}
+
+另外，还可以通过下面的方式来填加相应语言的设置：
+\begin{itemize}
+    \item \lstinline|\AddLanguageSetting{|\meta{settings}\lstinline|}|
+    \begin{itemize}
+        \item 向所有支持的语言增加设置 \meta{settings}。
+    \end{itemize}
+    \item \lstinline|\AddLanguageSetting(|\meta{language name}\lstinline|){|\meta{settings}\lstinline|}|
+    \begin{itemize}
+        \item 向指定的语言 \meta{language name} 增加设置 \meta{settings}。
+    \end{itemize}
+\end{itemize}
+例如，\lstinline|\AddLanguageSetting(German){\color{orange}}| 可以让所有德语以橙色显示（当然，还需要再加上 \lstinline|\AddLanguageSetting{\color{black}}| 来修正其他语言的颜色）。
+%</lebhart-doc-cn,beaulivre-doc-cn>
+%
+%<*lebhart-doc-fr,beaulivre-doc-fr>
+\LevelOneTitle{Instructions par sujet}
+
+\LevelTwoTitle{Configurer la langue}
+
+%<lebhart-doc-fr>\lebhart{} prend en charge plusieurs langues, notamment le chinois (simplifié et traditionnel), l'anglais, le français, l'allemand, l'italien, le japonais, le portugais (européen et brésilien), le russe et l'espagnol. La langue peut être sélectionnée par les macros suivantes :
+%<beaulivre-doc-fr>\beaulivre{} prend en charge plusieurs langues, notamment le chinois (simplifié et traditionnel), l'anglais, le français, l'allemand, l'italien, le japonais, le portugais (européen et brésilien), le russe et l'espagnol. La langue peut être sélectionnée par les macros suivantes :
+
+\begin{itemize}
+    \item \lstinline|\UseLanguage{|\meta{language name}\lstinline|}| est utilisé pour spécifier la langue. Le réglage correspondant de la langue sera appliqué après celui-ci. Il peut être utilisé soit dans le préambule ou dans le texte. Lorsqu'aucune langue n'est spécifiée, « English » est sélectionné par défaut.
+    \item \lstinline|\UseOtherLanguage{|\meta{language name}\lstinline|}{|\meta{content}\lstinline|}|, qui utilise les paramètres de langue spécifiés pour composer \meta{content}. Par rapport à \lstinline|\UseLanguage|, il ne modifiera pas l'interligne, donc l'interligne restera stable lorsque le texte CJK et occidental sont mélangés.
+\end{itemize}
+
+%<lebhart-doc-fr>
+\meta{language name} peut être (il n'est pas sensible à la casse, par exemple, \texttt{French} et \texttt{french} ont le même effet) :
+\begin{itemize}
+    \item chinois simplifié : \texttt{CN}, \texttt{Chinese}, \texttt{SChinese} ou \texttt{SimplifiedChinese}
+    \item chinois traditionnel : \texttt{TC}, \texttt{TChinese} ou \texttt{TraditionalChinese}
+    \item anglais : \texttt{EN} ou \texttt{English}
+    \item français : \texttt{FR} ou \texttt{French}
+    \item allemand : \texttt{DE}, \texttt{German} ou \texttt{ngerman}
+    \item italien : \texttt{IT} ou \texttt{Italian}
+    \item portugais : \texttt{PT} ou \texttt{Portuguese}
+    \item portugais (brésilien) : \texttt{BR} ou \texttt{Brazilian}
+    \item espagnol : \texttt{ES} ou \texttt{Spanish}
+    \item japonais : \texttt{JP} ou \texttt{Japanese}
+    \item russe : \texttt{RU} ou \texttt{Russian}
+\end{itemize}
+
+\medskip
+De plus, vous pouvez également ajouter de nouveaux paramètres à la langue sélectionnée :
+\begin{itemize}
+    \item \lstinline|\AddLanguageSetting{|\meta{settings}\lstinline|}|
+    \begin{itemize}
+        \item Ajoutez \meta{settings} à toutes les langues prises en charge.
+    \end{itemize}
+    \item \lstinline|\AddLanguageSetting(|\meta{language name}\lstinline|){|\meta{settings}\lstinline|}|
+    \begin{itemize}
+        \item Ajoutez \meta{settings} à la langue \meta{language name} sélectionnée.
+    \end{itemize}
+\end{itemize}
+Par exemple, \lstinline|\AddLanguageSetting(German){\color{orange}}| peut rendre tout le texte allemand affiché en orange (bien sûr, il faut alors ajouter \lstinline|\AddLanguageSetting{\color{black}}| afin de corriger la couleur du texte dans d'autres langues).
+%</lebhart-doc-fr,beaulivre-doc-fr>
+
+
+
+%<*colorist-doc,lebhart-doc-en,beaulivre-doc-en>
+\LevelTwoTitle{Theorems and how to reference them}
+
+Environments such as \texttt{definition} and \texttt{theorem} have been preset and can be used directly. 
+
+More specifically, preset environments include: 
+\texttt{assumption}, \texttt{axiom}, \texttt{conjecture}, \texttt{convention}, \texttt{corollary}, \texttt{definition}, \texttt{definition-proposition}, \texttt{definition-theorem}, \texttt{example}, \texttt{exercise}, \texttt{fact}, \texttt{hypothesis}, \texttt{lemma}, \texttt{notation}, \texttt{observation}, \texttt{problem}, \texttt{property}, \texttt{proposition}, \texttt{question}, \texttt{remark}, \texttt{theorem}, and the corresponding unnumbered version with an asterisk \lstinline|*| in the name. The titles will change with the current language. For example, \texttt{theorem} will be displayed as ``Theorem" in English mode and ``Théorème" in French mode.
+
+When referencing a theorem-like environment, it is recommended to use \lstinline|\cref{|\meta{label}\texttt{\}}. In this way, there is no need to explicitly write down the name of the corresponding environment every time.
+
+\begin{tip}[Example]
+\begin{code}
+\begin{definition}[Strange things] \label{def: strange} ...
+\end{code}
+
+will produce
+\begin{definition}[Strange things]\label{def: strange}
+    This is the definition of some strange objects. There is approximately a one-line spacing before and after the theorem environment, and there will be a symbol to mark the end of the environment.
+\end{definition}
+
+\lstinline|\cref{def: strange}| will be displayed as: \cref{def: strange}.
+
+After using \lstinline|\UseLanguage{French}|, a theorem will be displayed as:
+
+\UseLanguage{French}
+\begin{theorem}[Inutile]\label{thm}
+    Un théorème en français.
+\end{theorem}
+
+% By default, when referenced, the name of the theorem always matches the language of the context in which the theorem is located. For example, the definition above is still displayed in English in the current French mode: \cref{def: strange} and \cref{thm}. If you want the name of the theorem to match the current context when referencing, you can add \texttt{regionalref} to the global options.
+By default, when referenced, the name of the theorem matches the current context. For example, the definition above will be displayed in French in the current French context: \cref{def: strange,thm}. If you want the name of the theorem to always match the language of the context in which the theorem is located, you can add \texttt{originalref} to the global options.
+\end{tip}
+
+\UseLanguage{English}
+
+% \bigskip
+The following are the main styles of theorem-like environments:
+\begin{theorem}
+    Theorem style: theorem, proposition, lemma, corollary, ...
+\end{theorem}
+
+\begin{proof}
+    Proof style
+\end{proof}
+
+\begin{remark}
+    Remark style
+\end{remark}
+
+\begin{conjecture}
+    Conjecture style
+\end{conjecture}
+
+\begin{example*}
+    Example style: example, fact, ...
+\end{example*}
+
+\begin{problem}
+    Problem style: problem, question, ...
+\end{problem}
+
+\medskip
+%<beaulivre-doc-en>% \clearpage
+For aesthetics, adjacent definitions will be connected together automatically:
+\begin{definition}
+    First definition.
+\end{definition}
+
+\begin{definition}
+    Second definition.
+\end{definition}
+
+
+\begin{tip}
+    Please refer to the documentation of the package \textsf{create-theorem} to see how to declare new theorem-like environments.
+\end{tip}
+%</colorist-doc,lebhart-doc-en,beaulivre-doc-en>
+%
+%<*lebhart-doc-cn,beaulivre-doc-cn>
+\LevelTwoTitle{定理类环境及其引用}
+
+定义、定理等环境已经被预定义，可以直接使用。
+
+具体来说，预设的定理类环境包括：
+\texttt{assumption}、\texttt{axiom}、\texttt{conjecture}、\texttt{convention}、\texttt{corollary}、\texttt{definition}、\texttt{definition-proposition}、\texttt{definition-theorem}、\texttt{example}、\texttt{exercise}、\texttt{fact}、\texttt{hypothesis}、\texttt{lemma}、\texttt{notation}、\texttt{observation}、\texttt{problem}、\texttt{property}、\texttt{proposition}、\texttt{question}、\texttt{remark}、\texttt{theorem}，以及相应的带有星号 \lstinline|*| 的无编号版本。
+
+在引用定理类环境时，建议使用智能引用 \lstinline|\cref{|\meta{label}\lstinline|}|。这样就不必每次都写上相应环境的名称了。
+
+\medskip
+\begin{tip}[例子]
+\begin{code}
+\begin{definition}[奇异物品] \label{def: strange} ...
+\end{code}
+将会生成
+\begin{definition}[奇异物品]\label{def: strange}
+    这是奇异物品的定义。定理类环境的前后有一行左右的间距。在定义结束的时候会有一个符号来标记。
+\end{definition}
+
+\lstinline|\cref{def: strange}| 会显示为：\cref{def: strange}。
+
+\medskip
+使用 \lstinline|\UseLanguage{English}| 后，定理会显示为：
+
+\UseLanguage{English}
+\begin{theorem}[Useless]\label{thm}
+    A theorem in English.
+\end{theorem}
+
+% 默认情况下，引用时，定理的名称总是与定理所在区域的语言匹配，例如，上面的定义在现在的英文模式下依然显示为中文：\cref{def: strange} 和 \cref{thm}。如果在引用时想让定理的名称与当前语境相匹配，可以在全局选项中加入 \texttt{regionalref}。
+默认情况下，引用时，定理类环境的名称总是与当前语言相匹配，例如，上面的定义在现在的英文模式下将显示为英文：\cref{def: strange,thm}。如果在引用时想让定理的名称总是与原定理所在区域的语言匹配，即总是显示原始名称，可以在全局选项中加入 \texttt{originalref}。
+\end{tip}
+
+\UseLanguage{Chinese}
+
+\bigskip
+下面是定理类环境的几种主要样式：
+\begin{theorem}
+    Theorem style: theorem, proposition, lemma, corollary, ...
+\end{theorem}
+
+\begin{proof}
+    Proof style
+\end{proof}
+
+\begin{remark}
+    Remark style
+\end{remark}
+
+\begin{conjecture}
+    Conjecture style
+\end{conjecture}
+
+\begin{example*}
+    Example style: example, fact, ...
+\end{example*}
+
+\begin{problem}
+    Problem style: problem, question, ...
+\end{problem}
+
+\medskip
+%<beaulivre-doc-cn>% \clearpage
+为了美观，相邻的定义环境会自动连在一起：
+\begin{definition}
+    First definition.
+\end{definition}
+
+\begin{definition}
+    Second definition.
+\end{definition}
+
+
+\begin{tip}
+    请参阅 \textsf{create-theorem} 的说明文档以获知如何定义新的定理类环境。
+\end{tip}
+%</lebhart-doc-cn,beaulivre-doc-cn>
+%
+%<*lebhart-doc-fr,beaulivre-doc-fr>
+\LevelTwoTitle{Théorèmes et comment les référencer}
+
+Des environnements tels que \texttt{definition} et \texttt{theorem} ont été prédéfinis et peuvent être utilisés directement.
+
+Plus précisement, les environnements prédéfinis incluent : \texttt{assumption}, \texttt{axiom}, \texttt{conjecture}, \texttt{convention}, \texttt{corollary}, \texttt{definition}, \texttt{definition-proposition}, \texttt{definition-theorem}, \texttt{example}, \texttt{exercise}, \texttt{fact}, \texttt{hypothesis}, \texttt{lemma}, \texttt{notation}, \texttt{observation}, \texttt{problem}, \texttt{property}, \texttt{proposition}, \texttt{question}, \texttt{remark}, \texttt{theorem}, et la version non numérotée correspondante avec un astérisque \lstinline|*| dans le nom. Les titres changeront avec la langue actuelle. Par exemple, \texttt{theorem} sera affiché comme «~Theorem~» en mode anglais et «~Théorème~» en mode français.
+
+Lors du référencement d'un environnement de type théorème, il est recommandé d'utiliser \lstinline|\cref{|\meta{label}\texttt{\}}. De cette façon, il n'est pas nécessaire d'écrire explicitement le nom de l'environnement correspondant à chaque fois.
+
+\begin{tip}[Exemple]
+\begin{code}
+\begin{definition}[Des choses étranges] \label{def: strange} ...
+\end{code}
+
+will produce
+\begin{definition}[Des choses étranges]\label{def: strange}
+    C'est la définition de certains objets étranges. Il y a approximativement un espace d'une ligne avant et après l'environnement de type théorème, et il y aura un symbole pour marquer la fin de l'environnement.
+\end{definition}
+
+\lstinline|\cref{def: strange}| s'affichera sous la forme : \cref{def: strange}.
+
+Après avoir utilisé \lstinline|\UseLanguage{French}|, un théorème s'affichera sous la forme :
+
+\UseLanguage{English}
+\begin{theorem}[Useless]\label{thm}
+    A theorem in English.
+\end{theorem}
+
+% Par défaut, lorsqu'il est référencé, le nom de l'environnement de type théorème correspond toujours à la langue du contexte dans lequel se trouve l'environnement. Par exemple, la définition ci-dessus est toujours affichée en français dans le mode anglais courant : \cref{def: strange} et \cref{thm}. Si vous voulez que le nom du théorème corresponde au contexte actuel lors du référencement, vous pouvez ajouter \texttt{regionalref} aux options globales.
+Par défaut, lors du référencement, le nom du théorème correspond au contexte courant. Par exemple, le nom de la définition ci-dessus sera en français dans le contexte français courant : \cref{def: strange,thm}. Si vous voulez que le nom du théorème corresponde toujours à la langue du contexte dans lequel se trouve le théorème, vous pouvez ajouter \texttt{originalref} aux options globales.
+\end{tip}
+
+\UseLanguage{French}
+
+% \bigskip
+Voici les principaux styles d'environnements de type théorème :
+\begin{theorem}
+    Style de théorème : theorem, proposition, lemma, corollary, ...
+\end{theorem}
+
+\begin{proof}
+    Style d'épreuve
+\end{proof}
+
+\begin{remark}
+    Style de remarque
+\end{remark}
+
+\begin{conjecture}
+    Style de conjecture
+\end{conjecture}
+
+\begin{example*}
+    Style d'exemple : example, fact, ...
+\end{example*}
+
+\begin{problem}
+    Style de problème : problem, question, ...
+\end{problem}
+
+\medskip
+Pour l'esthétique, les définitions adjacentes seront reliées entre elles automatiquement :
+\begin{definition}
+    Première définition.
+\end{definition}
+
+\begin{definition}
+    Deuxième définition.
+\end{definition}
+
+
+\begin{tip}
+    Veuillez consulter la documentation du paquet \textsf{create-theorem} pour voir comment déclarer de nouveaux environnements de type théorème.
+\end{tip}
+%</lebhart-doc-fr,beaulivre-doc-fr>
+
+
+
+%<*colorist-doc,lebhart-doc-en,beaulivre-doc-en>
+%<beaulivre-doc-en>% \clearpage
+\LevelTwoTitle{Draft mark}
+
+You can use \lstinline|\DNF| to mark the unfinished part. For example:
+\begin{itemize}
+    \item \lstinline|\DNF| or \lstinline|\DNF<...>|. The effect is: \DNF~ or \DNF<...>. \\The prompt text changes according to the current language. For example, it will be displayed as \UseOtherLanguage{French}{\DNF} in French mode.
+\end{itemize}
+%</colorist-doc,lebhart-doc-en,beaulivre-doc-en>
+%
+%<*lebhart-doc-cn,beaulivre-doc-cn>
+\LevelTwoTitle{未完成标记}
+
+你可以通过 \lstinline|\DNF| 来标记尚未完成的部分。例如：
+\begin{itemize}
+    \item \lstinline|\DNF| 或 \lstinline|\DNF<...>|。效果为：\DNF~或 \DNF<...>。\\其提示文字与当前语言相对应，例如，在法语模式下将会显示为 \UseOtherLanguage{French}{\DNF}。
+\end{itemize}
+%</lebhart-doc-cn,beaulivre-doc-cn>
+%
+%<*lebhart-doc-fr,beaulivre-doc-fr>
+\LevelTwoTitle{Draft mark}
+
+Vous pouvez utiliser \lstinline|\DNF| pour marquer la partie inachevée. Par example :
+\begin{itemize}
+    \item \lstinline|\DNF| ou \lstinline|\DNF<...>|. L'effet est : \DNF~ ou \DNF<...>. \\Le texte à l'intérieur changera en fonction de la langue actuelle. Par exemple, il sera affiché sous la forme \UseOtherLanguage{English}{\DNF} en mode anglais.
+\end{itemize}
+%</lebhart-doc-fr,beaulivre-doc-fr>
+
+
+
+%<*colorist-doc,lebhart-doc-en>
+\LevelTwoTitle{Title, abstract and keywords}
+
+%<colorist-doc>\colorart{} has both the features of standard classes and that of the \AmS{} classes.
+%<lebhart-doc-en>\lebhart{} has both the features of standard classes and that of the \AmS{} classes.
+
+Therefore, the title part can either be written in the usual way, in accordance with the standard class \textsf{article}:
+
+\begin{code}
+\title{(*\meta{title}*)}
+\author{(*\meta{author}*)\thanks{(*\meta{text}*)}}
+\date{(*\meta{date}*)}
+\maketitle
+\begin{abstract}
+    (*\meta{abstract}*)
+\end{abstract}
+\begin{keyword}
+    (*\meta{keywords}*)
+\end{keyword}
+\end{code}
+
+or written in the way of \AmS{} classes:
+
+\begin{code}
+\title{(*\meta{title}*)}
+\author{(*\meta{author}*)}
+\thanks{(*\meta{text}*)}
+\address{(*\meta{address}*)}
+\email{(*\meta{email}*)}
+\date{(*\meta{date}*)}
+\keywords{(*\meta{keywords}*)}
+\subjclass{(*\meta{subjclass}*)}
+\begin{abstract}
+    (*\meta{abstract}*)
+\end{abstract}
+\maketitle
+\end{code}
+
+%<lebhart-doc-en>% \clearpage
+The author information can contain multiple groups, written as:
+
+\begin{code}
+\author{(*\meta{author 1}*)}
+\address{(*\meta{address 1}*)}
+\email{(*\meta{email 1}*)}
+\author{(*\meta{author 2}*)}
+\address{(*\meta{address 2}*)}
+\email{(*\meta{email 2}*)}
+...
+\end{code}
+
+Among them, the mutual order of \lstinline|\address|, \lstinline|\curraddr|, \lstinline|\email| is not important.
+%</colorist-doc,lebhart-doc-en>
+%
+%<*lebhart-doc-cn>
+\LevelTwoTitle{文章标题、摘要与关键词}
+
+\lebhart{} 同时具有标准文档类与\AmS{} 文档类的一些特性。
+
+因此，文章的标题部分既可以按照标准文档类 \textsf{article} 的写法来写：
+
+\begin{code}
+\title{(*\meta{title}*)}
+\author{(*\meta{author}*)\thanks{(*\meta{text}*)}}
+\date{(*\meta{date}*)}
+\maketitle
+\begin{abstract}
+    (*\meta{abstract}*)
+\end{abstract}
+\begin{keyword}
+    (*\meta{keywords}*)
+\end{keyword}
+\end{code}
+
+也可以按照 \AmS{} 文档类的方式来写：
+
+\begin{code}
+\title{(*\meta{title}*)}
+\author{(*\meta{author}*)}
+\thanks{(*\meta{text}*)}
+\address{(*\meta{address}*)}
+\email{(*\meta{email}*)}
+\date{(*\meta{date}*)}
+\keywords{(*\meta{keywords}*)}
+\subjclass{(*\meta{subjclass}*)}
+\begin{abstract}
+    (*\meta{abstract}*)
+\end{abstract}
+\maketitle
+\end{code}
+
+作者信息可以包含多组，输入方式为：
+
+\begin{code}
+\author{(*\meta{author 1}*)}
+\address{(*\meta{address 1}*)}
+\email{(*\meta{email 1}*)}
+\author{(*\meta{author 2}*)}
+\address{(*\meta{address 2}*)}
+\email{(*\meta{email 2}*)}
+...
+\end{code}
+
+其中 \lstinline|\address|、\lstinline|\curraddr|、\lstinline|\email| 的相互顺序是不重要的。
+%</lebhart-doc-cn>
+%
+%<*lebhart-doc-fr>
+\LevelTwoTitle{Titre, résumé et mots-clés}
+
+\lebhart{} possède à la fois les caractéristiques des classes standard et celles des classes \AmS{}.
+
+Par conséquent, le titre et les informations sur l'auteur peuvent être soit écrits de la manière habituelle, conformément à la classe standard \textsf{article} :
+
+\begin{code}
+\title{(*\meta{title}*)}
+\author{(*\meta{author}*)\thanks{(*\meta{text}*)}}
+\date{(*\meta{date}*)}
+\maketitle
+\begin{abstract}
+    (*\meta{abstract}*)
+\end{abstract}
+\begin{keyword}
+    (*\meta{keywords}*)
+\end{keyword}
+\end{code}
+
+ou écrit à la manière des classes \AmS{} :
+
+\begin{code}
+\title{(*\meta{title}*)}
+\author{(*\meta{author}*)}
+\thanks{(*\meta{text}*)}
+\address{(*\meta{address}*)}
+\email{(*\meta{email}*)}
+\date{(*\meta{date}*)}
+\keywords{(*\meta{keywords}*)}
+\subjclass{(*\meta{subjclass}*)}
+\begin{abstract}
+    (*\meta{abstract}*)
+\end{abstract}
+\maketitle
+\end{code}
+
+%<lebhart-doc-fr>% \clearpage
+Les informations sur l'auteur peuvent contenir plusieurs groupes, écrits comme suit :
+
+\begin{code}
+\author{(*\meta{author 1}*)}
+\address{(*\meta{address 1}*)}
+\email{(*\meta{email 1}*)}
+\author{(*\meta{author 2}*)}
+\address{(*\meta{address 2}*)}
+\email{(*\meta{email 2}*)}
+...
+\end{code}
+
+Parmi eux, l'ordre mutuel de \lstinline|\address|, \lstinline|\curraddr|, \lstinline|\email| n'est pas important.
+%</lebhart-doc-fr>
+
+
+
+%<*colorist-doc,lebhart-doc-en,beaulivre-doc-en>
+\bigskip
+%<colorist-doc>% \clearpage
+\LevelOneTitle{Known issues}
+
+\begin{itemize}
+    \item The font settings are still not perfect.
+    \item The TOC design does not look very nice.
+    \item Since many features are based on the \ProjLib{} toolkit, \colorist{} (and hence \colorart{}, \lebhart{} and \colorbook{}, \beaulivre{}) inherits all its problems. For details, please refer to the ``Known Issues'' section of the \ProjLib{} documentation.
+    \item The error handling mechanism is incomplete: there is no corresponding error prompt when some problems occur.
+    \item There are still many things that can be optimized in the code.
+\end{itemize}
+%</colorist-doc,lebhart-doc-en,beaulivre-doc-en>
+%
+%<*lebhart-doc-cn,beaulivre-doc-cn>
+\bigskip
+\LevelOneTitle{目前存在的问题}
+\begin{itemize}
+    \item 对于字体的设置仍然不够完善。
+    \item 目录的设计还不够美观。
+    \item 由于很多核心功能建立在 \ProjLib{} 工具箱的基础上，因此 \colorist{} (进而 \colorart{}、\lebhart{} 与 \colorbook{}、\beaulivre{}) 自然继承了其所有问题。详情可以参阅 \ProjLib{} 用户文档的“目前存在的问题”这一小节。
+    \item 错误处理功能不完善，在出现一些问题时没有相应的错误提示。
+    \item 代码中仍有许多可优化之处。
+\end{itemize}
+%</lebhart-doc-cn,beaulivre-doc-cn>
+%
+%<*lebhart-doc-fr,beaulivre-doc-fr>
+\bigskip
+\LevelOneTitle{Problèmes connus}
+
+\begin{itemize}
+    \item Les paramètres de police ne sont pas encore parfaits.
+    \item La conception de la table des matières est pas si belle.
+    \item Comme de nombreuses fonctionnalités sont basées sur la boîte à outils \ProjLib{}, \colorist{} (et donc \colorart{}, \lebhart{} et \colorbook{}, \beaulivre{}) hérite de tous ses problèmes. Pour plus de détails, veuillez vous référer à la section «~Problèmes connus~» de la documentation de \ProjLib{}.
+    \item Le mécanisme de gestion des erreurs est incomplet : pas de messages correspondants lorsque certains problèmes surviennent.
+    \item Il y a encore beaucoup de choses qui peuvent être optimisées dans le code.
+\end{itemize}
+%</lebhart-doc-fr,beaulivre-doc-fr>
+
+
+
+%<beaulivre-doc-cn>\part{演示}
+%<beaulivre-doc-en>\part{Demonstration}
+%<beaulivre-doc-fr>\part{Démonstration}
+%<beaulivre-doc-cn,beaulivre-doc-en,beaulivre-doc-fr>\blinddocument
+
+
+\end{document}

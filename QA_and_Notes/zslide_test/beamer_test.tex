@@ -1,0 +1,90 @@
+\documentclass[aspectratio=169]{beamer}
+\usepackage[
+  minted, 
+  lang=cn, 
+  math-alias=true, 
+  Math-envStyle=fancy, 
+  serif=math
+]{zslide}
+\usepackage{lipsum}
+\def\ee{\mathrm{e}}
+\def\dd{\;\mathrm{d}}
+
+\title{Beamer Template}
+\author{Eureka}
+\date{\today}
+% \logo{\includegraphics[width=4em]{./Arch.png}} 
+\begin{document}
+  \begin{frame}[plain]
+    \titlepage
+  \end{frame}
+  
+  \begin{frame}
+    \tableofcontents
+  \end{frame}
+
+  \section{sec 1}
+  \subsection{subsec 1}
+  \begin{frame}
+    Hello
+  \end{frame} 
+  \begin{frame}
+    \begin{multicols}{2}
+      \begin{itemize}
+        \item hello
+        \begin{itemize}
+          \item hello 
+          \begin{itemize}
+            \item Hello 
+            \item world
+          \end{itemize}
+          \item world
+        \end{itemize} 
+        \item world
+      \end{itemize}
+
+      \begin{enumerate}
+        \item hello
+        \begin{enumerate}
+          \item hello 
+          \begin{enumerate}
+            \item Hello 
+            \item world
+          \end{enumerate}
+          \item world
+        \end{enumerate} 
+        \item world
+      \end{enumerate}
+    \end{multicols}
+  \end{frame}
+  \subsection{subsec 2}
+  \begin{frame}
+    \begin{lemma}[哥德巴赫]\upshape
+      令 $\ee(\alpha) = \ee^{2\pi i}\alpha, S(\alpha) = \sum_{n=M+1}^{M+N}{a_n\ee(n\alpha)}, Z = \sum_{n=M+1}^{M+N}{|a_n|^2}$,
+      其中 $a_n$是任意的实数. 我们用 $\sum_{\chi_q}^{*}$来表示和式之中经过且只经过 $q$模的所有原特征,则有
+      \begin{align}
+          & \sum_{q\leq x}\frac{q}{\varphi(q)}\sum_{x_{q}}^{*}\Big|\sum_{n=M+1}^{M+N}a_{n}\chi_{q}(n)\Big|^{2}\le (X^{2}+\pi N)\sum_{n=M+1}^{M+N}\Big|u_{n}\Big|^{2} \\
+          & \sum_{D<q\leq Q}\frac{1}{\varphi(q)}\sum_{x_{q}}^{*}\Big|\sum_{n=M+1}^{M+N}a_{n}\chi_{q}(n)\Big|^{2}\LL\Big(Q+\frac{N}{D}\Big)\sum_{n=M+1}^{M+N}|a_{n}|^{2}
+      \end{align}
+    \end{lemma}
+  \end{frame} 
+  \begin{frame}
+    world
+  \end{frame} 
+
+  \section{sec 2}
+  \subsection{subsec 3}
+  \subsection{subsec 4}
+
+  \begin{frame}[containsverbatim]
+  Add `containsverbatim' to framed option, then you can use `minted' package.
+  \begin{minted}{c}
+  #include <stdio.h>
+  int main()
+  {
+    printf("Hello World");
+    return 0;
+  }
+  \end{minted}
+  \end{frame} 
+\end{document}

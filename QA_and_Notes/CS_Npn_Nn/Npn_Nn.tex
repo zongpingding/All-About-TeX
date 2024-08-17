@@ -1,0 +1,105 @@
+\documentclass{article}
+\usepackage[margin=3.5cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{xcolor}
+
+
+\title{\LaTeX{} 3 basic knowledge}
+\author{Eureka}
+\date{\today}
+\begin{document}
+\maketitle
+\ExplSyntaxOn
+\newcommand{\cmd}[1]{
+  \texttt{\tl_to_str:n {#1}}
+}
+\section{cs_new:Npn~ VS~ cs_new:Nn}
+% 1.Npn <=> Nn
+% 也就是新定义的命令有几个 'n' 那么你就需要几个参数，
+% 不然就会把你的其他东西给吃进去
+\cs_new:Nn \mytest_foo:nn
+  {Hello~ \textbf{#1}, #2~ world}
+\mytest_foo:nn {\TeX{}}{\par}\par
+
+\section{_nopar~ command}
+% 2..._nopar: 意味着你不能在这个命令的传输中传入\par 
+\cs_new_nopar:Nn \mytest_bar:nn
+  {Hello~ \textbf{#1, #2}~ world\par}
+\mytest_foo:nn {\TeX{}}{}\par
+
+\section{expand~ type}
+% 3. argument specifier: M, n, e, f, x, etc. 
+% see more at: "Interface3.pdf" Chapter 1-1.1 'Naming functions and variables'
+\subsection{e/x/o-type}
+\cs_set:Nn \test:n {
+  \tl_set:Nn \l_tmpb_tl {#1}
+  \cs_meaning:N \l_tmpb_tl\par
+}
+\tl_set:Nn \l_tmpa_tl {hello}
+\test:n {\l_tmpa_tl}
+\cs_generate_variant:Nn \test:n {o}
+\test:o {\l_tmpa_tl}
+% how 'exp_args:Nx' will be help for ? see below
+\cs_generate_variant:Nn \test:n {v}
+\def\tlname{l_tmpa_tl}
+\exp_args:Nx\test:v {\tlname}
+% or 
+% \test:o \l_tmpa_tl ==> working
+% \test:V \l_tmpa_tl ==> working
+% \test:v {\tlname}  ==> cause error.
+
+\subsection{f-type}
+% 'f'-type expansion
+\tl_new:N \l_tmpaa_tl
+\tl_set:Nn \l_tmpa_tl { A }
+\tl_set:Nn \l_tmpaa_tl { \l_tmpa_tl }
+\tl_set:Nn \l_tmpb_tl { B }
+% 'x' type
+\tl_set:Nx \l_tmpc_tl { \l_tmpaa_tl \l_tmpb_tl }
+\quad\;(`x'-expand)\cs_meaning:N \l_tmpc_tl\par
+
+% 'f' type expand
+\tl_set:Nf \l_tmpc_tl { \l_tmpaa_tl \l_tmpb_tl }
+(`f'-expand)\cs_meaning:N \l_tmpc_tl\par
+
+% expans step by step
+% expand once
+\tl_set:No \l_tmpc_tl { \l_tmpaa_tl \l_tmpb_tl }
+(`o'-type~ once)\cs_meaning:N \l_tmpc_tl\par
+% expand twice
+\tl_set:No \l_tmpc_tl { \l_tmpa_tl \l_tmpb_tl }
+(`o'-type~ twice)\cs_meaning:N \l_tmpc_tl\par
+% expand third
+\tl_set:No \l_tmpc_tl { \l_tmpa_tl \l_tmpb_tl }
+(`o'-type~ third)\cs_meaning:N \l_tmpc_tl
+\ExplSyntaxOff
+
+
+\section{argument specifier}
+Every function must include an \textbf{argument specifier}. For functions which take no
+arguments, this will be blank and the function name will end `:'.
+
+\def\c#1{\textcolor{red}{\texttt{#1}}}
+\def\diff#1{\textcolor{blue}{\texttt{#1}}}
+\begin{itemize}
+  \item \c{N} and \c{n}:means \diff{no manipulation}, pass the argument through \textbf{exactly as given}
+  \item \c{c}: means \diff{csname}, argument be turned into a csname. like \verb|\csname mycmd \csname|.
+  \item \c{V} and \c{v}:means \diff{value of variable}, get the content of a variable
+    A \c{V} argument will be a single token (similar to \c{N}), using \c{v} a csname is
+    \textbf{constructed first}, and then the \textbf{value} is recovered. So \verb|\foo:V \MyVariable| 
+    = \verb|\foo:v {MyVariable}|. You can only define a \textbf{base function} argument is \c{n} instead 
+    of \c{v, x, e, o} etc. Then generiant the variant(only \c{n} can be variant).
+  \item \c{o}:means \diff{expansion once}(Is it equvilant to expand only the first macro once?), while that \c{V,v} are prefered.
+  \item \c{x}:means \diff{exhaustive expansion}, fully expand every macro(until only unexpandable ones remain). 
+    Functions which feature an \c{x}-type argument \textbf{are not expandable}.
+  \item \c{e}:means \diff{expandable functions}, The \c{e} specifier is in many respects identical to \c{x},
+    Functions which feature an \c{e}-type argument \textbf{may be expandable}. Besides, Parameter character 
+    (usually \#) in the argument need not be doubled (when in nest loop). 
+  \item \c{f}:means \diff{full(first) expansion}. The \c{f} specifier stands for full expansion, and in contrast to \c{x}, this type 
+    \textbf{stops at the first non-expandable token}(<space> is gobbled) (reading the argument from left to right) without trying 
+    to expand it.
+  \item \c{T, F}: \diff{Ture/False} in logic test.
+  \item \c{p}: means \diff{\TeX{} parameters}, like \verb|\cs_set:Npn \foo:n #1{\textbf{#1}}|
+  \item \c{w}: means \diff{weird arguments}, This covers everything else, but mainly applies to delimited values
+\end{itemize}
+\end{document}

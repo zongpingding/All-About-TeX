@@ -1,0 +1,1303 @@
+    Memoir is a flexible class for typesetting poetry, fiction, 
+non-fiction and mathematical works as books, reports, articles or
+manuscripts. Documents can use 9pt, 10pt, 11pt, 12pt, 14pt, or 17pt as the
+normal fontsize and, if you have scalable fonts, 20pt, 25pt, 30pt, 36pt,
+48pt, or 60pt sizes, or even larger. Many methods are provided to let 
+you create your particular design. The class incorporates over 30 of the 
+more popular packages.
+
+    IF YOU HAVE ANY QUESTIONS PLEASE ASK THEM ON TEX.STACKEXCHANGE.COM 
+    (PLEASE USE THE MEMOIR TAG) OR BY EMAIL TO THE MAINTAINER.
+    PLEASE ADD MEMOIR TO THE SUBJECT.
+
+    PLEASE DON'T WRITE PETER DIRECTLY AS HE IS AWAY MORE OFTEN THAN
+    NOT.
+
+Lars Madsen <daleif@math.au.dk> is maintaining memoir.
+
+
+    NOTE: The full User Manual (memman.pdf) is a large document of about
+550 pages in total. You do not need to print all of it, especially if you 
+already have an earlier edition. Roughly speaking, the main portions are:
+o Frontmatter: Preface, Toc, Introduction, Terminology  ~  40 pages
+o Mainmatter: 
+    Class commands and environments, etc.               ~ 380 pages
+o Appendices: (La)Tex programming, Errors and warnings  ~  40 pages
+o Backmatter:
+    Command glossary                                    ~  40 pages
+    Bibliography, indexes                               ~  50 pages
+
+Changes (2022/11/17)
+
+o memoir v3.7.19
+
+-- changed version numbering to v3.7.<num> (no plans to switch to 3.8
+   anytime soon)
+-- changed several \theH... definitions to \def to work better with
+   coming hyperref/tagging changes
+-- similar for \toclevel@... macros
+-- only declare \stockwidth and \stockheight if the kernel hadn't done
+   so already
+
+o memhfixc v1.20
+
+-- removed patch for \@starttoc and thus \Hy@AtBeginDocument is no
+   longer used in memhfixc
+
+
+WORD OF ADVISE: It is not recommended to manually update memoir into
+an old LaTeX installation. Not all changes are compatible with older
+un-updated LaTeX systems and we often make no attempt to be backwards
+compatible. Instead we assume that users use updated memoir with an
+updated LaTeX installation.
+
+
+
+Changes (2022/07/29)
+
+o memoir v3.7r
+
+-- fixed typo in menual (table 7.2), \tocmark and similar does not
+   take arguments, they have a static definition. Reported in private
+   email by Ronno Das.
+-- fixed sporious space in \m@m@addamp, see
+   https://tex.stackexchange.com/a/647910/3929 for details.
+-- made the font sizing macros robust (\normalsize, \small, ...)
+   like with the standard classes (reported via private email)
+-- Addressed an issue where the combination of \DoubleSpacing and
+   \paragraphfootnotes lead to an arithmetic overflow.
+
+     Same fix has been applied to \paragraphfootstyle{...} where
+   additionally a hardcoded 64 has been replaced by \footfudgefiddle.
+-- NB: Next memoir version will be labelled v3.7.19 (not v3.7s)
+
+
+
+
+Changed (2022/02/20)
+
+o memoir v3.7q
+
+-- Added memhfixc autoloading to memoir (via
+   \AtEndPackage{hyperref}...), then the equivalent code can be
+   removed from hyperref
+-- now auto loads the etoolbox package in order to enable a future
+   patching approach instead of overwriting kernel macros
+   (nb: re-coding has not started yet) 
+-- changed definition of \medspace into \providecommand for better
+   testing with older kernels
+-- added some code to a hook provided by footmisc fixing a bug with
+   the combination of memoir+footmisc+reledmac, especially the 2022
+   update of footmisc
+-- fixed typo in manual regarding \setupmaintoc, see
+   https://tex.stackexchange.com/q/602963/3929 for details.
+-- The LaTeX team changed the order of the file/package hook names
+   into a more precise scheme. \AtBegin/EndFile, \AtBegin/EndPackage,
+   \AtBegin/EndClass changed accordingly
+
+Changed (2021/06/16)
+
+o memoir v3.7p
+
+-- moved various \theHxxx definitions from memhfixc directly into
+   memoir. They are only relevant when hyperref is loaded, but do no
+   harm otherwise.
+
+o memhfixc v1.19
+
+-- moved several hyperref related additions from memhfixc to memoir
+
+
+Changed (2021/03/23)
+
+o memoir v3.7o
+
+-- \footref will be added to the kernel, so we now "provide" it instead
+-- as of late 2020 the caption package will now adjust it self to the
+   class. It will even map several of the caption styling macros the
+   class provides onto the the corresponding setup in the caption
+   package. Special thanks to Axel Sommerfeldt for this
+   feature. Therefore we no longer reset in preparation for caption.
+-- The mparhack package is no longer marked as emulated as we did not
+   emulate the fix for the bug regarding \if@firstcolumn. If a document
+   specifies as twocolumn, we automatically load mparhack
+-- some internal cleanup and added some recommended alternatives
+
+
+
+Changed (2020/10/04)
+
+o memoir v3.7n
+
+-- The new implementations for the \AtEndPackage and friends only
+   require single #s not # doubling as in the old implementation. That
+   is not backwards compatible. # doubling now forced in the new
+   implementation as well.
+
+
+Changed (2020/09/10)
+
+o memoir v3.7m
+
+In preparation for the LaTeX format/kernel update (2020/10/01) several class
+file hook features will change to use these new kernel features, see the manuals
+for lthooks, ltfilehook, ltshipout for details on these new hooks.
+
+Thus from the 2020/10/01 LaTeX forward onwards we have the changes
+below. Until 2020/10/01 the new format can be tested via
+e.g. pdflatex-dev
+
+As of writing, you can test the new format via e.g. pdflatex-dev if you have an
+up to date LaTeX installation.
+
+Details about the changes:
+
+-- trimmarks are now added via the shipout/background hook, the added hook is
+   labeled "memoir/trimmarks"
+
+   See the ltshipout manual for more details.
+   
+-- \AtBeginFile{filename}{code} and \AtEndFile{filename}{code} are now
+   implemented via the file/before/filename and file/after/filename hooks.
+
+   **Breaking change:** In the old implementation of
+   \AtBegin/EndFile{file}: if file is a `.tex` file, then one could use
+   \AtEndFile{test}{code} to add code at the end of inputting
+   `test.tex`. Now you will have to use \AtEndFile{test.tex}{code}.
+
+   See the manual for ltfilehook for more details.
+
+-- \AtBeginPackage{name}{code}, \AtEndPackage{name}{code} and
+   \RequireAtEndPackage{name}{code} are now implemented via the
+   package/before/name and package/after/name hooks.
+   
+-- \AtBeginClass{name}{code}, \AtEndClass{name}{code} and
+   \RequireAtEndClass{name}{code} are implemented via class/before/name and
+   class/after/name
+   
+-- the redefinition of \trimmarks inside the definition of \quarkmarks have been
+   removed
+
+-- Whenever the caption package is loaded, memoir will reset it self
+   so the caption package can take over. We issue some information to
+   the user at this point. In this update we have changed this
+   information from a class warning to a class info as the warning
+   confused a ot of users.
+
+
+
+Changed (2020/06/02)
+
+o memoir v3.7l
+
+-- Minute change in preparation for october kernel update (several
+   amsmath spacing functions will be moved to the kernel, we made
+   versions of these also usable in the text, so will the kernel).
+
+
+Changed (2020/03/25)
+
+o memoir v3.7k
+
+-- Changed how glossaries are written to the glo file. Should now
+   support UTF8 just fine. This fixes
+   https://tex.stackexchange.com/q/529127/3929
+
+-- typo in manual: for \subbottom the \label goes into the subtitle
+   part, aka \subbottom[...\label{...}]{...}. Text in example fixed
+
+-- added a check for showkeys final-mode, and do nothing in that
+   case. This fixes https://tex.stackexchange.com/q/526922/3929
+
+-- brought the class into sync with booktabs dated 2020/01/12
+
+-- the provided .ins files will now just overwrite instead of asking
+   for permission.
+
+-- various typos
+
+
+Changed (2019/11/21)
+
+o memoir v3.7j
+
+-- Typo when textcase.sty is not found. The embedded fallback
+   (textcase v0.07, 2004) nedded # doubling, now fixed.
+
+Changed (2019/11/15)
+
+o memoir v3.7i
+
+-- indexes now uses protection when being moved from the aux to the
+   idx file(s)
+
+-- changed loading ifpdf, ifetex, ifxetex and ifluatex to just loading
+   the new iftex package. Suggested by The LaTeX Support Team.
+
+-- new feature for \createmark: the <show> variable now accepts:
+   nonumber, shownumber and notitle (implies shownumber). The latter
+   enables chapter headers to be just of the form "Chapter <number>"
+
+-- By request, added a7paper and b7paper options (plus \stockavii,
+   \stockbvii, \pageavii and \pagebvii)
+
+-- changed the header construction for tableofcontents and
+   friends. The anchor that hyperref will use for TOC, LOF etc entries
+   in the TOC will now point above the header not below it.
+
+-- changed a few things in \subbottom, which hopefully fixes an issue
+   with hypcap, https://tex.stackexchange.com/q/440399/3929 (and
+   https://github.com/ho-tex/oberdiek/issues/42)
+
+-- the handling of \absindent, \absparsep is now correctly described in the
+   manual (any changes of these of use of them has to be delayed to the start of
+   the document via \AtBeginDocument)
+
+-- Updated the patched \InputIfFileExists to match the one used in the
+   2019/10/01 format (if using that format, we use the old version)
+
+-- Updated the embedded copy of the booktabs package, bringing it in ling with
+   booktabs v1.6180339.
+
+-- Changed the warning emitted at the start of loading the caption
+   package. Apparently users got spooked by it. The caption package works just
+   fine with with memoir, the warning is just there to remind users that once
+   the caption package is loaded, all caption related configurations should go
+   through the caption package interface, not through the class interface.
+
+-- Fixed a bug in \lofmark and \lotmark when using the oneside option. The
+   default headings style uses \markright for all marks under oneside, but due
+   to an ordering mistake, \lofmark and \lotmark would still be using \markboth
+   unless you explicitly issued \pagestyle{headings} in the preamble. This is
+   now fixed.
+
+-- fixed bug in \newfootnoteseries, the included footnote type did not support
+   more than one paragraph. Is now long.
+
+-- fixed bug in \pagenote[...]{...}. Under hyperref
+   \pagenote{.}\pagenote[.]{.}{\pagenote{.} did not add a separator as
+   expected. It does now.
+
+
+o memhfixc v1.18
+
+-- added a \par to \contcaption to get rid of a sporadic space coming
+   from \refstepcounter under hyperref
+
+-- additionally added a patch when hypcap is loaded, now using
+   \contcaption is no longer an error (hypcap looks to see if \caption
+   has been used)
+
+
+
+Changed (2018/12/12)
+
+o memoir v3.7h
+
+-- The following packages are no longer embedded into the class
+   sources: array, delarray, dcolumn and tabularx.
+
+   These are all part of the _tools_ section of every LaTeX
+   installation, thus there is no reason to embed it anymore (let
+   alone keep track of when they are updated). Instead we require them
+   from the LaTeX installation.
+
+   Note that the class still makes its own defaults for some of the
+   default settings for these packages.
+
+   Historical note: When the class was first created updating LaTeX
+   was not an easy task, often done by hand. Also there was no manual
+   requirements, or if there were a manual it might not be easy to
+   find. So it made sense to have it all in one place and their
+   manuals added to the class manual. This usage information in the
+   manual will stay, but might no longer be 100% up to date, so users
+   are always referred to the package manuals.
+
+   We may remove more embedded packages in the future and replace them
+   with just require the distribution provided ones.
+
+-- remembered to note \pagerefname when dealing with page notes.
+
+-- fixed bug in inline toc entries in the manual when there are subitem
+   that are not typeset and hyperref is in use (\endlinechar=-1 around
+   the toc), also noted in the manual that this problem may occur and
+   how to deal with it.
+
+   One might argue that \endlinechar=-1 should be the default thenever
+   the ToC are being typeset.
+
+-- Added \SingleSpacing* which does *not* add a \vskip at the
+   end. Also adjusted \SingleSpacing such that it does not emit a
+   \vskip when used in the preamble. This fixes
+   <https://tex.stackexchange.com/q/298904/3929> 
+
+
+Changed (2018/04/04)
+
+o memoir v3.7g
+
+-- is now using colorlinks hyperref option in the manual. We switched
+   it off year ago because some users were printing the
+   manual. Nowadays most is reading the manual online, and thus
+   colorlinks brings a better reading experience.
+-- under hyperref \index{... |)} now also adds `|)hyperpage` to the
+   idx file. This is needed for xindy to process the idx
+   file. Makeindex does not seem to mind. Reported via private email.
+-- added examples of the nine much overlooked \setpageXX macros, these can
+   be used instead of \settrimmedsize and \settrims to place a trimmed
+   page on the stock in nine often used configurations.
+-- the way the class writes the pagesize to the output have been
+   rewritten and should now work with lualatex. Therefore we no longer
+   auto load the luatex85 package. We have also canceled \fixpdflayout
+   and \fixdvipslayout (they now just emit a warning)
+-- the class will truncate certain layout lengths to a whole number of
+   point (e.g. \textwidth). This can now be disabled using the
+   fullptlayout class option, reported via
+   https://tex.stackexchange.com/q/372381/3929 
+-- in as of the release of TeXLive 2018 \counterwithin/out will be
+   added to the LaTeX kernel, we changed our version to use
+   \providecommand accordingly 
+-- removed loading the mempatch.sty package, it has been empty for
+   many years
+-- now requiring ifpdf, ifetex, ifxetex and ifluatex packages to exist.
+   Earlier we attempted to emulate them if missing, this does not make
+   sense any more
+-- started adding "Recommended alternative" blocks to the
+   manual. These are just mentioning more modern alternatives to what
+   ever is mentioned in the manual. Fx using tcolorbox instead of the
+   buildin framed env. Suggestions are welcome (by email)
+-- added \titlingpageend{}{} which can be used to set the clearing
+   code at the end of the titlingpage env.
+-- clearified the interaction between 14pt and extrafontsizes options
+-- updating the embedded array and tabularx copies fixes
+   https://tex.stackexchange.com/q/411862/3929 (an issue with bidi)
+-- dumped the emulated date for delarray to 2014/10/28 (the code,
+   after the array update) is the same
+-- fixed a bad interaction in \subbottom when the showkeys and
+   hyperref is loaded. Reported via
+   https://tex.stackexchange.com/q/374301/3929 
+-- removed unnecessary \phansomsection from the thebiblipgraphy
+   setup. Reported via https://tex.stackexchange.com/a/396303/3929
+-- added \nobreak to \@vslnumleft and @vslnumright (internal to
+   verse), reported via https://tex.stackexchange.com/a/415939/3929
+-- added \phansomsection to \startnoteentrystart, otherwise \label in
+   \pagenote does not work correctly.   
+-- fixed a typo in \@listii where \itemsep is not pointing towards
+   \itemsepii, similar to the other \@listK macros. 
+-- fixed problem with \setfloatadjustment, font size changes did not
+   come through
+
+
+Changed (2016/05/16)
+
+o memoir v3.7f
+
+-- Sidecaption placement in oneside docs did not work as
+   advertised. Now left and inner will place it on the left side, and
+   right and outer will place it on the right.
+-- fixed sporious spaces in \createmark
+-- added loading luatex85 under certain conditions
+-- updated the embedded booktabs code so we are back aligned with
+   latest booktabs version.
+
+
+Changed (2015/07/08)
+
+o memoir v3.7e
+
+-- per request, memoir no longer auto load the etex package on newer
+   kernels (as the 2015+ kernels auto allocate the extra registers)
+
+
+Changed (2015/04/23)
+
+o memoir v3.7d
+
+-- \end@dblfloat code reversion now only happens if fixltx2e has a
+   release date older than 2014/01/01. Newer versions of fixltx2e has
+   no problems with memoir
+-- added \feetatbottom. Use it to force footnotes to be added
+   from the bottom up when in a \raggedbottom context. Has no effect
+   under \flushbottom
+-- \twocolumnfootnotes, \threecolumnfootnotes, \paragraphfootnotes now
+   use \skip\footins<series>
+-- added \setfootins, it will set \skip\footins and its minipage
+   counterpart, plus the \...v@r versions used by e.g.,
+   \twocolumnfootnotes 
+-- fixed a bug in page styles whereby one could not apply rule
+   prefixes to a copied style.
+-- Fixed typo in manual about \newleadpage, 
+   reported by Werner Grundlingh
+-- updated our version of \@doclearpage to match fixltx2e v1.1s (which
+   will also be in the next ltx kernel). This will change float
+   placement in a twocolumn doc (for the better)
+
+
+Changed (2015/03/05)
+
+o memoir v3.7c
+
+-- by request from LTX3, the \textsubscript definitions now only takes
+   place if \textsubscript is not already defined
+-- fixed interaction between memoir and fixltx2e, we delay our
+   \baselinestretch adjustment, reported by Ulrike Fisher
+-- provided \@textsuperscript instead of \newcommand, then fixltx2e
+   can be loaded before \documentclass, reported by Ulrike Fischer
+-- fixed typo in pagestyle message, reported by Werner Grundlingh 
+-- fixed a few sporious	spaces
+-- made changes to the article option (reported by Victor Ivrii):
+   o it no longer sets \chaptername to be empty 
+     (no idea why it did in the first place, certainly not a good idea
+     when using babel)
+   o under the article option, the headings page style now correctly
+     removes the term 'Chapter'  
+-- added a caveat about \tightlists vs. \small/\footnotesize
+-- reimplemented the ell chapter style
+-- various typos
+
+Please note that there are still items on my TODO list that has not
+yet been addressed. They will when time permits.
+
+
+
+Changed (2013/05/30)
+
+o memoir v3.7b
+
+-- bugfix sidecontcaption
+
+o memhfixc v1.17
+
+-- bugfix sidecaption and sidecontcaption
+
+
+Changed (2013/05/22)
+
+o memoir v3.7
+
+-- Emulated date for array package made to match the actual 
+   package
+-- When ever the caption package is loaded we now reset 
+   \abovecaptionskip to 10pt and \belowcaptionskip to 0pt 
+   as in the default classes
+-- Typos in manual
+-- Fixed bug in \subbottom[]{...}. If an empty argument is given, 
+   we will automatically eat the space after the (a)-part
+-- Fixed bug in \makeheadposition, the last two arguments was ignored, 
+   now works as intended
+-- Removed \thanksfootextra from manual
+-- Factored the box part out of the various \<X>numberline macros
+-- The \cftXfont can now end with a macro taking one argument, 
+   say \MakeTextUppercase
+-- Included a carbon copy of the textcase package by David Carlisle,
+   thus the class now provide the \MakeTextUppercase and
+   \MakeTextLowercase macros
+-- Default casing macro for the header information is now
+   \MakeTextUppercase  not \MakeUppercase 
+-- A hook is provided into \part, \book and \chapter which is executed
+   just before writing to the TOC. The hook is especially intended
+   when using the hyperref package and the layout dictates upper or
+   lower casing these titles in the TOC.
+-- All use of \MakeUppercase and \MakeLowercase in page styles,
+   chapter styles etc. have been changes into \MakeTextUppercase 
+   and \MakeTextLowercase
+-- Added a sniplet showcasing an approach to auto adjust the numwidths
+   in the toc using calc and etoolbox
+-- Added titlingpage* which does not reset the page counter after the
+   env
+-- Added \mempreaddchaptertotochook and \mempostaddchaptertotochook
+   hooks, executed right before and right after \chapter writes to the
+   .toc file. It can be used to create a simple \chaptertoc command,
+   see sniplet appendix.
+   Added similarly named hooks to \part and \book, plus 
+   \mempreaddapppagetotochook and \mempostaddapppagetotochook added to 
+   \appendixpage
+-- Clarification about \maxtocdepth (turns out, it is not used in memoir),
+   related to http://tex.stackexchange.com/a/97018/3929
+-- Made sure \postchapterprecis include code such that the text after
+   \chapterprecis is indented in the same manner as it would just
+   after \chapter
+-- Added a hook at the very end of \chapter, could be used to add a
+   \clearpage or similar
+-- Added a remark about trimmarks vs. synctex.
+-- Fixed bug in \foottopagenote, now it works with \continuousnotenums
+-- Section on the \pagenotecommand moved to the chapter about page notes
+   (\footnote, \sidefootnote, \sidepar etc.)
+-- documented \cftKformatpnumhook, which could be used to auto adjust pnumwidth
+-- Added a hook enabling color change in the showlocs page style
+-- Workaround for colors leaking into paragraph footnotes (a proper
+   solution would involve fixing the color stack problem as in bigfoot)
+-- Subfloat counter reset factored out into macros, requested by Axel
+   Sommerfelt 
+-- split \@makecaption into two, and inner (\@@makecaption) which
+   handles the formatting, and an outer (\@makecaption) handling the
+   space before and after 
+-- longtable caption support, added only if the ltcaption package is
+   not loaded (either directly or indirectly).
+-- Added an autoadjustment feature for \marginparwidth (suggested by
+   Steffen V. Petersen), thus unless the user has used \setmarginnotes
+   a suitable choice for \marginparwidth is made.
+   More of these auto adjusting macros may be added later.
+-- rewritten how page notes are written to the .ent file
+-- added hyperref support to page notes
+
+
+o memhfixc v1.16
+
+-- restore footnote comma separation, when hyperfootnotes option is
+   active (default in current hyperref)
+-- make sure \@starttoc behave like ours, when running under hyperref
+
+
+Changed (2011/03/06)
+
+o memoir v3.6j
+
+-- fixed typo in trimmarks
+-- changed \chapter (and chapter like titles), \section's, \part 
+   and \book such that a non-zero \parskip no longer interfer
+   with the title layout.
+-- yet another fix for the reimplemented page notes. Now 'x    x' 
+   only results in one line break not several.
+
+
+
+Changed (2011/02/18)
+
+o memoir v3.6i
+
+-- fixes two problems, one in \addtonotes and implemented the float 
+   inner adjustment in a different manner such that \setfloatlocation 
+   works again
+
+
+Changes (2011/02/13)
+
+o memoir v3.6h
+
+-- provided marginfigure and margintable environments modelled after 
+   tufte latex (work in progress) including special justification macro 
+   to force content flush against the textblock
+-- copied the contents of the placeins package, though under a 
+   different name (\FloatBlock) 
+-- added \setfloatadjustment to allow users to globally add stuff to the 
+   start of floats, e.g. make typeset floating tables using \small 
+-- added the possibility to change the color of the head/foot rule in
+   the pagestyle
+-- reimplemented the page note construction. Note that the new
+   implementation does not rely on the same macros as the old
+   implementation 
+-- Manual: checked and verified the links in the bibliography and made
+   all the CTAN links active in the PDF version of the manual. 
+-- \namesubappendices and \anonsubappendices never existed, 
+   their real names are \namedsubappendices and \unnamedsubappendices, 
+   fixed in the manual.
+-- fixed bug in \pfbreak
+-- added hook/wrapper such that packages like bidi can control the
+   typesetting direction of the headers/footers 
+-- added footer and header measuring, inspired by similar feature in 
+   fancyhdr. Though we do not change, say, the \headheight we leave 
+   this to the user and simply warn about it.
+-- made sure that \footnote, \sidefootnote, \sidepar and \sidebar 
+   use the same baseline stretch setting (note that for now \marginpar 
+   is not covered) 
+-- fixed a font problem inside \quarkmarks
+-- subsequent pagenotes are now separated in the same manner af footnotes
+
+o mem12.clo
+
+-- changed \headheight to 14.5pt, to match the pattern used by 
+   the other clo files.
+
+o memhfixc.sty
+
+-- now take care of using \printpagenoteshyperref to print back
+   references for page notes using hyperlinks.
+
+
+
+Changes (2010/09/19)
+
+o memoir v3.6g
+
+-- fixed a typo in the vplaces env
+-- made \needspace work better with \section and friends
+-- added \settypeoutlayoutunit such that users can choose in which 
+   unit the layout list should be written to the log file. 
+-- removed the \footnoteA--C commands from the manual, they have 
+   never existed 
+-- Added \OnehalfSpacing* and \DoubleSpacing* which will additionally 
+   also make floats and  page notes have the same spacing. Macros to 
+   explicitly set these values have also been added
+-- made it more clear who the maintainer is 
+
+
+Changes (2010/08/22)
+
+o memoir v3.6f
+
+-- fixed a typo in memoirs float handling which caused floats to
+   become lost, this brings float handling back in line
+
+Changes (2010/08/20)
+
+o memoir v3.6e
+
+-- changed \parnopar to make its changes inside a group
+-- some clarifications in the manual
+
+o Memhfixc v1.15
+
+- fixed typo introduced in v1.14 
+  (special thanks to Ian D. Leroux and meho_r on ctt for reporting this)
+
+
+
+
+
+Earlier changes are noted at the end.
+
+------------------------------------------------------------------- 
+  Author: Peter Wilson (Herries Press) herries dot press at earthlink dot net
+  Copyright 2001--2010 Peter R. Wilson
+  Copyright 2011--     Lars Madsen
+  Maintainer: Lars Madsen daleif at math dot au dot dk
+ 
+  This work may be distributed and/or modified under the
+  conditions of the LaTeX Project Public License, either
+  version 1.3c of this license or (at your option) any 
+  later version.
+  The latest version of the license is in
+     http://www.latex-project.org/lppl.txt
+  and version 1.3c or later is part of all distributions of
+  LaTeX version 2008/05/04 or later.
+ 
+  This work has the LPPL maintenance status "maintained".
+ 
+
+  This work consists of the files:
+README (this file) 
+memoir.dtx
+memoir.ins
+mempatch.dtx
+mempatch.ins
+  and the derived files 
+memoir.cls 
+mem9.clo
+mem10.clo
+mem11.clo
+mem12.clo
+mem14.clo 
+mem17.clo
+mem20.clo
+mem25.clo
+mem30.clo
+mem36.clo
+mem48.clo
+mem60.clo
+memhfixc.sty
+basic.gst.
+------------------------------------------------------------------- 
+
+
+    The distribution consists of the following files:
+README           (this file)
+memoir.(dtx|ins)   Class source and installation files
+mempatch.(dtx|ins) Source and installation for patch files
+memhfixc.sty       Patch file for hyperref package
+memman.tex         LaTeX source for the user manual
+                    (requires the memoir class and the alltt,
+                     fixltx2e, layouts, graphicx, and url packages for 
+                     processing)
+memman.pdf         User manual in PDF
+memmanadd.pdf      Addendum (in PDF) to the User Manual (if required)
+memsty.sty         Style file for (memman|memmanadd).tex
+memnoidxnum.tex    Some default indexed elements for memman.tex
+memfonts.sty       Palatino/CMR(lmodern) font mix
+memlays.sty        Additional diagrammatic layouts
+titlepages.sty     Assorted title page definitions
+anvil2.mps         Herries Press logo
+memman.ist         MakeIndex style file for (memman|memmanadd).tex
+memman.gst         MakeIndex style file for (memman|memmanadd) glossary
+trims-example.tex  Example file showcasing the four types of trimmarks 
+                   supported by memoir, a PDF version of this is needed 
+                   to build the manual
+
+To  manually install the package:
+o run: latex memoir.ins (which will generate memoir.cls, 
+                         a set of mem*.clo files,
+                         and basic.gst for MakeIndex glossary files)
+  run: latex mempatch.ins (which will generate memhfixc.sty and mempatch.sty)			 
+o Move memoir.cls, the mem*.clo files and any mem*.sty file to locations 
+  where LaTeX will find them (typically in a local texmf tree at 
+  /tex/latex/memoir) and refresh the file database. 
+  See the https://texfaq.org/ for more information on this.
+
+However, it is alway recommended that you update your LaTeX
+installation, instead of attempting to manually install a Package or
+Class. Nowadays both MikTeX and TeXLive based systems provide update
+facilities. (Though, note that LaTeX provided by a Linux distribution
+does not).
+
+To read the commented source code
+o run: (pdf)latex memoir.dtx
+       For an index run: makeindex -s gind.ist memoir
+o run: (pdf)latex memoir.dtx
+o Print the result for a hardcopy of the documented code (which consists
+  of nearly 500 pages)
+
+To process memman.tex (if you really want to do this and not just use 
+memman.pdf as supplied)
+o Make sure you can use the memoir class and the alltt, fixltx2e,
+  layouts, graphicx, comment, and url (and perhaps some more) packages.
+o Make sure you have memman.ist, and memman.gst, they are a part of the 
+  memoir documentation files
+
+o Run: pdflatex trims-example.tex
+o Run (pdf)latex twice on memman.tex
+o For an index run: makeindex -s memman.ist memman
+o For an index of first lines run: makeindex lines
+o For a glossary run: makeindex -s memman.gst -o memman.gls memman.glo
+o Run (pdf)latex twice more on memman.tex
+o Print the manual
+  
+(it is preferable to use pdflatex as the graphics from 
+trims-example.tex will otherwise be ignored)
+
+-------------------------------------------------------------------
+
+
+Changes (2010/07/01)
+
+o Memoir v3.6d
+
+-- added \precistocformat, default \noindent, thus the toc precis text 
+   is no longer indented by default.
+-- Fixed some typos in the manual and in the class
+-- reorganized the manner by which we handle the memoir user
+   manual. This enables us to add revision numbers and dates to the
+   start of each chapter of the manual. Please note that these
+   revision numbers do not appear if one attempts to compile
+   memman.tex as it relies on a modified (and thus private) version of
+   svn-multi and also relies on splitting memman.tex into separate
+   files.
+-- If the 'article' class option is in effect we now use the plain
+   page style by default instead of headings. 
+
+o Memhfixc v1.14
+
+-- Brought memoir sections back in line with hyperref. Now a hyperlink 
+   to a section should end up above the section title, instead of below. 
+
+
+Changes (2010/04/19)
+
+o Memoir v3.6
+
+-- reversioned memoir to version 3.6. The version number was tending 
+   towards the golden ratio, but apparently this numeric value is 
+   not widely known.
+-- fixed \marginparmargin{left} in twoside mode
+-- fixed a race condition in memhfixc
+
+
+Changes (2010/02/20)
+
+o Memoir v1.618033988c 
+
+-- fixed sporadic space in regular \footnote command
+
+
+Changes (2010/02/17)
+
+o Memoir v1.618033988b 
+
+-- fixed typo that broke \feetbelowfloat
+
+Changes (2010/02/16)
+
+o Memoir v1.618033988 
+
+-- changed internal toc handling, as not to open extra files if the 
+   TOC is being used several times.
+-- fixed bug in the emulation of ifpdf, ifxetex and ifluatex that 
+   might cause memoir to crash in certain cases
+-- added \clearmark and \clearplainmark to 'clear' mark commands when 
+   defining specialised page styles
+-- made \subcaptionref robust
+-- added \letcountercounter and \unletcounter to let one counter act 
+   as if it had another name
+-- add possibility to have \footnote write in the margin by internally 
+   use \marginpar	
+-- added a separate bottom aligned side footnote feature
+-- added consistent interface for \marginpar, \sidepar, \sidebar, 
+   and \sidefootnote for specifying into which margin the note should go
+-- added feature that makes it easier for the side writing macros to 
+   determine whether they are on the left or right of the text. The 
+   defaults for \sidepar and \sidebar have been changed such that their 
+   text now comes out flush up against the text.
+-- added appendix about the picture environment. Apparently there is no 
+   extensive freely available information about this environment. There 
+   is now. The chapter stems from an abandoned book project.
+-- extended the pagestyle changing macros such that they now warn if 
+   the page style does not exist or if the page style is an alias 
+   (trying to change an alias might lead to odd results)
+-- added tocvsec2 to list of emulated packages (left out by mistake)
+-- some undocumented hooks have been added to the toc building macros,
+   more about these later.
+
+
+Changes (2009/11/17)
+
+o Memoir v1.61803398c 
+
+-- fixed typo that broke \flushbottom. Please note that this fix WILL 
+   change existing documents, potentially changing page breaks.
+-- fixed a problem that might cause the addition of trimmarks to shift 
+   the output box a bit downward. Thanks to Heiko Oberdiek for the 
+   analysis and fix
+-- fixed a typo in an example in the manual
+-- changed \tmarkml, \tmarkmr, \tmarktm and \tmarkbm to place markers 
+   for the middle parts of the text. Earlier they did nothing and had 
+   to be defined by the user. Now the user can simply define them to do 
+   nothing if needed.
+-- added visual example to the manual showing the four trim mark types
+-- changed the madsen chapter style such that it now has a better 
+   unnumbered look
+
+
+Changes (2009/09/21)
+
+o Memoir v1.61803398b 
+
+-- fixed typo that broke \thanks
+
+
+Changes (2009/09/10)
+
+o Memoir v1.61803398 
+
+-- fixed bug with the upquote package
+-- added support for the bidi package
+-- added a simple page style
+-- added feature to \newlistof such that \KeepFromToc will locally change say 
+   \tableofcontents into \tableofcontents*
+-- Fixed bug, such that XeLaTeX will get the correct pages sizes
+
+
+Changes (2009/08/23)
+
+o Eighth edition of the User Manual covering memoir v1.61803398. 
+  The design Part is now in a separate document, memdesign, which 
+  should be available from CTAN in /info.
+
+
+Changes (2009/07/24)
+
+o Memoir v1.6180339h fixes minor typos in memoir.dtx and mempatch.dtx
+
+Changes (2009/07/21)
+
+o Memoir v1.6180339g fixes minor bugs in memoir and mempatch
+
+Changes (2009/07/12)
+
+o Memoir v1.6180339f fixes minor bugs and adds new commands
+
+-- \begin{labelled}{name} A description list where \name is the labelling macro 
+-- \twocoltocetc - the ToC and friends will be set in two columns
+-- \onecoltocetc - the ToC and friends will be set in one column (the default)
+-- \doccoltocetc - the ToC and friends will be set according the class column option
+-- \frontmatter, \mainmatter and \backmatter have had their float counter change 
+   factored out such that users may now change these
+
+o Memoir now automatically loads the etex package
+
+o The manual includes a chapter giving some historical backround related
+  to typesetting and further information about fonts. There is a new 
+  chapter describing an example implementation of a memoir-based package for 
+  a US University thesis.
+
+Changes (2009/02/06)
+
+o Memoir v1.6180339d,e fixes a bug introduced by v1.6180339c
+
+-- \makeheadwidth, \makerunningheadwidth and \makerunningfootwidth no longer 
+   support the '+' syntax from the calc package.
+
+-- under hyperref \nameref is now an alias for \titleref
+
+
+Changes (2009/01/26)
+o Memoir v1.6180339c released with minor bug fixes that could
+  not be done via the patch file, plus some new functionality. The
+  manual has NOT been updated and the changes are noted below.
+
+-- New paper size options: `a0paper', `a1paper', `a2paper', `b0paper', 
+   `b1paper', and `b2paper' for A0, A1, A2, B0,B1, and B2 size stock paper.
+
+-- Macro \memoirpostopthook{} which is called after the options are
+   processed but before anything else is done (like setting the page layout).
+   As an example, you may define it as (before the \documentclass}
+   command):
+     \newcommand*{\memoirpostopthook}{%
+       \setlength{\stockwidth}{<wid>}\setlength{\stockheight}{<ht>}}
+     \documentclass[...]{memoir}
+  to specify a stock paper size of <wid> by <ht> that is not provided by the 
+  defined options.
+
+-- New `portrait' option (default, the opposite of `landscape').
+
+-- New command \setbinding{<length>} for a binding offset of <length>.
+
+-- New commands: \setpagetm, \setpagetr, \setpagemr, \setpagebr, \setpagebm,
+   \setpagecc to position a (smaller) page on a (larger) stock at the
+   top-middle, top-right, middle-right, bottom-right, bottom-middle, and
+   centered with respect to the stock.
+
+   The macros are to be used instead of \settrimmedsize taking the
+   same arguments.
+
+-- New optional parameter in \makeheadwidth{<style>}[<footerwidth>]{<headerwidth>}
+   to set the width of the <style>'s headers to <headerwidth> and the footers 
+   to <headerwidth> or, if given, to <footerwidth>. The two widths can also
+   be set individually using \makerunningheadwidth{<style>}{<length>}
+   and similarly with \makerunningfootwidth. The lengths, if needed
+   are stored in \styleheadrunwidth and \stylefootrunwidth.
+
+-- New `showlocs' pagestyle, which is provided as an example of what can be
+   done to show the positions of headers, footers, and the textblock (lines
+   are drawn showing the header and footer vertical locations and a box is
+   drawn around the text block. It is implemented by two zero-sized pictures:
+   \framepichead which draws a line at the header location, and \framepictextfoot 
+   which draws a frame around the textblock and a line at the footer location.
+   Following the declaration \showheadfootlocoff the header/footer lines
+   will not be drawn (\showheadfootlocon turns them on again), and following 
+   the \showtextblocklocoff declaration the frame around the text block will 
+   not be drawn (\showtextblocklocon turns it on again). If you want a box 
+   around your text you could create your own pagestyle using \framepictextfoot
+   and with the showlocs code as a starting point. 
+
+-- New command \centerfloat is a version of \centering which centers a wide 
+   float or other known width element with respect to the textblock. E.g.,
+   \begin{table} \centerfloat \caption{A wide table} ... \end{table}
+
+-- New command \sourceatright[<length>]{<short text>}. Use at the end of a
+   paragraph to put <short text> flushright. If it is short enough it will
+   go at the end of the last line preceded by at least <length> (default 2em)
+   space, otherwise it is set (flushright) on the following line.
+
+-- New macro \leftspringright{<lfrac>}{<rfrac>}{<ltext>}{<rtext>} sets
+   <ltext> as a flushleft column, width <lfrac> of the textwidth, and <rtext> 
+   as a flushright column, width <rfrac> of the textwidth, with 
+   (1.0 - <lfrac> - <rfrac>) textwidth space between them. E.g.,
+   \leftspringright{0.4}{0.5}{On the left}{Right stuff}
+
+-- Following the declaration \linenottooshort[<length>] paragraphs will be set:
+   As normal but the last line will not be shorter than <length> (default 4em)
+
+-- Using \russianpar instead of \par to end a paragraph causes it to be set
+   following Russian typographic rules
+
+-- Using \lastlinerulefill instead of \par to end a paragraph will be 
+   cause any short line to be filled with a rule (\lastlineparrule) up to 
+   the righthand margin.
+
+-- Following the declaration \leftcenterright paragraphs will be set:
+   First line raggedright, the last line raggedleft, and the remainder 
+   centered. If you use this shape, set \everypar{} afterwards.
+
+-- Following the declaration \justlastraggedleft paragraphs will be set:
+   All lines normal except the last is raggedleft.
+
+-- Following the declaration \raggedrightthenleft paragraphs will be set:
+   First line raggedright and remainder raggedleft.
+
+-- If you use the above unusual paragraph shapes then using \\ to break
+   a line may give a surprising result. If so, you could try instead
+   \atcentercr (a memoir macro) or \break (a standard LaTeX macro) to see 
+   if the result is any better for you. In addition, just in case, memoir
+   stores the original definitions of \\ and \par as \memorigdbs and
+   \memorigpar respectively.
+
+-- \titleref have been extended with a \titleref*, which under
+   hyperref will provide the title but no link. Without hyperref, it
+   is the same as \titleref
+
+-- added hooks around the internals used by sidecaption,
+   sidecontcaption, sidenamedlegend and sidelegend. They do nothing by
+   default but can be used for something like this
+
+   \makeatletter
+   \newenvironment{sidecaption*}{
+     \renewcommand\@mem@scap@beforehook{\checkoddpage\ifoddpage\else\raggedleft\fi}
+     \renewcommand\@mem@scap@afterhook{\par}
+     \begin{sidecaption}}
+     {\end{sidecaption}}
+   \makeatother
+
+   which, if the user has placed the sidecaption on the outside in an
+   twosided layout, then the figure will automatically be pushed
+   towards the spine margin.
+
+
+
+Changes (2008/08/23)
+o memhfixc v1.10 released to fix problem with tex4ht
+o NO CHANGES TO ANYTHING ELSE
+
+Changes (2008/08/07)
+o Memoir v1.6180339a released to fix extraneous spaces in footnotes
+o NO CHANGES TO ANYTHING ELSE
+
+Changes (2008/07/23)
+o Memoir v1.6180339 released to cater for non-compatible changes in
+  the hyperref package. It is highly unlikely that I will make any future
+  changes to memoir with respect to hyperref modifications, instead hyperref
+  can cater for memoir if necessary. All patches from mempatch v5.1 are 
+  folded in.
+o Mempatch package v6.0 released.
+o INSIGNIFICANT CHANGES TO THE MANUAL (corrected typo in Figure 8.1 caption,
+  added two persons to the Acknowledgements)
+
+Changes (2008/07/12)
+o Mempatch package v5.1 released with bug fixes for \DisemulatePackage
+  and spacing of Part titles in the ToC.
+o There was a mismatch between the general version of memman.pdf and the
+  tds version. These are now the same. I took the opportunity to fix
+  some very minor typos (perhaps no more than half a dozen words) in the 
+  User Manual (if you have a printed copy of the seventh edition, it's not 
+  worth printing the update)
+o NO CHANGES TO THE CLASS
+
+Changes (2008/06/02)
+o Memoir class v1.618033 released with bug fixes for \feetbelowfloat
+  and sidebar layout for the larger font sizes.
+o NO CHANGES TO THE USER MANUAL
+
+Changes (2008/05/27)
+o Memoir class v1.61803 released incorporating all patches and comments about 
+  v1.61803 beta. Major extensions are extended, or arbitrary, document font 
+  sizes and provision of several styles of section headings.
+o User Manual (memman), edition 7 released incorporating the contents of the
+  Addendum. The part on typography has been extended and a glossary of memoir's
+  commands and environments has been added.
+o New (empty) version of mempatch.sty.
+
+    This will be the last release for a considerable period of time. After 25
+years in the USA we are moving back to the UK where there are grandchildren.
+The process will probably involve at least 6 months in LaTeX limbo.
+My definition of `considerable period' may imply decades.
+
+Changes (2008/04/25)
+o Beta version of memoir v1.61803 released incorporating all patches. 
+  No major comments received.
+o Beta version of the USER MANUAL released incorporating all of the
+  ADDENDUM. Minor comments received.
+
+Changes (2006/12/23)
+o New version (4.7) of mempatch.sty, fixing minor infelicities with v4.6
+o NO CHANGES TO THE USER MANUAL OR ADDENDUM
+
+Changes (2006/12/11)
+o New version (1.9) of memhfixc.sty
+o New version (4.6) of mempatch.sty, adding spacing commands,
+  about a dozen new built-in chapterstyles, new trimmarks,
+  some minor new commands, and bug fixes.
+o New version of memmanadd.pdf
+o NO CHANGES TO THE USER MANUAL
+
+Changes (2006/08/09)
+o New version 4.5 of mempatch.sty
+o New version memmanadd.pdf
+
+Changes (2005/09/25)
+o New version of memoir.dtx which will generate the new
+  version v1.618 of memoir.cls, the *.clo files (which are unchanged),
+  and the basic.gst configuration file for MakeIndex to support
+  memoir's glossary code.
+o Memoir.cls v1.618 incorporates all the patches from mempatch.sty
+  v3.12, and includes a code set for making glossaries.
+o New version 4.0 of mempatch.sty (contains no code)
+o New version of memmanadd.pdf
+o NO CHANGES TO THE USER MANUAL 
+ 
+
+Changes (2004/05/24)
+o New version (v1.6) of memhfixc.sty (fix for subappendices)
+o New version (v2.3d) of mempatch.sty (fix for boxedverbatim)
+
+Changes (2004/04/26)
+o New release (2.3 again but with some code) of mempatch.sty
+
+Changes (2004/04/05)
+o New version of memoir.dtx which will generate the new 
+  version v1.61 of memoir.cls and the *.clo files with minor
+  fixes for extraneous spaces and footnotes. Incorporates
+  the patches from mempatch 2.2.
+o New version 2.3 of mempatch.sty (contains no code)
+o NO CHANGES TO THE USER MANUAL 
+
+Changes (2004/03/01)
+o New version 2.2 of mempatch.sty (fix indent after verbatim)
+o APART FROM THIS FILE, NO CHANGES TO ANY OTHER DOCUMENTS
+
+Changes (2004/02/11)
+o New version 2.1 of mempatch.sty (fix for use of \linespread)
+o APART FROM THIS FILE, NO CHANGES TO ANY OTHER DOCUMENTS
+
+
+Changes (2004/01/31)
+o New version of memoir.dtx which will generate the new 
+  version v1.6 of memoir.cls incorporating all earlier patches
+o New version v2.0 of mempatch.sty (which does nothing)
+o New edition of the manual, incorporating all the material from
+  the Addendum, which is no more
+
+
+Changes (2003/11/16)  
+o New version 1.9 of mempatch.sty (major extensions for typesetting
+  arrays and tabulars; hung paragraphs; reduced moans about using 
+  deprecated font commands; bug fixes)
+o New version of the Addendum (memmanadd.pdf)
+o APART FROM THIS FILE, NO CHANGES TO ANY OTHER DOCUMENTS
+
+Changes (2003/09/16)
+o New version 1.8 of mempatch.sty (major extensions to footnoting,
+  e.g., multiple styles and multiple series; a `fixed marginpar';
+  and bug fixes)
+o New version of the Addendum (memmanadd.pdf)
+o APART FROM THIS FILE, NO CHANGES TO ANY OTHER DOCUMENTS
+
+Changes (2003/07/23)
+o New version 1.7 of mempatch.sty (improved odd/even page checking,
+  spacing in the bibliography, minor tweaks with the article option,
+  and bug fixes)
+o New version of the Addendum (memmanadd.pdf)
+o APART FROM THIS FILE, NO CHANGES TO ANY OTHER DOCUMENTS
+
+Changes (2003/06/28)
+o New version 1.6 of mempatch.sty (improved odd/even page checking,
+  page layout, and bug fixes)
+o New version of the Addendum (memmanadd.pdf)
+o APART FROM THIS FILE, NO CHANGES TO ANY OTHER DOCUMENTS
+
+Changes (2003/04/28)
+o New version 1.5 of mempatch.sty (improved frame boxes, footnotes, 
+  and bug fixes)
+o New version of the Addendum (memmanadd.pdf)
+o APART FROM THIS FILE, NO CHANGES TO ANY OTHER DOCUMENTS
+
+Changes (2003/02/20)
+o New version 1.3 of memhfixc.sty (fixes an appendices/hyperref problem)
+o New version of the Addendum (mammanadd.pdf) with description of footnote styling 
+o NO CHANGES TO ANY OTHER DOCUMENTS
+
+Changes (2003/02/13)
+o Reference sections, etc., by name as well as by number
+o Now 3 `need space' macros
+o New macros for `slash' fractions (fractions like 6/19)
+o Use of \footnote in titling macros (e.g., \author) ignored
+o New version 1.4 of mempatch.sty
+o New version 1.2 of memhfixc.sty
+o New version of the Addendum (memmanadd.pdf)
+o NO CHANGES TO ANY OTHER DOCUMENTS
+
+Changes (2003/01/22)
+o Second optional argument to \section, etc, for page header text
+o Formatting of numbers ---  cardinals and ordinals, numeric and spelled out
+o Better cooperation with natbib, chapterbib, nameref packages
+o New version 1.3 of mempatch.sty
+o New version 1.1 of memhfixc.sty
+o New version of the Addendum
+
+Changes in version 1.3a of memoir.cls (2002/11/22)
+o Fixed nasty figure/table numbering gremlin that couldn't be done by
+  the patch file
+
+Changes in version 1.3 of memoir.cls (2002/11/14)
+o More flexibility in defining chapter styles, and the appearance of 
+  chapter and part listings in the ToC
+o \tableofcontents and friends can be used multiple times
+o Major extensions for indexing, including multiple indexes
+o Major extensions to the trim marks
+o Can do N of M page numbering
+o Added automatic inclusion of a patch file
+o No change to the User Manual, but the Addendum has been revised
+
+Changes in version 0.2a of mem12.clo (2002/08/27)
+o Fixed scriptsize bug
+
+Changes in version 1.2 (2002/08/10)
+o Incorporated all fixes from memfixb.sty that applied to version 1.1
+o Minor changes to *.clo files
+o Added 17pt class option
+o Boxes that break over pages and/or contain verbatim text
+o Several ways of dealing with verbatim text
+o Convenient methods for file input and output
+o Additional \provide... commands
+o User-specified footnote configuration, and footnotes that can include
+  verbatim text
+o Additional optional argument to \chapter and \chapter* for short
+  header texts
+
+
+Changes in version 1.1 (2002/03/28)
+o Incorporated all fixes from memfixa.sty that applied to version 1.0
+o Minor change to *.clo files
+o Native support for subfigures
+o Fixed incompatability with the natbib package
+o Additional facilities for verse typesetting
+o Experimental marginpar-like extensions
+o New edition of the user manual
+
+Changes (2002/03/28)
+o Removed memfixa.sty
+
+Changes (2002/01/23)
+o Added memfixa.sty to distribution to fix problem if the
+        showtrims option and the calc package are used together.
+
+Changes in version 1.0 (2001/11/17)
+o First public production release
+o Support for tipped in illustrations
+o Fine control over chapter pages
+o Support for continous page numbering even if switching between
+  numbering systems (e.g., roman to arabic)
+o Minor change to *.clo files
+o Extended Part I of the manual, and more examples in Part II
+
+Changes in version 0.33 (2001/08/31)
+o Added controllable chapter spacing in LoF and LoT
+o Fixed bug in \appendixpage
+o Provided dictionary style headers for the Index (memman.(tex|ist))
+
+Changes in version 0.32 (2001/08/03)
+o Further fixes for old versions of the amsmath package
+
+Changes in version 0.31 (2001/07/24)
+o Companion chapterstyle typesets correctly on verso pages
+o Fixed odd interaction with the amsmaths package
+
+Changes in version 0.3 (2001/07/14)
+o Simulation of the article class
+o Addition of configurable titles
+o Addition of configurable abstract environment
+o Improved cooperation with the subfigure package
+
+Changes in version 0.2 (2001/06/03)
+o First public beta release
+o Major improvements
+
+Changes in version 0.1 (2001/05/20)
+o First public experimental alpha release
+
+-------------------------------------------------------------------
+
+2009/08/23
+Peter Wilson
+herries dot press at earthlink dot net
+
+%%% Local Variables: 
+%%% mode: text
+%%% End: 

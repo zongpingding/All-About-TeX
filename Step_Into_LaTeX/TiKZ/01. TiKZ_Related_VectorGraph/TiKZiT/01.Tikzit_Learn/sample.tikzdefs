@@ -1,0 +1,5 @@
+% sample.tikzdefs
+
+\usepackage{bm}
+\usepackage{amsmath}
+\newcommand{\param}[1]{\ensuremath{\vec{\bm{#1}}}}

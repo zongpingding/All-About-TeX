@@ -1,0 +1,66 @@
+\documentclass{article}
+
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{listings}
+\definecolor{code-main}{RGB}{70,130,180}
+\definecolor{code-expl3}{RGB}{240,50,100}
+\definecolor{code-comment}{RGB}{21,122,81}
+\definecolor{code-background}{gray}{0.99}
+\lstset{
+    language = [LaTeX]TeX,
+    basicstyle = \ttfamily,
+    keywordstyle = \color{code-main},
+    commentstyle = \color{code-comment},
+    showstringspaces = false,
+    breaklines = true,
+    frame = lines,
+    backgroundcolor = \color{code-background},
+    flexiblecolumns = true,
+    escapeinside = {(*}{*)},
+    alsoletter = {_,:},
+    % numbers = left,
+    % firstnumber = last,
+    numberstyle = \scriptsize\ttfamily,
+    stepnumber = 1,
+    numbersep = 5pt,
+}
+\newcommand{\meta}[1]{$\langle${\normalfont\itshape#1}$\rangle$}
+\lstset{% LaTeX2 commands
+    classoffset = 0,
+    texcsstyle =* \color{code-main},
+    moretexcs =
+      {
+        part,parttext,chapter,section,subsection,subsubsection,frontmatter,mainmatter,backmatter,tableofcontents,href,
+        traditionalcommand
+      }
+}
+\lstset{% LaTeX3 commands
+    classoffset = 1,
+    texcsstyle =* \color{code-expl3},
+    moretexcs =
+      {
+        mymodule_some_command:nn, expl_command:
+      }
+}
+\lstnewenvironment{code}{\setstretch{1.07}}{}
+\lstnewenvironment{code*}{\setstretch{1.07}\lstset{numbers=left}}{}
+
+\newcommand{\packageoption}[1]{\texttt{\textcolor{black!67!green}{#1}}}
+\newcommand{\commandoption}[1]{\texttt{\textcolor{black!67!cyan}{#1}}}
+
+\begin{document}
+
+\begin{code}
+\documentclass[(*\packageoption{options}*)]{class}
+\end{code}
+
+\lstinline|\traditionalcommand|
+
+\begin{code}
+\mymodule_some_command:nn {} {}
+\end{code}
+
+\lstinline|\expl_command:|
+
+\end{document}

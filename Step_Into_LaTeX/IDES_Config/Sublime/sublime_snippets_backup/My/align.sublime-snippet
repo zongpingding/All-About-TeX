@@ -1,0 +1,13 @@
+<snippet>
+	<content><![CDATA[
+$
+	\begin{aligned}
+		$1\nonumber \\\\
+		$2\nonumber \\\\
+		$3\nonumber \\\\
+	\end{aligned} 
+$
+]]></content>
+	<tabTrigger>alg</tabTrigger>
+	<scope>text.tex.latex</scope>
+</snippet>

@@ -1,0 +1,30 @@
+\documentclass{article}
+\usepackage{etoolbox}
+
+
+
+\begin{document}
+\NewDocumentCommand\MainCommand{m}{
+  \ifdef{#1}{
+    I received a command! #1
+  }{
+    It's not a command: #1
+  }
+}
+
+\newcommand\somecommand{Text}
+\MainCommand{\somecommand}
+
+\MainCommand{some text}
+
+\def\hello{a}
+\ifdef{\hello}{yes}{no}
+
+
+% \def\cmd#1{\ifcsname #1\endcsname I received a command\else It's not a command\fi}
+
+% Hello world
+
+% \cmd{hello}
+% \cmd{helloo}
+\end{document}

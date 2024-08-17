@@ -1,0 +1,80 @@
+\documentclass[fontset=windows, 12pt]{article}
+\usepackage{geometry}
+\usepackage[dvipsnames,svgnames]{xcolor}
+\usepackage[strict]{changepage} % 提供一个 adjustwidth 环境
+\usepackage{framed} % 实现方框效果
+\usepackage{ctex}
+\usepackage{amsmath}
+\geometry{a4paper,centering,scale=0.8}
+% environment derived from framed.sty: see leftbar environment definition
+% 文本框颜色
+\definecolor{innercolor}{rgb}{0.95,0.95,1} 
+% 边界框颜色
+\definecolor{bordercolor}{RGB}{200, 0, 0} 
+%% 常用的颜色
+\definecolor{greenshade}{rgb}{0.90,0.99,0.91}   % 绿色文本框，竖线颜色设为 Green
+\definecolor{redshade}{rgb}{1.00,0.90,0.90}     % 红色文本框，竖线颜色设为 LightCoral
+\definecolor{brownshade}{rgb}{0.99,0.97,0.93}   % 莫兰迪棕色，竖线颜色设为 BurlyWood
+
+
+% 定义一个formal样式环境；#1参数代表内部颜色，#2代表左边竖条颜色
+% 注意：行末需要把空格注释掉，不然画出来的方框会有空白竖线
+\newenvironment{formal}[2][innercolor]{%
+    \def\FrameCommand{%
+        \hspace{1pt}%
+        % 左侧颜色条细线的宽度
+        {\color{#2}\vrule width 2pt}%
+        % 文本距离左侧颜色条的边距
+        {\color{#1}\vrule width 4pt}%
+        \colorbox{#1}%
+    }%
+    \MakeFramed{\advance\hsize-\width\FrameRestore}%
+    \noindent\hspace{-4.55pt}% disable indenting first paragraph
+    \begin{adjustwidth}{}{7pt}%
+    \vspace{2pt}\vspace{2pt}%
+}
+{%
+    \vspace{2pt}\end{adjustwidth}\endMakeFramed%
+}
+
+
+
+\begin{document}
+
+\section{测试}
+
+\subsection*{普通文本测试}
+\begin{formal}{blue!70}
+This is a Test!
+
+这是一个测试
+\end{formal}
+
+
+\subsection*{公式测试}
+\begin{formal}[green!30]{bordercolor}
+下边开始证明:证明思路:1. 首先我们需要证明
+5.证明解的唯一性
+
+\textbf{证明1}：\par 
+$
+\begin{aligned}
+    &1.~ \mbox{若} y = \varphi(x) \mbox{是方程1的解} ,\mbox{那么带入到方程1中即有}\\
+    &\hspace*{10em} \frac{d \varphi(x)}{dx}=f(x, \varphi(x))\\
+    &\mbox{现在我们两边同时取}[x_0, x] \mbox{上的定积分.为了避免混淆，变换积分变量}\\
+    &\hspace*{10em}\int_{x_0}^{x}{\frac{d \varphi(t)}{dt} dt} = \int_{x_0}^{x}{f(t, \varphi(t)) dt}\\
+    & \mbox{那么就可以得到}\\
+    & \hspace*{10em} \varphi(x)-y_0(\mbox{原}\varphi(x_0)) = \int_{x_0}^{x}{f(t, \varphi(t)) dt}\\
+    & \mbox{移项可以得到}\\
+    & \hspace*{10em} \varphi(x) =  y_0 + \int_{x_0}^{x}{f(t, \varphi(t)) dt}\\
+    &\mbox{由此说明}\varphi(x) \mbox{满足方程2}\\
+    &2. ~ \mbox{若}y =  \varphi(x)\mbox{是2的解， 那么我们对方程2求导有:}\\
+    & \hspace*{10em} \frac{d }{dx}[\varphi(x)] = \frac{d}{dx}\left[y_0 + \int_{x_0}^{x}{f(t, \varphi(t)) dt}\right]\\
+    & \hspace*{10em} \mbox{即}~~\frac{d \varphi(x)}{dx}=f(x, \varphi(x))\\
+    & \mbox{所以} y = \varphi(x) \mbox{方程1的解}
+\end{aligned}
+$
+\end{formal}
+
+\end{document}
+

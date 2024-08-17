@@ -1,0 +1,204 @@
+% All rights to the corporate identity of University of Amsterdam and its elements
+% belong to the University of Amsterdam.
+% Please refer to the following page for further information:
+% https://extranet.uva.nl/en/a-z/content/corporate-communication/corporate-communication.html
+%
+% Copyright (c) 2015 Franz Geiger
+%
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+%
+% The above copyright notice and this permission notice shall be included in
+% all copies or substantial portions of the Software.
+%
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+% THE SOFTWARE.
+%
+% Additionally, this example document may be used with the template without
+% above license notice.
+
+\documentclass[pdf]{beamer}
+% Load University of Amsterdam theme
+% Options:
+% 	logo: Select whether to use the Dutch or English logo in header.
+% 		Either 'NL' or 'ENG'. Default: ENG
+% 	maincolor: Select which main color to use for title page and as highlight color.
+%		Possible values are: Any color definition. Default: uva-rood
+% 		This theme pre-defines colors from the University of Amsterdam corporate identity:
+% 			uva-zwart	(general UvA Black)
+% 			uva-rood	(general UvA Red)
+% 			uva-feb-groen	(Green for Faculty of Economics and Business)
+% 			uva-fgw-blauw	(Blue for Faculty of Humanities)
+% 			uva-fdr-donker-rood	(Dark Red for Faculty of Law)
+% 			uva-gen-groen	(Green for Faculty of Medicine (AMC))
+% 			uva-fnwi-paars	(Purple for Faculty of Science)
+% 			uva-fmg-oranje	(Orange for Faculty of Social and Behavioural Sciences)
+% 			uva-iis-licht-blauw	(Light Blue for Institute of Interdisciplinary Studies)
+% 			uva-ilo-rood	(Red for Interfacultaire Lerarenopleidingen)
+% 		Please refer to the following page for usage instructions regarding the
+% 		corporate identity colors: https://extranet.uva.nl/en/a-z/content/corporate-communication/corporate-identity-elements/colour/colour-kopie.html
+\usetheme[logo=ENG, maincolor=uva-rood]{UniversityOfAmsterdam}
+
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+
+\author{Author}
+\title{Title}
+\subtitle{Subtitle}
+\institute{Institute}
+\date{\today}
+
+\begin{document}
+
+% Title page (plain in order to hide regular background and footline)
+\frame[plain]{\titlepage}
+
+\begin{frame}
+	\frametitle{Outline}
+	\tableofcontents
+\end{frame}
+
+\section{Select your faculty color scheme}
+
+\begin{frame}{Pre-defined colors from UvA corporate identity}
+	\newcounter{posX}
+	\begin{tikzpicture}
+		\edef\posX{0}
+		\edef\posY{11}
+		\foreach \color in {uva-zwart, uva-rood, uva-feb-groen, uva-fgw-blauw, uva-fdr-donker-rood, uva-gen-groen, uva-fnwi-paars, uva-fmg-oranje, uva-iis-licht-blauw, uva-ilo-rood} {
+			\node [fill=\color, text=white] (\color) at (\posX, \posY) {\color};
+
+			\pgfmathparse{\posX+1}
+			\xdef\posX{\pgfmathresult}
+			\ifnum8>\posY
+				\xdef\posY{11}
+			\else
+				\pgfmathparse{\posY-1}
+				\xdef\posY{\pgfmathresult}			
+			\fi
+			};
+	\end{tikzpicture}
+\end{frame}
+
+\section{Example Content}
+
+\begin{frame}{\insertsectionhead}{Some lists}
+	\begin{columns}
+		\begin{column}{0.5\textwidth}
+			\begin{enumerate}
+				\item Foo
+				\item Bar
+				\begin{enumerate}
+					\item test
+					\item hello world
+					\begin{enumerate}
+						\item more levels
+					\end{enumerate}
+				\end{enumerate}
+				\item Baz
+			\end{enumerate}
+		\end{column}
+		\begin{column}{0.5\textwidth}
+			\begin{itemize}
+				\item Foo
+				\item Bar
+				\begin{itemize}
+					\item test
+					\item hello world
+					\begin{itemize}
+						\item more levels
+					\end{itemize}
+				\end{itemize}
+				\item Baz
+			\end{itemize}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+{ % Use a frametitle with title and subtitle on one line to safe space
+	\setbeamertemplate{frametitle}[University of Amsterdam oneline]
+
+	\begin{frame}{Block elements}{With subtitle on the same line as title}
+		\begin{columns}[t]
+			\begin{column}{0.45\textwidth}
+				\begin{example}[The usual]
+					Hello World
+				\end{example}
+				\begin{theorem}[Stuff is hard]
+					content...
+				\end{theorem}
+				\begin{corollary}
+					content...
+				\end{corollary}
+			\end{column}
+			\begin{column}{0.45\textwidth}
+				\begin{fact}
+					content...
+				\end{fact}
+				\begin{lemma}
+					content...
+				\end{lemma}
+				\begin{proof}[Proof \alert{this!}]
+					trivial
+				\end{proof}
+			\end{column}
+		\end{columns}
+	\end{frame}
+}
+
+\begin{frame}{Even more boxes}
+
+	\begin{definition}[of a definition]
+		A \alert{definition} is what is in such a box.
+	\end{definition}
+	\begin{block}{Title of the block element}
+		Just another block with content.
+	\end{block}
+	\begin{alertblock}{Attention!}
+		content...
+	\end{alertblock}
+	
+\end{frame}
+
+\section{Plain frames are really boring}
+
+\begin{frame}[plain]
+
+	A plain frame with a figure and a table.
+
+	\vfill
+
+	\begin{figure}
+		\caption{University of Amsterdam}\label{fig:uva-logo}
+		\includegraphics{beamerthemeUniversityOfAmsterdam/logo/uva_logo_ENG.pdf}
+	\end{figure}
+	
+	\begin{table}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			A & B & C \\
+			\hline
+			D & E & F \\
+			\hline
+		\end{tabular}
+		\caption{A table without content}\label{tab:nonsense}
+	\end{table}
+\end{frame}
+
+\section{Section titles show up in the footer}
+
+\begin{frame}{\insertsectionhead}
+	\begin{alertblock}{And what if there is no section?}
+		If a frame is outside any sections, (short) title of the presentation if used. In case this is empty too, author is used.
+	\end{alertblock}
+\end{frame}
+\end{document}

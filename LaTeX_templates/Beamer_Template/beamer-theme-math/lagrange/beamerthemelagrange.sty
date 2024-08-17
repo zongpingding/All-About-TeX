@@ -1,0 +1,285 @@
+% -*- coding: utf-8 -*-
+% ----------------------------------------------------------------------------
+% Author:  Jianrui Lyu <tolvjr@163.com>
+% Website: https://github.com/lvjr/theme
+% License: Creative Commons Attribution-ShareAlike 4.0 International License
+% ----------------------------------------------------------------------------
+
+\ProvidesPackage{beamerthemelagrange}[2019/06/06 v0.7 Beamer Theme Lagrange]
+
+\makeatletter
+
+% compatible with old versions of beamer
+\providecommand{\beamer@endinputifotherversion}[1]{}
+
+\RequirePackage{tikz,etoolbox,manfnt}
+\usetikzlibrary{calc}
+
+\mode<presentation>
+
+\@ifclasswith{beamer}{aspectratio=169}
+  {\setbeamersize{text margin left=5mm,text margin right=5mm}}
+  {\setbeamersize{text margin left=6mm,text margin right=6mm}}
+
+%% ----------------- background canvas and background ----------------
+
+\defbeamertemplate{background canvas}{narrow}{%
+  \begin{tikzpicture}
+  \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+  \draw[line width=4mm, rounded corners=4mm, corner1,
+        shading=axis,top color=corner2!80,bottom color=corner2!80,middle color=white,shading angle=-45]
+        (0,0) rectangle (\paperwidth,\paperheight);
+  \draw[line width=3.5mm, rounded corners=3.8mm, corner2]
+        (0,0) rectangle (\paperwidth,\paperheight);
+  \draw[draw=lightgray!50, step=4mm, xshift=6mm, yshift=6mm, opacity=0.5]
+      (0,0) grid ($(\paperwidth,\paperheight)-(12mm,12mm)$);
+  \end{tikzpicture}
+}
+
+\defbeamertemplate{background canvas}{wide}{%
+  \begin{tikzpicture}
+  \useasboundingbox (0,0) rectangle (\paperwidth,\paperheight);
+  \draw[line width=4mm, rounded corners=4mm, corner1,
+        shading=axis,top color=corner2!80,bottom color=corner2!80,middle color=white,shading angle=-45]
+        (0,0) rectangle (\paperwidth,\paperheight);
+  \draw[line width=3.5mm, rounded corners=3.8mm, corner2]
+        (0,0) rectangle (\paperwidth,\paperheight);
+  \draw[draw=lightgray!50, step=5mm, xshift=5mm, yshift=5mm, opacity=0.5]
+      (0,0) grid ($(\paperwidth,\paperheight)-(10mm,10mm)$);
+  \end{tikzpicture}
+}
+
+%% -------------------------- title page -----------------------------
+
+% add \occasion command
+\newcommand{\occasion}[1]{\def\insertoccasion{#1}}
+\occasion{}
+
+\newlength{\my@title@split@left}
+\newlength{\my@title@split@right}
+\@ifclasswith{beamer}{aspectratio=169}{
+  \setlength{\my@title@split@left}{0.618\textwidth}
+  \setlength{\my@title@split@right}{0.382\textwidth}
+}{
+  \setlength{\my@title@split@left}{0.54\textwidth}
+  \setlength{\my@title@split@right}{0.46\textwidth}
+}
+
+
+\defbeamertemplate{title page}{split}{%
+  \begin{minipage}[c][0.9\textheight]{\my@title@split@left}
+     \raggedright
+     \vfill
+     \ifx\insertoccasion\@empty\else
+        \usebeamerfont*{occasion}\usebeamercolor[fg]{occasion}\insertoccasion\\[3pt]%
+     \fi
+     \usebeamerfont*{date}\usebeamercolor[fg]{date}\insertdate
+     \vspace{4pt}{\color{gray}\hrule}
+     \vfill\vfill
+     \usebeamerfont*{title}\usebeamercolor[fg]{title}\inserttitle
+     \ifx\insertsubtitle\@empty\else
+        \\[5pt]\usebeamerfont*{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle
+     \fi%
+     \vfill\vfill{\color{gray}\hrule}\vspace{4pt}
+     \usebeamerfont*{author}\usebeamercolor[fg]{author}\insertauthor\\[3pt]%
+     \usebeamerfont*{institute}\usebeamercolor[fg]{institute}\insertinstitute
+     \vfill\vfill
+  \end{minipage}%
+  \begin{minipage}[c][0.9\textheight]{\my@title@split@right}
+    \hfill\includegraphics[height=0.9\textheight]{titlepage}%
+  \end{minipage}
+}
+
+%% ----------------------- section and subsection --------------------
+
+\def\sectionintochideskip{10pt}
+\def\sectionintocshowskip{6pt}
+\patchcmd{\beamer@sectionintoc}{\vskip1.5em}{\vskip\sectionintochideskip}{}{}
+\patchcmd{\beamer@sectionintoc}{\vfill}{\vskip\sectionintocshowskip}{}{}
+
+\AtBeginSection[]{%
+  \begin{frame}
+    \tableofcontents[sectionstyle=show/shaded,subsectionstyle=hide]
+  \end{frame}
+}
+
+\defbeamertemplate{section in toc}{numbered}{%
+  \leavevmode\leftskip=8mm\inserttocsectionnumber.\hspace{0.6em}\inserttocsection\par
+}
+\defbeamertemplate{section in toc}{dbend}{%
+  \leavevmode\leftskip=8mm{\color{accent3}\tiny\textdbend\scriptsize\inserttocsectionnumber}%
+  \hspace{0.6em}\inserttocsection\par
+}
+
+\AtBeginSubsection[]{%
+  \begin{frame}
+    \tableofcontents[sectionstyle=show/hide,subsectionstyle=show/shaded/hide]
+  \end{frame}
+}
+
+\defbeamertemplate{subsection in toc}{numbered}{%
+  \vspace{6pt}\leavevmode\leftskip=12mm\inserttocsectionnumber.\inserttocsubsectionnumber
+  \hspace{0.8em}\inserttocsubsection\par
+}
+\defbeamertemplate{subsection in toc}{dbend}{%
+  \vspace{6pt}\leavevmode\leftskip=12mm{\color{accent3}\tiny\textdbend
+  \scriptsize\inserttocsectionnumber.\inserttocsubsectionnumber}%
+  \hspace{0.8em}\inserttocsubsection\par
+}
+
+%% ---------------- headline, footline and textheight ----------------
+
+% make \textheight = \paperheight - 12mm
+\patchcmd{\beamer@calculateheadfoot}{\advance\footheight by 4pt}{}{}{}
+
+% modify plain frames
+\def\beamer@frametemplate@plain{}
+
+\@ifclasswith{beamer}{aspectratio=169}{
+  \setbeamertemplate{headline}{\vspace{5mm}}
+  \setbeamertemplate{footline}{\vspace{5mm}}
+}{
+  \setbeamertemplate{headline}{\vspace{6mm}}
+  \setbeamertemplate{footline}{\vspace{6mm}}
+}
+
+% patch frames with t option
+\patchcmd{\KV@beamerframe@t}
+  {\beamer@frametopskip=.2cm plus .5\paperheight}
+  {\beamer@frametopskip=0mm}
+  {}{}
+
+%% ------------------------- frame title -----------------------------
+
+\defbeamertemplate{frametitle}{simple}[1][]{%
+  \nointerlineskip
+  \begin{beamercolorbox}[wd=\paperwidth,sep=0pt,leftskip=\beamer@leftmargin,%
+                         rightskip=\beamer@rightmargin,#1]{frametitle}
+    \usebeamerfont{frametitle}%
+    \rule[-0.45em]{0pt}{1.5em}\insertframetitle
+    \rule[-0.45em]{0pt}{1.5em}\par
+  \end{beamercolorbox}
+}
+
+%% ------------------- block and theorem -----------------------------
+
+\defbeamertemplate{theorem begin}{simple}
+{%
+  \upshape%\bfseries\inserttheoremheadfont
+  {\usebeamercolor[fg]{theoremname}%
+  \inserttheoremname\inserttheoremnumber
+  \ifx\inserttheoremaddition\@empty\else\ (\inserttheoremaddition)\fi%
+  %\inserttheorempunctuation
+  }%
+  \quad\normalfont
+}
+\defbeamertemplate{theorem end}{simple}{\par}
+
+\defbeamertemplate{proof begin}{simple}
+{%
+  %\bfseries
+  {\usebeamercolor[fg]{proofname}\insertproofname}%
+  \quad\normalfont
+}
+\defbeamertemplate{proof end}{simple}{\par}
+
+%% --------------------------- font theme ----------------------------
+
+\setbeamerfont{title}{size=\LARGE,series=\bfseries,family=\rmfamily}
+\setbeamerfont{subtitle}{size=\large}
+\setbeamerfont{occasion}{size=\normalsize}
+\setbeamerfont{date}{size=\normalsize}
+\setbeamerfont{author}{size=\normalsize}
+\setbeamerfont{institute}{size=\normalsize}
+\setbeamerfont{section in toc}{size=\Large}
+\setbeamerfont{subsection in toc}{size=\large}
+\setbeamerfont{frametitle}{size=\large}
+\setbeamerfont{block title}{size=\normalsize}
+
+\usefonttheme{professionalfonts}
+%\usepackage{arev}
+
+%% ---------------------------- color theme --------------------------
+
+% always use rgb colors in pdf files
+\substitutecolormodel{hsb}{rgb}
+
+\definecolor{redx5}{Hsb}{0,1,0.5}
+\definecolor{yellow86}{Hsb}{60,0.8,0.6}
+\definecolor{greenx3}{Hsb}{120,1,0.3}
+\definecolor{azurexx}{Hsb}{210,1,0.5}
+\definecolor{blue29}{Hsb}{240,0.2,0.9}
+\definecolor{magenta88}{Hsb}{300,0.8,0.8}
+
+\colorlet{text1}{black}
+\colorlet{back1}{white}
+\colorlet{accent1}{azurexx}
+\colorlet{accent2}{greenx3}
+\colorlet{accent3}{redx5}
+\colorlet{accent4}{yellow86}
+\colorlet{accent5}{magenta88}
+\colorlet{filler1}{accent1!40!back1}
+\colorlet{filler2}{accent2!40!back1}
+\colorlet{filler3}{accent3!40!back1}
+\colorlet{filler4}{accent4!40!back1}
+\colorlet{filler5}{accent5!40!back1}
+\colorlet{corner1}{white}
+\colorlet{corner2}{blue29}
+
+\setbeamercolor{normal text}{bg=white,fg=black}
+\setbeamercolor{structure}{fg=accent3}
+\setbeamercolor{local structure}{fg=accent2}
+\setbeamercolor{footline}{bg=,fg=black}
+\setbeamercolor{title}{use=structure,fg=structure.fg}
+\setbeamercolor{subtitle}{fg=black}
+\setbeamercolor{occasion}{fg=accent1}
+\setbeamercolor{date}{fg=black}
+\setbeamercolor{author}{fg=accent2}
+\setbeamercolor{institute}{fg=black}
+\setbeamercolor{section in toc}{parent=occasion}
+\setbeamercolor{subsection in toc}{parent=author}
+\setbeamercolor{section in toc shaded}{parent=normal text}
+\setbeamercolor{subsection in toc shaded}{parent=normal text}
+\setbeamercolor{frametitle}{parent=title}
+\setbeamercolor{theoremname}{parent=occasion}
+\setbeamercolor{proofname}{parent=occasion}
+\setbeamercolor{block title}{fg=white,bg=accent1}
+\setbeamercolor{block body}{bg=lightgray}
+\setbeamercolor{block title example}{fg=white,bg=accent2}
+\setbeamercolor{block body example}{bg=lightgray}
+\setbeamercolor{block title alerted}{fg=white,bg=accent3}
+\setbeamercolor{block body alerted}{bg=lightgray}
+
+%% ------------------------ select templates -------------------------
+
+\@ifclasswith{beamer}{aspectratio=169}
+  {\setbeamertemplate{background canvas}[wide]}
+  {\setbeamertemplate{background canvas}[narrow]}
+\setbeamertemplate{title page}[split]
+\setbeamertemplate{theorem begin}[simple]
+\setbeamertemplate{theorem end}[simple]
+\setbeamertemplate{proof begin}[simple]
+\setbeamertemplate{proof end}[simple]
+\setbeamertemplate{frametitle}[simple]
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{section in toc}[dbend]
+\setbeamertemplate{subsection in toc}[dbend]
+\setbeamertemplate{subsubsection in toc}{}
+\setbeamertemplate{section in toc shaded}[default][100]
+\setbeamertemplate{subsection in toc shaded}[default][100]
+\setbeamertemplate{itemize items}[default]
+\setbeamertemplate{enumerate items}[default]
+
+%% ----------------------- handout mode ------------------------------
+
+\mode<handout>{
+  \colorlet{corner1}{lightgray}
+  \colorlet{corner2}{white}
+  \setbeamercolor{section in toc shaded}{fg=lightgray}
+  \setbeamercolor{subsection in toc shaded}{fg=lightgray}
+}
+
+\mode
+<all>
+
+\makeatother

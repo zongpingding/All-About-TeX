@@ -1,0 +1,367 @@
+% memlays.sty    % extra layouts for membook, extension to layouts package
+
+\ProvidesPackage{memlays}[2002/08/10 v1.0 Extra membook layouts]
+
+\usepackage{layouts}
+
+\providecommand\LMnote[2]{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CHAPTER HEADING
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\LMnote{2010/08/20}{added some baselineskips etc. to make the drawing
+  more realistic}
+
+\newcommand{\drawchapter}{%
+% Some default values first
+  \l@yltoc{0.85\textwidth}{\l@youthdi}               % textwidth
+  \l@yltoc{\baselineskip}{\l@youtvdi}            % baselineskip
+  \ifdrawparameters
+% When drawparameters is TRUE, use a generic layout.
+% Set dimensions and coordinates.
+    \Huge \l@youtvdii=\baselineskip \normalsize  % Heading baselineskip
+      \divide\l@youtvdii by \l@yonepoint
+    \l@yltoc{50pt}{\l@youtvpiii}                 % beforeskip
+    \l@yltoc{20pt}{\l@youtvpi}                   % midskip
+    \l@yltoc{40pt}{\l@youtvpii}                  % afterskip
+  \fi
+% Now continue setting all the other drawing lengths and coordinates.
+  \l@youtvdiii=\l@youtvpii            % afterskip 
+    \advance\l@youtvdiii by \l@youtparskip
+    \advance\l@youtvdiii by \l@youtvdi
+  \l@youtvdiv=\l@youtvpi              % midskip 
+%    \advance\l@youtvdiv by \l@youtparskip
+    \advance\l@youtvdiv by \l@youtvdii
+  \l@youtvdv=\l@youtvpiii             % beforeskip
+%    \advance\l@youtvdv by \l@youtparskip
+    \advance\l@youtvdv by \l@youtvdii
+  \l@youtyci=\l@youtvdi                  % Y coord of base of after text
+  \l@youtycii=\l@youtyci                 % Y coord of base of heading text
+    \advance\l@youtycii by \l@youtvdiii
+%%  \l@youthdiv=\z@                        % 0 or abs(-afterskip)
+% Continue.
+  \l@youtyciii=\l@youtycii               % Y coord of base Chapter N
+    \advance\l@youtyciii by \l@youtvdiv
+  \l@youtyciv=\l@youtyciii               % Y coord of top of typeblock
+    \advance\l@youtyciv by \l@youtvdv
+  \l@youtycvi=\l@youtyciv                 % 3*l@youtvdi + l@youtyciv
+    \advance\l@youtycvi by \l@youtvdi
+    \advance\l@youtycvi by \l@youtvdi
+    \advance\l@youtycvi by \l@youtvdi
+  \l@youthdii=\l@youtvdi                 % a small amount
+  \l@youthdiii=\l@youthdii               % half a small amount
+    \divide\l@youthdiii by \tw@
+%
+%    Draw the picture!
+%
+  \begin{center}
+  \setlength{\unitlength}{\l@youtunitlength}
+  \begin{picture}(\l@youthdi,\l@youtycvi)
+      \put(0,\l@youtyci){\begin{picture}(\l@youthdi,\l@youtyciv)
+%
+% Draw the two after heading text lines
+        \put(0,0){\l@ylabelfont second line of text following the heading \ldots}
+        \put(0,\l@youtyci){\l@ylabelfont This is the start of the after-heading text
+                           which continues on \ldots}
+% Draw the heading
+        \put(0,\l@youtycii){{\Huge The title}}
+% Draw the Chapter
+        \put(0,\l@youtyciii){{\huge Chapter 3}}
+% Top of the typeblock
+        \put(0,\l@youtyciv){\l@ylabelfont \_\_\_\_ top of the typeblock}
+        \testdrawdimensions
+        \ifl@ytempif
+% Draw the dimensions if required. First the before skips.
+          \put(0,\l@youtyciv){\vector(0,-1){\l@youtvdv}}
+          \put(0,\l@youtyciv){\begin{picture}(\l@youthdii,\l@youthdii)
+            \put(\l@youthdiii,-\l@youthdii){\makebox(0,0)[tl]%
+              {\l@yparamfont \l@ypcmd{beforechapskip}
+                + \l@ypcmd{baselineskip} + \l@ypcmd{topskip}
+              }}
+            \end{picture}}
+% The midskip
+%%          \put(0,\l@youtyciii){\vector(0,-1){\l@youtvdiv}}
+          \put(-\l@youthdiii,\l@youtyciii){\vector(0,-1){\l@youtvdiv}}
+          \put(0,\l@youtyciii){\begin{picture}(\l@youthdii,\l@youthdii)
+            \put(\l@youthdiii,-\l@youthdii){\makebox(0,0)[tl]%
+              {\l@yparamfont \l@ypcmd{midchapskip} + \l@ypcmd{baselineskip}}}
+            \end{picture}}
+% And finish with the afterskip
+          \put(0,\l@youtycii){\vector(0,-1){\l@youtvdiii}}
+          \put(0,\l@youtycii){\begin{picture}(\l@youthdii,\l@youthdii)
+            \put(\l@youthdiii,-\l@youthdii){\makebox(0,0)[tl]%
+              {\l@yparamfont \l@ypcmd{afterchapskip} + \l@ypcmd{baselineskip}}}
+            \end{picture}}
+        \fi
+        \end{picture}}
+% Draw rules.
+      \put(0,0){\line(1,0){\l@youthdi}}
+      \put(0,\l@youtycvi){\line(1,0){\l@youthdi}}
+      \end{picture}
+    \end{center}
+    \setlength{\unitlength}{1pt}
+% The end of the definition of |\drawheading|.
+}
+
+% Shorthands.
+\newcommand{\chapterdiagram}{\drawparameterstrue\drawchapter}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% HEADERS AND FOOTERS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\newcommand{\headerfooterdiagram}{%
+% some initial values
+  \l@yltoc{0.85\textwidth}{\l@youthdi}  % textwidth
+  \l@yltoc{\baselineskip}{\l@youtvdi}   % baselineskip
+% we need 4 x coordinates
+  \l@youtxci=\z@
+  \l@youtxciii=\l@youthdi
+  \l@youtxciv=\l@youtxciii
+    \advance\l@youtxciv by \l@youtvdi
+  \l@youtxcii=\l@youtxciii             % midway between xci and xciii
+    \advance\l@youtxcii by \l@youtxci
+    \divide\l@youtxcii by \tw@
+% we need 8 y coordinates
+  \l@youtycii=\l@youtvdi
+  \l@youtyciii=\l@youtycii
+    \advance\l@youtyciii by \l@youtvdi
+  \l@youtyciv=\l@youtyciii
+    \advance\l@youtyciv by \l@youtvdi
+  \l@youtycvi=\l@youtyciv
+    \advance\l@youtycvi by \l@youtvdi
+    \advance\l@youtycvi by \l@youtvdi
+    \advance\l@youtycvi by \l@youtvdi
+    \advance\l@youtycvi by \l@youtvdi
+    \advance\l@youtycvi by \l@youtvdi
+    \advance\l@youtycvi by \l@youtvdi
+  \l@youtycv=\l@youtyciv              % midway between yciv and ycvi
+    \advance\l@youtycv by \l@youtycvi
+    \divide\l@youtycv by \tw@
+  \l@youtycvii=\l@youtycvi
+    \advance\l@youtycvii by \l@youtvdi
+  \l@youtycviii=\l@youtycvii
+    \advance\l@youtycviii by \l@youtvdi
+  \l@youtyci=\l@youtycviii
+    \advance\l@youtyci by \l@youtvdi
+% we need 1 horizontal distance, which is the diagram width 
+% (i.e., \l@youthdi)
+% and one vertical distance, total picture height
+  \l@youtvdii=\l@youtycviii
+    \advance\l@youtvdii by \l@youtvdi
+    \advance\l@youtvdii by \l@youtvdi
+    \advance\l@youtvdii by \l@youtvdi
+% and a (half) small amount
+  \l@youthdii=\l@youtvdi
+  \l@youthdiii=\l@youthdii
+    \divide\l@youthdiii by \tw@
+%
+% Draw the picture
+%  
+  \begin{center}
+  \setlength{\unitlength}{\l@youtunitlength}
+  \begin{picture}(\l@youthdi,\l@youtvdii)
+\thinlines
+%    draw the horizontals
+    \put(0,0){\line(1,0){\l@youthdi}}
+    \put(0,\l@youtvdii){\line(1,0){\l@youthdi}}
+%       the footer texts
+    \put(0,\l@youtyciii){\makebox(0,0)[bl]{left}}
+    \put(\l@youtxcii,\l@youtyciii){\makebox(0,0)[b]{center}}
+    \put(\l@youtxciii,\l@youtyciii){\makebox(0,0)[br]{right}}
+%       the footrule
+\thicklines
+    \put(0,\l@youtyciv){\line(1,0){\l@youthdi}}
+    \put(\l@youtxciv,\l@youtyciv){\begin{picture}(\l@youthdii,\l@youthdii)
+      \put(0,\l@youthdiii){\makebox(0,0)[br]%
+        {\l@yparamfont \l@ypcmd{footrule}}}
+        \end{picture}}
+%       the TYPE BLOCK
+    \put(\l@youtxcii,\l@youtycv){\makebox(0,0){THE TYPE BLOCK}}
+%       the headrule
+    \put(0,\l@youtycvi){\line(1,0){\l@youthdi}}
+    \put(\l@youtxciv,\l@youtycvi){\begin{picture}(\l@youthdii,\l@youthdii)
+      \put(0,-\l@youthdiii){\makebox(0,0)[tr]%
+        {\l@yparamfont \l@ypcmd{headrule}}}
+        \end{picture}}
+\thinlines
+%       the header texts
+    \put(0,\l@youtycvii){\makebox(0,0)[tl]{left}}
+    \put(\l@youtxcii,\l@youtycvii){\makebox(0,0)[t]{center}}
+    \put(\l@youtxciii,\l@youtycvii){\makebox(0,0)[tr]{right}}
+%       the runningwidth
+    \put(0,\l@youtycviii){\vector(1,0){\l@youthdi}}
+    \put(0,\l@youtycviii){\vector(-1,0){0}}
+    \put(\l@youtxcii,\l@youtyci){\makebox(0,0)%
+      {\l@yparamfont \l@ypcmd{runningwidth}}}
+  \end{picture}
+  \setlength{\unitlength}{1pt}
+  \end{center}
+}
+
+
+\LMnote{2011/03/15}{We removed the \cs{parskip} effect on \cs{section}
+in one of the latest memoir versions, thus we need this to go away
+from the drawing}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SECTIONS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand{\drawheading}[1]{%
+  \l@yltoc{\textwidth}{\l@youthdi}               % textwidth
+  \l@yltoc{\baselineskip}{\l@youtvdi}            % baselineskip
+  \ifdrawparameters
+    \Huge \l@youtvdii=\baselineskip \normalsize  % Heading baselineskip
+      \divide\l@youtvdii by \l@yonepoint
+    \l@yltoc{40pt}{\l@youtvpi}                   % beforeskip
+    \ifruninhead
+      \l@yltoc{-72pt}{\l@youtvpii}                % afterskip
+      \l@yltoc{50pt}{\l@youthpi}                  % indent
+    \else
+      \l@yltoc{45pt}{\l@youtvpii}                 % afterskip
+      \l@yltoc{72pt}{\l@youthpi}                  % indent
+    \fi
+    \setbox0 = \hbox{{\Huge 3.5 Heading Title }}
+    \l@yltoc{\wd0}{\l@youthdv}  % width of heading text
+  \else
+    {#1 \l@youtvdii=\baselineskip\normalfont\normalsize} % heading baselineskip
+      \divide\l@youtvdii by \l@yonepoint
+    \setbox0 = \hbox{{#1 3.5 Heading Title }}
+    \l@yltoc{\wd0}{\l@youthdv}  % width of heading text
+  \fi
+  \l@youtvdiii=\l@youtvpii            % afterskip + parskip + textbaselineskip
+    \advance\l@youtvdiii by \l@youtparskip
+    \advance\l@youtvdiii by \l@youtvdi
+  \l@youtvdiv=\l@youtvpi              % beforeskip + parskip + headbaselineskip
+    \ifnum\l@youtvdiv < \z@
+      \l@youtvdiv = -\l@youtvdiv
+    \fi
+    \advance\l@youtvdiv by \l@youtparskip
+    \advance\l@youtvdiv by \l@youtvdii
+  \l@youtyci=\l@youtvdi                  % Y coord of base of after text
+  \l@youtycii=\l@youtyci                 % Y coord of base of heading text
+    \advance\l@youtycii by \l@youtvdiii
+  \l@youthdiv=\z@                        % 0 or abs(-afterskip)
+  \ifnum\l@youtvpii < \z@
+    \l@youthdiv = -\l@youtvpii
+    \l@youtvdiii=\l@youtvdi              %  textbaselineskip
+    \l@youtxci=\l@youthpi                % X coord of end of heading text
+      \advance\l@youtxci by \l@youthdv
+    \l@youtxcii=\l@youtxci               % X coord of start of after text
+      \advance\l@youtxcii by \l@youthdiv
+    \l@youtycii=\l@youtvdi               % Y coord of base of heading text
+  \fi
+  \l@youtyciii=\l@youtycii               % Y coord of base of prior text
+    \advance\l@youtyciii by \l@youtvdiv
+  \l@youtyciv=\l@youtyciii               % Y coord of top of prior text
+    \advance\l@youtyciv by \l@youtvdi
+  \l@youtycv=\l@youtyciv                 % 2*l@youtvdi + l@youtyciv
+    \advance\l@youtycv by \l@youtvdi
+    \advance\l@youtycv by \l@youtvdi
+  \l@youthdii=\l@youtvdi                 % a small amount
+  \l@youthdiii=\l@youthdii               % half a small amount
+    \divide\l@youthdiii by \tw@
+  \begin{center}
+  \setlength{\unitlength}{\l@youtunitlength}
+  \begin{picture}(\l@youthdi,\l@youtycv)
+    \ifnum\l@youtvpii < \z@
+      \put(0,\l@youtyci){\begin{picture}(\l@youthdi,\l@youtyciv)
+        \put(0,0){\l@ylabelfont second line of text following the heading \ldots}
+        \ifdrawparameters
+          \put(\l@youthpi,\l@youtycii){{\Huge 3.5 Heading Title}}
+        \else
+          \put(\l@youthpi,\l@youtycii){{#1 3.5 Heading Title}}
+        \fi
+        \put(\l@youtxcii,\l@youtycii){\l@ylabelfont Start of text \ldots}
+        \put(0,\l@youtyciii){\l@ylabelfont \ldots end of last line of preceding text.}
+%%        \ifdrawparameters
+        \testdrawdimensions
+        \ifl@ytempif
+          \put(0,\l@youtyciii){\vector(0,-1){\l@youtvdiv}}
+          \put(0,\l@youtyciii){\begin{picture}(\l@youthdii,\l@youthdii)
+            \put(\l@youthdiii,-\l@youthdii){\makebox(0,0)[tl]%
+              {\l@yparamfont \textit{$\|$beforeskip$\|$} +
+                \l@ypcmd{baselineskip}
+                (of heading font)}}
+            \end{picture}}
+          \put(0,\l@youtycii){\vector(1,0){\l@youthpi}}
+          \put(0,\l@youtycii){\begin{picture}(\l@youthdii,\l@youthdii)
+            \put(\l@youthdii,\l@youthdiii){\l@yparamfont \textit{indent}}
+            \end{picture}}
+          \put(\l@youtxci,\l@youtycii){\vector(1,0){\l@youthdiv}}
+          \put(\l@youtxci,\l@youtycii){\begin{picture}(\l@youthdii,\l@youthdii)
+            \put(\l@youthdiii,\l@youthdii){\l@yparamfont \textit{afterskip} ($< 0$)}
+            \end{picture}}
+        \fi
+        \end{picture}}
+    \else
+      \put(0,\l@youtyci){\begin{picture}(\l@youthdi,\l@youtyciv)
+        \put(0,0){\l@ylabelfont second line of text following the heading \ldots}
+        \put(0,\l@youtyci){\l@ylabelfont This is the start of the after-heading text,
+                           which continues on \ldots}
+        \ifdrawparameters
+          \put(\l@youthpi,\l@youtycii){{\Huge 3.5 Heading Title}}
+        \else
+          \put(\l@youthpi,\l@youtycii){{#1 3.5 Heading Title}}
+        \fi
+        \put(0,\l@youtyciii){\l@ylabelfont \ldots end of last line of preceding text.}
+%%        \ifdrawparameters
+        \testdrawdimensions
+        \ifl@ytempif
+          \put(0,\l@youtyciii){\vector(0,-1){\l@youtvdiv}}
+          \put(0,\l@youtyciii){\begin{picture}(\l@youthdii,\l@youthdii)
+            \put(\l@youthdiii,-\l@youthdii){\makebox(0,0)[tl]%
+              {\l@yparamfont \textit{$\|$beforeskip$\|$} +
+                \l@ypcmd{baselineskip}
+                (of heading font)}}
+            \end{picture}}
+          \put(0,\l@youtycii){\vector(1,0){\l@youthpi}}
+          \put(0,\l@youtycii){\begin{picture}(\l@youthdii,\l@youthdii)
+            \put(\l@youthdii,\l@youthdiii){\l@yparamfont \textit{indent}}
+            \end{picture}}
+          \put(0,\l@youtycii){\vector(0,-1){\l@youtvdiii}}
+          \put(0,\l@youtycii){\begin{picture}(\l@youthdii,\l@youthdii)
+            \put(\l@youthdiii,-\l@youthdii){\makebox(0,0)[tl]%
+              {\l@yparamfont \textit{afterskip} +
+                \l@ypcmd{baselineskip}
+                (of text font)}}
+            \end{picture}}
+        \fi
+        \end{picture}}
+      \fi
+      \put(0,0){\line(1,0){\l@youthdi}}
+      \put(0,\l@youtycv){\line(1,0){\l@youthdi}}
+      \end{picture}
+    \end{center}
+    \setlength{\unitlength}{1pt}
+%%    \ifdrawparameters\else
+    \testprintparameters
+    \ifl@ytempif
+      \begin{center}
+      \begin{footnotesize}
+        Lengths are to the nearest pt. \\
+      \begin{ttfamily}
+      \begin{tabular}{l@{\hspace{20pt}}l}
+      \textit{beforeskip}      = \number\l@youtvpi pt &
+      \textit{afterskip}       = \number\l@youtvpii pt \\
+      \textit{indent}          = \number\l@youthpi pt &
+      \textrm{(heading font)}
+         \l@ycmd{baselineskip} = \number\l@youtvdii pt \\
+      \l@ycmd{parskip}         = \number\l@youtparskip pt &
+      \textrm{heading font}    = \string#1 \\
+      \end{tabular}
+      \end{ttfamily}\end{footnotesize}
+      \end{center}
+    \fi
+}
+
+
+
+
+\endinput

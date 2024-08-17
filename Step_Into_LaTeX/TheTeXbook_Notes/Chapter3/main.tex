@@ -1,0 +1,98 @@
+\documentclass[fontset=windows, 12pt]{article}
+\PassOptionsToPackage{quiet}{fontspec}
+\usepackage[a4paper, total={6.5in, 10in}]{geometry}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{ctex}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{wasysym}
+
+
+\newcommand{\trans}[1]{{\ttfamily #1}}
+\newcommand{\num}{\ensuremath{\RHD}}
+
+\title{Controlling \TeX}
+\author{Eureka}
+\date{\today}
+\begin{document}
+\maketitle
+
+\section{Basic Concept}
+\subsection{escape character}
+
+{\bf 原文}
+
+Note: Some computer terminals have a key marked ‘ESC’, but that is not
+your escape character! It is a key that sends a special message to the operating
+system, so don’t confuse it with what this manual calls “escape.”
+
+\trans{人话翻译： 你键盘上的 {\ttfamily ESC} 键，不是这里的 {\ttfamily escape character} }
+
+\trans{注：高德纳在这里应该是把我们一般的个人 PC 称作了终端}
+
+\noindent \textbf{Remark}
+
+\textbf{TEX allows any character to be used for escapes, But Usually \textbackslash}
+
+\subsection{Control Seqence}
+\textbf{定义} 
+
+Immediately after typing `\textbackslash' (i.e., immediately after an escape character)
+you type a {\bf coded comman}d telling TEX what you have in mind. Such commands
+are called {\bf control sequences}. 
+
+\textbf{Controle Seqence 的分类}
+
+Control sequences come in two flavors.(控制序列有两种形式)
+
+\num{\itshape Control Words}
+
+consists of an escape character followed by one or more
+letters, followed by a space or by something besides a letter. 
+一个简单的控制序列的例子：{\ttfamily \textbackslash input }
+
+\textbf{Remark}
+
+TEX has to know
+where the control sequence ends, so you must put a space after a 
+control word
+{\bf if the next character is a letter}
+
+\trans{\TeX 必须知道控制序列在哪里结束，所以当控制序列后面是一个字母时，务必使用空格分开}.
+
+In case you’re
+wondering what a “letter” is, the answer is that TEX normally regards the 52
+symbols A...Z and a...z as letters. The digits 0...9 are not considered to be
+letters, so they don’t appear in control sequences of the first kind.
+
+\trans{翻译：在\TeX 中 letter 仅包含52个大小写英文字母，}\textbf{不包含数字}
+
+\num {\itshape control symbol}
+
+\textbf{定义}
+
+it consists of the escape character followed by a  {\bf single nonletter}. 
+一个简单的控制序列的例子：\verb |\'x|(注： 使用样例：\verb|A\'a|---> A\'a)
+
+\textbf{Remark}
+
+In this case you
+don’t need a space to separate the control sequence from a letter that follows
+
+\trans{在这种情况下，你不用再添加空格了，因为这类控制序列一般只有一个 symbol（letter， nonletter）}
+
+
+\num  EXERCISE 3.1
+
+What are the control sequences in ‘\textbackslash I’m \textbackslash exercise3.1\textbackslash\textbackslash!’ ?
+
+\textbf{Solve}
+
+报错：Undefined control sequence.
+
+\num 
+
+\end{document}

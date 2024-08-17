@@ -1,0 +1,76 @@
+% \special{dvipdfmx:config z 0}
+% \PassOptionsToPackage{quiet}{fontspec}
+\documentclass[cn, math=cm]{elegantbook}
+% 更改了自定义的宏包为 Article.sty
+% \usepackage{My}
+\usepackage{Article}
+\usepackage{./Chapter/TikZ/tikzit}
+\input{Chapter/TikZ/mystyle.tikzstyles}
+\input{Chapter/TikZ/mystyle.tikzdefs}
+
+
+\setcounter{tocdepth}{3}
+\cover{Chapter/TikZ/cover.jpg}
+\title{数学笔记}
+\date{\today}
+\author{Eureka}
+\bioinfo{注}{本笔记为本人独自完成，难免有误!}
+
+% 本文档命令
+\newcommand{\ccr}[1]{\makecell{{\color{#1}\rule{1cm}{1cm}}}}
+
+% 修改标题页的橙色带
+\definecolor{customcolor}{RGB}{32,178,170}
+\colorlet{coverlinecolor}{customcolor}
+\usepackage{cprotect}
+
+\addbibresource[location=local]{reference.bib} % 参考文献，不要删除
+
+\begin{document}
+    % 通常的用法
+    \maketitle
+    \frontmatter
+    \tableofcontents
+    \mainmatter
+    
+    % 注：chapter*{}不会有页码
+    \chapter*{Preface}   
+    \input{Chapter/Preface.tex}
+
+
+    \chapter{Daily}
+    \input{Chapter/Daliy/daily.tex}
+
+
+    \chapter{Mathematical Analysis}
+    \input{Chapter/Mathematical Analysis/math analysis.tex}
+    \input{Chapter/Mathematical Analysis/Definite limit.tex}
+    \input{Chapter/Mathematical Analysis/Definite Integrate.tex}
+    \input{Chapter/Mathematical Analysis/Real Number Theroy.tex}
+    \input{Chapter/Mathematical Analysis/Point set.tex}
+    \input{Chapter/Mathematical Analysis/Fourier.tex}
+
+
+    \chapter{Algebra}
+    \input{Chapter/Algebra/Linear Algebra.tex}
+    \input{Chapter/Algebra/Sum.tex}
+    \input{Chapter/Algebra/Isomorphism.tex}
+    \input{Chapter/Algebra/Direcr Sum.tex}
+    
+
+    \chapter{Ordinary Partial Equation}
+    \input{Chapter/Ordinary Partial Equation/Linear First-order Partial Equation Common Solution.tex}
+    \input{Chapter/Ordinary Partial Equation/Integrateing Fractor.tex}
+    \input{Chapter/Ordinary Partial Equation/Constant Variation.tex}
+    \input{Chapter/Ordinary Partial Equation/PiCard.tex}
+
+
+    \chapter{Probability}
+    \input{Chapter/Probability/Common Distribution.tex}
+
+
+    \chapter{Numerical Analysis}
+    \input{./Chapter/numerical analysis/InneProduct.tex}
+
+    
+\end{document}

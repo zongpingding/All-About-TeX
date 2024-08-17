@@ -1,0 +1,32 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper, total={6.5in, 10in}]{geometry}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+\definecolor{xcol0}{HTML}{BD4242} % red
+\definecolor{xcol1}{HTML}{4268BD} % blue
+\definecolor{xcol2}{HTML}{52B256} % green
+\definecolor{xcol3}{HTML}{7F52B2} % purple
+\definecolor{xcol4}{HTML}{FF9F31} % orange
+\definecolor{xcol5}{HTML}{777777} % gray
+\definecolor{xcol6}{HTML}{80F5DC} % cyan
+
+\newcommand{\cmplxsol}[1]{
+    \coordinate (O) at (0,0);
+    \draw[black!20] (1,0) arc (0:360:1);
+    \pgfmathsetmacro{\dt}{360/#1}
+    \pgfmathsetmacro{\n}{int(#1-1)}
+    \pgfplotsinvokeforeach{\n,...,0}{
+        \pgfmathparse{##1+1}
+        \draw[xcol##1, fill=xcol##1!20] (O) -- ({0.1*##1},0) arc (0:{\dt*##1}:{0.1*##1}) -- cycle;
+        \draw[very thick, xcol##1] (O) -- ({cos(\dt*##1)},{sin(\dt*##1)}) node{};
+        \node[xcol##1, fill=xcol##1!10, rounded corners]  at ({1.23*cos(\dt*##1)},{1.23*sin(\dt*##1)}) {$z_{\the\numexpr##1+1\relax}$};
+    }
+}
+\begin{document}
+    \begin{tikzpicture}
+        \cmplxsol{5}
+    \end{tikzpicture}
+    
+\end{document}

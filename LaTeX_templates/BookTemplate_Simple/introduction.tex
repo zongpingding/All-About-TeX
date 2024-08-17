@@ -1,0 +1,141 @@
+\chapter{Introduction}
+\label{sec:intro}
+
+\kant[4] % Dummy text
+
+\begin{equation}
+    \iint_D \diff x \diff y
+    =
+    \int_0^{2\pi} \int_0^t \rho \diff \rho \diff t
+    =
+    \frac{4}{3} \pi^3.
+\end{equation}
+
+\section{Figures and Tables}
+
+% Standalone with \input:
+\begin{figure}[htbp]
+    \centering
+    \input{figures/ball}
+    \caption[One ball]{One ball.}
+\end{figure}
+
+% Standalone with \includegraphics:
+\begin{figure}[thbp]
+    \centering
+    \includegraphics{balls}
+    \caption[Two balls]{Two balls.}
+\end{figure}
+
+% Todonotes:
+\begin{figure}[hbp]
+    \centering
+    \missingfigure{Three balls.}
+    \caption[Three balls]{Three balls.}
+\end{figure}
+
+\kant[5-6] % Dummy text
+
+% Booktabs:
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{@{}ll@{}}
+        \toprule
+        \textbf{Correct}               & \textbf{Incorrect}      \\
+        \midrule
+        \( \varphi \colon X \to Y \)   & \( \varphi : X \to Y \) \\[0.5ex]
+        \( \varphi(x) \coloneqq x^2 \) & \( \varphi(x) := x^2 \) \\
+        \bottomrule
+    \end{tabular}
+    \caption[Colons]{Proper colon usage.}
+\end{table}
+
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{@{}ll@{}}
+        \toprule
+        \textbf{Correct}     & \textbf{Incorrect}         \\
+        \midrule
+        \( A \implies B \)   & \( A \Rightarrow B \)      \\
+        \( A \impliedby B \) & \( A \Leftarrow B \)       \\
+        \( A \iff B \)       & \( A \Leftrightarrow B \)  \\
+        \bottomrule
+    \end{tabular}
+    \caption[Arrows]{Proper arrow usage.}
+\end{table}
+
+% Tablefootnote and multirow:
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{@{}ll@{}}
+        \toprule
+        \textbf{Correct}
+        & 
+        \textbf{Incorrect}
+        \\
+        \midrule
+        \( -1 \) 
+        & 
+        -1
+        \\[0.3ex]
+        1--10
+        &
+        1-10
+        \\[0.3ex]
+        Birch--Swinnerton-Dyer\tablefootnote{It is now easy to tell that Birch and Swinnerton-Dyer are two people.} conjecture
+        &
+        Birch-Swinnerton-Dyer conjecture
+        \\[0.3ex]
+        The ball \dash which is blue \dash is round.
+        &
+        \multirow{ 2}{*}{The ball - which is blue - is round.}
+        \\[0.3ex]
+        The ball---which is blue---is round. 
+        &
+        \\
+        \bottomrule
+    \end{tabular}
+    \caption[Dashes]{Proper dash usage.}
+\end{table}
+
+\begin{table}[hbtp]
+    \centering
+    \begin{tabular}{@{}*{2}{p{0.5\textwidth}}@{}}
+        \toprule
+        \textbf{Correct} &  \textbf{Incorrect}
+        \\
+        \midrule
+        \enquote{This is an \enquote{inner quote} inside an outer quote}
+        &
+        'This is an "inner quote" inside an outer quote'
+        \\
+        \bottomrule
+    \end{tabular}
+    \caption[Quotation marks]
+    {Proper quotation mark usage.
+    The \texttt{\textbackslash enquote} command chooses the correct
+    quotation marks for the specified language.}
+\end{table}
+
+\section{Outline}
+
+The rest of the text is organised as follows:
+\begin{description}
+    \item[\cref{sec:second}]
+    is second to none, with the notable exception of \cref{sec:intro}.
+    The main tool introduced here is the employment of unintelligible sentences.
+
+    \item[\cref{sec:third}]
+    asserts the basic properties of being the third chapter of a text.
+    This section reveals the shocking truth of filler content.
+
+    \item[\cref{sec:fourth}]
+    demonstrates how easily one can get to four chapters by simply using the \texttt{kantlipsum} package to generate dummy words.
+
+    \item[\cref{sec:first-app}]
+    features additional material for the specially interested.
+
+    \item[\cref{sec:second-app}]
+    consists of results best relegated to the back of the document,
+    ensuring that nobody will ever read it.
+\end{description}

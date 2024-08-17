@@ -1,0 +1,46 @@
+\documentclass{article}
+\usepackage{ztikz}
+\ztikzLoadModule{zdraw, gnuplot}
+
+
+
+\begin{document}
+
+
+
+\centering
+\section{latex3 draw}
+\zrule[height=30, width=30, startColor=red, endColor=orange, step=.05]\qquad
+
+
+\newpage
+\zdrawSetUnit{cm}
+\zdrawSetPathWidth{5pt}
+\zplot[
+  domain={-3, 0.1, 3}, 
+  action=shade, 
+  startColor=blue, 
+  endColor=red, 
+  axis=x
+]{-x^2}
+\zplot[
+  domain={-3, 0.1, 3}, 
+  action=shade, 
+  startColor=blue, 
+  endColor=red, 
+  axis=y, 
+  range={0, 9}
+]{x^2}
+
+
+
+\section{gnuplot}
+\begin{tikzpicture}
+  \Plot{sgn(x)}
+\end{tikzpicture}
+
+
+\Plotz{x**2+y}
+\end{document}
+
+

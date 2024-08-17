@@ -1,0 +1,300 @@
+\newpage
+\section{PiCard逼近}
+\subsection{Picard逼近证明}
+
+这里本质上就是证明定解问题的存在唯一性， 适定性及稳定性
+首先有引入一个定理
+
+\begin{theorem}{解的存在唯一性定理}
+已知初值问题
+\begin{align}
+    \begin{cases}
+        \frac{\dd y}{\dd x} &= f(x, y)\\
+        y\bigg|_{x=x_0} &= y_0
+    \end{cases}
+    \label{Orig}
+\end{align}
+
+
+其中 $f(x, y$) 是闭矩形域 $\mathbb{R}:|x-x_0|\le a,~ |y-y_0|\le b$ 上的连续函数.
+
+
+$\mathbf{Lipschz}$ \textsf{条件:}
+若 $\exists L>0, ~ s.t. ~ |f(x, y_1) - f(x, y_2)|\le L|y_1-y_2|$，
+对 $\forall (x, y_1), (x, y_2)\in \mathbb{R}$都成立，则称$f(x, y)$关于 $y$ 
+满足 $\mathbf{Lipschz}$条件
+
+$\mathbf{Picard}$ \textsf{存在唯一性定理:}
+若$f(x, y)$在$\mathbb{R}:|x-x_0|\le a,~ |y-y_0|\le b$上连续,且关于$y$满足$\mathbf{Lipschz}$条件,
+则微分方程在$|x-x_0|\le h$上存在唯一的解:
+\[
+    y = \varphi(x)
+\]
+且其中$h = \min\{a, \frac{b}{M}\}, ~ M = \max\limits_\mathbb{R} |f(x, y)|$
+\end{theorem}
+
+
+\begin{figure}[!htb]
+    \begin{minipage}[t]{0.55\linewidth}
+        \vspace*{2em}
+        \num{1}\quad $M$就是阴影区域 $f(x, y)$的最大值\\[7em]
+        \num{2}\quad $y=\varphi(x)$的唯一性在 $x\in [x_0-h, x_0+h]$上能够保证
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.4\linewidth}
+        \hspace*{0pt}
+        \center
+        \begin{tikzpicture}{scale=0.25}
+            \draw[-stealth] (-1, 0)--(5, 0)node[below=.5em, left] {$x$};
+            \draw[-stealth] (0, -1)--(0, 5)node[right=.5em, below] {$y$};
+            \draw[fill = black!20] (1, 1)--(4, 1)--(4, 3)--(1, 3)--cycle;
+            \draw[dashed] (2.5, 0)node[below] {$x_0$}--(2.5, 2)node[right=.5em, above=.25em] {$(x_0, y_0)$}--(0, 2)node[left] {$y_0$};
+            \draw[decorate, decoration={calligraphic brace, amplitude=2mm}] (1, 3)--(4, 3)node[midway, above=.5em] {$2a$};
+            \draw[decorate, decoration={calligraphic brace, mirror, amplitude=2mm}] (4, 1)--(4, 3)node[midway, right=.5em] {$2b$};
+            \node[left=.5em, below] at (0, 0) {$O$};
+            \draw[fill=black!60]  (2.5, 2) circle (2pt);
+            \draw[dashed] (2.2, 0)--(2.2, 2);
+            \draw[dashed] (2.8, 0)--(2.8, 2)--(2.5, 2);
+            \draw[decorate, decoration={calligraphic brace}] (2.2, 0)--(2.8, 0)node[midway, above=.5em] {$2h$};
+        \end{tikzpicture}
+    \end{minipage}
+\end{figure}
+
+
+\noindent{\sf 证明思路}
+
+1. 首先证明
+\begin{align}
+    &\begin{cases}
+        \frac{\dd y}{\dd x} &= f(x, y)\\
+        y\bigg|_{x=x_0} &= y_0
+     \end{cases}
+     \Leftrightarrow
+     &\mbox{积分方程:} ~~y(x) = y_0 + \int_{x_0}^{x}{f(t, y(t)) \dd t}\label{IntFun}
+\end{align}
+
+2. 构造 $\mathbf{PiCard}$逐步逼近序列
+
+从积分方程\ref{IntFun}构造Picard逼近序列$\{\varphi_n(x)\}$
+\[
+    \{\varphi_n(x)\}:
+    \left\{
+    \begin{aligned}
+        &\varphi_0(x) = y_0\notag\\
+        &\varphi_n(x) = y_0 + \int_{x_0}^{x}{f(t, \varphi_{n-1}(t)) \dd t}\label{PiCard}
+    \end{aligned}
+    \right.
+\]
+
+3. 最后证明 $\{\varphi_n(x)\}$一致收敛于 $\varphi(x)$
+
+\begin{formal}{blue!20}
+    注意：我们的 $\varphi_0(x)$是任意取的,把 $\varphi_0(x)$带入方程\ref{PiCard}， 就可以得到 $\varphi_1(x)$， 如果此时 $\varphi_0(x)=\varphi_1(x)$那么就可以得到出$\varphi_0(x)$就是
+    方程\ref{IntFun}的解.反之, 若 $\varphi_0(x)\neq \varphi_1(x)$， 那么就把 $\varphi_1(x)$带入方程\ref{PiCard}, 从的得到 $\varphi_2(x)$，再次检查 $\varphi_2(x)=\varphi_1(x)$, 
+    那么 $\varphi_1(x)$就是方程\ref{IntFun}的解；以此类推，我们不一定总能够找到一个 $\varphi_{n-1}(x)$来使得 $\varphi_n(x)= \varphi_{n-1}(x)$.即有：即使 $\{\varphi_n(x)\}$收敛于 $\varphi(x)$，但是我们仍然无法确定
+    $\varphi(x)$为方程\ref{IntFun}的解。由此引出了证明的第四步 $\cdots$     
+\end{formal}
+
+
+4. 证明$\varphi(x)$是否为方程\ref{IntFun}的解
+
+5.证明解的唯一性
+
+\begin{proof}{\sf \color{orange} 1}\par
+    若 $y = \varphi(x)$ 是方程\ref{Orig}的解, 那么带入到方程\ref{Orig}中即有
+    \[
+        \frac{\dd \varphi(x)}{\dd x}=f(x, \varphi(x))    
+    \]
+
+    现在我们两边同时取 $[x_0, x]$ 上的定积分.为了避免混淆，我们变换一下积分变量有
+    \[
+        \int_{x_0}^{x}{\frac{\dd \varphi(t)}{\dd t} \dd t} = \int_{x_0}^{x}{f(t, \varphi(t)) \dd t}    
+        \Longrightarrow
+        \varphi(x)-y_0(\mbox{原}\,\varphi(x_0)) = \int_{x_0}^{x}{f(t, \varphi(t)) \dd t}    
+    \]
+
+    移项可以得到
+    \[
+        \varphi(x) =  y_0 + \int_{x_0}^{x}{f(t, \varphi(t)) \dd t}    
+    \]
+
+    由此说明 $y = \varphi(x)$ 满足方程\ref{IntFun}.
+
+    若 $y = \varphi(x)$是\ref{IntFun}的解, 那么我们对方程\Ref{IntFun}求导有:
+    \begin{align*}
+        \frac{\dd }{\dd x}[\varphi(x)] = \frac{\dd}{\dd x}\left[y_0 + \int_{x_0}^{x}{f(t, \varphi(t)) \dd t}\right]
+        \Longrightarrow
+        \frac{\dd \varphi(x)}{\dd x}=f(x, \varphi(x))
+    \end{align*}
+
+    所以 $y = \varphi(x)$ 是方程\ref{Orig}的解
+\end{proof}
+
+
+\begin{proof}{\sf \color{orange} 2}\par
+    从前面的定义可以知道, $\varphi(x)$\mbox{的}$\mathbf{Picard}$逼近序列为
+    \begin{align*}
+    \left\{\begin{aligned}
+        &\varphi_0(x) = y_0\\
+        &\varphi_1(x)  = y_0 + \int_{x_0}^{x}{f(t, \varphi_0(t)) \dd t}\\
+        &\varphi_2(x)  = y_0 + \int_{x_0}^{x}{f(t, \varphi_1(t)) \dd t}\\
+        &\varphi_3(x)  = y_0 + \int_{x_0}^{x}{f(t, \varphi_2(t)) \dd t}\\
+        &\vdots\\
+        &\varphi_{n}(x)  = y_0 + \int_{x_0}^{x}{f(t, \varphi_{n-1}(t)) \dd t}
+        \label{PicardExample}
+    \end{aligned}\right.
+    \end{align*}
+
+    所以我们就构造出来了一个函数序列
+    \begin{align*}
+        \bigg\{\varphi_0(x), \varphi_1(x), \cdots, \varphi_n(x)\bigg\}
+    \end{align*}
+
+    明显这个函数序列 $\{\varphi_n(x)\}$在区间 $[x_0-h, x_0+h]$ 上是有定义的,而且是连续的。
+    下面证明它满足不等式关系
+    \begin{align*}
+        |\varphi_n(x)-y_0|\le b
+    \end{align*}
+
+    以此来说明我们这个 $\varphi_n(x)$是有意义的。
+
+    1.当 $n=1$时，
+    \begin{align*}
+        \varphi_1(x)&=\int_{x_0}^{x}{f(t, \varphi(t)) \dd t}\\
+        \Longrightarrow|\varphi_1(x)-y_0| &= \left|\int_{x_0}^{x}{f(t, \varphi(t)) \dd t}\right|\le \int_{x_0}^{x}{|f(t, y_0)| \dd t}
+        \le M(x-x_0)\le Mh\le b
+    \end{align*}
+
+    2. 现在我们使用数学归纳法，假设当 $n=k$时成立$|\varphi_{k}(x)-y_0| \le b $,由于在这时
+    \begin{align*}
+        \varphi_{k+1}(x) = \int_{x_0}^{x}{f(t, \varphi_k(t)) \dd t}
+    \end{align*}
+    那么此时我们有
+    \begin{align*}
+        |\varphi_{k+1}(x) - y_0|\le \int_{x_0}^{x}{|f(t, \varphi_k(t)) |dt}\le M(x-x_0)\le Mh\le b
+    \end{align*}
+\end{proof}
+
+
+\begin{proof}{\sf \color{orange} 3}\par
+    从上边我们可以看出函数序列 $\{\varphi_n(x)\}$的收敛性,等价于如下的级数 $\zeta_s$ 的收敛性.
+    \begin{align*}
+        \varphi_n(x)
+        =&\varphi_0(x) + [\varphi_1(x) - \varphi_0(x)] + \cdots + [\varphi_{n}(x)-\varphi_{n-1}(x)]\\
+        =&\varphi_0(x) + \sum_{i=1}^{n}{\left(\varphi_{i}(x)-\varphi_{i-1}(x)\right)}\\
+        =&\zeta_s
+    \end{align*}
+    下边我们使用数学归纳法来证明这个级数是收敛的;
+    
+    \noindent\num{1}\quad 首先当 $n=1$时我们有
+    \[
+        |\varphi_1(x)-\varphi_0(x)|\le \int_{x_0}^{x}{f(t, \varphi_0(t)) \dd t} \le M(x-x_0)   
+    \]
+
+    \noindent\num{2}\quad 对于 $n=2$时,我们有
+    \begin{align*}
+        |\varphi_2(x)-\varphi_1(x)|&\le \int_{x_0}^{x}{\left|f(t, \varphi_1(t))-f(t, \varphi_0(x)) \right|\dd t} \\
+    \end{align*}
+
+    又因为$f(x, y)$在$\mathbb{R}:|x-x_0|\le a,~ |y-y_0|\le b$上关于$y$满足$\mathbf{Lipschz}$条件,所以我们可以得到
+    \begin{align*}
+        \left|\varphi_2(x)-\varphi_1(x)\right|
+        &\le L \int_{x_0}^{x}{\left|\varphi_1(t)-\varphi_0(t)\right|\dd t}
+          \le L \int_{x_0}^{x}{M(t-x_0) \dd t}\\
+        & = L\cdot \frac{M}{2}(x-x_0)^2
+          = \frac{ML}{2!}(x-x_0)^2
+    \end{align*}
+
+    \noindent\num{3}\quad 下面我们由数学归纳法假设对于正整数 $n$ 成立不等式
+    \begin{align*}
+        \left|\varphi_n(x)-\varphi_{n-1}(x)\right|\le \frac{ML^{n-1}}{n!}(x-x_0)^n
+    \end{align*}
+
+    于是我们可以得到当正整数取 $n+1$时，有
+    \begin{align*}
+        \left|\varphi_{n+1}(x)-\varphi_n(x)\right|
+        &\le L \int_{x_0}^{x}{\left|f(t, \varphi_n(t)) - f(t, \varphi_{n-1}(t))\right|\dd t}
+          \le L \int_{x_0}^{x}{\left|\varphi_n(t)-\varphi_{n-1}(t)\right| \dd t}\\
+        & = L\cdot \frac{ML^{n-1}}{n!}\int_{x_0}^{x}{(t-x_0)^n \dd t}
+          = \frac{ML^{n}}{(n+1)!}(x-x_0)^{n+1}
+    \end{align*}
+
+    于是由数学归纳法可以知道，对于所有的正整数 $k$,函数项级数 $\zeta_s$的每一项均有
+    \begin{align*}
+        \left|\varphi_{k}(x)-\varphi_{k-1}(x)\right|\le \frac{ML^{k-1}}{k!}(x-x_0)^{k}, ~~~x_0-h \le x\le x_0 +h
+    \end{align*}
+    又因为上式的右端是一个正项的收敛级数，于是根据 $\mathbf{weierstrass}$判别法可以知道函数项级数 $\zeta_s$在 ${x_0}$的$O(x_0, h)$邻域
+    内一致收敛
+\end{proof}
+
+
+\clearpage
+\begin{proof}{\sf \color{orange} 4}\par
+    从上边的\textsf{证明3}我们可以假设函数序列 $\{\varphi_n(x)\}$收敛于 $\varphi(x)$, 即
+    \begin{align*}
+        \lim_{n\to\infty}{\varphi_n(x)} = \varphi(x)
+    \end{align*}
+    同时我们也可以知道 $\varphi(x)$在 $O(x_0, h)$上是连续的，为证明 $\varphi(x)$是方程 \ref{Orig}
+    的解，只需要证明 $\varphi(x)$是方程 \ref{IntFun}的解。根据 $\mathbf{Lipschz}$条件我们可以得到
+    \begin{align*}
+        \left|f(x, \varphi_n(x))-f(x, \varphi(x))\right| \le L\left|\varphi_n(x) -\varphi(x)\right|
+    \end{align*}
+    因为 $\{\varphi_n(x)\}$在 $O(x_0, h)$上一致收敛于 $\varphi(x)$，所有可以知道函数序列$f(x, \varphi_n(x))$在
+    $O(x_0, h)$上一致收敛于 $f(x, \varphi(x))$. 根据一致收敛的性质可以知道，方程\ref{PiCard}两边同时对
+    $n$求极限仍然相等。即:
+    \begin{align*}
+        \lim_{n\to\infty}{\varphi_n(x)} = y_0 + \lim_{n\to \infty}{\int_{x_0}^{x}{f(t, \varphi_{n-1}(x)) \dd t}}
+        =y_0 + \int_{x_0}^{x}{\lim_{n\to \infty}{f(t, \varphi_{n-1}(x))} \dd t}
+    \end{align*}
+    即:
+    \begin{align*}
+        \varphi(x) = y_0 + \int_{x_0}^{x}{f(t, \varphi(t)) \dd t}
+    \end{align*}
+    于是 $\varphi(x)$是方程 \ref{IntFun}的解， 也是方程\ref{Orig}的解
+\end{proof}
+
+
+\begin{proof}{\sf \color{orange} 5}\par
+    最后我们证明方程 \ref{IntFun}的解是唯一的。为此我们假设方程\ref{IntFun}还有另外一个解
+    $\psi(x), x\in O(x_0, h)$,下边我们证明 $\psi(x)$也是 函数序列$\{\varphi_n(x)\}$的极限函数：
+    应为 $\psi(x)$也是方程\ref{IntFun}的解，所以我们可以得到如下的方程
+    \begin{align*}
+        \psi_n(x) = y_0 + \int_{x_0}^{x}{f(t, \psi_{n-1}(t)) \dd t}
+    \end{align*}
+    和\textsf{证明4}的思路相类似,我们也可以进行如下的估计:
+    \begin{align*}
+        |\varphi_0(x)-\psi(x)|
+        &\le \int_{x_0}^{x}{f(t, \psi_0(t)) \dd t} \le M(x-x_0) \\
+        |\varphi_1(x)-\psi(x)|
+        &\le \int_{x_0}^{x}{\biggl|f(t, \varphi_0(t))-f(t, \psi(x)) \biggr|\dd t}
+            \le L \int_{x_0}^{x}{\biggl|\varphi_0(t)-\psi(t)\biggr| \dd t}\\
+        &\le ML \int_{x_0}^{x}{t-x_0 \dd t}
+         = \frac{ML}{2!}(x-x_0)^2
+    \end{align*}
+    下面我们由数学归纳法假设对于正整数 $n$ 成立不等式(此即为\textsf{误差公式})
+    \begin{align}
+        \left|\varphi_{n-1}(x)-\psi(x)\right|\le \frac{ML^{n-1}}{n!}(x-x_0)^n
+        \tag{7}
+    \end{align}
+    于是我们可以得到当正整数取 $n+1$时，有
+    \begin{align*}
+        \left|\varphi_{n}(x)-\psi(x)\right|
+        &\le L \int_{x_0}^{x}{\biggl|f(t, \varphi_{n-1}(t)) - f(t, \psi(t))\biggr|\dd t}
+            \le L \int_{x_0}^{x}{\biggl|\varphi_{n-1}(t)-\psi(t)\biggr| \dd t}\\
+        & = L\cdot \frac{ML^{n-1}}{n!}\int_{x_0}^{x}{(t-x_0)^n \dd t}
+          = \frac{ML^{n}}{(n+1)!}(x-x_0)^{n+1}
+    \end{align*}
+    于是由数学归纳法可以知道，对于所有的正整数 $n$，均有
+    \begin{align*}
+        \left|\varphi_{n}(x)-\psi_{k-1}(x)\right|\le \frac{ML^{n}}{(n+1)!}(x-x_0)^{n+1}, ~~~x_0-h \le x\le x_0 +h
+    \end{align*}
+    因为上式的右端项是一个正项收敛级数的通项 $\frac{ML^n}{(n+1)!}h^{n+1}$.因为上式的右端项是一个正项收敛级数的通项
+    所以有：
+    \begin{align*}
+        \lim_{n\to \infty}{\frac{ML^n}{(n+1)!}h^{n+1}}=0
+    \end{align*}
+    所以 $\psi(x)$在 $O(x_0, h)$上一致收敛于 $\psi(x)$，最后根据极限的唯一性可以得到:
+    \begin{align*}
+        \varphi(x) = \psi(x), ~~~x \in O(x_, h)
+    \end{align*}
+\end{proof}

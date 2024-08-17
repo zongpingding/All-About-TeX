@@ -1,0 +1,186 @@
+% memfonts.sty  font package for memoir
+
+\ProvidesPackage{memfonts}
+        [2007/11/13 v1.0 Palatino/CMR font mix]
+
+%%%% use Palatino as roman font (which includes italic and small caps)
+\renewcommand{\rmdefault}{ppl} 
+\renewcommand{\oldstylenums}[1]{{\fontfamily{pplj}\selectfont #1}}
+
+%%%\DeclareFontShape{T1}{ppl}{bx}{n}{<-> ssub * ppl/b/n}{}
+%%%\DeclareFontShape{T1}{ppl}{bx}{sc}{<-> ssub * ppl/b/sc}{}
+%%%\DeclareFontShape{OMS}{ppl}{m}{n}{<-> ssub * cmsy/m/n}{}
+
+%%%%%%%%%% some other odd ones
+%%%\DeclareFontShape{T1}{pbk}{m}{n}{<-> ssub pbk/l/n}{}
+
+
+%%%% use Latin Modern for other fonts
+\renewcommand{\sfdefault}{lmss}
+\renewcommand{\ttdefault}{lmtt}
+
+%%%% scaled version of t1lmtt
+
+\DeclareFontFamily{T1}{lmtt}{\hyphenchar \font\m@ne}
+\DeclareFontShape{T1}{lmtt}{m}{n}
+  {<-8.5> s * [1.09] ec-lmtt8 <8.5-9.5> s * [1.09] ec-lmtt9
+   <9.5-11> s * [1.09] ec-lmtt10 <11-> s * [1.09] ec-lmtt12
+  }{}
+
+\DeclareFontShape{T1}{lmtt}{m}{sl}
+  {<-> s * [1.09] ec-lmtto10}{}
+\DeclareFontShape{T1}{lmtt}{m}{it}
+  {<-> s * [1.09] ec-lmtti10}{}
+\DeclareFontShape{T1}{lmtt}{m}{sc}
+  {<-> s * [1.09] ec-lmtcsc10}{}
+\DeclareFontShape{T1}{lmtt}{m}{scsl}
+  {<-> s * [1.09] ec-lmtcso10}{}
+%%%% light (l), light condensed (lc), and dark (b) variants
+\DeclareFontShape{T1}{lmtt}{l}{n}
+  {<-> s * [1.09] ec-lmtl10}{}
+\DeclareFontShape{T1}{lmtt}{l}{sl}
+  {<-> s * [1.09] ec-lmtlo10}{}
+\DeclareFontShape{T1}{lmtt}{l}{it}
+  {<->sub*lmtt/l/sl}{}
+
+\DeclareFontShape{T1}{lmtt}{lc}{n}
+  {<-> s * [1.09] ec-lmtlc10}{}
+\DeclareFontShape{T1}{lmtt}{lc}{sl}
+  {<-> s * [1.09] ec-lmtlco10}{}
+\DeclareFontShape{T1}{lmtt}{lc}{it}
+  {<->sub*lmtt/lc/sl}{}
+
+\DeclareFontShape{T1}{lmtt}{b}{n}
+  {<-> s * [1.09] ec-lmtk10}{}
+\DeclareFontShape{T1}{lmtt}{b}{sl}
+  {<-> s * [1.09] ec-lmtko10}{}
+\DeclareFontShape{T1}{lmtt}{b}{it}
+  {<->sub*lmtt/b/sl}{}
+
+\DeclareFontShape{T1}{lmtt}{bx}{n}
+  {<->ssub*lmtt/b/n}{}
+\DeclareFontShape{T1}{lmtt}{bx}{sl}
+  {<->ssub*lmtt/b/sl}{}
+\DeclareFontShape{T1}{lmtt}{bx}{it}
+  {<->ssub*lmtt/b/sl}{}
+
+
+%%%% scaled version of t1lmss
+
+\DeclareFontFamily{T1}{lmss}{}
+\DeclareFontShape{T1}{lmss}{m}{n}
+  {<-8.5> s * [1.07] ec-lmss8 <8.5-9.5> s * [1.07] ec-lmss9
+   <9.5-11> s * [1.07] ec-lmss10 <11-15.5> s * [1.07] ec-lmss12
+   <15.5-> s * [1.07] ec-lmss17
+  }{}
+\DeclareFontShape{T1}{lmss}{m}{sl}
+  {<-8.5> s * [1.07] ec-lmsso8 <8.5-9.5> s * [1.07] ec-lmsso9
+   <9.5-11> s * [1.07] ec-lmsso10 <11-15.5> s * [1.07] ec-lmsso12
+   <15.5-> s * [1.07] ec-lmsso17
+  }{}
+\DeclareFontShape{T1}{lmss}{m}{it}
+  {<->ssub*lmss/m/sl}{}
+\DeclareFontShape{T1}{lmss}{m}{sc}
+  {<->sub*lmr/m/sc}{}
+
+%%%%%%%%%%% semibold condensed
+\DeclareFontShape{T1}{lmss}{sbc}{n}
+  {<-> s * [1.07] ec-lmssdc10}{}
+\DeclareFontShape{T1}{lmss}{sbc}{sl}
+  {<-> s * [1.07] ec-lmssdo10}{}
+\DeclareFontShape{T1}{lmss}{sbc}{it}
+  {<->ssub*lmss/sbc/sl}{}
+
+%%%%%%%%%%%% bold extended
+\DeclareFontShape{T1}{lmss}{bx}{n}
+  {<-> s * [1.07] ec-lmssbx10}{}
+\DeclareFontShape{T1}{lmss}{bx}{sl}
+  {<-> s * [1.07] ec-lmssbo10}{}
+\DeclareFontShape{T1}{lmss}{bx}{it}
+  {<->ssub*lmss/bx/sl}{}
+
+
+
+\endinput
+
+%%%%% scaled version of standard ot1cmtt.fd
+\DeclareFontFamily{OT1}{cmtt}{\hyphenchar \font-1}
+\DeclareFontShape{OT1}{cmtt}{m}{n}
+     {%
+      <5><6><7><8> s * [1.09] cmtt8<9> s * [1.09] cmtt9%
+      <10><10.95> s * [1.09] cmtt10%
+      <12><14.4><17.28><20.74><24.88> s * [1.09] cmtt12%
+      }{}
+%%%%%% make sure subst shapes are available
+\DeclareFontShape{OT1}{cmtt}{m}{it}
+     {%
+      <5><6><7><8><9>%
+      <10><10.95><12><14.4><17.28><20.74><24.88> s * [1.09] cmitt10%
+      }{}
+\DeclareFontShape{OT1}{cmtt}{m}{sl}
+     {%
+      <5><6><7><8><9>%
+      <10><10.95><12><14.4><17.28><20.74><24.88> s * [1.09] cmsltt10%
+      }{}
+\DeclareFontShape{OT1}{cmtt}{m}{sc}
+     {%
+      <5><6><7><8><9>%
+      <10><10.95><12><14.4><17.28><20.74><24.88> s * [1.09] cmtcsc10%
+      }{}
+\DeclareFontShape{OT1}{cmtt}{m}{ui}
+  {<->ssub*cmtt/m/it}{}
+\DeclareFontShape{OT1}{cmtt}{bx}{n}
+  {<->ssub*cmtt/m/n}{}
+\DeclareFontShape{OT1}{cmtt}{bx}{it}
+  {<->ssub*cmtt/m/it}{}
+\DeclareFontShape{OT1}{cmtt}{bx}{ui}
+  {<->ssub*cmtt/m/it}{}
+
+
+%%%%% scaled version of standard ot1cmss.fd
+\DeclareFontFamily{OT1}{cmss}{\hyphenchar\font45 }
+\DeclareFontShape{OT1}{cmss}{m}{n}
+     {%
+      <5><6><7><8> s * [1.09] cmss8%
+      <9> s * [1.09] cmss9%
+      <10><10.95> s * [1.09] cmss10%
+      <12><14.4> s * [1.09] cmss12%
+      <17.28><20.74><24.88> s * [1.09] cmss17%
+      }{}
+% Font undefined, therefore substituted
+\DeclareFontShape{OT1}{cmss}{m}{it}
+      {<->ssub*cmss/m/sl}{}
+\DeclareFontShape{OT1}{cmss}{m}{sl}
+    {%
+      <5><6><7><8> s * [1.09] cmssi8
+      <9> s * [1.09] cmssi9%
+      <10><10.95> s * [1.09] cmssi10%
+      <12><14.4> s * [1.09] cmssi12%
+      <17.28><20.74><24.88> s * [1.09] cmssi17%
+      }{}
+%%%%%%% Font/shape undefined, therefore substituted
+\DeclareFontShape{OT1}{cmss}{m}{sc}
+       {<->ssub*cmr/m/sc}{}
+%%%%%%% Font/shape undefined, therefore substituted
+\DeclareFontShape{OT1}{cmss}{m}{ui}
+       {<->ssub*cmr/m/ui}{}
+%%%%%%%% semibold condensed series
+\DeclareFontShape{OT1}{cmss}{sbc}{n}
+     {%
+      <5><6><7><8><9> s * [1.09] cmssdc10%
+       <10><10.95><12><14.4><17.28><20.74><24.88> s * [1.09] cmssdc10%
+       }{}
+
+%%%%%%%%% bold extended series
+\DeclareFontShape{OT1}{cmss}{bx}{n}
+     {%
+      <5><6><7><8><9> s * [1.09] cmssbx10%
+      <10><10.95><12><14.4><17.28><20.74><24.88> s * [1.09] cmssbx10%
+      }{}
+%%%%%%% Font/shape undefined, therefore substituted
+\DeclareFontShape{OT1}{cmss}{bx}{ui}
+       {<->ssub*cmr/bx/ui}{}
+
+
+\endinput
+

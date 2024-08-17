@@ -1,0 +1,380 @@
+\documentclass[fontset=windows]{article}
+\PassOptionsToPackage{quiet}{fontspec}
+\usepackage{lshort-zh-cn-style}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{ctex}
+\usepackage{cancel}
+\usepackage{float}
+\usepackage{pifont}
+\usepackage{graphicx}
+\usepackage{tcolorbox}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage[nottoc]{tocbibind}
+\usepackage[hidelinks]{hyperref}
+\usepackage{listings}
+\usepackage{multicol}
+\newcommand\degree{^\circ}
+\definecolor{lightblue}{HTML}{6495ED}
+
+\title{\LaTeX 盒子排版}
+\author{Eureka}
+\date{\today}
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\section{基础}
+盒子是 \LaTeX 排版的基础单元，虽然解释上去有些抽象：每一行是一个盒子，里面的文字从
+左到右依次排列；每一页也是一个盒子，各行文字从上到下依次排布，颇有一些活字印刷术的
+味道。\par
+不管如何，\LaTeX 提供了一些命令让我们生成一些有特定用途的盒子。
+\subsection{水平盒子}
+\begin{command}
+    \cmd{mbox}\marg*{\ldots} \\
+    \cmd{makebox}\oarg{width}\oarg{align}\marg*{\ldots}
+\end{command}
+\cmd{mbox} 生成一个基本的水平盒子，内容只有一行，不允许分段（除非嵌套其它盒子，比如后
+文的垂直盒子）。外表看上去，\cmd{mbox} 的内容与正常的文本无二，不过断行时文字不会从盒子里
+断开。
+
+\textbf{测试}\par
+\mbox{生成一个基本的水平盒子，内容只有一行，不允许分段（除非嵌套其它盒子，比如后
+文的垂直盒子）。\\外表看上去，\cmd{mbox} 的内容与正常的文本无二，不过断行时文字不会从盒子里
+断开。
+}
+
+{
+    \kaishu
+    \textsf{结论：}
+    从上便可以看出, $\backslash \backslash$不起作用， 也不会自动换行
+}
+
+\subsection{自定义水平盒子}
+对齐选项有：
+\begin{itemize}
+    \item c:居中对齐(默认)
+    \item l:左对齐
+    \item r:右对齐
+    \item s:分散对齐
+\end{itemize}
+\textbf{测试}\par
+
+\begin{enumerate}
+    %% \boxed 可以显示盒子的形状
+    %% 换行符\\会在下一行产生一个盒子
+    \item \fbox{\mbox{Test 10em box}}
+    \item \fbox{\makebox[10em][c]{Test 10em box}}\\
+    \item \fbox{\makebox[10em][s]{Test 10em box}}\footnote[1]
+    {分散对齐方式强行拉开单词的间距，
+    往往会报 Underfull $\backslash$hbox 的消息}
+\end{enumerate}    
+
+
+\textbf{水平盒子加边框}
+
+\begin{command}
+    \cmd{fbox}\marg*{\ldots} \\
+    \cmd{framebox}\oarg{width}\oarg{align}\marg*{\ldots}\\
+    \cmd{boxed}\marg*{\ldots}
+    通过 \cmd{setlength} 命令调节边框的宽度(向外拓展) \cmd{fboxrule} 和内边距(保证上下内边距) \cmd{fboxsep} 
+\end{command}
+
+
+\begin{example}
+    %% 1.\boxed{}会自动进入数学环境
+    %% \boxed{} 和 \fbox{} 不能指定宽度和对齐
+    %% 2. ~会输出硬空格
+    \boxed[10em]{Hello~}\\
+    \boxed{Hello~}\\
+    \boxed{\sum_{i=0}^{\infty}{\frac{1}{i^2}}}\\
+    \fbox{Hello Jack}\\
+    \framebox[3em][l]{Helloa}\\
+    \framebox[3em][l]{MMM}\\
+
+    \framebox[6em][l]{Hello}
+
+    \setlength{\fboxrule}{5mm}
+    \framebox[6em][l]{Hello}\\
+
+    \setlength{\fboxsep}{10mm}  
+    \framebox[6em][l]{Hello}
+
+\end{example}
+
+\subsection{竖直盒子}
+\textbf{一般是可以换行的}\par
+\begin{command}
+    \cmd{parbox}\oarg{align}\oarg{height}\oarg{inner-align}\marg{width}\marg*{\ldots} \\[0.5ex]
+    \cmd{begin}\marg*{minipage}\oarg{align}\oarg{height}\oarg{inner-align}\marg{width} \\
+    \ldots \\
+    \cmd{end}\marg*{minipage}
+\end{command}
+
+\textbf{测试}\par
+\begin{example}
+测试:\parbox[b][2em][r]{3em}%
+    {你好， what you do， Thanks}    
+\end{example}
+
+
+\vspace*{4em}
+\begin{example}
+测试:\parbox[b][2em][r]{3em}%
+    {你好， what you do， Thanks}    
+\end{example}
+
+\vspace*{4em}
+\begin{example}
+    测试:\parbox[t][2em][r]{4em}%
+        {你好， what you do， Thanks}    
+\end{example}
+
+
+\vspace*{4em}
+\begin{example}
+    测试:\parbox[t]{4em}%
+        {你好， what you do， Thanks}    
+\end{example}
+
+\vspace*{4em}
+\begin{example}
+\fbox{  
+    测试:\parbox[b][2em][c]{8em}%
+    {你好， what you do， Thanks}  
+    }  
+\end{example}
+
+\vspace*{4em}
+\begin{example}
+        \textcolor{red}{测试}:\parbox[t]{8em}%
+        {北美洲原始居民为印第安人。16-18世纪，
+        正在进行资本原始积累的西欧各国相继入侵北美洲。
+        到了十八世纪中期，在北美大西洋沿岸建立了
+        十三块殖民地，殖民地的经济，文化，政治相对
+        成熟。}  
+\end{example}
+
+
+\vspace*{4em}
+\begin{example}
+    \textcolor{red}{测试}:\parbox[b]{8em}%
+        {北美洲原始居民为印第安人。16-18世纪，
+        正在进行资本原始积累的西欧各国相继入侵北美洲。
+        到了十八世纪中期，在北美大西洋沿岸建立了
+        十三块殖民地，殖民地的经济，文化，政治相对
+        成熟。}  
+\end{example}
+
+{
+    \kaishu 
+    总结,一般使用格式\\
+    1.\cmd{parbox} [\oarg{parbox盒子和前边盒子的对齐方式}]\{<text>\}\\
+    2.\\
+    \cmd{begin}\marg*{minipage}\par
+    \oarg{minipage盒子和前边盒子的对齐方式}\par
+    \oarg{\oarg{minipage盒子的高度}}\par
+    \oarg{minipage盒子内部的对齐方式}\par
+    \marg{\oarg{minipage盒子的宽度}}\par
+    <text>\\
+    \cmd{end}\marg*{minipage}
+}
+
+\subsection{标尺盒子}
+\cmd{rule} 命令用来画一个实心的矩形盒子，也可适当调整以用来\textcolor{red}{画线}（标尺）：
+\begin{command}
+\cmd{rule}\oarg{raise}\marg{width}\marg{height}
+\end{command}
+\begin{example}
+Black \rule{12pt}{4pt} box.
+
+Upper \rule[4pt]{6pt}{8pt} and
+lower \rule[-4pt]{6pt}{8pt} box.
+
+A \rule[-.4pt]{3em}{.4pt} line.
+\end{example}
+
+
+\section{各个长度单位}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+
+\begin{example}
+    \begin{tabular}{l|l}
+        \hline\\
+       1. pt(point) & \red{\rule{1pt}{1pt}}\\
+       \hline\\
+       2. mm(毫米) &\red{\rule{1mm}{1mm}}\\
+       \hline\\
+       3. ex(size of 'x') &\red{\rule{1ex}{1ex}}\\
+       \hline\\
+       4. em(size of `M') &\red{\rule{1em}{1em}}\\
+       \hline\\
+       5. cm(厘米) &\red{\rule{1cm}{1cm}}\\
+       \hline
+    \end{tabular}
+\end{example}
+
+\section{浮动体}
+内容丰富的文章或者书籍往往包含许多图片和表格等内容。这些内容的尺寸往往太大，导致
+分页困难。\LaTeX 为此引入了浮动体的机制，\red{令大块的内容可以脱离上下文，放置在合适的位置}。
+LATEX 预定义了两类浮动体环境 figure 和 table。习惯上 figure 里放图片，table 里放
+表格，但并没有严格限制，可以在任何一个浮动体里放置文字、公式、表格、图片等等任意内容。
+\newpage
+
+
+\textbf{各个参数的理解}\par
+\Arg{placement} 参数提供了一些符号用来表示浮动体允许排版的位置，\red{如 \texttt{hbp} 允许浮动体排版在当前位置、底部或者单独成页}。
+\env{table} 和 \env{figure} 浮动体的默认设置为 \texttt{tbp}。
+\begin{table}[htp]
+\centering
+\caption{浮动体的位置参数}\label{tbl:float-placement}
+\begin{tabular}{*{2}{l}}
+ \hline
+ \textbf{参数} & \textbf{含义} \\
+ \hline
+ \texttt{h} & 当前位置（代码所处的上下文） \\
+ \texttt{t} & 顶部 \\
+ \texttt{b} & 底部 \\
+ \texttt{p} & 单独成页 \\
+ \texttt{!} & 在决定位置时忽视\red{限制} \\
+ \hline
+\end{tabular}
+\begin{quote}\footnotesize
+注 1：排版位置的选取与参数里符号的顺序无关，\LaTeX{} 总是以 \texttt{h-t-b-p} 的优先级顺序决定浮动体位置。
+也就是说 \texttt{[!htp]} 和 \texttt{[ph!t]} 没有区别。\par
+注 2：限制包括\red{浮动体个数}（除单独成页外，默认每页不超过 3 个浮动体，其中顶部不超过 2 个，底部不超过 1 个）
+以及\red{浮动体空间占页面的百分比}（默认顶部不超过 70\%，底部不超过 30\%）。
+\end{quote}
+\end{table}
+
+\section{单双栏排版}
+\cmdindex{onecolumn,twocolumn}
+\LaTeX{} 支持简单的单栏或双栏排版。标准文档类的全局选项 \texttt{onecolumn}、\texttt{twocolumn}
+可控制全文分单栏或双栏排版。\LaTeX{} 也提供了切换单/双栏排版的命令：
+\begin{command}
+\cmd{onecolumn} \\
+\cmd{twocolumn}\oarg{one-column top material}
+\end{command}
+
+\cmd{twocolumn} 支持带一个可选参数，用于排版双栏之上的一部分单栏内容。
+
+\cmdindex{newpage,clearpage}
+切换单/双栏排版时总是会另起一页（\cmd{clearpage}）。
+在双栏模式下使用 \cmd{newpage} 会换栏而不是换页；\cmd{clearpage} 则能够换页。
+
+\cmdindex{columnwidth,columnsep,columnseprule}
+双栏排版时每一栏的宽度为 \cmd{columnwidth}，它由 \cmd{textwidth} 减去 \cmd{columnsep} 的差除以 2 得到。
+两栏之间还有一道竖线，宽度为 \cmd{columnseprule}，默认为零，也就是看不到竖线。
+
+\cmdindex{columnwidth,columnsep,columnseprule}
+双栏排版时每一栏的宽度为 \cmd{columnwidth}，它由 \cmd{textwidth} 减去 \cmd{columnsep} 的差除以 2 得到。
+两栏之间还有一道竖线，宽度为 \cmd{columnseprule}，默认为零，也就是看不到竖线。
+
+\pkgindex{multicol}
+\envindex[multicol]{multicols}
+一个比较好用的分栏解决方案是 \pkg{multicol}，它提供了简单的 \env{multicols} 环境
+（注意不要写成 \env{multicol} 环境）自动产生分栏，如以下环境将内容分为 3 栏：
+\begin{verbatim}
+\begin{multicols}{3}
+...
+\end{multicols}
+\end{verbatim}
+
+
+\subsection{使用\cmd{twocolumn}命令}
+\red{缺点：无法在一页中使用单栏，双栏并存。使用$\backslash$newpage进行换列}
+\twocolumn
+\columnseprule=0.5pt
+双腿瘫痪后，我的脾气变得暴怒无常。望着望着天上北归的雁阵，我会突然把面前的玻璃砸碎；听着听着李谷一甜美的歌声，
+我会猛地把手边的东西摔向四周的墙壁。母亲就悄悄地躲出去，在我看不见的地方偷偷地听着我的动静。当一切恢复沉寂，
+她又悄悄地进来，眼边红红的，看着我。“听说北海的花儿都开了，我推着你去走走。”她总是这么说。母亲喜欢花，可自从我的腿瘫痪后，
+她侍弄的那些花都死了。“不，我不去！”我狠命地捶打这两条可恨的腿，喊着：“我活着有什么劲！”母亲扑过来抓住我的手，
+忍住哭声说：“咱娘儿俩在一块儿，好好儿活，好好儿活……”可我却一直都不知道，她的病已经到了那步田地。后来妹妹告诉我，
+她常常肝疼得整宿整宿翻来覆去地睡不了觉。
+
+那天我又独自坐在屋里，看着窗外的树叶“唰唰拉拉”地飘落。母亲进来了，挡在窗前：“北海的菊花开了，我推着你去看看吧。
+”她憔悴的脸上现出央求般的神色。“什么时候？”“你要是愿意，就明天。”她说。我的回答已经让她喜出望外了。“好吧，就明天。”我说。
+她高兴得一会坐下，一会站起：“那就赶紧准备准备。”“唉呀，烦不烦？几步路，有什么好准备的！”她也笑了，坐在我身边，
+絮絮叨叨地说着：“看完菊花，咱们就去‘仿膳’，你小时候最爱吃那儿的豌豆黄儿。还记得那回我带你去北海吗？你偏说那杨树花是毛毛虫，
+跑着，一脚踩扁一个……”她忽然不说了。对于“跑”和“踩”一类的字眼儿。她比我还敏感。她又悄悄地出去了。
+\newpage 
+%% 注意:此处的换页是换栏
+%% 换页使用\clearpage
+她出去了。就再也没回来。
+
+邻居们把她抬上车时，她还在大口大口地吐着鲜血。我没想到她已经病成那样。看着三轮车远去，也绝没有想到那竟是永远的诀别。
+
+邻居的小伙子背着我去看她的时候，她正艰难地呼吸着，像她那一生艰难的生活。别人告诉我，她昏迷前的最后一句话是：“我那个有病的儿子和我那个还未成年的女儿……”
+
+又是秋天，妹妹推我去北海看了菊花。黄色的花淡雅、白色的花高洁、紫红色的花热烈而深沉，泼泼洒洒，秋风中正开得烂漫。我懂得母亲没有说完的话。妹妹也懂。我俩在一块儿，要好好儿活……
+\clearpage
+\onecolumn
+% \clearpage
+\red{\textbf{赏析}}\par
+{
+    \kaishu
+    世界上最痛苦的事情莫过于“子欲养而亲不待”，这样的痛楚太过绵长，痛得难以名状。
+
+    随着年龄的增长，时间长河的流逝，我们会慢慢离开父母温馨的怀抱。为学习，为工作，为生活，和父母甚至远隔万水千山。
+    一家人在一起的日子终究是有限的，珍惜和父母在一起的日子。在面临突如其来的困难时，不要太过任性，不要自暴自弃，
+    要知道如果你觉得痛苦了，父母所承受的痛苦是加倍的，爱自己，“好好活”，也是爱父母。
+
+    作者寥寥几百字就把自己对母亲的爱与自己少不更事的追悔挥洒得淋漓尽致，表现了母爱的无私、理解与伟大。
+}
+\newpage
+
+\subsection{使用multicolomn宏包}
+
+% \usepackage{multicol}
+
+{
+    \red{
+    \begin{itemize}
+        \item 1. 在multipulcols*环境中 --> 默认一个分栏排满以后在换栏。
+        \item 2. 在multicols(*)环境中使用$\backslash$newpage只会换到新的一页
+        \item 3. 使用$\backslash$columnbreak来换栏
+    \end{itemize} 
+    }   
+}
+\par
+\vspace*{4em}
+\centerline{\red{\textbf{伟大与渺小- -臧克家}}}
+\begin{multicols}{2}
+
+我们有太多的伟人。写在历史上的被渲染过的，不必说他们了；和我们同时代，向我们显示伟大的，已经够数了。
+这些人，凭了个人的阴谋机诈、凭了阴险与残酷，只要抓住一个机会使自己向高处爬一级，他是决不放弃这个机会的，
+至于牺牲个人的天良与别人的利害甚至生命，他毫不顾惜。这些伟人的伟大，是用个人的人性去换来的，是踏在人民大众的骨骸上升高起来的。
+当他站得高、显得伟大的时候，一般有肉没有骨头，有躯壳没灵魂的人中狗，便成群地蜷伏在他脚下，仰起头来望望他，便“伟大呵，
+伟大呵”地乱叫一阵子。当别人靠近他的时候，它们便狺狺狂吠起来，在壮主子的声威之余，自己仿佛也有威可畏了。这些伟人与臣侯是相依为命，
+狼狈为奸的。主子为了获取权势的兔，是不能没有走狗的，在走狗的瞳孔里，主子的尊容也许并非那样庄严，然而在他们口里又是另一回事了。
+为了一块骨头，它们出卖了自己。
+% \columnbreak
+在伟人自己，眼睛看的是逢迎的脸色，咂嚅趑趄的情感，耳朵听的是谗媚阿佞的声音，左右的人钢壁铁墙一样把他围在一个小天地里，眼看不过咫尺，
+耳听不出左右，久而久之，也只能以他人之耳为耳，以他人之目为目。
+% \newpage
+\columnbreak
+
+而这些他人，又正是以他为法宝而有所贪图的人，他们所说的话，所报告的见闻，
+全是以自己的利害为标准而取舍，改窜，编辑的，不但与事实不符，常常会整个相反。
+
+信假为真，以真为假，是非颠倒，黑白不分。
+古时候有这样的皇帝，天下大饥，他怪罪人民何不食肉糜，今日的伟人吃的鸡蛋也许还是一块钱一个。
+
+这样的伟人，拔地几千尺，活在半空里，和群众、和现实，脱离得一干二净。在别人眼前，他作势，他装腔，他在别人眼里不是“人”，而是“伟人”。
+他自己，喜怒哀乐，不能自由，不愿自由，不敢自由，硬把人之所以为人的一些天性压抑，闷死，另换上一些人造的东西，这样弄得长久了，
+自己也觉得自己不是“人”了，而成了“人”以上的另一种人的“人”。勉强解释，就是孤家“寡人”之“人”。这样的“人”，是“性相近也，习相远也”，
+远的是民众，是人性。这样的人是刚愎的，残暴的，虚伪的，反动的，半疯狂的，自欺欺人的，存心“不令天下人负我，我负天下人”的。
+把一个国家，一个世界，交给这样一个半疯子去统治，那会造成个什么样子呢？
+
+\end{multicols}
+\red{\textbf{赏析}}\par
+{
+    \kaishu 
+    苍茫大地，芸芸众生中，每个人都是渺小的，不需要因为自己的渺小而感到自卑，渺小有渺小的妙处，每个人都有自己的位置，
+    都能找到自己的光源，发出自己的声音。要知道蓝天有自己的深邃，白云有自己的飘逸，草原有自己的芬芳，
+    就连不起眼的小草也有属于自己的翠绿，每个人都是独特而优秀的
+}
+\end{document}

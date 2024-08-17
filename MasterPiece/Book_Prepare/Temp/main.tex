@@ -1,0 +1,80 @@
+\documentclass[12pt]{article}
+\PassOptionsToPackage{quiet}{fontspec}
+\usepackage[a4paper, total={6.5in, 10in}]{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{bm}
+\usepackage{enumerate}
+\usepackage{tikz}
+\usepackage{ctex}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{framed}
+\usepackage{multicol}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{ccfonts,eulervm} 
+\xeCJKsetup{CJKmath=true}
+\setCJKmathfont[Path=../fonts/]{FanMengWenRouNaiLaoTi.ttf}
+\setmainfont[Path=../fonts/]{palatino.ttf}
+\renewcommand\CJKrmdefault{}
+\setCJKmainfont[Path=../fonts/]{FanMengWenRouNaiLaoTi.ttf}
+
+
+
+\title{指派问题模型建立}
+\author{丁宗平}
+\date{\today}
+\begin{document}
+\maketitle
+
+
+
+\section{变量说明}
+假设每个救援队的编号是 $i,\; i\in \{1, 2, \cdots, n\}$(取决于灾区外部的县(node)个数), 
+假设每一个需要建立的救援点编号是 $j,\; j\in \{1, 2, \cdots, m\}$($m\ge n$).
+设网络图 $G$ 中从节点 $i$ 到节点 $j$ 的边 $l_{ij}$ 的权重为 $w_{ij}$.
+同时假设如下的 $0-1$变量 $x_{ij}$:
+\begin{align}
+    x_{ij} = 
+    \left\{
+        \begin{aligned}
+            & 1,\quad 如果第 i 个施工队去了 j 个救援点 \\
+            & 0,\quad otherwise \\
+        \end{aligned}
+    \right.
+\end{align}
+
+
+
+\section{模型建立}
+    约束方程为:
+\[
+    \min z    
+\]
+
+\begin{align}
+    \left\{
+    \begin{aligned}
+        & z - \sum_{j=1}^{m}{x_{ij}\cdot t_{ij}} \ge 0,\quad && for\ i = 1,2,\cdots, n\\
+        & \sum_{i=1}^{n}{x_{ij}} - 1 = 0,\quad &&  for\ j = 1,2,\cdots, m\\
+        & \sum_{j=1}^{m}{x_{ij}} - 1 = 0,\quad &&  for\ i = 1,2,\cdots, n\\
+        & t_{ij} = \frac{w_{ij}}{v},\quad &&  for\ i = 1,2,\cdots, n ;for\ j \in 1, 2, \cdots, m
+        % & t_{ij} - \sum_{j=1}^{m}{x_{ij}\cdot t_{ij}} = 0,\quad &&  for\ i = 1,2,\cdots, n\\
+    \end{aligned}
+    \right.
+\end{align}
+
+\section{备注}
+最初的目标函数为:
+\begin{align}
+    \min\left\{\max\left\{\sum_{j=1}^{m}{x_{ij}\cdot t_{ij}}\right\}\right\}
+\end{align}
+
+\thispagestyle{empty}
+
+
+
+\end{document}

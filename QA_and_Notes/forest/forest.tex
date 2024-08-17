@@ -1,0 +1,87 @@
+\documentclass[12pt]{article}
+\usepackage[margin=2cm]{geometry}
+\usepackage{pdflscape}
+\usepackage{forest}
+\tikzset{
+  ELS/.style={% Edge Label Style
+    font=\footnotesize\sffamily, inner sep=2pt,
+    anchor=#1, % label position: "ELS=west" or "ELS=east"
+    pos=0.5,
+    sloped
+  }
+}
+\usetikzlibrary{arrows.meta}
+  
+\begin{document}
+\begin{landscape}      
+\begin{forest}
+for tree={
+    draw, 
+    rounded corners=0pt,
+    if level=0{circle}{
+      if level=4{minimum width=12mm, minimum height=12mm}
+                {inner sep=1mm, text width=42mm, minimum height=12mm,  text centered}
+    },
+    % if level=4{text width=12mm}{},
+    semithick,
+    % top color=white, bottom color=blue!20,
+    anchor=center,      % <---
+    child anchor=west,
+    grow'=east,
+    edge = {-Stealth,semithick},  
+    l sep=19mm,
+    s sep=8mm,
+    where level=1{s sep=4mm}{}% insert diferent `s sep`
+  },
+  EL/.style = {% shortenes for edge label, defined as style
+  before typesetting nodes={% edge labels positioning
+    where n=1{%
+        edge label/.wrap value={node[ELS=south]{$#1$}}% above left
+      }{%
+        edge label/.wrap value={node[ELS=north]{$#1$}}% above right
+      }
+    }
+  }
+  % main content
+  [root node
+    [I run well, EL=0.6
+        [II run well, EL=\leq 0.3%,s sep=1mm
+          [I and II run wel, EL=0.4
+            [0.48]
+          ]
+        ]
+        [II dont't run well, EL=\leq 0.3%,s sep=1mm
+          [I run well\\ and II don't run wel, EL=0.8\times 0.4
+            [0.32]
+          ]
+        ]
+    ]
+    [I don't run well, EL=0.6
+      [II run well
+        [I run well\\ and II run wel, EL=0.2\times 0.2
+          [0.12]
+        ]
+      ]
+      [II dont't run well
+        [I and II don't run wel, EL=0.2\times 0.4
+          [0.08]
+        ]
+      ]
+    ]
+  ]
+\end{forest}
+\end{landscape} 
+\end{document} 
+
+
+[root node 
+  [second node I
+    [third node I
+      [fourth node I]
+      [fourth node II]
+    ]
+    [third node II]
+  ]
+  [second node II]
+  [second node III] 
+]

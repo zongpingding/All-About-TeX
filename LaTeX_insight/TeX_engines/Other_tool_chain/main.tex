@@ -1,0 +1,46 @@
+\documentclass[12pt]{article}
+\usepackage{mathpazo}
+
+
+
+\title{Common Engine in \TeX Live}
+\author{Eureka}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{At First}
+
+we have use package mathpazo to change Both Math Font and Text RM Font:There is the Instructions Official:
+
+Loading this package changes the default roman font family to Adobe Palatino, and
+the virtual ‘mathpazo’ fonts will be used for math. These virtual fonts are made
+up basically from Palatino Italic, with the missing math symbols coming from the
+CM and Pazo math fonts.
+
+
+\subsection{Test Fomular}
+
+There is a Folumar to Test The Presentation As Follows:
+\[
+    \sum_{i=1}^{+\infty}{\frac{1}{i^2}} = \frac{\pi^2}{6}    
+\]
+
+\section{Common Options}
+    At First We Excute: latex main.tex
+
+\section{Concret Steps}
+\begin{verbatim}
+    Option1: dvipdfmx main.dvi
+
+    Option2: dvips main.dvi -> ps2pdf main.ps main.pdf 
+\end{verbatim}
+
+\section{Remark}
+    SumatraPdf Support .ps File Default,so there is no need to Convert .ps to .pdf
+
+\section{The Last}
+I Think I Should Read The Book The {\rmfamily \TeX Book} right now
+
+\end{document}

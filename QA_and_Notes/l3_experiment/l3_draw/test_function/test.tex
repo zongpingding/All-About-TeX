@@ -1,0 +1,59 @@
+\documentclass{article}
+\usepackage[margin=3.5cm]{geometry}
+\usepackage{l3draw}
+
+
+\begin{document}
+\ExplSyntaxOn
+% function plot command (0, 5cm)
+% \function_plot:nnn {<function>}{<domain>}{<style>}
+% style = {<unit>, <action>, <color>}
+\cs_generate_variant:Nn \fp_step_inline:nnnn {eeen}
+\cs_set:Npn \function_plot:nnn #1#2#3 {
+  % => split arg
+  \args_split_cs:nn {#2}{domain}
+  \args_split_cs:nn {#3}{style}
+  % => start point
+  \tl_set:Nn \l_tmpa_tl {#1}
+  \tl_replace_all:Nne \l_tmpa_tl {x}{(\tl_use:N \l__arg_domain_i)}
+  % => draw function 
+  \draw_begin:
+    \str_case:VnF \l__arg_style_ii {
+      {stroke}{\exp_args:Nx \color_stroke:n {\tl_use:N \l__arg_style_iii}}
+      {fill}{\exp_args:Nx \color_fill:n {\tl_use:N \l__arg_style_iii}}
+      {clip}{\relax}
+    }{\relax}
+    \draw_path_moveto:n {\l__arg_domain_i\l__arg_style_i, \l_tmpa_tl\l__arg_style_i}
+    \fp_step_inline:eeen {\l__arg_domain_i}{\l__arg_domain_ii}{\l__arg_domain_iii}{
+        \tl_set:Nn \l_tmpa_tl {#1}
+        \tl_replace_all:Nnn \l_tmpa_tl {x}{(##1)}
+        \draw_path_lineto:n {##1 \l__arg_style_i, \l_tmpa_tl \l__arg_style_i}
+    }
+    \draw_path_use_clear:n {\l__arg_style_ii}
+  \draw_end:
+}
+
+% args split
+% Usage:
+% #1 -> args; #2 -> args index(key-name)
+% \args_split_cs:nn {1,2,3,4}{key}
+% \tl_use:N \l__arg_key_iii
+% \seq_use:cnnn {l_key_seq}{,}{,}{,}
+\cs_generate_variant:Nn \int_step_inline:nnn {nen}
+\cs_generate_variant:Nn \seq_set_split:Nnn {cnn}
+\cs_set:Npn \args_split_cs:nn #1#2 {
+  \seq_new:c {l_#2_seq}
+  \seq_set_split:cnn {l_#2_seq}{,}{#1}
+  \int_step_inline:nen {1}{\seq_count:c {l_#2_seq}}{
+    \tl_set:Nn \l_tmpa_tl {l__arg_#2_\int_to_roman:n{##1}}
+    \tl_new:c {\tl_use:N \l_tmpa_tl}
+    \tl_set:ce {\tl_use:N \l_tmpa_tl}{\seq_item:cn {l_#2_seq}{##1}}
+  }
+}
+
+
+\function_plot:nnn {x^3-2*x}{-5, 0.25, 5}{em, fill, magenta}
+% \function_plot:nnn {sin(x)}{0, 0.05*\c_pi_fp, 2*\c_pi_fp}{cm}
+
+\ExplSyntaxOff
+\end{document}

@@ -1,0 +1,197 @@
+\documentclass{article}
+\usepackage[a4paper, total={6.5in, 10in}]{geometry}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{multicol}
+\usepackage{gplot}
+% \usepackage{FunctionPlot}
+
+
+
+% Env setting
+\lstset{
+    frame=tb,
+    aboveskip=3mm,
+    belowskip=3mm,
+    showstringspaces=false,
+    columns=flexible,
+    framerule=1pt,
+    rulecolor=\color{gray!35},
+    backgroundcolor=\color{gray!5},
+    basicstyle={\small\ttfamily},
+    numbers=left,
+    numbersep=5pt,
+    numberstyle=\small\color{gray}\ttfamily,
+    keywordstyle=\color{blue},
+    commentstyle=\color{dkgreen},
+    stringstyle=\color{mauve},
+    breaklines=true,
+    postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\hookrightarrow\space}},
+    breakatwhitespace=true,
+    tabsize=4,
+}
+\makeatletter
+\lstnewenvironment{bytes}[1][\f@size]           % setting default code fontsize = \normalsize 
+{
+    \lstset{%
+        basicstyle=\fontsize{#1pt}{#1pt}\selectfont\ttfamily, 
+    }
+}{}
+\makeatother
+
+
+
+
+\title{TeX Write18 Config}
+\author{Eureka}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Start}
+Test Echo someting to a \verb|.txt| file
+\begin{bytes}
+	\immediate\write18{echo Hello2 > ./Test_export.txt}
+\end{bytes}
+\immediate\write18{echo Hello2 > ./Test_export.txt}
+
+which means that, \TeX{} could interact with the system, and could use the system to do some things.
+
+
+
+\section{Powershell Script}
+1. Debug Process(Use .ps1 in "Win+R" windows)
+\begin{bytes}
+	\immediate\write18{pwsh.exe -NoProfile -File "./Scripts/Gplot_3d.ps1" x**2}
+\end{bytes}
+
+2. Test Use self Define commanf in \verb|$profile| in PowerShell
+\begin{bytes}
+	\immediate\write18{pwsh.exe -NoProfile -File "./Scripts/Gplot_3d.ps1" x**2}
+
+	\begin{center}
+		\includegraphics[width=.4\textwidth]{./gnuoutput/Function_output_3d.pdf}
+	\end{center}
+\end{bytes}
+% \immediate\write18{pwsh.exe -NoProfile -File "./Scripts/Gplot_3d.ps1" x**2}
+% \begin{center}
+% 	\includegraphics[width=.3\textwidth]{./gnuoutput/Function_output_3d.pdf}
+% \end{center}
+
+3. Make a Command
+\begin{bytes}
+	% To use it convenient,make it be a command:
+	\newcommand{\Gplotz}[1]{%
+		\immediate\write18{pwsh.exe -NoProfile -File "./Scripts/Gplot_3d.ps1" #1}
+		\includegraphics[width=.4\linewidth]{./gnuoutput/Function_output_3d.pdf}
+	}
+	% Example
+	\Gplotz{x**2 + y**2}
+\end{bytes}
+
+% \begin{center}
+% 	\Gplotz{x**2+y**2+x+y+x*y}
+% \end{center}
+It's in Unix, So I can't active with Powershell.
+\textcolor{red}{use pwsh is very inconvenient}
+
+
+\clearpage
+\section{LaTeX3 Base:Win and Unix}
+Therefore we use unix like command:
+\begin{multicols}{2}
+	\begin{itemize}
+		\item sed, grep, awk 
+		\item mv, cp, mkdir, rm
+	\end{itemize}	
+\end{multicols}
+
+
+\begin{bytes}
+%% 1.counter to identify picture created by Gnuplot
+\newcounter{gnu@plot@pic@counter}
+\newcommand{\gnu@picture@fullname}{}
+\newcommand{\Gplotz}[1]{%
+    \sys_shell_now:n {pwsh.exe~ -NoProfile~ -File~ "./Scripts/Gplot_3d.ps1" #1}
+	\includegraphics[width=0.4\textwidth]{./gnuoutput/Function_output_3d.pdf}
+}
+\newcommand{\GplotzNew}[1]{%
+    \stepcounter{gnu@plot@pic@counter}
+	\sys_shell_now:n {sed~ -i~ "34s|f(x,~ y)~ =~ .*|f(x,~ y)~ =~ #1|"~ ./Scripts/Gplot_3d.gp}
+	\sys_shell_now:n {gnuplot~ ./Scripts/Gplot_3d.gp}
+    % picture rename
+    \renewcommand{\gnu@picture@fullname}{%
+		Function_output_3d_\the\value{gnu@plot@pic@counter}.pdf
+	}
+    \cs_generate_variant:Nn \sys_shell_mv:nn {nx}
+    \sys_shell_mv:nx {./Function_output_3d.pdf}{./gnuoutput/\gnu@picture@fullname}
+	\includegraphics[width=0.45\textwidth]{./gnuoutput/\gnu@picture@fullname}
+}
+
+%% 2.Example 
+\begin{center}
+	\GplotzNew{x+100y}
+	\GplotzNew{x**2-y**2-1000}
+\end{center}
+\end{bytes}
+
+
+
+\begin{center}
+	\GplotzNew{x+y}
+	\GplotzNew{x**2-y**2-10}
+\end{center}
+
+
+\clearpage
+\section{ParamPlot}
+ParamPlot is Defined as post:
+Becareful the \verb|\[.*\]| in \verb|sed| command , it will cause \verb|\GenericError| Error.
+
+So don't use the following cmd:
+\begin{bytes}
+	\immediate\write18{sed -i "27s|set yr \[.*\]|set yr [#1]|" ./Scripts/Gplot_2d.gp}
+\end{bytes}
+
+use \verb|[#2]| to add the \verb|[]|, instead of in the \verb|sed| cmd...
+
+
+\begin{bytes}
+% 3.param_plot
+\newcommand{\GPplotz}[2][-4:4]{%
+    \stepcounter{gnu@plot@pic@counter}
+    \sys_shell_now:n {sed~ -i~ "42s|splot~ .*|splot~ #2|"~ ./Scripts/GPplot.gp}
+	\sys_shell_now:n {sed~ -i~ "36s|set~ zr~ .*|set~ zr~ [#1]|"~ ./Scripts/GPplot.gp}
+	\sys_shell_now:n {gnuplot~ ./Scripts/GPplot.gp}
+    % picture rename
+    \renewcommand{\gnu@picture@fullname}{%
+		Param_Function_output_\the\value{gnu@plot@pic@counter}.pdf
+	}
+    \cs_generate_variant:Nn \sys_shell_mv:nn {nx}
+    \sys_shell_mv:nx {./Param_Function_output.pdf}{./gnuoutput/\gnu@picture@fullname}
+	\includegraphics[width=0.45\textwidth]{./gnuoutput/\gnu@picture@fullname}
+}
+
+%% Example
+\begin{center}
+	\GPplotz[0:2]{1*cos(u)*cos(v), 2*cos(u)*sin(v), sin(u)}
+	\GPplotz[-4.5:4.5]{4*cos(u)*cos(v), 4*cos(u)*sin(v), 4*sin(u)}
+\end{center}
+\end{bytes}
+
+
+\begin{center}
+	\GPplotz[-.75:.75]{1*cos(u)*cos(v), 2*cos(u)*sin(v), sin(u)}
+	\GPplotz[-4.5:4.5]{4*cos(u)*cos(v), 4*cos(u)*sin(v), 4*sin(u)}
+\end{center}
+
+
+\end{document}
+
+
+
+
+
+

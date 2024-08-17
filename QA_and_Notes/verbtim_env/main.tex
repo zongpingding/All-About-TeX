@@ -1,0 +1,24 @@
+\documentclass{article}
+\usepackage{tikz}
+\usepackage{l3sys-shell}
+
+\begin{document}
+hello 
+
+\centering
+\begin{tikzpicture}
+  \draw[red] plot[raw gnuplot, id=2] function{
+    set samples 50; 
+    set xr [-pi:pi];
+    plot sin(x)
+  };
+\end{tikzpicture}
+
+\ExplSyntaxOn
+\sys_shell_split_ls:nN {.}\l_tempa_seq
+\seq_use:Nn \l_tempa_seq {,\par\noindent}
+
+
+
+\makeatother
+\end{document}

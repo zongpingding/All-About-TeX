@@ -1,0 +1,74 @@
+\documentclass[fontset=windows]{article}
+\PassOptionsToPackage{quiet}{fontspec}
+\usepackage[a4paper, total={6.5in, 10in}]{geometry}
+\usepackage{lmodern}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{ctex}
+\usepackage{xcolor}
+\title{Python In \LaTeX}
+\author{}
+\date{}
+
+% 注： 在命令行输入多行内容时，使用Shift+Enter换行（不执行）
+
+\begin{document}
+\maketitle
+    Hello{} \LaTeX
+
+    \section{PythonInTex}
+    \subsection{普通的替换}
+    ``{{ 'hello world'|title }}''
+
+    ``{{ 'hello world'.upper() }}''
+
+    \subsection{设置计数器}
+    %   我们把Settings类传到st变量中了：tmptex = Template(tex).render(st=Settings)
+    第一次使用计数器:设置从5开始{{ st.getinc('a', 5) }}
+
+    第二次使用计数器:{{ st.getinc('a') }}
+
+    \subsection{日期设置}
+    CTeX默认使用$\backslash$ today:\today
+
+    调用python生成日期:{{ st.today() }}
+
+    指定日期格式: {{ st.today('%Y-%m-%d:%H-%M-%S') }}
+    
+
+    \subsection{大写数字的转换}
+    原数:0123456789
+
+    汉字:{{ st.num2cn('0123456789', isbig=False) }}
+
+    汉字:{{ st.num2cn('0123456789', isbig=True) }}
+
+    嵌套书写: {{ st.num2cn(st.today('%Y年%m月%d日 %H时%M分%S秒')) }}
+
+    \subsection{直接使用python语法}
+    {{ st.loop(8, 'Hello') }}
+
+    \subsection{测试素数}
+    测试定义的素数函数:{{ st.IsPrime(13) }}
+
+    测试定义的素数函数:{{ st.IsPrime(16) }}
+
+    \subsection{使用循环}
+    %% 注意：%和{之间不能有空格
+    循环和判断:
+        {%for num in [1, 2, 3, 4, 5]%}
+            {% if num>3 %}
+            {{num}} > 3
+            {% else %}
+            {{num}} < 3
+            {% endif %}
+        {%endfor%}
+    
+
+
+    \section{反思}
+    实际上在引用Python后，很容易完成某些工作。因为python擅长于处理字符串，特别是在Jinja2模板库的
+    帮助下。这样一来，就有一个问题，在TeX中许多功能的包只完成一些简单的替换，是不是可以用Python
+    的这种形式来完成文字处理这一部分(即\textcolor{red}{\textbf{宏替换}})，而仅仅是把TeX作为一个排版的引擎。
+
+\end{document}

@@ -1,0 +1,40 @@
+\documentclass{article}
+\usepackage{tikz}
+% fill rectangles by a given coordinates list
+\ExplSyntaxOn
+\cs_set_nopar:Nn \__fill_block:nn {
+  \seq_set_split:Nnn \l_tmpa_seq {;} {#2}
+  \int_set:Nn \l_tmpa_int {\seq_count:N \l_tmpa_seq}
+  \int_step_inline:nnn {1}{\l_tmpa_int}{
+    \def\tempCoor{\seq_item:Nn \l_tmpa_seq {##1}}
+    \fill[#1, fill~ opacity=0.5, draw=black] \tempCoor++(0.5, 0.5) 
+      rectangle ++(-1, -1);
+  }
+}
+\newcommand{\fillBlock}{\__fill_block:nn}
+\ExplSyntaxOff
+
+\begin{document}
+\begin{tikzpicture}
+% ==> coordinate system
+\draw (0.5, 0.5) -- (0.5, 4.5);
+\draw (0.5, 0.5) -- (4.5, 0.5);
+\node at (2.5, -0.25) {$X$};
+\node at (-0.25, 2.5) {$Y$};
+\foreach \x in {1, 2, 3, 4}{
+  \draw (\x, 0.5) -- (\x, 0.4) node[below] {\x};
+  \draw (0.5, \x) -- (0.4, \x) node[left] {\x};
+}
+
+% ==> sum of 2 tosses
+\foreach \x in {1, 2, 3, 4}{
+  \foreach \y in {1, 2, 3, 4}{
+    \fill[teal!\fpeval{(\x+\y)*12.5}] (\x, \y)++(0.5, 0.5) rectangle ++(-1, -1);
+    \node at (\x, \y) {\fpeval{\x+\y}};
+  }
+}
+
+% ==> hightlight coordinates type here
+\fillBlock{red}{(2,2); (2,3); (2,4); (3,2); (4,2)}
+\end{tikzpicture}
+\end{document}

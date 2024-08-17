@@ -1,0 +1,639 @@
+% titlepages.sty     Example title pages
+%\ProvidesPackage{titlepages}[2007/12/02 v1.0 example title pages]
+\ProvidesPackage{titlepages}[2009/07/09 v1.1 example title pages]
+
+%%% This package is used for part of the memoir documentation and
+%%% I don't expect it to be useful for anything else except, perhaps,
+%%% as code examples.
+%%% This uses fonts from the FontSite 500 supported on
+%%% LaTeX by Christopher League (http://contrapunctus.net/fs500tex/)
+%%% If you use the package and do not have these fonts then
+%%% define/renew \FSfont to do nothing, e.g.,
+%%% \renewcommand*{\FSfont}[1]{}
+%%% (Its default definition is \newcommand*{\FSfont}[1]{\fontfamily{#1}\selectfont})
+
+\newcommand*{\titleJT}{\begingroup% Jan Tschichold: typographer
+\FSfont{5gm}% Garamond
+\tdrop = 0.08\txtheight
+\vspace*{\tdrop}
+\hspace*{0.3\txtwidth}
+{\Large The Author}\\[2\tdrop]
+\hspace*{0.3\txtwidth}{\Huge\itshape The Big Book of}\par
+{\raggedleft\Huge\itshape Conundrums\par}
+\vfill
+\hspace*{0.3\txtwidth}{\Large \plogo} \\[0.5\baselineskip]
+\hspace*{0.3\txtwidth}{\Large The Publisher}
+\vspace*{\tdrop}
+\endgroup}
+
+\newcommand*{\titleTH}{\begingroup% T&H Typography
+\raggedleft
+\vspace*{\baselineskip}
+{\Large The Author}\\[0.167\txtheight]
+{\bfseries The Big Book of}\\[\baselineskip]
+{\textcolor{Medium}{\Huge CONUNDRUMS}}\\[\baselineskip]
+{\small With 123 illustrations}\par
+\vfill
+{\Large The Publisher \plogo}\par
+\vspace*{3\baselineskip}
+\endgroup}
+
+\newcommand*{\titleM}{\begingroup% Misericords, T&H p 153
+\tdrop = 0.08\txtheight
+\centering
+\vspace*{\tdrop}
+{\Huge\bfseries Conundrums}\\[\baselineskip]
+{\scshape puzzles for the mind}\\[\baselineskip]
+{\scshape by}\\[\baselineskip]
+{\large\scshape the author}\par
+\vfill
+{\plogo}\\[0.5\baselineskip]
+{\scshape the publisher}\par
+\vspace*{2\tdrop}\endgroup}
+
+\newcommand*{\titleS}{\begingroup% Scripts, T&H p 151
+\tdrop = 0.1\txtheight
+\centering
+\vspace*{\tdrop}
+{\Huge Conundrums}\\[\baselineskip]
+{\large\itshape by The Author}\\[\baselineskip]
+\vfill
+\rule{0.4\txtwidth}{0.4pt}\\[\baselineskip]
+{\large\itshape The Publisher}\par
+\vspace*{\tdrop}
+\endgroup}
+
+
+\newcommand*{\titleRF}{\begingroup% Robert Frost, T&H p 149
+\FSfont{5bo}%  Bembo/Bergamo
+\tdrop = 0.2\txtheight
+\centering
+\vfill
+{\Huge The Big Book of}\\[\baselineskip]
+{\Huge CONUNDRUMS}\\[\baselineskip]
+{\large Edited by The Editor}\\[0.5\tdrop]
+{\Large \plogo}\\[0.5\baselineskip]
+{\Large The Publisher}\par
+{\large\scshape year}\par
+\vfill\null
+\endgroup}
+
+\newcommand*{\titleDB}{\begingroup% Design of Books, by Adrian Wilson
+\LXfont{ppl}%   Palatino/Palladio
+\tdrop = 0.14\txtheight
+\centering
+\vspace*{\tdrop}
+{\Large THE}\\[\baselineskip]
+{\Huge BIG BOOK}\\[\baselineskip]
+{\Huge OF}\\[\baselineskip]
+{\Huge CONUNDRUMS}\\[1.5\baselineskip]
+{\LARGE BY}\\[\baselineskip]
+{\LARGE THE AUTHOR}\par
+%\begin{vplace}
+\vfill
+{FOREWORD BY AN OTHER}\\[8\baselineskip]
+%\end{vplace}
+\vfill
+{\small\sffamily THE PUBLISHER}\par
+\endgroup}
+
+\newcommand*{\titleAM}{\begingroup% Ancient Mariner, AW fig 11-20, p. 151
+\FSfont{5bo}%  Bembo/Bergamo
+\tdrop = 0.12\txtheight
+\centering
+\vspace*{\tdrop}
+{\large The Author}\\[\baselineskip]
+{\Huge THE BIG BOOK}\\[\baselineskip]
+{\Large OF}\\[\baselineskip]
+{\Huge CONUNDRUMS}\\[\baselineskip]
+{\scshape with ten engravings}\\
+{\scshape and with a foreword by}\\
+{\large\scshape an other}\\[\tdrop]
+{\plogo}\\[0.5\baselineskip]
+{\small\scshape the publisher}\par
+{\small\scshape year}\par
+\vfill\null
+\endgroup}
+
+\newcommand*{\titleP}{\begingroup% The Pyramids, AW fig 6-15, p. 81
+\FSfont{5bo}%  Bembo/Bergamo
+\tdrop = 0.12\txtheight
+\vspace*{\tdrop}
+\hspace*{0.3\txtwidth}
+{\Huge SOME}\\[\baselineskip]
+\hspace*{0.3\txtwidth}
+{\Huge CONUNDRUMS}\par
+\vspace*{3\tdrop}
+{\large By THE AUTHOR}
+\vfill
+{\scshape the publisher}
+\vspace*{0.5\tdrop}
+\endgroup}
+
+\newcommand*{\titleHL}{\begingroup% Horizontal Line
+\tdrop = 0.4\txtheight
+\vspace*{\tdrop}
+\hfill{\large The Author} \\
+\rule{\txtwidth}{0.4pt}
+
+\vspace*{\baselineskip}
+{\Huge CONUNDRUMS}\par
+\vfill
+{\centering The Publisher\par}
+\vspace*{\baselineskip}
+\endgroup}
+
+\newcommand*{\titleVL}{\begingroup% Vertical Line
+\tdrop = 0.1\txtheight
+\vspace*{\tdrop}
+  \hbox{%
+  \hspace*{0.2\txtwidth}%
+  \vrule depth 0.6\txtheight%
+  \hspace*{2em}%
+  \vbox{%
+    \vspace{\tdrop}
+    {\noindent\large The Author}\\[3\baselineskip]
+    {\Huge Conundrums}\par
+    \vfil
+    }% end of vbox
+  }% end of hbox
+\begin{center}
+The Publisher
+\end{center}
+\null
+\endgroup}
+
+\newcommand*{\titleGM}{\begingroup% Gentle Madness
+\tdrop = 0.1\txtheight
+\vspace*{\baselineskip}
+\vfill
+  \hbox{%
+  \hspace*{0.2\txtwidth}%
+  \rule{1pt}{\txtheight}
+  \hspace*{0.05\txtwidth}%
+%\fbox{%
+\parbox[b]{0.75\txtwidth}{
+  \vbox{%
+    \vspace{\tdrop}
+    {\noindent\HUGE\bfseries Some\\[0.5\baselineskip] Conundrums}\\[2\baselineskip]
+    {\Large\itshape Puzzles for the Mind}\\[4\baselineskip]
+    {\Large THE AUTHOR}\par
+    \vspace{0.5\txtheight}
+    {\noindent The Publisher}\\[\baselineskip]
+    }% end of vbox
+}% end of parbox
+%}% end of fbox
+  }% end of hbox
+\vfill
+\null
+\endgroup}
+
+\newcommand*{\wb}[2]{\fontsize{#1}{#2}\usefont{U}{webo}{xl}{n}}
+\newcommand*{\titlePM}{\begingroup% Gentle Madness with Printers' Ornaments
+\tdrop = 0.1\txtheight
+\vspace*{\baselineskip}
+\vfill
+  \hbox{%
+  \hspace*{0.1\txtwidth}%
+  {\wb{18pt}{18pt}
+   \begin{picture}(0,0)
+     \multiput(0,0)(0,20){22}{\textcolor{Medium}{Q}}
+   \end{picture}
+  }
+%  \rule{1pt}{\txtheight}
+  \hspace*{0.15\txtwidth}%
+\parbox[b]{0.75\txtwidth}{
+  \vbox{%
+    \vspace{\tdrop}
+    {\noindent\HUGE\bfseries Some\\[0.5\baselineskip] Conundrums}\\[2\baselineskip]
+    {\Large\itshape Puzzles for the Mind}\\[4\baselineskip]
+    {\Large THE AUTHOR}\par
+    \vspace{0.5\txtheight}
+    {\noindent The Publisher}\\[\baselineskip]
+    }% end of vbox
+}% end of parbox
+  }% end of hbox
+\vfill
+\null
+\endgroup}
+
+\newcommand*{\titleAT}{\begingroup% Anatomy of a Typeface
+%%%\FSfont{5gr}%   Galliard/Gareth
+\tdrop=0.1\txtheight
+\vspace*{\tdrop}
+\rule{\txtwidth}{1pt}\par
+\vspace{2pt}\vspace{-\baselineskip}
+\rule{\txtwidth}{0.4pt}\par
+\vspace{0.5\tdrop}
+\centering 
+\textcolor{Medium}{
+{\Huge THE BOOK}\\[0.5\baselineskip]
+{\Large OF}\\[0.75\baselineskip]
+{\Huge CONUNDRUMS}}
+\par
+\vspace{0.25\tdrop}
+\rule{0.3\txtwidth}{0.4pt}\par
+\vspace{\tdrop}
+{\large %\scshape 
+ THE AUTHOR}\par
+\vfill
+{\large \textcolor{Medium}{\plogo}}\\[0.5\baselineskip]
+{%\large\scshape 
+  THE PUBLISHER}\par
+\vspace*{\tdrop}
+\endgroup}
+
+\newcommand*{\titleLL}{\begingroup% Lost Languages
+\tdrop=0.1\txtheight
+\fboxsep 0.5\baselineskip
+\sffamily
+\vspace*{\tdrop}
+\centering 
+{\textcolor{Light}{\HUGE CONUNDRUMS}}\par
+\vspace{0.5\tdrop}
+\colorbox{Dark}{\textcolor{white}{\normalfont\itshape\Large Puzzles for the Mind}}\par
+\vspace{\tdrop}
+{\Large The Author}\par
+\vfill
+{\footnotesize THE PUBLISHER}\par
+\vspace*{\tdrop}
+\endgroup}
+
+\newcommand*{\titleCC}{\begingroup% City of Cambridge
+\tdrop=0.1\txtheight
+\vspace*{\tdrop}
+\centering 
+{\Large\itshape THE BIG BOOK OF}\\[0.5\tdrop]
+{\textcolor{Medium}{\HUGE\bfseries CONUNDRUMS}}\par
+\vspace{\tdrop}
+{\LARGE\itshape VOLUME 1: SOCIAL AND MORAL}\par
+\vfill
+{\Large THE AUTHOR}\par
+\vfill
+{\plogo}\\[0.5\baselineskip]
+{\itshape THE PUBLISHER}\par
+{\scshape year}\par
+%\vfill
+\vspace*{\tdrop}
+\endgroup}
+
+
+\newcommand*{\titleDS}{\begingroup% DS Thesis
+\tdrop=0.1\txtheight
+%\vspace*{\tdrop}
+\centering 
+{\Large\bfseries CONUNDRUMS CONSIDERED AS PUZZLES FOR THE MIND}\par
+\vspace{0.6\baselineskip}
+{By}\\[0.6\baselineskip]
+{The Candidate\\[0.6\baselineskip]
+A Thesis Submitted to the Graduate\\[0.5\baselineskip]
+Faculty of The University\\[0.5\baselineskip]
+in Partial Fulfillment of the\\[0.5\baselineskip]
+Requirements for the Degree of\\[0.5\baselineskip]
+DEGREE\\[0.5\baselineskip]
+Major Subject: Logic}\par
+
+\flushleft
+{Approved by the \\
+ Examining Committee:}\par
+\vspace{1.5\baselineskip}
+\rule{15em}{0.4pt}\\
+A Professor, Thesis Advisor \\[1\baselineskip]
+\rule{15em}{0.4pt}\\
+Another Professor, Thesis Advisor \\[1\baselineskip]
+\rule{15em}{0.4pt}\\
+A Faculty, Member \\[1\baselineskip]
+\rule{15em}{0.4pt}\\
+Another Faculty, Member \\[1\baselineskip]
+\rule{15em}{0.4pt}\\
+A Third Faculty, Member\par
+\centering
+\vspace{1\baselineskip}
+The University \\
+The Address \\[\baselineskip]
+The Date\par
+\vfill
+\endgroup}
+
+\newcommand*{\titleMS}{\begingroup% MS Thesis
+\tdrop=0.1\txtheight
+\vspace*{\tdrop}
+\centering 
+{\LARGE THE UNIVERSITY}\\[2\baselineskip]
+{\LARGE\sffamily Conundrums: \\ puzzles for the mind}\par
+\vfill
+{\LARGE THESIS}\par
+\vspace{\tdrop}
+{\large some remarks concerning the supervisor \\
+        and the time and place of the examination \\
+        and other administrative details}\par
+\vfill
+{\large\bfseries The Candidate}\par
+\vspace*{\tdrop}
+\endgroup}
+
+\newcommand*{\titlePW}{\begingroup% PW Thesis
+\tdrop=0.1\txtheight
+\vspace*{\tdrop}
+\centering 
+{\Large\bfseries SOME REMARKS \\ ON CONUNDRUMS \\ AS PUZZLES FOR THE MIND}\par
+\vspace*{\tdrop}
+{\large by}\par
+\vspace*{\tdrop}
+{\Large THE CANDIDATE}\par
+\vfill
+\raggedright
+{\Large 
+  Thesis submitted to The University for the degree of
+        DEGREE, Month year.}\par
+\vfill
+\null
+\endgroup}
+
+\newcommand*{\titleSW}{\begingroup% Story of Writing
+\raggedleft
+\vspace*{\baselineskip}
+{\Huge\itshape The Book \\ of Conundrums}\\[\baselineskip]
+{\large\itshape With over 120 illustrations, 50 in color}\\[0.2\textheight]
+{\Large The Author}\par
+\vfill
+{\Large \plogo{} \sffamily The Publisher}
+\vspace*{\baselineskip}
+\endgroup}
+
+\newcommand*{\titleTMB}{\begingroup% Three Men in a Boat
+\tdrop=0.1\txtheight
+\centering
+\settowidth{\unitlength}{\LARGE THE BOOK OF CONUNDRUMS}
+\vspace*{\baselineskip}
+{\large\scshape the author}\\[\baselineskip]
+\rule{\unitlength}{1.6pt}\vspace*{-\baselineskip}\vspace*{2pt}
+\rule{\unitlength}{0.4pt}\\[\baselineskip]
+{\LARGE THE BOOK OF CONUNDRUMS}\\[\baselineskip]
+{\itshape puzzles for the mind}\\[0.2\baselineskip]
+\rule{\unitlength}{0.4pt}\vspace*{-\baselineskip}\vspace{3.2pt}
+\rule{\unitlength}{1.6pt}\\[\baselineskip]
+{\large\scshape drawings by the artist}\par
+\vfill
+{\large\scshape the publisher}\\[\baselineskip]
+{\small\scshape year}\par
+\vspace*{\tdrop}
+\endgroup}
+
+\newcommand*{\titleJE}{\begingroup% Jane Eyre
+\vspace*{2\baselineskip}
+{\Large\bfseries The Author}\\[2\baselineskip]
+\begin{center}
+{\Huge\bfseries CONUNDRUMS}
+\end{center}
+\vspace*{4\baselineskip}
+{\Large\bfseries Illustrations by The Artist}\par
+\vfill
+\begin{center}
+{\Large{\bfseries The Publisher $\bullet$} \scshape year}
+\end{center}
+\vspace*{2\baselineskip}
+\endgroup}
+
+\newcommand*{\cdiam}{\prec\kern-2pt\succ}
+\newcommand*{\titleZD}{\begingroup% Zuleika Dobson
+\vspace*{2\baselineskip}
+\centering
+\begin{picture}(240,0)
+  \multiput(0,0)(24,0){10}{{\wb{10}{12}4}}
+  \multiput(-5,-21)(0,-24){15}{\rotatebox{90}{{\wb{10}{12}4}}}
+  \multiput(0,-360)(24,0){10}{{\wb{10}{12}4}}
+  \multiput(235,-21)(0,-24){15}{\rotatebox{90}{{\wb{10}{12}4}}}
+  \put(0,0){\begin{minipage}[t]{240pt}
+            \centering
+            \vspace*{2\baselineskip}
+             {\Huge Selected Conundrums}\\
+             {\large\itshape --- puzzles for the mind ---} \\[0.5\baselineskip]
+             {\large WITH ILLUSTRATIONS BY} \\[0.5\baselineskip]
+             {\large THE AUTHOR } \\[0.5\baselineskip]
+             {\LARGE T. H. E. AUTHOR} \par
+             \vspace*{5\baselineskip}
+             $\cdiam$\\[0.25\baselineskip]
+             $\cdiam\cdiam\cdiam$\\[0.25\baselineskip]
+             $\cdiam\cdiam\cdiam\cdiam\cdiam$\\[0.25\baselineskip]
+             $\cdiam\cdiam\cdiam$\\[0.25\baselineskip]
+             $\cdiam$\par
+             \vspace*{5\baselineskip}
+             {\Large THE PUBLISHER}\\
+             {\Large\scshape year}\par
+             \vspace*{2\baselineskip}
+            \end{minipage}}
+\end{picture}
+\vfill
+\null
+\endgroup}
+
+\newcommand*{\titleWH}{\begingroup% Words in their Hands
+\tdrop = 2\baselineskip
+\centering
+\vspace*{\tdrop}
+{\Huge SOME CONUNDRUMS}\\[\tdrop]
+\scalebox{8}[1]{{\wb{10}{12}4}}\\[\tdrop]
+{\Large\itshape A Collection of Puzzles by}\\[\baselineskip]
+{\Large THE AUTHOR}\\[\baselineskip]
+{\wb{10}{12}4}\\[\baselineskip]
+{\Large\itshape with a Commentary by}\\[\baselineskip]
+{\Large A N OTHER}\par
+\vfill
+\scalebox{8}[1]{{\wb{10}{12}4}}\\[\tdrop]
+{\Large THE PUBLISHER}\\
+{\scshape year}\par
+\vspace*{\tdrop}
+\endgroup}
+
+\newcommand*{\titleBWF}{\begingroup% Beowulf
+\tdrop = 0.1\txtheight
+\parindent=0pt
+\vspace*{\tdrop}
+{\Huge\bfseries Conundrums}\\[\baselineskip]
+{\Large {\itshape Translated by} {\scshape the translator}}\par
+\vfill
+\plogo\\[0.2\baselineskip]
+{\Large\itshape The Publisher}
+\vspace*{\tdrop}
+\endgroup}
+
+
+\newcommand*{\titleSI}{\begingroup% Sagas
+\tdrop = 0.13\txtheight
+\centering
+\vspace*{\tdrop}
+{\Huge CONUNDRUMS FOR}\\[\baselineskip]
+{\Huge THE MIND}\\[\baselineskip]
+{\Huge\itshape A Selection}\\[3\baselineskip]
+{\Large \textit{Preface by} \textsc{famous person}}\\
+{\Large \textit{Introduction by} \textsc{an other}}\par
+\vfill
+{\Large THE PUBLISHER}\par
+\vspace*{\tdrop}
+\endgroup}
+
+
+\newcommand*{\titleGP}{\begingroup% Geometric Modeling
+\tdrop=0.1\txtheight
+\centering
+\vspace*{\baselineskip}
+\rule{\txtwidth}{1.6pt}\vspace*{-\baselineskip}\vspace*{2pt}
+\rule{\txtwidth}{0.4pt}\\[\baselineskip]
+{\LARGE CONUNDRUMS\\ AND \\[0.3\baselineskip] PUZZLES}\\[0.2\baselineskip]
+\rule{\txtwidth}{0.4pt}\vspace*{-\baselineskip}\vspace{3.2pt}
+\rule{\txtwidth}{1.6pt}\\[\baselineskip]
+\scshape
+Selected and Expanded Papers from the Organisation Working Conference
+on \\ Enigmas \\
+Location, date from--to\par
+\vspace*{2\baselineskip}
+Edited by \\[\baselineskip]
+{\Large FIRST EDITOR \\ SECOND EDITOR \\ THIRD EDITOR}\\
+{\itshape Organisation \\ Address}\par
+\vfill
+\plogo\\
+{\scshape year} \\
+{\large THE PUBLISHER}\par
+\endgroup}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% The Family Receipt Book
+
+\newlength{\rbtextwidth}\setlength{\rbtextwidth}{289pt}
+\newlength{\rbtextheight}\setlength{\rbtextheight}{490pt}
+
+\newcommand*{\covertext}{%
+{\normalsize THE NEW\par}
+{\huge FAMILY RECEIPT BOOK\par}
+{\tiny CONTAINING A LARGE COLLECTION OF\par}
+{\footnotesize HIGHLY ESTIMATED RECEIPTS IN A VARIETY \par}
+{\footnotesize OF BRANCHES, NAMELY:\par}
+{\huge BREWING,\par}
+{\Large MAKING AND PRESERVING BRITISH WINES,\par}
+{\huge DYING,\par}
+{\large RURAL AND DOMESTIC ECONOMY,\par}
+{\footnotesize SELECTED FROM EXPERIENCED \& APPROVED RECEIPTS,\par}
+{\normalsize\textsf{FOR THE USE OF PUBLICANS}\par}
+{\footnotesize AND HOUSEKEEPERS IN GENERAL,\par}
+{\tiny A GREAT MANY OF WHICH WERE NEVER BEFORE PUBLISHED.\par}
+\rule{0.15\rbtextwidth}{0.4pt}\par
+{\Large BY G.~MILLSWOOD.\par}
+\rule{0.75\rbtextwidth}{0.4pt}\par
+{\footnotesize \textsf{PRICE ONE SHILLING}\par}
+\rule{0.5\rbtextwidth}{0.4pt}\par
+{\footnotesize DERBY: PRINTED AND SOLD BY G.~WILKINS AND SON,\par}
+{\footnotesize QUEEN STREET.\par}}
+
+\newlength{\sepframe}
+\newlength{\framex}
+\newlength{\framey}
+\setlength{\sepframe}{2.4pt}
+\setlength{\framex}{\rbtextwidth}
+\addtolength{\framex}{2\sepframe}
+\setlength{\framey}{\rbtextheight}
+\addtolength{\framey}{2\sepframe}
+\newcommand*{\titleRB}{%
+%%\FSfont{5cu}%  Century Old Style
+\LXfont{pnc}%  New Century Schoolbook
+  \begin{picture}(\strip@pt\rbtextwidth,\strip@pt\rbtextheight)%
+    \thinlines
+    \put(0,0){\framebox(\strip@pt\rbtextwidth,\strip@pt\rbtextheight){%
+\begin{minipage}{\rbtextwidth}
+\centering
+\setlength{\parskip}{0.67\baselineskip}
+\covertext
+\end{minipage}
+}}%
+    \put(-\strip@pt\sepframe,-\strip@pt\sepframe)%
+             {\framebox(\strip@pt\framex,\strip@pt\framey){}}%
+  \end{picture}}
+
+
+
+%%%%%% added 2009/07/08
+\newcommand*{\titleASUt}{\begingroup % ASU title page
+\LXfont{ptm}
+%\DoubleSpace doesn't work as used in display
+\parindent=0pt
+\tdrop = 0.08\textheight
+\tdrop = 0pt
+\vspace*{\tdrop}
+\centering
+CONTINUING CONUNDRUMS IN THE TYPOGRAPHIC \\[\baselineskip]
+ REQUIREMENTS FOR THESES \\[\baselineskip]
+by \\[\baselineskip] 
+Ima A. Student
+
+\vfill
+
+{%\SingleSpace
+A Polemic Presented in Partial Fulfillment \\
+of the Requirements for the Degree \\
+Master of Arts}
+\vfill
+
+ARCHIBALD SMYTHE UNIVERSITY \\[\baselineskip]
+May 2021 \par
+
+\vspace*{\tdrop}
+\endgroup}
+
+%%%%%%% added 2009/07/08
+\newcommand*{\titleASUa}{\begingroup % ASU approval page
+\LXfont{ptm}
+%\DoubleSpace
+\parindent=0pt
+\tdrop = 0.08\textheight
+\tdrop = 0pt
+\vspace*{\tdrop}
+\centering
+CONTINUING CONUNDRUMS IN THE TYPOGRAPHIC \\[\baselineskip]
+ REQUIREMENTS FOR THESES \\[\baselineskip]
+ by \\[\baselineskip]
+ Ima A. Student \\[3\baselineskip]
+has been approved \\[\baselineskip]
+April 2018
+
+\vfill
+
+Graduate Supervisory Committee: \\[\baselineskip]
+{%\SingleSpace
+S. Holmes, Co-Chair \\
+J. Moriarty, Co-Chair \\
+G. E. Challenger \\
+A. Quartermain \\
+J. H. Watson
+}
+
+\vfill
+
+ACCEPTED BY THE GRADUATE COLLEGE \par
+\vspace*{\tdrop}
+\endgroup}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand*{\thistitle}{\begingroup% based on titleJT
+\parindent=0pt
+\tdrop = 0.08\textheight
+\vspace*{\tdrop}
+\hspace*{0.3\textwidth}%
+{\LARGE Peter Wilson}\\[2\tdrop]
+\hspace*{0.3\textwidth}{\HUGE\itshape Some Examples of}\par
+{\raggedleft\HUGE\itshape Title Pages\par}
+\vfill
+\settowidth{\bibindent}{\Large The Herries Press}%
+\settowidth{\unitlength}{\Large 2006}%
+\addtolength{\bibindent}{-\unitlength}%
+\hspace*{0.3\textwidth}{\Large The Herries Press}\\[0.5\baselineskip]
+\hspace*{0.3\textwidth}%
+%\hspace*{0.5\bibindent}%
+{\Large 2007}
+\vspace*{\tdrop}
+\endgroup}
+
+
+
+\endinput
+

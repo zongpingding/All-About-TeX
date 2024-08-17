@@ -1,0 +1,321 @@
+\NeedsTeXFormat{LaTeX2e}
+
+
+\ProvidesPackage{style}[2019/06/27 Custom LaTeX style]
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PACKAGES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%% Silence warning about obsolete package
+\RequirePackage{silence}
+\WarningFilter{remreset}{The remreset package}
+
+
+%% Standalone
+\RequirePackage{standalone}
+
+
+%% Encoding
+\RequirePackage[utf8]{inputenx}
+\RequirePackage[T1]{fontenc}
+
+
+%% Fonts and typography
+\RequirePackage{lmodern}           % Latin Modern
+\renewcommand{\sfdefault}{phv}     % Helvetica
+\RequirePackage[scaled]{beramono}  % Bera Mono (Bitstream Vera Sans Mono)
+\RequirePackage[final]{microtype}  % Improved typography
+\pretolerance = 1000               % Relaxes parameters for line breaks
+\tolerance    = 2000               % Relaxes parameters for line breaks
+\setlength{\emergencystretch}{1em} % Relaxes parameters for line breaks
+\RequirePackage{siunitx}           % Typesetting units
+\RequirePackage{listings}          % Typesetting code
+\lstset
+{
+    basicstyle       = \ttfamily\footnotesize,
+    commentstyle     = \color{gray},
+    stringstyle      = \itshape,
+    showstringspaces = false,
+    frame            = tb
+}
+\RequirePackage[obeyspaces,
+                spaces,
+                hyphens]{url}      % Typesetting URLs
+\urlstyle{sf}
+
+
+%% Mathematics
+\RequirePackage{amssymb}    % Extra symbols
+\RequirePackage{amsthm}     % Theorem-like environments
+\RequirePackage{thmtools}   % Theorem-like environments, extends amsthm
+\RequirePackage{mathtools}  % Fonts and environments for mathematical formulae
+\RequirePackage{mathrsfs}   % Script font with \mathscr{}
+\RequirePackage{dsfont}     % Double stroke font with \mathds{}
+\RequirePackage{cancel}     % Cancel terms with \cancel, \bcancel or \xcancel
+\RequirePackage{stmaryrd}   % Brackets
+\everymath
+{
+    \ifodd\value{page}          % Allow multiline equations
+        \allowdisplaybreaks[1]  % to break across two pages:
+        \else                   % - Breaks from odd to even pages are allowed,
+        \allowdisplaybreaks[4]  %   but discouraged.
+    \fi                         % - Breaks from even to odd pages are allowed.
+}
+
+
+%% Language
+\RequirePackage{babel}
+\RequirePackage{csquotes}
+
+
+%% Graphics
+\RequirePackage[dvipsnames,
+                svgnames,
+                cmyk]{xcolor}     % Pre-defined colors
+\RequirePackage{graphicx}         % Tool for importing images
+\graphicspath{{figures/}}
+\RequirePackage{tikz}             % Drawing tool
+\usetikzlibrary{calc}
+\usetikzlibrary{intersections}
+\usetikzlibrary{decorations.markings}
+
+
+%% Organising tools
+\RequirePackage{etoolbox}                                % Hooks
+\RequirePackage{pgffor}                                  % For-loops
+\RequirePackage{comment}                                 % Multiline comments
+\RequirePackage[notref, notcite]{showkeys}               % Labels in margins
+\renewcommand{\showkeyslabelformat}[1]
+{
+    \fbox
+    {
+        \parbox[t]{0.6\marginparwidth}
+        {
+            \centering\normalfont\footnotesize\ttfamily
+            \path{#1}
+        }
+    }
+}
+\RequirePackage[obeyFinal,
+                color       = LightGray,
+                bordercolor = LightGray,
+                textsize    = footnotesize,
+                figwidth    = 0.99\linewidth]{todonotes} % Marginal notes
+
+
+%% Lists
+\RequirePackage{enumitem}
+\setlist[itemize]    {font = \upshape,           before = \leavevmode}
+\setlist[enumerate]  {font = \upshape,           before = \leavevmode}
+\setlist[description]{font = \bfseries\sffamily, before = \leavevmode}
+\foreach \env in {theorem, corollary, lemma, proposition, observation,
+                  conjecture, definition, example, notation, remark}
+{
+    \AtBeginEnvironment{\env}
+    {
+        \setlist[enumerate, 1]{wide,
+                               label = \thetheorem.\arabic{*}.,
+                               ref   = \thetheorem.\arabic{*}}
+    }
+}
+
+
+%% Miscellaneous
+\RequirePackage{xspace}         % Clever space
+\RequirePackage{textcomp}       % Extra symbols
+\RequirePackage{multirow}       % Rows spanning multiple lines in tables
+\RequirePackage{tablefootnote}  % Footnotes for tables
+
+
+%% Bibliography
+\RequirePackage{mathscinet}
+\RequirePackage[backend    = biber,
+                sortcites  = true,
+                giveninits = true,
+                doi        = false,
+                isbn       = false,
+                url        = false,
+                sortlocale = nb_NO,
+                style      = alphabetic]{biblatex}
+\DeclareNameAlias{sortname}{family-given}
+\DeclareNameAlias{default}{family-given}
+\DeclareFieldFormat[article]{volume}{\bibstring{jourvol}\addnbspace#1}
+\DeclareFieldFormat[article]{number}{\bibstring{number}\addnbspace#1}
+\renewbibmacro*{volume+number+eid}
+{
+    \printfield{volume}
+    \setunit{\addcomma\space}
+    \printfield{number}
+    \setunit{\addcomma\space}
+    \printfield{eid}
+}
+\addbibresource{bibliography.bib}
+
+
+%% Cross references
+\RequirePackage{varioref}
+\RequirePackage[pdfusetitle]{hyperref}
+\RequirePackage[nameinlink, capitalize, noabbrev]{cleveref}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% MEMOIR SETTINGS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%% Title page
+\pretitle{\begin{center}\huge\sffamily\bfseries\boldmath}
+
+
+%% Book
+\renewcommand*{\printbooktitle}[1]
+{
+    \hrule\vskip\onelineskip
+    \centering\booktitlefont #1
+    \vskip\onelineskip\hrule
+}
+\renewcommand*{\afterbookskip}{\par}
+\renewcommand*{\booktitlefont}{\Huge\bfseries\boldmath\sffamily}
+\renewcommand*{\booknamefont}{\normalfont\huge\bfseries\MakeUppercase}
+
+
+%% Part
+\renewcommand*{\printparttitle}[1]
+{
+    \hrule\vskip\onelineskip
+    \centering\parttitlefont #1
+    \vskip\onelineskip\hrule
+}
+\renewcommand*{\afterpartskip}{\par}
+\renewcommand*{\parttitlefont}{\Huge\bfseries\boldmath\sffamily}
+\renewcommand*{\partnamefont}{\normalfont\huge\bfseries\MakeUppercase}
+
+
+%% Chapter
+\chapterstyle{demo2}
+\renewcommand*{\printchaptername}
+{
+    \centering\chapnamefont\MakeUppercase{\@chapapp}
+}
+\renewcommand*{\printchapternum}{\chapnumfont\thechapter\space}
+\renewcommand*{\chaptitlefont}{\Huge\bfseries\boldmath\sffamily\center}
+
+
+%% Lower level sections
+\setsecheadstyle{\Large\bfseries\boldmath\sffamily\raggedright}
+\setsubsecheadstyle{\large\bfseries\boldmath\sffamily\raggedright}
+\setsubsubsecheadstyle{\normalsize\bfseries\boldmath\sffamily\raggedright}
+\setparaheadstyle{\normalsize\bfseries\boldmath\sffamily\raggedright}
+\setsubparaheadstyle{\normalsize\bfseries\boldmath\sffamily\raggedright}
+
+
+%% Abstract
+\renewcommand{\abstractnamefont}{\sffamily\bfseries}
+\renewcommand{\abstracttextfont}{\normalfont\small\noindent\ignorespaces}
+
+
+%% Table of contents
+\setrmarg{3em}
+\setpnumwidth{2em}
+\addtolength{\cftbooknumwidth}{0.5em}
+\addtolength{\cftpartnumwidth}{0.5em}
+\addtolength{\cftchapternumwidth}{0.5em}
+\addtolength{\cftsectionindent}{0.5em}
+\addtolength{\cftsubsectionindent}{0.5em}
+\addtolength{\cftsubsubsectionindent}{0.5em}
+\addtolength{\cftparagraphindent}{0.5em}
+\addtolength{\cftsubparagraphindent}{0.5em}
+\renewcommand{\cftchapteraftersnumb}{\bfseries\boldmath}
+
+
+%% Header and footer
+\pagestyle{ruled}
+\makeevenhead{ruled}{\sffamily\leftmark}{}{}
+\makeoddhead {ruled}{}{}{\sffamily\rightmark}
+\makeevenfoot{ruled}{\sffamily\thepage}{}{}
+\makeoddfoot{ruled}{}{}{\sffamily\thepage}
+
+\makepagestyle{chapter}
+\makeevenfoot{chapter}{\sffamily\thepage}{}{}
+\makeoddfoot{chapter}{}{}{\sffamily\thepage}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% USER-DEFINED MACROS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%% Environments
+\declaretheoremstyle[headfont   = \bfseries\sffamily,
+                     notefont   = \normalfont,
+                     bodyfont   = \itshape,
+                     spaceabove = 6pt,
+                     spacebelow = 6pt]{plain}
+\declaretheoremstyle[headfont   = \bfseries\sffamily,
+                     notefont   = \normalfont,
+                     spaceabove = 6pt,
+                     spacebelow = 6pt]{definition}
+\declaretheorem[style = plain, numberwithin = section]{theorem}
+\declaretheorem[style = plain,      sibling = theorem]{corollary}
+\declaretheorem[style = plain,      sibling = theorem]{lemma}
+\declaretheorem[style = plain,      sibling = theorem]{proposition}
+\declaretheorem[style = plain,      sibling = theorem]{observation}
+\declaretheorem[style = plain,      sibling = theorem]{conjecture}
+\declaretheorem[style = definition, sibling = theorem]{definition}
+\declaretheorem[style = definition, sibling = theorem]{example}
+\declaretheorem[style = definition, sibling = theorem]{notation}
+\declaretheorem[style = remark,     sibling = theorem]{remark}
+\crefname{observation}{Observation}{Observations}
+\Crefname{observation}{Observation}{Observations}
+\crefname{conjecture}{Conjecture}{Conjectures}
+\Crefname{conjecture}{Conjecture}{Conjectures}
+\crefname{notation}{Notation}{Notations}
+\Crefname{notation}{Notation}{Notations}
+
+
+%% Operators
+\newcommand{\diff}{\mathop{}\!\mathrm{d}}
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\rank}{rank}
+
+
+%% Delimiters
+\DeclarePairedDelimiter{\p}{\lparen}{\rparen}          % Parenthesis
+\DeclarePairedDelimiter{\set}{\lbrace}{\rbrace}        % Set
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}          % Absolute value
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}         % Norm
+\DeclarePairedDelimiter{\ip}{\langle}{\rangle}         % Inner product, ideal
+\DeclarePairedDelimiter{\sqb}{\lbrack}{\rbrack}        % Square brackets
+\DeclarePairedDelimiter{\ssqb}{\llbracket}{\rrbracket} % Double brackets
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}         % Ceiling
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}      % Floor
+
+
+%% Blackboard bold
+\newcommand{\N}{\mathbb{N}}    % Natural numbers
+\newcommand{\Z}{\mathbb{Z}}    % Integers
+\newcommand{\Q}{\mathbb{Q}}    % Rational numbers
+\newcommand{\R}{\mathbb{R}}    % Real numbers
+\newcommand{\C}{\mathbb{C}}    % Complex numbers
+\newcommand{\A}{\mathbb{A}}    % Affine space
+\renewcommand{\P}{\mathbb{P}}  % Projective space
+
+
+%% Bold face
+\renewcommand{\a}{\mathbf{a}}
+\renewcommand{\b}{\mathbf{b}}
+\newcommand{\x}{\mathbf{x}}
+\newcommand{\y}{\mathbf{y}}
+\newcommand{\0}{\mathbf{0}}
+\newcommand{\1}{\mathbf{1}}
+
+
+%% Miscellaneous
+\renewcommand{\qedsymbol}{\(\blacksquare\)}
+\newcommand{\ie}{\leavevmode\unskip, i.e.,\xspace}
+\newcommand{\eg}{\leavevmode\unskip, e.g.,\xspace}
+\newcommand{\dash}{\textthreequartersemdash\xspace}
+\newcommand{\TikZ}{Ti\textit{k}Z\xspace}
+\newcommand{\matlab}{\textsc{Matlab}\xspace}
+
+
+\endinput
