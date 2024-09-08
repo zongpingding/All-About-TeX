@@ -1,0 +1,47 @@
+\documentclass[
+  hyper,
+  fancy,
+  class=book,
+  mathSpec={envStyle=plain}
+]{zlatex}
+
+
+\title{Test}
+\author{Eureka}
+\date{\today}
+\begin{document}
+\maketitle
+\frontmatter
+\newpage\thepage Hello world 
+\newpage\thepage Hello world
+
+\mainmatter
+\zsubtitle{An Introduction to Mathematical Logic}
+\chapter{MATHEMATICAL LOGIC}
+\section{chapter style I}
+\section{chapter style II}
+Hello \newpage
+
+world
+
+\zsubtitle{Step into Structure of English Stentences}
+\setcounter{chapter}{98}
+\chapter{English Learning}
+\section{SSE I}
+\section{SSE II}
+hello world
+
+
+\zsubtitle{Basic introduction to Chinese Culture}
+\chapter*{Chinese Culture}
+\section{SSE I}
+\section{SSE II}
+hello world
+
+
+\ExplSyntaxOn
+
+\ExplSyntaxOff
+
+
+\end{document}

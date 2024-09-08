@@ -1,0 +1,14 @@
+\documentclass{article}
+\newcommand{\testA}{testA}
+\NewDocumentCommand{\testB}{}{testB}
+\NewExpandableDocumentCommand{\testC}{}{testB}
+
+
+\begin{document}
+\tableofcontents
+
+\section{\testA}          % "testA" in the toc
+\section{\protect\testA}  % "\testA" in the toc
+\section{\testB}          % "\testB" in the toc
+\section{\testC}          % "\testB" in the toc
+\end{document}

@@ -1,0 +1,23 @@
+\documentclass[UTF8]{ctexbook}
+\usepackage{xcolor}
+\usepackage{tikz}
+\newcommand{\piyu}[4]{%
+\raisebox{-0.3em}{\begin{tikzpicture}
+    \draw[lightgray] (0,0pt) rectangle (20pt, 10pt);%矩形
+    \fill[fill = lightgray] (0,0pt) rectangle (10pt, 10pt);%填色，还可以设置线宽
+    \node [below,rotate= 0] at (5pt, 6pt) {\smash{\hbox{\color{white}\fangsong\fontsize{8}{10}\selectfont{#1}}\hss}};
+    \node [below,rotate= 0] at (15pt, 6pt) {\smash{\hbox{\color{black}\fangsong\fontsize{8}{10}\selectfont{#2}}\hss}};
+\end{tikzpicture}%
+}% end of raisebox
+{\textcolor{#3}{{\fangsong{\fontsize{8}{10}\selectfont#4}}}}}%
+
+
+\begin{document}
+虽是如此说，只这酒色财气四件中，惟有“财色”二者更为利害。怎见得他的利害？假如一个人到了那穷苦的田地，
+受尽无限凄凉，耐尽无端懊恼，晚来摸一摸米瓮，苦无隔宿之炊，早起看一看厨前，愧没半星烟火，
+\piyu{绣}{眉}{green}{情景逼真。酸俫读此，能不雪涕！}妻子饥寒，一身冻馁，就是那粥饭尚且艰难，
+那讨馀钱沽酒？\piyu{绣}{旁}{green}{酒因财缺。}更有一种可恨处，亲朋白眼，面目寒酸，便是凌云志气，
+分外消磨，怎能勾与人争气！\piyu{绣}{旁}{green}{气以财弱。}\piyu{张}{夹}{red}{以上反起财。}
+正是：\piyu{张}{夹}{red}{这一个“正是”是冷。}
+
+\end{document}

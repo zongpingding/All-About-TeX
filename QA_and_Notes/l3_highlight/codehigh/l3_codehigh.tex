@@ -1,0 +1,19 @@
+\documentclass{article}
+\usepackage{codehigh}
+
+
+
+
+\begin{document}
+\begin{codehigh}[language=latex/latex3]
+\cs_new_protected:Npn \__codehigh_typeset_demo:
+  {
+  \__codehigh_build_code:
+  \__codehigh_build_demo:
+  \dim_set:Nn \l_tmpa_dim { \box_wd:N \g__codehigh_code_box }
+  \dim_set:Nn \l_tmpb_dim { \box_wd:N \g__codehigh_demo_box }
+  \par\addvspace{0.5em}\noindent
+  % more code
+}
+\end{codehigh}
+\end{document}

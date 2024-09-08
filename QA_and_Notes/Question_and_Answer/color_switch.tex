@@ -1,0 +1,23 @@
+\documentclass{article}
+\usepackage{ztikz}
+\ztikzLoadModule{cache, gnuplot}
+\ztikzLoadModule{zdraw}
+
+
+\begin{document}
+\centering
+\begin{tikzpicture}[scale=.2]
+  \ContourPlot[-7:7; -7:7][teal]{sin(x**2+y**2)-exp(-x*y)}
+\end{tikzpicture}
+
+
+\ExplSyntaxOn
+\zplot[
+  domain={0, 0.02*\c_pi_fp, 2*\c_pi_fp}, 
+  action=shade, 
+  startColor=blue,
+  endColor=green, 
+  axis=x
+]{sin(x)}
+
+\end{document}

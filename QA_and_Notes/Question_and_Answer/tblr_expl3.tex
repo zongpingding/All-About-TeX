@@ -1,0 +1,76 @@
+\documentclass[zihao=-4,a4paper,punct=kaiming,oneside]{ctexart}
+\usepackage{tabularray}
+\UseTblrLibrary{counter}
+
+% counter and cmd
+\newcounter{spl}
+\newcommand{\spl}{\stepcounter{spl}\arabic{spl}}
+\newcommand*\lfrmh{empty & ok & \spl\\}
+\newcommand*\lfrmhh{xx & yy & zz\\}
+\newcommand*\lfrmhhh{xxx & yyy & www\\}
+
+
+\begin{document}
+\section{expand in args}
+\begin{longtblr}[expand=\lfrmh\lfrmhh\lfrmhhh]{colspec={|X|X|X|}}
+  \hline
+  \lfrmh
+  \lfrmh
+  \lfrmhh
+  \lfrmhhh
+  a & b & c\\
+  \hline
+\end{longtblr}
+
+\vspace*{3em}
+最右边一列希望是：0、1、2 ……递增
+
+
+\section{expand in outter}
+\SetTblrOuter[longtblr]{expand=\lfrmh\lfrmhh\lfrmhhh}
+\begin{longtblr}{colspec={|X|X|X|}}
+  \hline
+  \lfrmh
+  \lfrmh
+  \lfrmhh
+  \lfrmhhh
+  a & b & c\\
+  \hline
+\end{longtblr}
+
+\vspace*{3em}
+最右边一列希望是：0、1、2 ……递增
+
+
+\section{expand command that has args}
+\subsection{no default value}
+\NewExpandableDocumentCommand\cmdA{m}{#1}
+\NewExpandableDocumentCommand\cmdB{m}{#1}
+\SetTblrOuter[longtblr]{expand=\cmdA\cmdB}
+\begin{longtblr}{cc}
+  \cmdA{xx} & \cmdB{yy}\\
+\end{longtblr}
+
+
+\subsection{has default value}
+\NewExpandableDocumentCommand\cmdC{O{xx}m}{#1}
+\NewExpandableDocumentCommand\cmdD{O{yy}m}{#1}
+\begin{tblr}[expand=\expanded]{cc}
+  \expanded{\cmdC{}} & \expanded{\cmdD[NoNo]{}}\\
+\end{tblr}
+
+\subsection{delete the second arg}
+\NewExpandableDocumentCommand\cmdE{O{xx}m}{#2}
+\NewExpandableDocumentCommand\cmdF{O{yy}m}{#1}
+\begin{tblr}[expand=\expanded]{cc}
+  \expanded{\cmdE{zz}} & \expanded{\cmdF[NoNo]{ww}}\\
+\end{tblr}
+
+
+% => why can't only has one default arg ?
+% ANS: this is feature of \NewExpandableDocumentCommand
+%     The last argument (if any are present) must be one of 
+%     the mandatory types m, r, R, l or u.
+% \NewExpandableDocumentCommand{\expcmd}{O{hello}}{#1}
+% \expcmd
+\end{document}

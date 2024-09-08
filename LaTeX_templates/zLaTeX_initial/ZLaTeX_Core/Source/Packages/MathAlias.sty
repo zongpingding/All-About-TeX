@@ -1,0 +1,20 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{ZLaTeX_Core/Source/Packages/MathAlias}
+
+
+% 4.1 Math Font Alias 
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\C}[1]{\ensuremath{\mathcal{#1}}}
+\renewcommand{\S}[1]{\ensuremath{\mathscr{#1}}}
+\newcommand{\B}[1]{\ensuremath{\mathbb{#1}}}
+\newcommand{\F}[1]{\ensuremath{\bm{#1}}}
+\newcommand{\R}[1]{\ensuremath{\mathrm{#1}}}
+% 4.2 Math arrow (need package mathtools)
+\newcommand{\lr}{\ensuremath{\longrightarrow}}
+\renewcommand{\ll}{\ensuremath{\longleftarrow}}
+\newcommand{\equ}{\ensuremath{\Longleftrightarrow}\,}
+\newcommand{\sr}{\ensuremath{\longmapsto}}
+\newcommand{\lrr}[2][]{\ensuremath{\xRightarrow[#1]{#2}}}
+\newcommand{\lll}[2][]{\ensuremath{\xLeftarrow[#1]{#2}}}
+\newcommand{\ns}{\ensuremath{\varnothing}}
+\newcommand{\A}{\ensuremath{\forall}}

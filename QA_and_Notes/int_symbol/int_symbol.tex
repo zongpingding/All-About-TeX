@@ -1,0 +1,79 @@
+\documentclass{article}
+\usepackage{bigints}
+\usepackage[a1paper]{geometry}
+% \usepackage{amsmath}
+
+
+\newcommand\testA[1][]{
+\bigint_{a}^{b} \begin{bmatrix}
+  x \\
+  y \\
+  z \\
+  w \\
+  v #1
+\end{bmatrix} \; \mathrm{d}x
+}
+\newcommand\testB[1][]{
+\bigint_{a}^{b} \begin{bmatrix}
+  x \\
+  y \\
+  z \\
+  w \\
+  v \\ 
+  #1
+\end{bmatrix} \; \mathrm{d}x
+}
+
+\begin{document}
+\begin{align}
+\int_{a}^{b} \begin{bmatrix}
+  x \\
+  y \\
+  z \\
+  w \\
+  v
+\end{bmatrix} \; \mathrm{d}x
+\end{align}
+
+
+
+\begin{align}
+\testA[
+  \testB[
+    \testA[
+      \testB[
+        \testA[
+          \testB[
+            \testA[
+              \testB[
+                \testA[
+                  \testA[
+                    \testB[
+                      \testA[
+                        \testB[
+                          \testB[
+                            \testA[
+                              \testB[
+                                \testA[
+                                  \testB[
+                                    \testA
+                                  ]
+                                ]
+                              ]
+                            ]
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]
+]
+\end{align}
+\end{document}

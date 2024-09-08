@@ -1,0 +1,304 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1.5in]{geometry}
+\usepackage{graphicx}
+\usepackage{pict2e}
+\usepackage{tikz}
+\usepackage{xcolor}
+\definecolor{lstbg}{HTML}{F6F6F6}
+\usepackage{listings}
+% avoid line number copy: only avaliable in acrobat
+\usepackage{accsupp}
+\newcommand{\noncopynumber}[1]{%
+  \BeginAccSupp{method=escape,ActualText={}}#1\EndAccSupp{}
+}
+\lstset{%
+  language = TeX,
+  basicstyle = \ttfamily,
+  morekeywords={
+    AddToHook, RemoveFromHook, 
+    ClearHookNext, AddToHookNext, UseHook, 
+    NewHook, NewReversedHook, NewMirroredHookPair,
+    newcommand, put, begin, circle, line, oval,
+  },
+  backgroundcolor = \color{lstbg},
+  commentstyle =\color{gray}\texttt,
+  keywordstyle = {\color{teal}},
+  numbers = left, 
+  numbersep = 5pt,
+  numberstyle = \ttfamily\noncopynumber,
+}
+% shipout hooks
+\pagestyle{empty}
+\ExplSyntaxOn
+\NewDocumentCommand{\shipoutPageNum}{}{
+  \int_compare:nNnTF {\int_mod:nn {\thepage}{2}} = {0} {
+    \textcolor{red}{\scalebox{6}{\bfseries\thepage}}
+  }{
+    \textcolor{blue}{\scalebox{6}{\bfseries\thepage}}
+  }
+}
+\ExplSyntaxOff
+\AddToHook{shipout/background}{%
+\ifnum\thepage=1\else%
+\put(0, -15pt){\tikz\fill[orange] (0, 0) rectangle (\paperwidth, 15pt);}
+\put(.9\paperwidth, -6em){\shipoutPageNum}
+\put(.5\paperwidth, -.5\paperheight){\makebox(0, 0){%
+  \includegraphics[width=.5\paperwidth]{latex-logo}}}
+\fi
+}
+
+
+
+% command alias
+\newcommand\tbh{\textbackslash}
+\newcommand\cmda{Content}
+\begin{document}
+\tableofcontents
+\newpage
+
+\section{Hook Management}
+\subsection{add/remove}
+\begin{lstlisting}
+% Original: Content
+
+\AddToHook{cmd/cmda/before}{Before\ }
+% Before Content
+
+\AddToHook{cmd/cmda/after}{\ After}
+% Before Content After
+
+\RemoveFromHook{cmd/cmda/before}
+% Content After
+
+\RemoveFromHook{cmd/cmda/after}
+% Content
+\end{lstlisting}
+
+
+\subsection{hook label}
+\AddToHook{cmd/cmda/before}[bf-1]{Before-1\ }
+\AddToHook{cmd/cmda/before}[bf-2]{Before-2\ }
+\quad Original Content: \cmda, the below contents listing the result of each hook label\par
+
+\begin{lstlisting}
+\RemoveFromHook{cmd/cmda/before}
+% Before-1 Before-2 Content
+
+\RemoveFromHook{cmd/cmda/before}[bf-1]
+% Before-2 Content
+
+\RemoveFromHook{cmd/cmda/before}[bf-2]
+% Before-1 Content
+\end{lstlisting}
+
+\subsection{One-off hook}
+Execute code only once, i.e., just the next time a hook is called. Because this is one-off code, it is
+not labeled.
+\begin{lstlisting}
+\AddToHookNext{hook}{code}
+\ClearHookNext{hook}
+\end{lstlisting}
+
+A simple example:
+\begin{lstlisting}
+\newcommand\cmda{Content}
+\AddToHook{cmd/cmda/before}[bf-1]{Before-1\ }
+\AddToHook{cmd/cmda/before}[bf-2]{Before-2\ }
+\AddToHookNext{cmd/cmda/before}{Before-Once\ }
+\cmda\par
+\cmda\par
+% Before-1 Before-2 Before-Once Content
+% Before-1 Before-2 Content
+\end{lstlisting}
+
+Typical use cases for \texttt{\tbh AddToHookNext} are the hooks related
+to shipping out pages; e.g., you may want to use a special background on the next
+page.
+
+\subsection{hook in pairs}
+Some hooks (whether normal or one-time) come in pairs, for example, the hooks
+\texttt{file/before and file/after}, which are executed before and after the loading of
+every file. The second of such hooks is called \textbf{Reverse Hook}, means: the execution
+order in the reversed hook is exactly the opposit
+
+
+\section{Generic Hooks}
+There is one further category: some hooks are so called “\textbf{Generic Hooks}”. Normally
+a hook has to be explicitly declared before it can be used in code.
+
+\subsection{environment hooks}
+Every environment offers a set of four generic hooks. 
+\begin{itemize}
+  \item Outer hooks: \texttt{before} and \texttt{after}
+  \item Inner hooks: \texttt{begin} and \texttt{end}
+\end{itemize}
+
+Only the \texttt{/after} hook is implemented as a reversed hook; Generic environment hooks are never one-time
+hooks even with environments that are supposed to appear only once in a document.
+
+The hooks are executed only if \texttt{\tbh begin\{env\}} and \texttt{\tbh end\{env\}} are used. If the en-
+vironment code is executed via low-level calls to \texttt{\tbh⟨env⟩} and \texttt{\tbh end⟨env⟩} (e.g., to avoid
+the environment grouping), they are not available. If you want them available in code
+using this method, you would need to add them yourself, i.e., write something like
+\begin{lstlisting}
+\UseHook{env/quote/before}\quote
+...
+\endquote\UseHook{env/quote/after}
+\end{lstlisting}
+
+to add the outer hooks, etc.
+
+\subsection{command hooks}
+Similar to environments there are two generic hooks available for any \LaTeX{} (document-level) command — in theory at least. 
+In practice there are restrictions, and especially the \texttt{/after} hooks work only with a subset of commands.
+
+\section{File Hooks}
+An example:
+\begin{lstlisting}
+\AddToHook{package/amsmath/after}{%
+  \AddToHook{cmd/colon/after}{\!}%
+}
+\end{lstlisting}
+This is essential to make our this example involving \texttt{package/amsmath/after} work: if
+the package was already loaded, then the code in \AddToHook is immediately applied.
+If we had used a file hook instead (which is a normal hook), the code would have
+been stored away, waiting forever for a second invocation that would never happen.
+
+
+Some usefule hooks:
+\begin{itemize}
+  \item \texttt{file/before, file/<file>/before, file/<file>/after, file/after}
+  \item \texttt{package/before, package/<name>/before, package/<name>/after, package/after}
+  \item \texttt{class/before, class/<name>/before, class/<name>/after, class/after}
+\end{itemize}
+As you may have guessed, the last two
+are reversed hooks. The ⟨file⟩ name has to be given with its extension to be recognized,
+even if it is .tex, so this is different from the behavior of the \texttt{\tbh input} command.
+
+The final group of file-related hooks are those specific to files loaded with an
+\texttt{\tbh include} command. 
+
+
+\section{Shipout Hooks}
+\subsection{Background and Foreground}
+During the shipout the \texttt{background picture} is printed first, then the
+\texttt{content of the page}, and finally the \texttt{foreground picture}, each overwriting the other.
+
+With the starting point being the top-left corner of the page, your vertical co-
+ordinate values should be negative.
+
+The hooks should therefore contain only \texttt{\tbh put} commands or other commands suitable within a picture
+environment; 
+
+% \AddToHookNext{shipout/foreground}
+%   {\put(.5\paperwidth, -.5\paperheight)
+%     {\makebox(0, 0){\includegraphics
+%       [width=.5\paperwidth]{latex-logo}}}}
+
+\begin{lstlisting}
+\AddToHookNext{shipout/background}
+  {\put(.5\paperwidth, -.5\paperheight)
+    {\makebox(0, 0){\includegraphics
+      [width=.5\paperwidth]{vs_logo}}}}
+% remove background picture
+\RemoveFromHook{shipout/background}
+\end{lstlisting}
+
+
+\subsection{tikz code}
+Using tikz code for watermark:
+\begin{lstlisting}
+\AddToHook{shipout/background}{%
+\put(1cm,-\paperheight)
+{\begin{tikzpicture}[remember picture]%
+% tikz code
+\end{tikzpicture}}%
+}
+\end{lstlisting}
+
+For example:
+\begin{lstlisting}
+\AddToHook{shipout/background}{%
+\put(.5\paperwidth, -.5\paperheight)
+{\makebox(0, 0){\begin{tikzpicture}[remember picture]%
+  \draw[pink, fill=pink] (0,0) rectangle (5, 5);
+\end{tikzpicture}}}%
+}
+\end{lstlisting}
+
+Review of the \texttt{pict2e} which is extention of the \texttt{picture} environment:
+\begin{lstlisting}
+\begin{picture}(0,0)
+  \put(0,0) {\includegraphics[width=6em]{example-image-a}}
+  \put(0,0) {\makebox(0, 0){
+    \includegraphics[width=3em]{example-image-b}
+  }}
+  \put(0,0) {\circle{60}} 
+  \put(40,0){\circle{40}} \put(40,0){\circle*{16}}
+\end{picture}
+\end{lstlisting}
+
+\vskip6em
+\begin{center}
+\begin{picture}(0,0)
+  \put(0,0) {\includegraphics[width=6em]{example-image-a}}
+  \put(0,0) {\makebox(0, 0){
+    \includegraphics[width=3em]{example-image-b}
+  }}
+  \put(0,0) {\circle{60}} 
+  \put(40,0){\circle{40}} \put(40,0){\circle*{16}}
+\end{picture}
+\end{center}
+\vskip6em
+
+
+\subsection{Other Shipout Hooks}
+All related hooks:
+\begin{itemize}
+  \item \texttt{shipout/background}
+  \item \texttt{shipout/foreground}
+  \item \texttt{shipout/firstpage}: can also be set using the command \texttt{\tbh AtBeginDvi}
+  \item \texttt{shipout/lastpage}
+  \item \texttt{shipout/before}: can be used to manipulate the collected page box
+    before it is being shipped out (or even discard it)
+  \item \texttt{shipout}: is executed right in front of the
+    page being shipped out, i.e., after any foreground or background material has been added. 
+  \item \texttt{shipout/after}: is called after the current page has been shipped out.
+\end{itemize}
+
+\textbf{Caution:} Note that it is not possible (or advisable) to try to use these hooks to typeset
+material with the intention of returning it to the main vertical list. It will go wrong and
+give unexpected results in many cases 
+
+
+\section{Declaring Hooks}
+We now look briefly at what is necessary to define new
+hooks and use them in your own package code.
+
+\begin{lstlisting}
+\NewHook{hook}      \NewReversedHook{hook}
+\NewMirroredHookPair{hook1}{hook2}
+\end{lstlisting}
+
+How to call (normal) hooks ?
+\begin{itemize}
+  \item \texttt{\tbh UseHook\{hook\}}: execute a normal hook code
+  \item \texttt{\tbh UseOneTimeHook\{hook\}}: If the hook is intended to be a one-time hook, you call it with this.
+\end{itemize}
+
+% \newpage
+\section{Appendix}
+Example image in \texttt{graphicx} package:
+\begin{lstlisting}
+\includegraphics[width=3cm]{example-image-a}
+\includegraphics[width=3cm]{example-grid-100x100pt}
+\includegraphics[width=3cm]{example-image-duck}
+\end{lstlisting}
+
+\begin{center}
+  \includegraphics[width=3cm]{example-image-a}
+  \includegraphics[width=3cm]{example-grid-100x100pt}
+  \includegraphics[width=3cm]{example-image-duck}
+\end{center}
+\end{document}

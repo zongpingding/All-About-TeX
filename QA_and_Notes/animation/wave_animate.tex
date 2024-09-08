@@ -1,0 +1,39 @@
+\documentclass{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{animate}
+\usepackage{tikz}
+\usepackage{xcolor}
+\ExplSyntaxOn
+\clist_new:N \l__color_clist
+\clist_set:Nn \l__color_clist {red, orange, yellow, green, blue, purple, brown, black}
+\newcommand{\colorItem}[1]{\clist_item:Nn \l__color_clist {#1}}
+\ExplSyntaxOff
+
+
+\begin{document}
+\centering
+\begin{animateinline}[
+    loop,autopause,controls,
+    buttonsize=1.2em,
+    buttonbg=0.6:0.6:1,
+    buttonfg=0.2:0.2:1,
+    begin={\begin{tikzpicture}},
+    end={\end{tikzpicture}}
+  ]{10}                       % FPS setting = 2
+  % 1. Test animation
+  % \multiframe{8}{ixtick=0+1}{ % total frames = 6
+  %   \useasboundingbox (-3, -3) rectangle (6, 6);
+  %   \draw[thick, \colorItem{\ixtick}] (\ixtick, 0) circle (2);
+  %   \newframe
+  % }
+  % 2. standing wave
+  \multiframe{100}{ix=0+1}{    % total frames = 100
+    \useasboundingbox (-4, -4) rectangle (8, 8);
+    % A = 1, 2, 3; f = 1/w = 1/0.04 = 25; k = 2
+    \draw[thick, red] plot[samples=100, domain=-pi:2*pi] function{sin(0.04*\ix)*sin(2*x)};
+    \draw[thick, blue] plot[samples=100, domain=-pi:2*pi] function{2*sin(0.04*(\ix-10))*sin(2*x)};
+    \draw[thick, teal] plot[samples=100, domain=-pi:2*pi] function{3*sin(0.04*(\ix-20))*sin(2*x)};
+  }
+\end{animateinline}
+\end{document}

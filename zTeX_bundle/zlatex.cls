@@ -44,6 +44,9 @@
 
 % setup options for class
 \zlatex_define_option:n {
+  % fancy to load 'tikz', 'tcolorbox' etc,.
+  fancy           .bool_gset:N  =  \g__zlatex_fancy_bool,
+  fancy           .initial:n    =  { false },
   % zlatex language
   lang            .str_gset:N   =  \g__zlatex_lang_str,
   lang            .initial:n    =  { en },
@@ -108,6 +111,17 @@
 
 % option setup
 \ProcessKeysOptions {zlatex / option}
+
+% handle fancy option
+\newif\ifloadtikz
+\bool_if:NTF \g__zlatex_fancy_bool {
+  \RequirePackage[many]{tcolorbox}
+  \loadtikztrue
+}{\loadtikzfalse}
+\ExplSyntaxOff\ifloadtikz
+  \RequirePackage{tikz}
+  \usetikzlibrary{calc}
+\fi\ExplSyntaxOn
 \NewDocumentCommand{\zlatexSetup}{m}{
   \zlatex_set:nn {option}{#1}
 }
@@ -140,6 +154,7 @@
       {\RequirePackage[utf8]{inputenc}}
     \RequirePackage[T1]{fontenc}
     \RequirePackage[english]{babel}
+    \RequirePackage{microtype}
   }
   {cn} {
     \sys_if_engine_xetex:TF {}{\msg_error:nn {zlatex}{compile-engine-xetex}}
@@ -344,6 +359,7 @@
 \definecolor{mathpropositionColor}{HTML}{f39c12}
 \definecolor{mathremarkColor}{HTML}{c92a2a}
 \definecolor{RoyalRed}{RGB}{157,16, 45}
+\definecolor{zchapColor}{HTML}{7f8184}
 
 % color spec for zlatex
 \zlatex_define:nn {color}{
@@ -463,26 +479,59 @@
 
 % theorem-like env declaration
 \msg_new:nnn {zlatex}{mathenv-type}{Current~math~env~is~:~'\str_use:N \g__zlatex_math_env_style_tl'~,only~'plain',~'leftbar',~'background',~'fancy'~types~are-valid.}
-\DeclareDocumentEnvironment{zlatexTheoremLikeFrame}{O{black}}{
+\NewDocumentCommand{\zlatexMathEnvStyle}{m}{
+  \tl_gset:Nn \g__zlatex_math_env_style_tl {#1}
+}
+\str_if_eq:VnT \g__zlatex_math_env_style_tl{shadow}{
+  \@ifpackageloaded{tcolorbox}{\relax}{
+    \RequirePackage[many]{tcolorbox}
+  }
+}
+\DeclareDocumentEnvironment{zlatexTheoremLikeFrame}{O{axiom}}{
+  \def\TempColor{\tl_use:c {l__zlatex_#1_color_tl}}
+  \typeout{TempColor: \TempColor}
   \str_case:VnF \g__zlatex_math_env_style_tl {
     {plain}{  
       \def\FrameCommand{}
       \MakeFramed {\advance\hsize-\width \FrameRestore}
     }
     {leftbar}{
-      \def\FrameCommand{{\color{#1}\vrule width 3pt}\hspace{5pt}}
+      \def\FrameCommand{{\color{\TempColor}\vrule width 3pt}\hspace{5pt}}
       \MakeFramed {\advance\hsize-\width \FrameRestore}
     }
     {background}{
-      \def\FrameCommand{\colorbox{#1!10}}
+      \def\FrameCommand{\colorbox{\TempColor!10}}
       \MakeFramed {\advance\hsize-\width \FrameRestore}
     }
     {fancy}{
-      \def\FrameCommand{{\color{#1}\vrule width 3pt}\colorbox{#1!10}}
+      \def\FrameCommand{{\color{\TempColor}\vrule width 3pt}\colorbox{\TempColor!10}}
       \MakeFramed{\advance\hsize-\width \FrameRestore}
     }
+    {shadow}{
+      \begin{tcolorbox}[
+        top=1.5pt,
+        bottom=1.5pt,
+        left=3pt,
+        right=3pt,
+        boxrule=0pt,
+        sharp~ corners,
+        enhanced~ jigsaw,
+        drop~ fuzzy~ shadow,
+        breakable,
+        colback={\TempColor!10}, 
+        borderline~ west={3pt}{0pt}{\TempColor}
+      ]
+    }
   }{\msg_error:nn {zlatex}{mathenv-type}}
-}{\endMakeFramed}
+}{
+  \str_case:VnF \g__zlatex_math_env_style_tl {
+    {shadow}{\end{tcolorbox}}
+    {plain}{\endMakeFramed}
+    {leftbar}{\endMakeFramed}
+    {background}{\endMakeFramed}
+    {fancy}{\endMakeFramed}
+  }{\msg_error:nn {zlatex}{mathenv-type}}
+}
 
 % loop to create math env, setup \cref
 \clist_map_inline:Nn \g__zlatex_theoremlike_envs_clist {
@@ -491,7 +540,7 @@
 
   % env create (3 types: 'leftbar', 'none' and 'backgroud')
   \NewDocumentEnvironment{#1}{O{}}{
-    \begin{zlatexTheoremLikeFrame}[\tl_use:c {l__zlatex_#1_color_tl}]
+    \begin{zlatexTheoremLikeFrame}[#1]
     \begin{zlatex#1}[##1]
   }{\end{zlatex#1}\end{zlatexTheoremLikeFrame}}
 
@@ -617,20 +666,142 @@
 
 % chapter head style
 \IfClassLoadedTF{book}{
-  \RequirePackage{titlesec}
-  \titleformat{\chapter}[display]
-    {\bfseries\huge\color{black}}
-    {\flushright\Large\color{\tl_use:N \l__zlatex_chapter_color_tl}
-    \MakeUppercase{\chaptertitlename}\hspace{1ex}
-    {\scalebox{4}{\thechapter}}}
-    {10pt}
-    {\color{\tl_use:N \l__zlatex_chapter_rule_color_tl}\titlerule\vspace{1ex}}
+  \newif\ifFancyChapter
+  \bool_if:NTF \g__zlatex_fancy_bool {
+    \RequirePackage[explicit]{titlesec}
+    \FancyChaptertrue
+    % numbered chapter format
+    \makeatletter
+    \titleformat{\chapter}[display]
+    {\normalfont\huge\sffamily}{}
+    {20pt}{
+    \begin{tikzpicture}[overlay, remember~ picture]%
+      % mark nodes (need 'calc' library)
+      \coordinate (A) at ($(current~ page.north~ west)+(.125\paperwidth, 0pt)$);
+      \coordinate (stripES) at ($(A)+(3em, -.25\paperheight)$);
+      % chapter head
+      \fill[zchapColor] (A) rectangle (stripES);
+      \draw[draw=zchapColor] (stripES)++(.25em, 4em)   -- ++(.75\paperwidth-3.25em, 0pt);
+      \draw[draw=zchapColor] (stripES)++(.25em, 1.5pt) -- ++(.75\paperwidth-3.25em, 0pt);
+      \draw[draw=zchapColor] (stripES)++(.25em, 0em)   -- ++(.75\paperwidth-3.25em, 0pt);
+      % chapter title and index
+      \node[anchor=south, color=white] at ($(stripES)+(-1.5em, 0em)$)
+        {\normalfont\normalsize\scalebox{4}{\thechapter}\Suffixnum{\thechapter}};
+      \node[anchor=south~ west, inner~ sep=0pt, 
+            yshift=4.25em, xshift=.25em, 
+            font=\Large\bfseries, color=zchapColor
+        ] at (stripES) {\z@subtitle};
+      \node[anchor=south~ west, inner~ sep=0pt,
+            yshift=1.5em, xshift=.25em,
+            font=\Cinzel\Huge\bfseries, color=zchapColor
+        ] at (stripES) {#1};
+      % parbox insert
+      \node[anchor=north~ west, inner~ sep=0pt] at ($(stripES)+(-3em, -1em)$){
+        \parbox[t]{.3\paperwidth}{\normalfont\fontsize{10pt}{15pt}
+          \selectfont\Cinzel\itshape\z@leftContent}
+      };
+      \node[anchor=north~ west, inner~ sep=0pt] at ($(stripES)+(-3em+.45em+.3\paperwidth, -1em)$){
+        \parbox[t]{\dimeval{.45\paperwidth-.45em}}{
+          \normalfont\fontsize{10pt}{15pt}\selectfont\z@rightContent}
+      };
+      % saying block
+      \coordinate (sayingWN) at ($(current~ page.south~ west)+(0, .3\paperheight)$); 
+      \shade[top~ color=white, bottom~ color=zchapColor!25] (sayingWN) 
+        rectangle ++(1\paperwidth, 5pt);
+      \shade[top~ color=zchapColor!25, bottom~ color=white] ($(sayingWN)+(0em, -.15\paperheight)$) 
+        rectangle ++(1\paperwidth, -5pt);
+      \node at ($(sayingWN)+(.5\paperwidth, -0.075\paperheight)$) {
+        \parbox[t][][r]{.75\paperwidth}{\normalfont\fontsize{15pt}{22.5pt}\selectfont
+          \MakeUppercase{\Cinzel\z@saying\\\hspace*{\fill}{\itshape\normalsize\z@sayauthor}}}
+      };
+    \end{tikzpicture}}[\thispagestyle{empty}\clearpage]
+    \makeatother
+    % unnumbered chapter format
+    \titleformat{name=\chapter, numberless}
+      {\normalfont\bfseries\Huge}
+      {}{0pt}{#1}
+  }{
+    \RequirePackage{titlesec}
+    \FancyChapterfalse
+    % numbered chapter format
+    \titleformat{\chapter}[display]
+      {\bfseries\huge\color{black}}
+      {\flushright\Large\color{\tl_use:N \l__zlatex_chapter_color_tl}
+      \MakeUppercase{\chaptertitlename}\hspace{1ex}
+      {\scalebox{4}{\thechapter}}}
+      {10pt}
+      {\color{\tl_use:N \l__zlatex_chapter_rule_color_tl}\titlerule\vspace{1ex}}
+    % unnumbered chapter format
+    \titleformat{name=\chapter, numberless}
+      {\normalfont\bfseries\Huge}
+      {}{0pt}{}
+  }
   % chapter space
   \titlespacing{\chapter}{0pt}{-30pt}{40pt}
-  \titleformat{name=\chapter, numberless}
-    {\normalfont\bfseries\Huge}
-    {}{0pt}{}
 }{\relax}
+
+% find number suffix: 1 -> st, 2 -> nd, ...
+\tl_const:Nn \c_numSufix_i {st}
+\tl_const:Nn \c_numSufix_ii {nd}
+\tl_const:Nn \c_numSufix_iii {rd}
+\tl_const:Nn \c_numSufix_ {th}
+\clist_const:Nn \c_numSpecialSufix_clist {11, 12, 13}
+\NewDocumentCommand\Suffixnum{m}{
+  \clist_if_in:NnTF \c_numSpecialSufix_clist {#1}
+  {th}{
+    \int_compare:nNnTF {\int_mod:nn {#1}{10}}{>}{3}
+    {th}
+    {\tl_use:c {c_numSufix_\int_to_roman:n {\int_mod:nn {#1}{10}}}}
+  }
+}
+
+% fancy chapter default material
+\ExplSyntaxOff
+\makeatletter
+\ifFancyChapter
+  % default settings
+  \newcommand{\z@subtitle}{An Introduction to Mathematical Logic}
+  \newcommand{\z@saying}{Mathematical logic has always been closely connected with the philosophy of mathematics.}
+  \newcommand{\z@sayauthor}{-- Joseph R. Shoenfield}
+  \newcommand{\z@leftContent}{
+    \includegraphics[width=1\linewidth]{example-image-duck}\\[.5em]
+    We add two words of caution. First, if two different syntactical variables
+    occur in the same context, they do not necessarily represent different expressions.
+  }
+  \newcommand{\z@rightContent}{
+    Logic is the study of reasoning; and mathematical logic is the study of the 
+    type of reasoning done by mathematicians. To discover the proper approach to 
+    mathematical logic, we must therefore examine the methods of the mathematician.\\
+    The conspicuous feature of mathematics, as opposed to other sciences, is
+    the use of proofs instead of observations. A physicist may prove physical laws
+    from other physical laws; but he usually regards agreement with observation as
+    the ultimate test of a physical law. A mathematician may, on occasions, use
+    observation; for example, he may measure the angles of many triangles and
+    conclude that the sum of the angles is always 180$^\circ$. However, he will 
+    accept this as a law of mathematics only when it has been proved.
+  }
+  % users' interface
+  \NewDocumentCommand{\zsubtitle}{m}{
+    \renewcommand\z@subtitle{#1}
+  }
+  \NewDocumentCommand{\zchapterSaying}{O{}m}{
+    \renewcommand\z@saying{#2}
+    \renewcommand\z@sayauthor{#1}
+  }
+  \NewDocumentCommand{\zchapterLContent}{m}{
+    \renewcommand\z@leftContent{#1}
+  }
+  \NewDocumentCommand{\zchapterRContent}{m}{
+    \renewcommand\z@rightContent{#1}
+  }
+\else 
+  \NewDocumentCommand{\zsubtitle}{m}{\relax}
+  \NewDocumentCommand{\zchapterSaying}{O{}m}{\relax}
+  \NewDocumentCommand{\zchapterLContent}{m}{\relax}
+  \NewDocumentCommand{\zchapterRContent}{m}{\relax}
+\fi
+\makeatother
+\ExplSyntaxOn
 
 % title page
 \let\orimaketitle\maketitle
@@ -639,6 +810,7 @@
   \orimaketitle
   \restoregeometry
 }
+\makeatletter
 \bool_if:NTF \g__zlatex_slide_bool {
   \let\orithepage\thepage
   \renewcommand\maketitle{
@@ -664,10 +836,11 @@
     \restoregeometry
     \bool_if:NTF \g__zlatex_hyperref_bool {\hypersetup{pageanchor=true}}{\relax}
   }
-} 
+}
+\makeatother
 
 % reset counter command
-\NewDocumentCommand{\zlatexUpdateCounterAfter}{mm}{\@addtoreset{#1}{#2}}
+\NewDocumentCommand{\zlatexCounterWith}{mm}{\@addtoreset{#1}{#2}}
 
 
 

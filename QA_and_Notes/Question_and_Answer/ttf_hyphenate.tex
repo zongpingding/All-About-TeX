@@ -1,0 +1,36 @@
+\documentclass[english,11pt,oneside,article]{memoir}
+\usepackage[english]{babel}
+\usepackage{geometry}
+\usepackage{lipsum}
+\setlength{\emergencystretch}{2em}
+
+\usepackage{letltxmacro}
+\LetLtxMacro\origttfamily\ttfamily
+\DeclareRobustCommand*{\ttfamily}{%
+  \origttfamily
+  \hyphenchar\font=`\-\relax
+  \fontdimen3\font=.25em\relax
+  \fontdimen4\font=.167em\relax
+  \fontdimen7\font=.167em\relax
+}
+
+\makeatletter
+\DeclareRobustCommand\vttfamily{%
+  \not@math@alphabet\vttfamily\relax
+  \fontfamily{cmvtt}% cmvtt (Computer Modern) or lmvtt (Latin Modern)
+  \selectfont
+}
+\DeclareTextFontCommand{\textvtt}{\vttfamily}
+\makeatother
+
+\geometry{left=20mm,right=20mm, top=20mm, bottom=50mm}
+\OnehalfSpacing
+\leftskip3em\rightskip2em
+
+
+
+\begin{document}
+\lipsum[1]
+
+{\ttfamily \lipsum[1]}
+\end{document}

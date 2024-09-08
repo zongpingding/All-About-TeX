@@ -1,0 +1,35 @@
+\documentclass{article}
+\usepackage{ctex}
+\usepackage{zhlipsum}
+
+\makeatletter
+\newcommand\rjustified{%
+  \let\\\@fillcr
+  \leftskip\z@\@plus 1fil
+  \rightskip\z@\@plus -1fil
+  \parfillskip\z@\@plus 1fil\relax
+}
+\protected\def\@fillcr{%
+  \let \reserved@e \relax
+  \let \reserved@f \relax
+  \@ifstar{\let \reserved@e \vadjust \let \reserved@f \nobreak
+    \@xnewlinefill}%
+  \@xnewlinefill}
+\def\@xnewlinefill{\@ifnextchar[% ] bracket matching
+  \@newlinefill{\@gnewlinefill\relax}}
+\def\@newlinefill[#1]{\let \reserved@e \vadjust
+  \@gnewlinefill {\vskip #1}}
+\def\@gnewlinefill #1{%
+  \ifvmode
+    \@nolnerr
+  \else
+    \unskip \reserved@e {\reserved@f#1}\nobreak \hfill \break
+  \fi}
+\makeatother
+
+
+\begin{document}
+
+\rjustified{\zhlipsum[2]}
+
+\end{document}

@@ -1,0 +1,48 @@
+\documentclass{article}
+\usepackage[margin=2.5in]{geometry}
+\usepackage{makeidx,showidx,multicol,microtype}
+
+
+\newcommand\bs{\symbol{’134}}
+% print backslash in either OT1 or T1
+\newcommand\Com[1]{\texttt{\bs#1}\index{#1@\texttt{\bs#1}}}
+\newcommand\Prog[1]{\texttt{#1}\index{#1@\texttt{#1} program}}
+\newcommand\MakeIndex{\texttt{makeindex}}
+
+
+\renewenvironment{theindex}
+{\begin{multicols}{2}[\section*{\indexname}][5\baselineskip]%
+\addcontentsline{toc}{section}{\indexname}%
+\setlength\parindent{0pt}\pagestyle{plain}%
+\ExpandArgs{Nc}\RenewCommandCopy{\item}{@idxitem}}%
+{\end{multicols}}
+
+
+\makeindex
+\begin{document}
+\section{Generating an Index}
+Using the \textsf{showidx} package, users can see where they define
+index entries.
+
+Entries are entered into the index by the \Com{index} command. More
+precisely, the argument of the \Com{index} command is written
+literally into the auxiliary file \texttt{idx}. Note, however, that
+information is actually written into that file only when the
+\Com{makeindex} command was given in the document preamble.
+
+\section{Preparing the Index}
+In order to prepare the index for printing, the \texttt{idx} file has
+to be transformed by an external program, like \MakeIndex{}.
+This program writes the \texttt{ind} file.
+\begin{verbatim}
+makeindex filename
+\end{verbatim}
+
+\section{Printing the Index}\index{Final production run}
+During the final production run of a document, the index can be
+\index{include index}included by putting a \Com{printindex} command at
+the position in the text where you want the index to appear (normally
+at the end).This command will input the \texttt{ind} file prepared by
+\MakeIndex{}, and \LaTeX{} will typeset the information.
+\printindex
+\end{document}

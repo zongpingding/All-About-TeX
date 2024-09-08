@@ -1,0 +1,88 @@
+\documentclass{article}
+\usepackage[margin=1cm, a1paper]{geometry}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+
+
+\begin{document}
+\ExplSyntaxOn
+\newcommand\logo[1][black]{
+  \textcolor{#1}{\scalebox{8}{\(\pi\)}}
+}
+
+\cs_set_nopar:Nn \newSetCof:nn {
+  \coffin_if_exist:cF {l_tmp#1_coffin}
+    {\coffin_new:c {l_tmp#1_coffin}}
+  \hcoffin_set:cn {l_tmp#1_coffin}{#2}
+}
+\cs_set_nopar:Nn \useCof:n {
+  \coffin_typeset:cnnnn {l_tmp#1_coffin} 
+    {l} {b} {0pt} {0pt}
+}
+
+% set coffins
+\newSetCof:nn {Ia}{\logo[red]}
+\newSetCof:nn {Ib}{\logo[red]}
+\newSetCof:nn {IIa}{\logo[blue]}
+\newSetCof:nn {IIb}{\logo[blue]}
+
+
+\centering
+% 1. make the basic pattern I
+\coffin_rotate:Nn \l_tmpIb_coffin {-90}
+\coffin_join:NnnNnnnn \l_tmpIa_coffin {r} {t} 
+                      \l_tmpIb_coffin {r} {b} 
+                      {-8pt} {-19pt}
+% 2. make the basic pattern II
+\coffin_rotate:Nn \l_tmpIIb_coffin {-90}
+\coffin_join:NnnNnnnn \l_tmpIIa_coffin {r} {t} 
+                      \l_tmpIIb_coffin {r} {b} 
+                      {-8pt} {-19pt}
+% define these 2 basic component
+\coffin_set_eq:NN \l_tmpa_coffin \l_tmpIa_coffin
+\coffin_rotate:Nn \l_tmpIIa_coffin {180}
+\coffin_set_eq:NN \l_tmpb_coffin \l_tmpIIa_coffin
+\coffin_reset_poles:N \l_tmpa_coffin
+\coffin_reset_poles:N \l_tmpb_coffin
+
+
+% ==> join these 2 basic component
+\coffin_new:N \l_tmp_before_coffin
+\coffin_new:N \l_tmp_after_coffin
+\coffin_set_eq:NN \l_tmp_before_coffin \l_tmpa_coffin
+\coffin_set_eq:NN \l_tmp_after_coffin \l_tmpb_coffin
+% 1: rotate aroud upper right corner ==> style I
+\cs_set_nopar:Nn \__fisrt_repeat_pattern:nn {
+  \coffin_reset_poles:N \l_tmp_before_coffin
+  \coffin_join:NnnNnnnn \l_tmp_before_coffin {hc} {t} 
+                        \l_tmp_after_coffin {hc} {b} 
+                        {#1}{#2}
+}
+
+% 2: rotate aroud upper right corner ==> style II
+\cs_set_nopar:Nn \__second_repeat_pattern:nn {
+  \coffin_set_eq:NN \l_tmp_after_coffin \l_tmp_before_coffin
+  \coffin_rotate:Nn \l_tmp_after_coffin {180}
+  \coffin_reset_poles:N \l_tmp_before_coffin
+  \coffin_join:NnnNnnnn \l_tmp_before_coffin {r} {t} 
+                        \l_tmp_after_coffin {r} {t} 
+                        {#1}{#2}
+  \coffin_set_eq:NN \l_tmp_after_coffin \l_tmp_before_coffin
+}
+
+
+% ==> start repeat
+\__fisrt_repeat_pattern:nn {8pt} {-21pt}
+\__second_repeat_pattern:nn {-10pt} {-52pt}
+
+\__fisrt_repeat_pattern:nn {10pt} {-45pt}
+\__second_repeat_pattern:nn {-10pt} {-52pt}
+
+\__fisrt_repeat_pattern:nn {30.5pt} {-160pt}
+% \__second_repeat_pattern:nn {-10pt} {-52pt}
+\useCof:n {_before}
+\ExplSyntaxOff
+
+
+\end{document}

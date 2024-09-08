@@ -1,0 +1,21 @@
+\documentclass{article}
+\usepackage{scalerel}[2016-12-29]
+\def\scaleint#1{\vcenter{\hbox{\scaleto[9ex]{\displaystyle\int}{#1}}}}
+
+\ExplSyntaxOn
+\NewDocumentCommand\newint{mO{a}O{b}}{
+  \vcenter{
+    \hbox{
+      \scaleto[\fpeval{#1*0.75}ex]{\displaystyle\int}{\fpeval{#1*3}ex}
+    }
+  }
+} 
+\ExplSyntaxOff
+
+\begin{document}
+\def\x{\frac{a}{c}dP}
+\def\bs{\mkern-15mu}
+\[
+  \newint{30}_{a}^{b}
+\]
+\end{document}

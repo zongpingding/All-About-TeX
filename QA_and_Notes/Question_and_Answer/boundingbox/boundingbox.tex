@@ -1,0 +1,26 @@
+\documentclass{minimal}
+\usepackage{tikz}
+\usetikzlibrary{intersections}
+
+% angle calculation
+\ExplSyntaxOn
+\cs_new_nopar:Npn \__angle_calc:nn #1#2 {
+  \fp_eval:n {acos(#1/sqrt((#1)^2+(#2)^2))*180/pi}
+}
+\NewExpandableDocumentCommand{\angleCalc}{mm}{
+  \__angle_calc:nn {#1}{#2}
+}
+\ExplSyntaxOff
+
+
+\begin{document}
+\angleCalc{-2}{3}
+
+\begin{tikzpicture}
+  \draw[name path=p1] (0, 0) rectangle (5, 5);
+  \draw[red] (4, 0) -- (2, 3);
+  \path[name path=p2] (4, 0) --+ (\angleCalc{-2}{3}:10cm);
+  \fill[name intersections={of=p1 and p2, by=i}] (i) circle (2pt);
+\end{tikzpicture}
+
+\end{document}

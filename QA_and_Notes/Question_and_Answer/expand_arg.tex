@@ -1,0 +1,18 @@
+\documentclass{article}
+\usepackage{xcolor}
+
+\def\cmda{%
+  \ifodd\value{page}%
+    green%
+  \else%
+    blue%
+  \fi
+}
+
+\begin{document}
+\textcolor{\cmda}{Hello}
+
+\newpage
+
+\textcolor{\cmda}{Hello}
+\end{document}

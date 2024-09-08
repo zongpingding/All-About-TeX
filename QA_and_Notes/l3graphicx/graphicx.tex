@@ -1,0 +1,19 @@
+\documentclass{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{l3graphics}
+
+
+
+\ExplSyntaxOn
+\begin{document}
+% have some key-value in loading figure:
+% * config search path
+% * extention map
+% * draft mode and decode setting
+\section{Include~ Figure}
+\graphics_include:nn {type=png, draft=true}{fig.png}
+
+
+\section{Show~ graphics~ list}
+\graphics_show_list:
+\end{document}
