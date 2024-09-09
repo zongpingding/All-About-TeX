@@ -1,0 +1,12 @@
+\documentclass{article}
+
+
+\begin{document}
+\newcommand\cmdb{Generic-Content}
+\NewReversedHook{mypackage/AF}
+\AddToHook{cmd/cmdb/after}{\UseHook{mypackage/AF}}
+\AddToHook{mypackage/AF}[af-1]{\ Second-1}
+\AddToHook{mypackage/AF}[af-2]{\ Second-2}
+
+\ShowHook{mypackage/AF}
+\end{document}
