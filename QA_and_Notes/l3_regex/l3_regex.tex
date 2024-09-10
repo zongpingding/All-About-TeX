@@ -1,0 +1,182 @@
+\documentclass{article}
+\usepackage[margin=1.5in]{geometry}
+
+\begin{document}
+\tableofcontents
+\newpage
+
+\section{Syntax of Regex Expression}
+\subsection{Intro}
+\begin{verbatim}
+\regex_replace_all:nnN { \w+ } { \c{emph}\cB\{ \0 \cE\} , } \l_my_tl
+% 1. \0: denotes the full match
+% 2. \c{emph}: \emph
+% 3. \cB\{...\cE\}: {...}
+% 4. \cB.: \begingroup 
+% 5. \cE.: \endgroup
+\end{verbatim}
+
+\subsection{new and store}
+If a regular expression is to be used several times, it can be compiled once, and
+stored in a regex variable using \verb|\regex_set:Nn|. For example
+\begin{verbatim}
+\regex_new:N \l_foo_regex
+\regex_set:Nn \l_foo_regex { \c{begin} \cB. (\c[^BE].*) \cE. }
+\end{verbatim}
+
+\subsection{regex show}
+\verb|\regex_show:n { \c{begin} \cB. (\c[^BE].*) \cE. }| will show the details of the regex.
+\begin{verbatim}
+> Compiled regex {\c {begin}\cB .(\c [^BE].*)\cE .}:
++-branch
+  control sequence \begin
+  Match
+    categories B, class
+      any token
+  ,-group begin
+  | Match, repeated 0 or more times, greedy
+  |   categories CMTPUDSLOA, class
+  |     any token
+  `-group end
+  Match
+    categories E, class
+      any token.
+<recently read> }
+\end{verbatim}
+
+\subsection{match rule}
+\begin{itemize}
+  \item every alphanumeric character \verb|(A–Z, a–z, 0–9)| matches exactly itself
+  \item non-alphanumeric printable ascii characters can (and should) always be escaped
+  \item spaces should always be escaped (even in character classes)
+  \item any other character may be escaped or not, without any effect: both versions match
+    exactly that character.
+\end{itemize}
+
+\subsection{Characters classes}
+Some predefined character classes are available:
+\begin{itemize}
+  \item \verb|.|: A single period matches any token.
+  \item \verb|\d|: decimal digit
+  \item \verb|\h|: space or tab
+  \item \verb|\w|: any word, alphanumerics and underscore
+  \item The uppercae form of the above classes are negated, e.g. \verb|\D|, \verb|\H|, \verb|\W|
+\end{itemize}
+
+match exactly one token regex expression:
+\begin{itemize}
+  \item \verb|[...]|: matches any of the special tokens
+  \item \verb|^...|: matches any token except the special tokens
+  \item \verb|[x-y]|: Within a character class
+  \item \verb|[:<name>:]|: the posix character class
+  \item \verb|[^:<name>:]|: the negated form of posix character class
+\end{itemize}
+
+\subsection{alternatives, groups, repetitions}
+For \textbf{greedy quantifiers} the regex code will first investigate matches that involve as \textbf{many}
+repetitions as possible, while for \textbf{lazy quantifiers} it investigates matches with as \textbf{few}
+repetitions as possible first.
+\begin{itemize}
+  \item \verb|?|: 0 or 1, greedy
+  \item \verb|??|: 0 or 1, lazy
+  \item \verb|*|: 0 or more, greedy.
+  \item \verb|*?|: 0 or more, lazy
+  \item \verb|+|: 1 or more, greedy
+  \item ... 
+  \item \verb|{n}|: exact $n$ times 
+  \item \verb|{n,}|: at least $n$ times
+  \item ... 
+  \item \verb|{n, m}|: At least $n$, no more than $m$, greedy.
+  \item ...
+\end{itemize}
+
+\subsection{Alternation and capturing groups}
+\begin{itemize}
+  \item \verb!A|B|C!: Either one of A, B, or C, investigating A first.
+  \item \verb|(...)|: Capturing group.
+  \item \verb|(?:...)|: Non-capturing group.
+\end{itemize}
+
+\subsection{Matching exact tokens}
+\begin{itemize}
+  \item \verb|C|: for control sequences;
+  \item \verb|B|: for begin-group tokens;
+  \item \verb|E|: for end-group tokens;
+  \item \verb|T|: for alignment tab tokens;
+  \item \verb|P|: for macro parameter tokens;
+  \item \verb|U|: for superscript tokens (up);
+  \item \verb|D|: for subscript tokens (down);
+  \item \verb|S|: for spaces;
+  \item \verb|L|: for letters;
+\end{itemize}
+
+Use as follows:
+\begin{verbatim}
+1. \c{<regex>} A control sequence whose csname matches the ⟨regex⟩
+
+2. \c[XYZ] Applies to the next object, and forces it to only match tokens with category X, Y, or Z
+\end{verbatim}
+
+\section{Miscellaneous and replacement text}
+\verb|\b|: Word boundary, replacement text refered as.
+\begin{itemize}
+  \item \verb|\0|: is the whole match
+  \item \verb|\1|: is the submatch that was matched by the first (capturing) group (...);
+  \item \verb|\a, \e, \f, \n, \r, \t, \xhh, \x{hhh}|: correspond to single characters as in regular
+    expressions;
+  \item \verb|\c{<cs name>}|: inserts a control sequence;
+  \item \verb|\u{<tl var name>}|: inserts the contents of the \verb|tl var|
+\end{itemize}
+Most of the features described in regular expressions do not make sense within the re-
+placement text.
+
+\subsection{match and further item}
+Finds the first match of the ⟨regular expression⟩ in the ⟨token list⟩. If it exists,
+the \textbf{match} is stored as the \textbf{first item} of the ⟨seq var⟩, and \textbf{further items} are the contents
+of \textbf{capturing groups}, in the order of their opening parenthesis.
+
+An explicit example:
+\begin{verbatim}
+\regex_extract_once:nnN {\((.*?)\)}{1-2(30~ 6)=[]}\l_tmpa_seq
+\seq_show:N \l_tmpa_seq
+\seq_use:Nn \l_tmpa_seq {,~}
+
+>  {(30 6)}
+>  {30 6}.
+<recently read> }
+l.171 \seq_show:N \l_tmpa_seq
+\end{verbatim}
+
+
+
+\section{Practice}
+\ExplSyntaxOn
+\tl_set:Nn \l_my_tl { That~ cat.~ ()~ (12a)}
+% ==> regex new and replace
+% \regex_replace_once:nnN { at } { is } \l_my_tl
+% \regex_replace_all:nnN { at } { is } \l_my_tl
+% \regex_replace_all:nnN { \w+ } { \c{emph}\cB\{ \0 \cE\} , } \l_my_tl
+% \regex_new:N \l_foo_regex
+% \regex_set:Nn \l_foo_regex { \c{begin} \cB. (\c[^BE].*) \cE. }
+% \tl_use:N \l_my_tl\par
+% \regex_replace_all:nnN { \((.*?)\) } { =\0= } \l_my_tl
+% \tl_use:N \l_my_tl\par
+
+% ==> regex to split
+% \seq_new:N \l_draw_seq
+% \regex_split:nnN {\((.*?)\)}{([1])-->(a)...(b)}\l_draw_seq
+% \regex_split:nnN {(-->|\.{3})}{(1)-->(a)...(b)}\l_draw_seq
+% \seq_show:N \l_draw_seq
+
+% ==> regex match
+% \regex_match:nnTF {\(|]} {(-1}{In\par}{Not~ in\par}
+% \regex_match:nnTF {\(|]} {-1]}{In\par}{Not~ in\par}
+% \regex_match:nnTF {\(|]} {-1}{In\par}{Not~ in\par}
+
+% ==> regex extract
+\regex_extract_once:nnN {-?+?\d+}{2083\textbf{Test}}\l_tmpa_seq
+\seq_show:N \l_tmpa_seq
+% \seq_use:Nn \l_tmpa_seq {,~}
+\seq_item:Nn \l_tmpa_seq {-1}
+\ExplSyntaxOff
+\end{document}

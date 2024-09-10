@@ -1,0 +1,94 @@
+\documentclass{article}
+\usepackage{tikz}
+\usepackage{pifont}
+\usepackage{xcolor}
+\usetikzlibrary{arrows.meta}
+\tikzset{
+Mcirc/.style={
+  circle,
+  inner sep=0pt,
+  % text width=1.5em,
+  align = center,
+  draw = black,
+  fill = white
+}}
+\tikzset{
+Mrec/.style={
+  rectangle,
+  inner sep=0pt,
+  % text width=1.5em,
+  align = center,
+  draw = black,
+  fill = white
+}}
+
+%% ==> Using Hook
+% \NewHook{graphvizx/edge/()}
+% \NewHook{graphvizx/edge/[]}
+% \NewDocumentCommand{\cmda}{}{Hello \UseHook{graphvizx/edge/[]}}
+% \cmda\par
+% \AddToHook{graphvizx/edge/[]}{
+%   \tikz[baseline=-0.5ex, >=Latex]\draw[->, red] (0, 0) -- (1, 0);
+% }
+% \cmda
+
+
+\ExplSyntaxOn
+%% ==> Using L3-Regex
+% () --> circle
+% [] --> rectangle
+\seq_new:N \l_draw_seq
+\seq_new:N \l_draw_line_seq
+\regex_new:N \l_draw_split_regex
+\regex_set:Nn \l_draw_split_regex { (-->|\.{3}) }
+\cs_new_nopar:Npn \_draw_parse:n #1 {
+  % split the input by newline
+  \_split_draw_table:n {#1}
+  % iterate over each line
+  \seq_map_inline:Nn \l_draw_seq {
+    \regex_split:NnN \l_draw_split_regex {##1} \l_draw_line_seq 
+    \seq_map_inline:Nn \l_draw_line_seq {
+      \regex_match_case:nnF {
+        {\)}{\_circNum:nn {}{####1}}
+        {]}{\_circNum:nn {fill}{####1}}
+      }{####1}{
+      \regex_match_case:nnF {
+          {-->}{\tikz[baseline=-0.75ex, >=Latex]\draw[->, red] (0, 0) -- (.75, 0);}
+          {...}{\hspace*{.75cm}}
+        }{####1}{\relax}
+      }
+    }
+    % write a newline
+    \par
+  }
+}
+\cs_new:Npn \_split_draw_table:n #1{
+  \seq_set_split:Nnn \l_draw_seq {\\} {#1}
+}
+\cs_new_nopar:Npn \_circNum:nn #1#2 {
+  % extract digit and style (like "+201\color{red}...")
+  \seq_set_split:Nee \l_tmpa_seq {|} {\tl_range:nnn {#2}{2}{-2}}
+  \tl_set:Ne \l_tmpa_tl {\seq_item:Nn \l_tmpa_seq {1}}
+  \tl_set:Ne \l_tmpb_tl {\seq_item:Nn \l_tmpa_seq {2}}
+  \tl_if_eq:nnTF {#1}{fill}{
+    {\tl_use:N \l_tmpb_tl \ding{\int_eval:n {181+\l_tmpa_tl}}}
+  }{
+    {\tl_use:N \l_tmpb_tl \ding{\int_eval:n {171+\l_tmpa_tl}}}
+  }
+}
+\NewDocumentCommand{\Gdiag}{m}{\_draw_parse:n {#1}}
+\ExplSyntaxOff
+
+
+\begin{document}
+\Gdiag {
+  [4] ... (9|\color{teal}) --> [9] --> [4] --> [1] \\
+  (9) --> (8) --> (8) --> [9] --> [4] \\
+  [3] ... [7] --> [3|\color{purple}] --> (3) --> (9) \\
+  (7|\color{orange}) --> (5) --> (5) --> (6) ... [8] \\
+  (5) --> (3) --> [4] ... [5|\color{red}] --> (7) \\
+  (3) --> [4] ... (7) --> (3|\color{cyan}) --> [0]
+}
+
+\end{document}
+

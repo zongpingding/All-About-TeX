@@ -1,0 +1,210 @@
+graph Color_wheel {
+	graph [
+		layout = neato
+		label = "Color wheel, 33 colors.\nNeato layout"
+		labelloc = b
+		fontname = "Helvetica,Arial,sans-serif"
+		start = regular
+		normalize = 0
+	]
+	node [
+		shape = circle
+		style = filled
+		color = "#00000088"
+		fontname = "Helvetica,Arial,sans-serif"
+	]
+	edge [
+		len = 2.7
+		color = "#00000088"
+		fontname = "Helvetica,Arial,sans-serif"
+	]
+	subgraph Dark {
+		node [fontcolor = white width = 1.4]
+		center [width = 1 style = invis shape = point]
+		center -- darkred [label = "0°/360°"]
+		darkred [fillcolor = darkred]
+		brown [fillcolor = brown]
+		brown -- center [label = "30°"]
+		olive [fillcolor = olive]
+		olive -- center [label = "60°"]
+		darkolivegreen [fillcolor = darkolivegreen fontsize = 10]
+		darkolivegreen -- center [label = "90°"]
+		darkgreen [fillcolor = darkgreen]
+		darkgreen -- center [label = "120°"]
+		"dark hue 0.416" [color = ".416 1 .6" fontcolor = white]
+		"dark hue 0.416" -- center [label = "150°"]
+		darkcyan [fillcolor = darkcyan]
+		darkcyan -- center [label = "180°"]
+		"dark hue 0.583" [color = ".583 1 .6" fontcolor = white]
+		"dark hue 0.583" -- center [label = "210°"]
+		darkblue [fillcolor = darkblue]
+		darkblue -- center [label = "240°"]
+		"dark hue 0.750" [color = ".750 1 .6"]
+		"dark hue 0.750" -- center [label = "270°"]
+		darkmagenta [fillcolor = darkmagenta]
+		darkmagenta -- center [label = "300°"]
+		"dark hue 0.916" [color = ".916 1 .6"]
+		"dark hue 0.916" -- center [label = "330°"]
+	}
+	subgraph Tue {
+		node [width = 1.3]
+		"hue 0.083" -- brown
+		"hue 0.083" [color = ".083 1 1"]
+		"hue 0.125" [color = ".125 1 1"]
+		"hue 0.166" -- olive
+		"hue 0.166" [color = ".166 1 1"]
+		"hue 0.208" [color = ".208 1 1"]
+		"hue 0.250" -- darkolivegreen
+		"hue 0.250" [color = ".250 1 1"]
+		"hue 0.291" [color = ".291 1 1"]
+		"hue 0.333" -- darkgreen
+		"hue 0.333" [color = ".333 1 1"]
+		"hue 0.375" [color = ".375 1 1"]
+		"hue 0.416" -- "dark hue 0.416"
+		"hue 0.416" [color = ".416 1 1"]
+		"hue 0.458" [color = ".458 1 1"]
+		"hue 0.500" -- darkcyan
+		"hue 0.500" [color = ".500 1 1"]
+		"hue 0.541" [color = ".541 1 1"]
+		node [fontcolor = white]
+		"hue 0.000" [color = ".000 1 1"]
+		"hue 0.000" -- darkred
+		"hue 0.041" [color = ".041 1 1"]
+		"hue 0.583" -- "dark hue 0.583"
+		"hue 0.583" [color = ".583 1 1"]
+		"hue 0.625" [color = ".625 1 1"]
+		"hue 0.666" -- darkblue
+		"hue 0.666" [color = ".666 1 1"]
+		"hue 0.708" [color = ".708 1 1"]
+		"hue 0.750" -- "dark hue 0.750"
+		"hue 0.750" [color = ".750 1 1"]
+		"hue 0.791" [color = ".791 1 1"]
+		"hue 0.833" -- darkmagenta
+		"hue 0.833" [color = ".833 1 1"]
+		"hue 0.875" [color = ".875 1 1"]
+		"hue 0.916" -- "dark hue 0.916"
+		"hue 0.916" [color = ".916 1 1"]
+		"hue 0.958" [color = ".958 1 1"]
+		edge [len = 1]
+		"hue 0.000" -- "hue 0.041" -- "hue 0.083" -- "hue 0.125" -- "hue 0.166" -- "hue 0.208"
+		"hue 0.208" -- "hue 0.250" -- "hue 0.291" -- "hue 0.333" -- "hue 0.375" -- "hue 0.416"
+		"hue 0.416" -- "hue 0.458" -- "hue 0.500" --"hue 0.541" -- "hue 0.583" -- "hue 0.625"
+		"hue 0.625" -- "hue 0.666" -- "hue 0.708" -- "hue 0.750" -- "hue 0.791" -- "hue 0.833"
+		"hue 0.833" -- "hue 0.875" -- "hue 0.916" -- "hue 0.958" -- "hue 0.000"
+	}
+	subgraph Main_colors {
+		node [width = 2 fontsize = 20]
+		red [fillcolor = red fontcolor = white]
+		orangered [fillcolor = orangered]
+		orange [fillcolor = orange]
+		gold [fillcolor = gold]
+		yellow [fillcolor = yellow]
+		yellowgreen [fillcolor = yellowgreen]
+		deeppink [fillcolor = deeppink fontcolor = white]
+		fuchsia [label = "fuchsia\nmagenta" fillcolor = fuchsia fontcolor = white]
+		purple [fillcolor = purple fontcolor = white]
+		blue [fillcolor = blue fontcolor = white]
+		cornflowerblue [fillcolor = cornflowerblue]
+		deepskyblue [fillcolor = deepskyblue]
+		aqua [fillcolor = aqua label = "aqua\ncyan"]
+		springgreen [fillcolor = springgreen]
+		green [fillcolor = green]
+		purple -- fuchsia -- deeppink -- red
+		cornflowerblue -- blue -- purple
+		cornflowerblue -- deepskyblue -- aqua [len = 1.7]
+		aqua -- springgreen -- green -- yellowgreen -- yellow
+		yellow -- gold -- orange -- orangered -- red [len = 1.6]
+		orange -- "hue 0.083"
+		deeppink -- "hue 0.916"
+		deeppink -- "hue 0.875"
+		red -- "hue 0.000"
+		yellowgreen -- "hue 0.250"
+		blue -- "hue 0.666"
+		yellow -- "hue 0.166"
+		gold -- "hue 0.125"
+		green -- "hue 0.333"
+		springgreen -- "hue 0.416"
+		aqua -- "hue 0.500"
+		cornflowerblue -- "hue 0.583"
+		deepskyblue -- "hue 0.541"
+		purple -- "hue 0.791"
+		purple -- "hue 0.750"
+		fuchsia -- "hue 0.833"
+	}
+	subgraph Light_colors {
+		node [width = 2 fontsize = 20]
+		node [shape = circle width = 1.8]
+		edge [len = 2.1]
+		pink [fillcolor = pink]
+		pink -- red
+		lightyellow [fillcolor = lightyellow]
+		lightyellow -- yellow
+		mediumpurple [fillcolor = mediumpurple]
+		mediumpurple -- purple
+		violet [fillcolor = violet]
+		violet -- fuchsia
+		hotpink [fillcolor = hotpink]
+		hotpink -- deeppink
+		"light hue 0.250" [color = ".250 .2 1"]
+		"light hue 0.250" -- yellowgreen
+		lightcyan [fillcolor = lightcyan]
+		lightcyan -- aqua
+		lightslateblue [fillcolor = lightslateblue]
+		lightslateblue -- blue
+		lightgreen [fillcolor = lightgreen]
+		lightgreen -- green
+		lightskyblue [fillcolor = lightskyblue]
+		lightskyblue -- deepskyblue
+		peachpuff [fillcolor = peachpuff]
+		peachpuff -- orange
+		"light hue 0.416" [color = ".416 .2 1"]
+		"light hue 0.416" -- springgreen
+	}
+	subgraph Tints {
+		node [width = 1]
+		edge [len = 2.4]
+		"hue 0 tint" -- pink
+		"hue 0 tint" [color = "0 .1 1"]
+		"hue 0.041 tint" [color = ".041 .1 1"]
+		"hue 0.083 tint" -- peachpuff
+		"hue 0.083 tint" [color = ".083 .1 1"]
+		"hue 0.125 tint" [color = ".125 .1 1"]
+		"hue 0.166 tint" -- lightyellow
+		"hue 0.166 tint" [color = ".166 .1 1"]
+		"hue 0.208 tint" [color = ".208 .1 1"]
+		"hue 0.250 tint" -- "light hue 0.250"
+		"hue 0.250 tint" [color = ".250 .1 1"]
+		"hue 0.291 tint" [color = ".291 .1 1"]
+		"hue 0.333 tint" -- lightgreen
+		"hue 0.333 tint" [color = ".333 .1 1"]
+		"hue 0.375 tint" [color = ".375 .1 1"]
+		"hue 0.416 tint" -- "light hue 0.416"
+		"hue 0.416 tint" [color = ".416 .1 1"]
+		"hue 0.458 tint" [color = ".458 .1 1"]
+		"hue 0.5 tint" -- lightcyan
+		"hue 0.5 tint" [color = ".5 .1 1"]
+		"hue 0.541 tint" -- lightskyblue
+		"hue 0.541 tint" [color = ".541 .1 1"]
+		"hue 0.583 tint" [color = ".583 .1 1"]
+		"hue 0.625 tint" [color = ".625 .1 1"]
+		"hue 0.666 tint" -- lightslateblue
+		"hue 0.666 tint" [color = ".666 .1 1"]
+		"hue 0.708 tint" [color = ".708 .1 1"]
+		"hue 0.750 tint" -- mediumpurple
+		"hue 0.750 tint" [color = ".750 .1 1"]
+		"hue 0.791 tint" [color = ".791 .1 1"]
+		"hue 0.833 tint" -- violet
+		"hue 0.833 tint" [color = ".833 .1 1"]
+		"hue 0.875 tint" [color = ".875 .1 1"]
+		"hue 0.916 tint" -- hotpink
+		"hue 0.916 tint" [color = ".916 .1 1"]
+		"hue 0.958 tint" [color = ".958 .1 1"]
+		edge [len = 2]
+		"hue 0 tint" -- "hue 0.041 tint" -- "hue 0.083 tint" -- "hue 0.125 tint" -- "hue 0.166 tint" -- "hue 0.208 tint"
+		"hue 0.208 tint" -- "hue 0.250 tint" -- "hue 0.291 tint" -- "hue 0.333 tint" -- "hue 0.375 tint" -- "hue 0.416 tint"
+		"hue 0.416 tint" -- "hue 0.458 tint" -- "hue 0.5 tint" --"hue 0.541 tint" -- "hue 0.583 tint" -- "hue 0.625 tint"
+		"hue 0.625 tint" -- "hue 0.666 tint" -- "hue 0.708 tint" -- "hue 0.750 tint" -- "hue 0.791 tint" -- "hue 0.833 tint"
+		"hue 0.833 tint" -- "hue 0.875 tint" -- "hue 0.916 tint" -- "hue 0.958 tint" -- "hue 0 tint"
+	}
+	// © 2022 Costa Shulyupin, licensed under EPL
+}
