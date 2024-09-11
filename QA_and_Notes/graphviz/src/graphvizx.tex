@@ -41,7 +41,7 @@ Mrec/.style={
 \seq_new:N \l_draw_line_seq
 \regex_new:N \l_draw_split_regex
 \regex_set:Nn \l_draw_split_regex { (-->|\.{3}) }
-\cs_new_nopar:Npn \_draw_parse:n #1 {
+\cs_new:Npn \_draw_parse:n #1 {
   % split the input by newline
   \_split_draw_table:n {#1}
   % iterate over each line

@@ -1,0 +1,59 @@
+\documentclass{article}
+
+
+\begin{document}
+\ExplSyntaxOn
+\cctab_new:N \g_my_cctab
+\cctab_gset:Nn \g_my_cctab {
+  \cctab_select:N \c_document_cctab
+  \int_step_inline:nn { 255 }{
+    \int_compare:nT 
+      { \char_value_catcode:n { #1 } = 11 } 
+      { \char_set_catcode_other:n { #1 } }
+  }
+}
+\tl_set:Nn \l_tmpa_tl {abcde@f&^}
+\tl_set_rescan:Nno \l_tmpa_tl 
+  { \cctab_select:N \g_my_cctab } 
+  { \l_tmpa_tl }
+% show cctab of \l_tmpa_tl
+% \tl_analysis_show:N \l_tmpa_tl
+\ExplSyntaxOff
+\section{Code Example}
+\begin{verbatim}
+\cctab_new:N \g_my_cctab
+\cctab_gset:Nn \g_my_cctab {
+  \cctab_select:N \c_document_cctab
+  \int_step_inline:nn { 255 }{
+    \int_compare:nT 
+      { \char_value_catcode:n { #1 } = 11 } 
+      { \char_set_catcode_other:n { #1 } }
+  }
+}
+\tl_set:Nn \l_tmpa_tl {abcde@f&^}
+\tl_set_rescan:Nno \l_tmpa_tl 
+  { \cctab_select:N \g_my_cctab } 
+  { \l_tmpa_tl }
+% show cctab of \l_tmpa_tl
+\tl_analysis_show:N \l_tmpa_tl
+\end{verbatim}
+
+\section{Result}
+The catgory code specification of the variable \verb|\l_tmpa_tl| is changed 
+to the one specified by the global cctab \verb|\g_my_cctab|. The following 
+are the log messages:
+
+\begin{verbatim}
+The token list \l_tmpa_tl contains the tokens:
+>  a (the character a)
+>  b (the character b)
+>  c (the character c)
+>  d (the character d)
+>  e (the character e)
+>  @ (the character @)
+>  f (the character f)
+>  & (alignment tab character &)
+>  ^ (superscript character ^).
+<recently read> }
+\end{verbatim}
+\end{document}
