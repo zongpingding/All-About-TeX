@@ -1,0 +1,234 @@
+\documentclass{article}
+\usepackage[margin=1.5in]{geometry}
+\usepackage{fontspec}
+\usepackage{lipsum}
+
+\newcommand\anycxchar{uniEBA3}
+\newcommand\anycxcharb{uni2580}
+\newcommand\anycxcharc{circlecopyrt}
+\directlua {
+  luaotfload.add_colorscheme("cxscheme",
+  {
+    ["FF200080"] = {"\anycxchar"},
+  })
+}
+
+\directlua {
+luaotfload.add_colorscheme("cyscheme",
+  {
+    ["FF20A090"] = {"\anycxcharb"},
+  })
+}
+
+
+\directlua {
+luaotfload.add_colorscheme("czscheme",
+  {
+    ["FF0000"] = {"T_h"},
+  })
+}
+
+\directlua{
+fonts.handlers.otf.addfeature {
+  name = "anycx",
+  type = "substitution",
+  data = {
+    ["a"] = "\anycxchar",
+    ["b"] = "\anycxchar",
+    ["c"] = "\anycxchar",
+    ["d"] = "\anycxchar",
+    ["e"] = "\anycxchar",
+    ["f"] = "\anycxchar",
+    ["g"] = "\anycxchar",
+    ["h"] = "\anycxchar",
+    ["i"] = "\anycxchar",
+    ["j"] = "\anycxchar",
+    ["k"] = "\anycxchar",
+    ["l"] = "\anycxchar",
+    ["m"] = "\anycxchar",
+    ["n"] = "\anycxchar",
+    ["o"] = "\anycxchar",
+    ["p"] = "\anycxchar",
+    ["q"] = "\anycxchar",
+    ["r"] = "\anycxchar",
+    ["s"] = "\anycxchar",
+    ["t"] = "\anycxchar",
+    ["u"] = "\anycxchar",
+    ["v"] = "\anycxchar",
+    ["w"] = "\anycxchar",
+    ["x"] = "\anycxchar",
+    ["y"] = "\anycxchar",
+    ["z"] = "\anycxchar",
+    ["0"] = "\anycxchar",
+    ["1"] = "\anycxchar",
+    ["2"] = "\anycxchar",
+    ["3"] = "\anycxchar",
+    ["4"] = "\anycxchar",
+    ["5"] = "\anycxchar",
+    ["6"] = "\anycxchar",
+    ["7"] = "\anycxchar",
+    ["8"] = "\anycxchar",
+    ["9"] = "\anycxchar",
+    ["r"] = "\anycxchar",
+    [","] = "\anycxchar",
+    ["."] = "\anycxchar",
+    ["/"] = "\anycxchar",
+    ["<"] = "\anycxchar",
+    [">"] = "\anycxchar",
+    ["?"] = "\anycxchar",
+    }
+  }
+}
+
+
+\directlua{
+fonts.handlers.otf.addfeature {
+  name = "anycy",
+  type = "substitution",
+  data = {
+    ["hyphen"] = "\anycxcharb",
+    ["a"] = "\anycxcharb",
+    ["b"] = "\anycxcharb",
+    ["c"] = "\anycxcharb",
+    ["d"] = "\anycxcharb",
+    ["e"] = "\anycxcharb",
+    ["f"] = "\anycxcharb",
+    ["g"] = "\anycxcharb",
+    ["h"] = "\anycxcharb",
+    ["i"] = "\anycxcharb",
+    ["j"] = "\anycxcharb",
+    ["k"] = "\anycxcharb",
+    ["l"] = "\anycxcharb",
+    ["m"] = "\anycxcharb",
+    ["n"] = "\anycxcharb",
+    ["o"] = "\anycxcharb",
+    ["p"] = "\anycxcharb",
+    ["q"] = "\anycxcharb",
+    ["r"] = "\anycxcharb",
+    ["s"] = "\anycxcharb",
+    ["t"] = "\anycxcharb",
+    ["u"] = "\anycxcharb",
+    ["v"] = "\anycxcharb",
+    ["w"] = "\anycxcharb",
+    ["x"] = "\anycxcharb",
+    ["y"] = "\anycxcharb",
+    ["z"] = "\anycxcharb",
+    ["0"] = "\anycxcharb",
+    ["1"] = "\anycxcharb",
+    ["2"] = "\anycxcharb",
+    ["3"] = "\anycxcharb",
+    ["4"] = "\anycxcharb",
+    ["5"] = "\anycxcharb",
+    ["6"] = "\anycxcharb",
+    ["7"] = "\anycxcharb",
+    ["8"] = "\anycxcharb",
+    ["9"] = "\anycxcharb",
+    [32] = "\anycxcharb",
+    ["r"] = "\anycxcharb",
+    [","] = "\anycxcharb",
+    ["."] = "\anycxcharb",
+    ["/"] = "\anycxcharb",
+    ["<"] = "\anycxcharb",
+    [">"] = "\anycxcharb",
+    ["?"] = "\anycxcharb",
+    }
+  }
+}
+
+\directlua{
+fonts.handlers.otf.addfeature {
+  name = "anycz2",
+  type = "substitution",
+  data = {
+    ["T_h"] = "\anycxcharc",
+  }
+}}
+
+\directlua{
+fonts.handlers.otf.addfeature {
+  name = "anycz",
+  type = "substitution",
+  data = {
+    ["hyphen"] = "\anycxcharc",
+    ["a"] = "\anycxcharc",
+    ["b"] = "\anycxcharc",
+    ["c"] = "\anycxcharc",
+    ["d"] = "\anycxcharc",
+    ["e"] = "\anycxcharc",
+    ["f"] = "\anycxcharc",
+    ["g"] = "\anycxcharc",
+    ["h"] = "\anycxcharc",
+    ["i"] = "\anycxcharc",
+    ["j"] = "\anycxcharc",
+    ["k"] = "\anycxcharc",
+    ["l"] = "\anycxcharc",
+    ["m"] = "\anycxcharc",
+    ["n"] = "\anycxcharc",
+    ["o"] = "\anycxcharc",
+    ["p"] = "\anycxcharc",
+    ["q"] = "\anycxcharc",
+    ["r"] = "\anycxcharc",
+    ["s"] = "\anycxcharc",
+    ["t"] = "\anycxcharc",
+    ["u"] = "\anycxcharc",
+    ["v"] = "\anycxcharc",
+    ["w"] = "\anycxcharc",
+    ["x"] = "\anycxcharc",
+    ["y"] = "\anycxcharc",
+    ["z"] = "\anycxcharc",
+    ["0"] = "\anycxcharc",
+    ["1"] = "\anycxcharc",
+    ["2"] = "\anycxcharc",
+    ["3"] = "\anycxcharc",
+    ["4"] = "\anycxcharc",
+    ["5"] = "\anycxcharc",
+    ["6"] = "\anycxcharc",
+    ["7"] = "\anycxcharc",
+    ["8"] = "\anycxcharc",
+    ["9"] = "\anycxcharc",
+    [32] = "\anycxcharc",
+    ["r"] = "\anycxcharc",
+    [","] = "\anycxcharc",
+    ["."] = "\anycxcharc",
+    ["/"] = "\anycxcharc",
+    ["<"] = "\anycxcharc",
+    [">"] = "\anycxcharc",
+    ["?"] = "\anycxcharc",
+    }
+  }
+}
+\newfontfamily\fany{Clara}[
+  RawFeature=+anycx,
+  Colour=cxscheme,
+]
+\newfontfamily\fancy{FiraMath}[
+  RawFeature=+anycy,
+  Colour=cyscheme,
+]
+\newfontfamily\fancz{AntykwaTorunska}[
+  RawFeature=+anycz,
+]
+\newfontfamily\fancza{AntykwaTorunska}[
+  Ligatures=TeX,
+  Colour=czscheme,
+]
+\newfontfamily\fanczb{AntykwaTorunska}[
+  RawFeature=+anycz;+anycz2,
+]
+
+
+\begin{document}
+\section{plain Text}
+\lipsum[1]
+
+\section{Encoded Text}
+\fany
+\lipsum[1]
+
+\fancy
+\lipsum[1]
+
+% \newpage
+% \normalfont
+% \fancza 
+\end{document}

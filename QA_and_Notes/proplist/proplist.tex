@@ -7,28 +7,39 @@
 \ExplSyntaxOn
 % 1. create a new property list
 \prop_new:N \l_my_prop
-
-
 % 2. add key-value
 % single key-value
 \prop_put:Nnn \l_my_prop {key1}{value1}
 % set from key-value
 \prop_put_from_keyval:Nn \l_my_prop {
-    key2=value2,
-    key3=value3
+  key2=value2,
+  key3=value3
 }
-
-
 % 3. get value by key
 \prop_item:Nn \l_my_prop {key1}\par
-
-
 % 4. map inline 
 \prop_map_inline:Nn \l_my_prop {
     \textbf{#1}~ --~ #2\par
 }
-
 \ExplSyntaxOff
 
-Hello ^^M World
+
+\section{Test}
+\ExplSyntaxOn
+\prop_new:N \g_arabix_suffix_prop
+\prop_set_from_keyval:Nn \g_arabix_suffix_prop {
+  1=st, 2=nd, 3=rd,
+  11=th, 12=th, 13=th,
+  0=th, _=th
+} 
+\NewDocumentCommand\numSuffix{m}{
+  \int_compare:nTF {11 <= #1 <= 13}
+    {\prop_item:Ne \g_arabix_suffix_prop {#1}}
+    {\int_compare:nTF {\int_mod:nn {#1}{10} > 3}
+      {\prop_item:Ne \g_arabix_suffix_prop {_}}
+      {\prop_item:Ne \g_arabix_suffix_prop {\int_mod:nn {#1}{10}}}
+    }
+}
+\ExplSyntaxOff
+\numSuffix{23}
 \end{document}

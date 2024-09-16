@@ -1,0 +1,14 @@
+\documentclass{article}
+\input{regression-test.tex}
+\usepackage{TESTpkg}
+
+
+\begin{document}
+\ExplSyntaxOn
+\START
+\TEST{LVT Test}{
+  hbox_set:Nn \l_tmpa_box {\cmdA[ARG-ONE]}
+  \TRUE
+}
+\END
+\end{document}

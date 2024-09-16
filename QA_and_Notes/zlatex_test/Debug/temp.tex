@@ -1,0 +1,86 @@
+\documentclass[10pt]{article}
+\usepackage{titletoc}
+
+
+% \ExplSyntaxOn
+% \def\ttl@tocentry#1#2#3#4#5#6#7#8{%
+%   \ttl@fixhyperref
+%   \ttl@providettll{}{#2}%
+%   \xdef\ttl@b{\csname ttll@#2\endcsname}%
+%   \ifnum\ttl@b>\c@tocdepth\else
+%     \ifnum\ttl@b<\ttl@toctop\else
+%       \edef\ttl@a{\ttl@lasttoc}%
+%       \gdef\thecontentspage{#8}%
+%       \global\let\thecontentslabel\@empty
+%       \global\let\NEWthecontentslabel\@empty
+%       \global\ttl@labelfalse
+%       \sbox\z@{%  Unused box. It just catch the numberline
+%         \def\numberline##1{\global\ttl@labeltrue\gdef\thecontentslabel{##1}\gdef\NEWthecontentslabel{##1}}%
+%         #7}%    \ttl@b = current     \ttl@a = previous
+%       \ifttl@fromblock
+%         \ttl@outblock{#1}{#2}{#4}%
+%       \else
+%         \ttl@outnoblock{#1}{#3}{#4}%
+%       \fi
+%       \def\numberline##1{\ignorespaces}%
+%       \ifttl@label
+%         {\leavevmode\strut\@firstoftwo#5{#7}\strut\kern\z@}%
+%       \else
+%         {\leavevmode\strut\@secondoftwo#5{#7}\strut\kern\z@}%
+%       \fi
+%       {#6}%
+%       \ifcase#1\relax
+%         \ifttl@fromblock\else
+%           \protected@edef\ttl@preend{\@nameuse{ttle@#2}}%
+%         \fi
+%         \global\ttl@fromblocktrue
+%       \else
+%         \@@par
+%         \nobreak
+%         \csname ttle@#2\endcsname
+%         \endgroup
+%         \global\ttl@fromblockfalse
+%       \fi
+%       \xdef\ttl@lasttoc{\csname ttll@#2\endcsname}%
+%     \fi
+%   \fi
+%   \ignorespaces}
+% \ExplSyntaxOff 
+
+\let\NEWToclabel\contentslabel
+\def\NEWLABEL{\contentslabel{2em}}
+% \let\oldthecontentslabel\thecontentslabel
+\titlecontents{subsection}
+  [0em] % ie, 1.5em (chapter) + 2.3em
+  {}
+  {\NEWToclabel[\NEWLABEL]{0em}}
+  {\hspace*{-2.3em}}
+  {\titlerule*[1pc]{.}\contentspage}
+
+
+\begin{document}
+\ExplSyntaxOn
+\box_new:N \l_zlatex_measure_box
+% \zlatex_box_set_to:NNn \box_ht:N \l_tmpa_dim {mm}
+\cs_new_protected:Npn \zlatex_box_set_to:NNn #1#2#3 {
+  \hbox_set:Nn \l_zlatex_measure_box {#3}
+  \dim_set:Nn #2 {#1 \l_zlatex_measure_box}
+  \box_set_eq:NN \l_zlatex_measure_box \c_empty_box
+}
+\cs_new_protected:Npn \zlatex_set_to_height:Nn { \zlatex_box_set_to:NNn \box_ht:N }
+\cs_new_protected:Npn \zlatex_set_to_width:Nn  { \zlatex_box_set_to:NNn \box_wd:N }
+\cs_new_protected:Npn \zlatex_set_to_depth:Nn  { \zlatex_box_set_to:NNn \box_dp:N }
+
+% test
+% \zlatex_set_to_width:Nn \l_tmpa_dim {\hbox~to~8pt{\hfill m\hfill}}
+% \dim_use:N \l_tmpa_dim % 8.0pt
+\ExplSyntaxOff
+
+\tableofcontents
+
+\section{SSE I}
+\subsection{SSS I.1}
+
+
+
+\end{document}

@@ -1,0 +1,9 @@
+\input{regression-test.tex}
+\documentclass{minimal}
+\begin{document}
+
+\begin{verbatim}
+  ZZZ
+\end{verbatim}
+
+\end{document}

@@ -1,0 +1,1190 @@
+%%     Copyright (C) 2020-2022 by Nan Geng <nangeng@nwafu.edu.cn>
+%% --------------------------------------------------------------------------
+%%
+%%     This work may be distributed and/or modified under the
+%%     conditions of the LaTeX Project Public License, either
+%%     version 1.3c of this license or (at your option) any later
+%%     version. This version of this license is in
+%%        http://www.latex-project.org/lppl/lppl-1-3c.txt
+%%     and the latest version of this license is in
+%%        http://www.latex-project.org/lppl.txt
+%%     and version 1.3 or later is part of all distributions of
+%%     LaTeX version 2005/12/01 or later.
+%%
+%%     This work has the LPPL maintenance status "maintained".
+%%
+%%     The Current Maintainer of this work is Nan Geng.
+%%
+%% --------------------------------------------------------------------------
+%%
+\NeedsTeXFormat{LaTeX2e}[2020/10/01]
+\RequirePackage{expl3}
+\ProvidesExplPackage{circledtext}{2022-04-28}{v1.1.0}
+  {Typeset circled text with l3draw}
+
+\RequirePackage { xtemplate, l3keys2e, l3draw, xparse }
+
+% 保证TeXLive的向下兼容
+\cs_if_free:NT \box_ht_plus_dp:N
+  {
+    \cs_new_protected:Npn \box_ht_plus_dp:N #1
+      { \tex_dimexpr:D \box_ht:N #1 + \box_dp:N #1 \scan_stop: }
+  }
+
+% 带圈文字用户接口
+% #1 *号命令，实现阴文
+% #2 格式选项
+% #3 文字
+\NewDocumentCommand{\circledtext}{ s O{} m }
+  {
+    \group_begin:
+      \IfBooleanTF{ #1 }
+        {
+          \bool_set_true:N  \l__circledtext_negative_bool
+        }{
+          \bool_set_false:N \l__circledtext_negative_bool
+        }
+      \__circledtext_handle:nn { #2 } { #3 }
+    \group_end:
+  }
+
+% 是否反白标志
+\bool_new:N   \l__circledtext_negative_bool
+
+% 基字符盒子
+\box_new:N    \l__circledtext_basebox_box
+
+% 字符盒子类型
+\tl_new:N     \l__circledtext_char_box_type_tl
+% 字符盒子类型列表
+\clist_new:N  \g__circledtext_char_box_list_clist
+
+% 缩放方式
+\tl_new:N     \l__circledtext_resize_method_tl
+% 缩放方式列表
+\clist_new:N  \g__circledtext_resize_method_clist
+
+% 基字符盒子正方形连长
+\dim_new:N    \l__circledtext_char_box_size_dim
+% 基字符盒子正方形外接圆半径
+\dim_new:N    \l__circledtext_char_box_radius_dim
+% 基字符宽度
+\dim_new:N    \l__circledtext_char_width_dim
+% 基字符高度
+\dim_new:N    \l__circledtext_char_height_dim
+% 字符(串)盒子宽度
+\dim_new:N    \l__circledtext_box_width_dim
+% 字符(串)盒子高度
+\dim_new:N    \l__circledtext_box_height_dim
+% 字符(串)外框线宽
+\dim_new:N    \l__circledtext_box_linewidth_dim
+% 字符(串)内部十字、米字装饰线线宽
+\dim_new:N    \l__circledtext_cross_linewidth_dim
+% 字符(串)深度(带格式)
+\dim_new:N    \l__circledtext_char_dp_dim
+
+% 字符(串)盒子容器
+\coffin_new:N \l__circledtext_str_box_coffin
+% 字符框盒子容器
+\coffin_new:N \l__circledtext_box_coffin
+% 字符盒子容器
+\coffin_new:N \l__circledtext_char_coffin
+% 临时盒子容器
+\coffin_new:N \l__circledtext_tmpa_coffin
+% 临时盒子容器
+\coffin_new:N \l__circledtext_tmpb_coffin
+
+% 基字符宽度
+\dim_new:N    \charboxwd
+% 基字符高度
+\dim_new:N    \charboxht
+
+% 待处理字符(串)
+\tl_new:N     \l__circledtext_chars_tl
+% 字符(串)排版格式
+\tl_new:N     \l__circledtext_character_format_tl
+% 内部十字、米字装饰线颜色点边框颜色比例
+\int_new:N    \l__circledtext_cross_color_ratio_int
+\int_set:Nn   \l__circledtext_cross_color_ratio_int { 30 }
+% 字符(串)的字形类型(实线、虚线等)
+\int_new:N    \l__circledtext_charstroke_type_int
+
+% 字体自身缩放比例
+\fp_new:N     \l__circledtext_char_shrink_fp
+
+% 填充色辅助函数
+\cs_new_nopar:Nn \__circledtext_aux_color_boxfill:
+  { }
+
+% 盒子由l3draw实现，
+% 设计思路和部分源码来自zitie宏包(\url{https://www.ctan.org/pkg/zitie})。
+
+% 颜色命名函数
+% #1 颜色名称
+% #2 颜色表达式
+\cs_set_nopar:Npn \__circledtext_color_select:nn #1#2
+  {
+    \color_set:nn {#1} {#2}
+  }
+\cs_generate_variant:Nn \__circledtext_color_select:nn {nx}
+
+% 颜色命名函数
+% #1 颜色名称
+% #2 颜色空间
+% #3 颜色分量值
+\cs_set_nopar:Npn \__circledtext_color_select:nnn #1#2#3
+  {
+    \color_set:nnn {#1} {#2} {#3}
+  }
+\cs_generate_variant:Nn \__circledtext_color_select:nnn {nnx}
+
+% 计算基字符的宽和高
+\cs_new:Npn \__circledtext_calc_basechar_w_h:
+  {
+    \dim_set:Nn \l__circledtext_char_width_dim
+      {
+        \box_wd:N \l__circledtext_basebox_box
+      }
+    \dim_set:Nn \l__circledtext_char_height_dim
+      {
+        \box_ht_plus_dp:N \l__circledtext_basebox_box
+      }
+  }
+
+% 盒子容器总高度计算函数
+\cs_new_nopar:Npn \__circledtext_coffin_ht_plus_dp:N #1
+  {
+    \coffin_ht:N #1 + \coffin_dp:N #1
+  }
+
+% 计算基字符外框大小(外接正方形边长和外接圆半径)
+\cs_new:Npn \__circledtext_calc_char_box_size:
+  {
+    % 设置基字符格式的基字符盒子
+    \hbox_set:Nn \l_tmpa_box
+      {
+        \tl_use:N \l__circledtext_character_format_tl
+        \tl_use:N \c__circledtext_basechar_tl
+      }
+
+    % 盒子宽度
+    \dim_set:Nn \l_tmpa_dim
+      {
+        \box_wd:N \l_tmpa_box
+      }
+    % 盒子高度
+    \dim_set:Nn \l_tmpb_dim
+      {
+        \box_ht_plus_dp:N \l_tmpa_box
+      }
+
+    % 盒子深度
+    \dim_set:Nn \l__circledtext_char_dp_dim
+      {
+        \box_dp:N \l_tmpa_box
+      }
+
+    % 正方形边长
+    \dim_compare:nNnTF \l_tmpa_dim > \l_tmpb_dim
+      {
+        \dim_gset_eq:NN \l__circledtext_char_box_size_dim \l_tmpa_dim
+      }
+      {
+        \dim_gset_eq:NN \l__circledtext_char_box_size_dim \l_tmpb_dim
+      }
+
+    % 设置基字符盒子正方形宽和高(相等)
+    \dim_gset_eq:NN \charboxwd \l__circledtext_char_box_size_dim
+    \dim_gset_eq:NN \charboxht \l__circledtext_char_box_size_dim
+
+    % 外接圆半径
+    \dim_gset:Nn \l__circledtext_char_box_radius_dim
+      {
+        \fp_to_dim:n
+          {
+            \fp_eval:n { \l__circledtext_char_box_size_dim * sqrt(2)/ 2 }
+          }
+      }
+  }
+
+% 字符盒子构造类型函数名称生成函数
+% 名称中6个参数分别表示：
+% #1 左下角x坐标
+% #2 左下角y坐标
+% #3 右上角x坐标
+% #4 右上角y坐标
+% #5 x方向缩放比例(扩展保留参数)
+% #6 y方向缩放比例(扩展保留参数)
+\cs_new_nopar:Npn \__circledtext_char_box_type:n #1
+  {
+    __circledtext_char_box_construct_type_ #1 :nnnnnn
+  }
+% 字符盒子构造类型函数名称命令生成函数
+% 名称命令中6个参数分别表示：
+% #1 左下角x坐标
+% #2 左下角y坐标
+% #3 右上角x坐标
+% #4 右上角y坐标
+% #5 x方向缩放比例(扩展保留参数)
+% #6 y方向缩放比例(扩展保留参数)
+\cs_new_nopar:Npn \__circledtext_char_box_type_c:n #1
+  {
+    \use:c
+      {
+        __circledtext_char_box_construct_type_ #1 :nnnnnn
+      }
+  }
+
+% 字符盒子构造类型函数生成器函数
+% #1 类型名称
+\cs_new:Npn \__circledtext_new_char_box_construct:nn #1
+  {
+    % 将类型名称记入clist
+    \clist_put_right:Nn \g__circledtext_char_box_list_clist {#1}
+    % 类似\cs_new:cn __circledtext_char_box_construct_type_none:nnnnnn
+    \cs_new:cn { \__circledtext_char_box_type:n {#1} }
+  }
+\cs_generate_variant:Nn \__circledtext_new_char_box_construct:nn { V }
+\cs_generate_variant:Nn \__circledtext_new_char_box_construct:nn { x }
+
+% 定义字符边框盒子类型
+
+% 无边框
+\__circledtext_new_char_box_construct:nn { none } { }
+
+% 填充正方形
+\__circledtext_new_char_box_construct:nn { __filledsquare }
+  {
+    \cs_if_eq:NNF \__circledtext_aux_color_boxfill: \c_empty_tl
+      {
+        \__circledtext_aux_color_boxfill:
+        \draw_scope_begin:
+          \bool_if:NTF \l__circledtext_negative_bool
+            {
+              \color_fill:n { circledtextcharcolor }
+            }{
+              \color_fill:n { circledtextboxfill   }
+            }
+          \draw_transform_shift:n { (#3-#3*#5)/2, (#4-#4*#6)/2 }
+          \draw_path_rectangle:nn { #1, #2 } { #3*#5, #4*#6 }
+          \draw_path_use_clear:n { fill }
+        \draw_scope_end:
+      }
+  }
+
+% 反色填充正方形
+\__circledtext_new_char_box_construct:nn { __negfilledsquare }
+  {
+    \cs_if_eq:NNF \__circledtext_aux_color_boxfill: \c_empty_tl
+      {
+        \__circledtext_aux_color_boxfill:
+        \draw_scope_begin:
+          \bool_if:NTF \l__circledtext_negative_bool
+            {
+              \color_fill:n { circledtextboxfill   }
+            }{
+              \color_fill:n { circledtextcharcolor }
+            }
+          \draw_transform_shift:n { (#3-#3*#5)/2, (#4-#4*#6)/2 }
+          \draw_path_rectangle:nn { #1, #2 } { #3*#5, #4*#6 }
+          \draw_path_use_clear:n { fill }
+        \draw_scope_end:
+      }
+  }
+
+% 正方形填充内切圆
+\__circledtext_new_char_box_construct:nn { __innerfilledcircle }
+  {
+    \cs_if_eq:NNF \__circledtext_aux_color_boxfill: \c_empty_tl
+      {
+        \__circledtext_aux_color_boxfill:
+        \draw_scope_begin:
+          \bool_if:NTF \l__circledtext_negative_bool
+            {
+              \color_fill:n { circledtextcharcolor }
+            }{
+              \color_fill:n { circledtextboxfill   }
+            }
+          \draw_path_circle:nn { #3/2, #4/2 } { #3*#5/2 }
+          \draw_path_use_clear:n { fill }
+        \draw_scope_end:
+      }
+  }
+
+% 正方形填充外接圆
+\__circledtext_new_char_box_construct:nn { __outerfilledcircle }
+  {
+    \cs_if_eq:NNF \__circledtext_aux_color_boxfill: \c_empty_tl
+      {
+        \__circledtext_aux_color_boxfill:
+        \draw_scope_begin:
+          \bool_if:NTF \l__circledtext_negative_bool
+            {
+              \color_fill:n { circledtextcharcolor }
+            }{
+              \color_fill:n { circledtextboxfill   }
+            }
+          \draw_path_circle:nn { #3/2, #4/2 } { \l__circledtext_char_box_radius_dim*#5 }
+          \draw_path_use_clear:n { fill }
+        \draw_scope_end:
+      }
+  }
+
+% 无反色底层填充内切圆
+\__circledtext_new_char_box_construct:nn { __innerlowerfilledcircle }
+  {
+    \draw_scope_begin:
+      \color_fill:n { lowerbgboxfill   }
+      \draw_path_circle:nn { #3/2, #4/2 } { #3*#5/2 }
+      \draw_path_use_clear:n { fill }
+    \draw_scope_end:
+  }
+
+% 无反色上层填充内切圆
+\__circledtext_new_char_box_construct:nn { __innerupperfilledcircle }
+  {
+    \draw_scope_begin:
+      \color_fill:n { upperbgboxfill   }
+      \draw_path_circle:nn { #3/2, #4/2 } { #3*#5/2 }
+      \draw_path_use_clear:n { fill }
+    \draw_scope_end:
+  }
+
+% 无反色阴影填充内切圆
+\__circledtext_new_char_box_construct:nn { __innershadowfilledcircle }
+  {
+    \draw_scope_begin:
+      \color_fill:n { shadowboxfill   }
+      \draw_transform_shift:n { \charboxwd*0.1, -\charboxht*0.1 }
+      \draw_path_circle:nn { #3/2, #4/2 } { #3*#5/2 }
+      \draw_path_use_clear:n { fill }
+    \draw_scope_end:
+  }
+
+% 正方形边框
+\__circledtext_new_char_box_construct:nn { __squarebox }
+  {
+    \draw_scope_begin:
+      \color_stroke:n { circledtextcharboxcolor   }
+      \draw_transform_shift:n { (#3-#3*#5)/2, (#4-#4*#6)/2 }
+      \draw_path_rectangle:nn { #1, #2 } { #3*#5, #4*#6 }
+      \draw_path_use_clear:n { stroke }
+    \draw_scope_end:
+  }
+
+% 正方形内切圆边框
+\__circledtext_new_char_box_construct:nn { __innercirclebox }
+  {
+    \__circledtext_aux_color_boxfill:
+    \draw_scope_begin:
+      \color_stroke:n { circledtextcharboxcolor   }
+      \draw_path_circle:nn { #3/2, #4/2 } { #3*#5/2 }
+      \draw_path_use_clear:n { stroke }
+    \draw_scope_end:
+  }
+
+% 正方形外接圆边框
+\__circledtext_new_char_box_construct:nn { __outercirclebox }
+  {
+    \draw_scope_begin:
+      \color_stroke:n { circledtextcharboxcolor }
+      \draw_path_circle:nn { #3/2, #4/2 }
+        { \l__circledtext_char_box_radius_dim*#5 }
+      \draw_path_use_clear:n { stroke }
+    \draw_scope_end:
+  }
+
+% 正方形斜十字线(正方形对角连线)
+\__circledtext_new_char_box_construct:nn { __dcross }
+  {
+    \draw_scope_begin:
+      \tl_if_empty:NF \l__circledtext_dash_pattern_tl
+        {
+          \exp_args:No \draw_dash_pattern:nn { \l__circledtext_dash_pattern_tl } { 0pt }
+        }
+      \draw_linewidth:n{ \l__circledtext_cross_linewidth_dim }
+      \color_stroke:n { circledtextcrosscolor }
+      \draw_transform_shift:n { (#3-#3*#5)/2, (#4-#4*#6)/2 }
+      \draw_path_moveto:n { #1   ,    #2 }
+      \draw_path_lineto:n { #3*#5, #4*#6 }
+      \draw_path_moveto:n { #1   , #4*#6 }
+      \draw_path_lineto:n { #3   , #2*#5 }
+      \draw_path_use_clear:n { stroke }
+    \draw_scope_end:
+  }
+
+% 正方形正十字线(正方形对边中点连线)
+\__circledtext_new_char_box_construct:nn { __scross }
+  {
+    \draw_scope_begin:
+      \tl_if_empty:NF \l__circledtext_dash_pattern_tl
+        {
+          \exp_args:No \draw_dash_pattern:nn { \l__circledtext_dash_pattern_tl } { 0pt }
+        }
+      \draw_linewidth:n{ \l__circledtext_cross_linewidth_dim }
+      \color_stroke:n { circledtextcrosscolor }
+      \draw_transform_shift:n { (#3-#3*#5)/2, (#4-#4*#6)/2 }
+      \draw_path_moveto:n { #3*#5/2,      #2 }
+      \draw_path_lineto:n { #3*#5/2,   #4*#6 }
+      \draw_path_moveto:n { #1     , #4*#6/2 }
+      \draw_path_lineto:n { #3*#5  , #4*#6/2 }
+      \draw_path_use_clear:n { stroke }
+    \draw_scope_end:
+  }
+
+% 内切圆斜十字线(需要求交点)
+\__circledtext_new_char_box_construct:nn { __innerdcross }
+  {
+    \draw_scope_begin:
+      \tl_if_empty:NF \l__circledtext_dash_pattern_tl
+        {
+          \exp_args:No \draw_dash_pattern:nn { \l__circledtext_dash_pattern_tl } { 0pt }
+        }
+      \draw_linewidth:n{ \l__circledtext_cross_linewidth_dim }
+      \color_stroke:n { circledtextcrosscolor }
+      \draw_path_moveto:n
+        {
+          \draw_point_intersect_line_circle:nnnnn
+            { #1, #2 } % line's first point
+            { #3, #4 } % line's second point
+            { #3/2, #4/2 } { #3*#5/2 }
+            {1}  % index of intersect
+        }
+      \draw_path_lineto:n
+        {
+          \draw_point_intersect_line_circle:nnnnn
+            { #1, #2 } % line's first point
+            { #3, #4 } % line's second point
+            { #3/2, #4/2 } { #3*#5/2 }
+            {2}  % index of intersect
+        }
+      \draw_path_moveto:n
+        {
+          \draw_point_intersect_line_circle:nnnnn
+            { #1, #4 } % line's first point
+            { #3, #2 } % line's second point
+            { #3/2, #4/2 } { #3*#5/2 }
+            {1}  % index of intersect
+        }
+      \draw_path_lineto:n
+        {
+          \draw_point_intersect_line_circle:nnnnn
+            { #1, #4 } % line's first point
+            { #3, #2 } % line's second point
+            { #3/2, #4/2 } { #3*#5/2 }
+            {2}  % index of intersect
+        }
+      \draw_path_use_clear:n { stroke }
+    \draw_scope_end:
+  }
+
+% 外接圆正十字线(需要求交点)
+\__circledtext_new_char_box_construct:nn { __outercross }
+  {
+    \draw_scope_begin:
+      \tl_if_empty:NF \l__circledtext_dash_pattern_tl
+        {
+          \exp_args:No \draw_dash_pattern:nn { \l__circledtext_dash_pattern_tl } { 0pt }
+        }
+      \draw_linewidth:n{ \l__circledtext_cross_linewidth_dim }
+      \color_stroke:n { circledtextcrosscolor }
+      \draw_path_moveto:n
+        {
+          \draw_point_intersect_line_circle:nnnnn
+            { #3/2, #2 } % line's first point
+            { #3/2, #4 } % line's second point
+            { #3/2, #4/2 } { \l__circledtext_char_box_radius_dim*#5 }
+            {1}  % index of intersect
+        }
+      \draw_path_lineto:n
+        {
+          \draw_point_intersect_line_circle:nnnnn
+            { #3/2, #2 } % line's first point
+            { #3/2, #4 } % line's second point
+            { #3/2, #4/2 } { \l__circledtext_char_box_radius_dim*#5 }
+            {2}  % index of intersect
+        }
+      \draw_path_moveto:n
+        {
+          \draw_point_intersect_line_circle:nnnnn
+            { #1, #4/2 } % line's first point
+            { #3, #4/2 } % line's second point
+            { #3/2, #4/2 } { \l__circledtext_char_box_radius_dim*#5 }
+            {1}  % index of intersect
+        }
+      \draw_path_lineto:n
+        {
+          \draw_point_intersect_line_circle:nnnnn
+            { #1, #4/2 } % line's first point
+            { #3, #4/2 } % line's second point
+            { #3/2, #4/2 } { \l__circledtext_char_box_radius_dim*#5 }
+            {2}  % index of intersect
+        }
+      \draw_path_use_clear:n { stroke }
+    \draw_scope_end:
+  }
+
+% 填充内切圆叠加内切圆边框
+\__circledtext_new_char_box_construct:nn { o }
+  {
+    \__circledtext_char_box_type_c:n { __innerfilledcircle } {#1} {#2} {#3} {#4} {#5} {#6}
+    \__circledtext_char_box_type_c:n { __innercirclebox } {#1} {#2} {#3} {#4} {#5} {#6}
+  }
+
+% 填充内切圆叠加正方形正十字线与内切圆边框
+\clist_map_variable:nNn {o+,+o} \l_tmpa_tl
+  {
+    \__circledtext_new_char_box_construct:Vn \l_tmpa_tl
+      {
+        \__circledtext_char_box_type_c:n { __innerfilledcircle } {#1} {#2} {#3} {#4} {#5} {#6}
+        \__circledtext_char_box_type_c:n { __scross } {#1} {#2} {#3} {#4} {#5} {#6}
+        \__circledtext_char_box_type_c:n { __innercirclebox } {#1} {#2} {#3} {#4} {#5} {#6}
+      }
+  }
+
+% 填充内切圆叠加内切圆斜十字线与内切圆边框
+\clist_map_variable:nNn {ox,xo} \l_tmpa_tl
+  {
+    \__circledtext_new_char_box_construct:Vn \l_tmpa_tl
+      {
+        \__circledtext_char_box_type_c:n { __innerfilledcircle } {#1} {#2} {#3} {#4} {#5} {#6}
+        \__circledtext_char_box_type_c:n { __innerdcross } {#1} {#2} {#3} {#4} {#5} {#6}
+        \__circledtext_char_box_type_c:n { __innercirclebox } {#1} {#2} {#3} {#4} {#5} {#6}
+      }
+  }
+
+% 填充内切圆叠加内切圆正斜十字线与内切圆边框
+\clist_map_variable:nNn {ox+,o+x,xo+,x+o,+ox,+xo} \l_tmpa_tl
+  {
+    \__circledtext_new_char_box_construct:Vn  \l_tmpa_tl
+      {
+        \__circledtext_char_box_type_c:n { __innerfilledcircle } {#1} {#2} {#3} {#4} {#5} {#6}
+        \__circledtext_char_box_type_c:n { __innerdcross } {#1} {#2} {#3} {#4} {#5} {#6}
+        \__circledtext_char_box_type_c:n { __scross } {#1} {#2} {#3} {#4} {#5} {#6}
+        \__circledtext_char_box_type_c:n { __innercirclebox } {#1} {#2} {#3} {#4} {#5} {#6}
+      }
+  }
+
+% 内切圆斜十字线叠加正十字线
+\clist_map_variable:nNn {x+,+x} \l_tmpa_tl
+  {
+    \__circledtext_new_char_box_construct:Vn \l_tmpa_tl
+      {
+        \__circledtext_char_box_type_c:n { __innerdcross } {#1} {#2} {#3} {#4} {#5} {#6}
+        \__circledtext_char_box_type_c:n { __scross } {#1} {#2} {#3} {#4} {#5} {#6}
+      }
+  }
+
+% 填充正方形叠加正方形边框
+\__circledtext_new_char_box_construct:nn { O }
+  {
+    \__circledtext_char_box_type_c:n { __filledsquare } {#1} {#2} {#3} {#4} {#5} {#6}
+    \__circledtext_char_box_type_c:n { __squarebox } {#1} {#2} {#3} {#4} {#5} {#6}
+  }
+
+% 填充正方形叠加正方形正十字线与正方形边框
+\clist_map_variable:nNn {O+,+O} \l_tmpa_tl
+  {
+    \__circledtext_new_char_box_construct:Vn \l_tmpa_tl
+      {
+        \__circledtext_char_box_type_c:n { __filledsquare } {#1} {#2} {#3} {#4} {#5} {#6}
+        \__circledtext_char_box_type_c:n { __scross } {#1} {#2} {#3} {#4} {#5} {#6}
+        \__circledtext_char_box_type_c:n { __squarebox } {#1} {#2} {#3} {#4} {#5} {#6}
+      }
+  }
+
+% 填充正方形叠加正方形斜十字线与正方形边框
+\clist_map_variable:nNn {OX,XO} \l_tmpa_tl
+  {
+    \__circledtext_new_char_box_construct:Vn \l_tmpa_tl
+      {
+        \__circledtext_char_box_type_c:n { __filledsquare } {#1} {#2} {#3} {#4} {#5} {#6}
+        \__circledtext_char_box_type_c:n { __dcross } {#1} {#2} {#3} {#4} {#5} {#6}
+        \__circledtext_char_box_type_c:n { __squarebox } {#1} {#2} {#3} {#4} {#5} {#6}
+      }
+  }
+
+% 填充正方形叠加正方形斜正十字线与正方形边框
+\clist_map_variable:nNn {OX+,O+X,XO+,X+O,+OX,+XO} \l_tmpa_tl
+  {
+    \__circledtext_new_char_box_construct:Vn \l_tmpa_tl
+      {
+        \__circledtext_char_box_type_c:n { __filledsquare } {#1} {#2} {#3} {#4} {#5} {#6}
+        \__circledtext_char_box_type_c:n { __dcross } {#1} {#2} {#3} {#4} {#5} {#6}
+        \__circledtext_char_box_type_c:n { __scross } {#1} {#2} {#3} {#4} {#5} {#6}
+        \__circledtext_char_box_type_c:n { __squarebox } {#1} {#2} {#3} {#4} {#5} {#6}
+      }
+  }
+
+% 正方形斜十字线叠加正十字线
+\clist_map_variable:nNn {X+,+X} \l_tmpa_tl
+  {
+    \__circledtext_new_char_box_construct:Vn \l_tmpa_tl
+      {
+        \__circledtext_char_box_type_c:n { __dcross } {#1} {#2} {#3} {#4} {#5} {#6}
+        \__circledtext_char_box_type_c:n { __scross } {#1} {#2} {#3} {#4} {#5} {#6}
+      }
+  }
+
+% 内切圆叠加同心82%内切圆边框
+\__circledtext_new_char_box_construct:nn { oo }
+  {
+    \__circledtext_char_box_type_c:n { __innerfilledcircle } {#1} {#2} {#3} {#4} {#5} {#6}
+    \__circledtext_char_box_type_c:n { __innercirclebox } {#1} {#2} {#3} {#4} {#5} {#6}
+    \__circledtext_char_box_type_c:n { __innercirclebox } {#1} {#2} {#3} {#4} {0.82} {0.82}
+  }
+
+% 反色正方形叠加内切填充圆
+\clist_map_variable:nNn {Oo,oO} \l_tmpa_tl
+  {
+    \__circledtext_new_char_box_construct:Vn \l_tmpa_tl
+      {
+        \__circledtext_char_box_type_c:n { __negfilledsquare } {#1} {#2} {#3} {#4} {#5} {#6}
+        \__circledtext_char_box_type_c:n { __innerfilledcircle } {#1} {#2} {#3} {#4} {#5} {#6}
+        \__circledtext_char_box_type_c:n { __squarebox } {#1} {#2} {#3} {#4} {#5} {#6}
+      }
+  }
+
+% 正方形叠加同心82%正方形边框
+\__circledtext_new_char_box_construct:nn { OO }
+  {
+    \__circledtext_char_box_type_c:n { __filledsquare } {#1} {#2} {#3} {#4} {#5} {#6}
+    \__circledtext_char_box_type_c:n { __squarebox } {#1} {#2} {#3} {#4} {#5} {#6}
+    \__circledtext_char_box_type_c:n { __squarebox } {#1} {#2} {#3} {#4} {0.82} {0.82}
+  }
+
+% 3同心圆叠加(类似中国象棋棋子形状)
+\__circledtext_new_char_box_construct:nn { ooo }
+  {
+    % 绘制棋子阴影(需要局部平移坐标)
+    \__circledtext_char_box_type_c:n { __innershadowfilledcircle }
+                                       {#1} {#2} {#3} {#4} {1.0} {1.0}
+    % 绘制棋子外圈背景
+    \__circledtext_char_box_type_c:n { __innerlowerfilledcircle }
+                                     {#1} {#2} {#3} {#4} {#5} {#6}
+    % 绘制棋子边环背景
+    \__circledtext_char_box_type_c:n { __innerupperfilledcircle }
+                                     {#1} {#2} {#3} {#4} {0.88} {0.88}
+    % 绘制棋子内圈背景
+    \__circledtext_char_box_type_c:n { __innerlowerfilledcircle }
+                                     {#1} {#2} {#3} {#4} {0.72} {0.72}
+    % 绘制边环刻环线
+    \__circledtext_char_box_type_c:n { __innercirclebox }
+                                     {#1} {#2} {#3} {#4} {0.88} {0.88}
+    \__circledtext_char_box_type_c:n { __innercirclebox }
+                                     {#1} {#2} {#3} {#4} {0.72} {0.72}
+
+  }
+
+\msg_new:nnn { circledtext } { box-exists } { The~ box~ type~ `#1~ not~ exists. }
+
+% 缩放类型名称生成函数
+\cs_new_nopar:Npn \__circledtext_resize:n #1
+  {
+    __circledtext_processor_resize_ #1 :w
+  }
+
+% 缩放类型函数名称命令生成函数
+\cs_new_nopar:Npn \__circledtext_resize_c:n #1
+  {
+    \use:c
+      {
+        __circledtext_processor_resize_ #1 :w
+      }
+  }
+
+% 缩放代码生成函数
+% #1 dim长度变量1
+% #2 dim长度变量2
+% #3 缩放代码1
+% #4 缩放代码2
+% #5 缩放代码3
+% 如果 #1 > 0           ，取#3代码
+% 如果 #1 <= 0 且#2 > 0 ，取#4代码
+% 如果 #1 <= 0 且#2 <= 0，取#5代码
+\cs_new:Npn \__circledtext_dim_gezero_dispatch:NNnnn #1#2 #3#4#5
+  {
+    \dim_compare:nNnTF #1 > \c_zero_dim
+      { #3 }
+      {
+        \dim_compare:nNnTF #2 > \c_zero_dim
+          { #4 } { #5 }
+      }
+  }
+
+% 缩放代码生成函数
+% #1 dim长度变量1
+% #2 dim长度变量2
+% #3 缩放代码1
+% #4 缩放代码2
+% #5 缩放代码3
+% #6 缩放代码4
+% 如果 #1 > 0  且 #2 > 0 ，取#3代码
+% 如果 #1 > 0  且 #2 <= 0，取#4代码
+% 如果 #1 <= 0 且 #2 > 0 ，取#5代码
+% 如果 #1 <= 0 且 #2 <= 0，取#6代码
+\cs_new:Npn \__circledtext_dim_gezero_dispatch:NNnnnn #1#2 #3#4#5#6
+  {
+    \dim_compare:nNnTF #1 > \c_zero_dim
+      {
+        \dim_compare:nNnTF #2 > \c_zero_dim
+          { #3 } { #4 }
+      }
+      {
+        \dim_compare:nNnTF #2 > \c_zero_dim
+          { #5 } { #6 }
+      }
+  }
+
+% 缩放代码生成函数(分别按高度、宽度或实际尺寸缩放)
+\cs_new:Npn \__circledtext_force_size_dispatch:nnn % height, width, none
+  {
+    \__circledtext_dim_gezero_dispatch:NNnnn \l__circledtext_height_dim
+      \l__circledtext_width_dim
+  }
+
+% 缩放代码生成函数(分别按高宽、高度、宽度或实际尺寸缩放)
+\cs_new:Npn \__circledtext_force_size_dispatch:nnnn % both, height, width, none
+  {
+    \__circledtext_dim_gezero_dispatch:NNnnnn \l__circledtext_box_height_dim
+      \l__circledtext_box_width_dim
+  }
+
+% 构造缩放类型
+\cs_new:Npn \__circledtext_new_resize_method:nn #1
+  {
+    \clist_put_right:Nn \g__circledtext_resize_method_clist {#1}
+    \cs_new:cpn { \__circledtext_resize:n {#1} }
+  }
+
+% 无缩放
+\__circledtext_new_resize_method:nn { none } { }
+
+% 按实际参数缩放
+\__circledtext_new_resize_method:nn { real }
+  {
+    \__circledtext_force_size_dispatch:nnnn
+      {% 盒子宽高缩放
+        \coffin_resize:Nnn \l__circledtext_box_coffin
+                           \l__circledtext_box_width_dim
+                           \l__circledtext_box_height_dim
+      }
+      {% 指定高度为比例缩放
+        \coffin_scale:Nnn \l__circledtext_box_coffin
+          {
+            \dim_ratio:nn { \l__circledtext_box_height_dim }
+                          { \__circledtext_coffin_ht_plus_dp:N \l__circledtext_box_coffin }
+          }
+          {
+            \dim_ratio:nn { \l__circledtext_box_height_dim }
+                          { \__circledtext_coffin_ht_plus_dp:N \l__circledtext_box_coffin }
+          }
+      }
+      {% 指定宽度为比例缩放
+        \coffin_scale:Nnn \l__circledtext_box_coffin
+          {
+            \dim_ratio:nn { \l__circledtext_box_width_dim }
+                          { \coffin_wd:N \l__circledtext_box_coffin }
+          }
+          {
+            \dim_ratio:nn { \l__circledtext_box_width_dim }
+                          { \coffin_wd:N \l__circledtext_box_coffin }
+          }
+      }
+      {% 实际宽、高比例缩放
+        \coffin_scale:Nnn \l__circledtext_box_coffin
+                          { \l__circledtext_x_scale_tl }
+                          { \l__circledtext_y_scale_tl }
+      }
+  }
+
+% 按基字符参数缩放
+\__circledtext_new_resize_method:nn { base }
+  {
+    \__circledtext_force_size_dispatch:nnnn
+      {% 按指定盒子宽高缩放
+        \coffin_resize:Nnn \l__circledtext_box_coffin
+                           \l__circledtext_box_width_dim
+                           \l__circledtext_box_height_dim
+      }
+      {% 基字符宽高乘以高度比例缩放
+        \coffin_resize:Nnn \l__circledtext_box_coffin
+           {
+             \l__circledtext_char_width_dim * \dim_ratio:nn { \l__circledtext_box_height_dim }
+               { \__circledtext_coffin_ht_plus_dp:N \l__circledtext_box_coffin }
+           }
+           {
+             \l__circledtext_box_height_dim
+           }
+      }
+      {% 基字符宽高乘以宽度比例缩放
+        \coffin_resize:Nnn \l__circledtext_box_coffin
+           {
+             \l__circledtext_box_width_dim
+           }
+           {
+             \l__circledtext_char_height_dim * \dim_ratio:nn { \l__circledtext_box_width_dim }
+               { \coffin_wd:N \l__circledtext_box_coffin }
+           }
+      }
+      {% 基字符乘比例系数后缩放
+        \coffin_resize:Nnn \l__circledtext_box_coffin
+           {
+             \l__circledtext_x_scale_tl \l__circledtext_char_width_dim
+           }
+           {
+             \l__circledtext_y_scale_tl \l__circledtext_char_height_dim
+           }
+      }
+  }
+\msg_new:nnn { circledtext } { resize-type } { using~ `#1'~ resize. }
+
+% 笔画设置函数
+\cs_new:Npn \__circledtext_chars_stroke:nn #1#2
+  {
+    \special { pdf:code ~ q ~ #1 } #2 \special { pdf:code ~ Q }
+  }
+% 笔画构造函数
+\cs_new_protected:Npn \__circledtext_chars_stroke_construct:n #1
+  {
+    \int_case:nn {\l__circledtext_charstroke_type_int}
+      {
+        {1}{ #1 }
+        {2}{
+          \__circledtext_chars_stroke:nn { 1 ~ Tr ~ 0.10 ~ w ~ [] ~ 0 ~ d ~ 1 ~ J } {#1}
+        }
+        {3}{
+          \__circledtext_chars_stroke:nn { 1 ~ Tr ~ 0.10 ~ w ~ [1~1] ~ 0 ~ d ~ 1 ~ J } {#1}
+        }
+        {4}{
+          \__circledtext_chars_stroke:nn { 3 ~ Tr } {#1}
+        }
+
+      }
+  }
+\cs_generate_variant:Nn  \__circledtext_chars_stroke_construct:n { V }
+\cs_generate_variant:Nn  \__circledtext_chars_stroke_construct:n { x }
+
+% key_value选项设计
+\keys_define:nn { circledtext }
+  {
+    % 基字符
+    basechar  .code:n = { \tl_gset:Nx \c__circledtext_basechar_tl {#1}
+                          \__circledtext_calc_basechar_w_h:
+                        },
+    % 字符格式
+    charf .code:n = { \tl_gset:Nn \l__circledtext_character_format_tl {#1}
+                      \__circledtext_calc_char_box_size:
+                    },
+    % charf .initial:n = \normalsize ,
+    % 边框类型
+    boxtype .code:n = { \exp_args:NNx \clist_if_in:NnTF
+                            \g__circledtext_char_box_list_clist {#1}
+                            { \tl_set:Nx \l__circledtext_char_box_type_tl {#1} }
+                            { \msg_error:nnx { circledtext } { box-exists } {#1} }
+                        % \__circledtext_calc_char_box_size:
+                      },
+    % 缩放方式
+    resize    .code:n = { \exp_args:NNx \clist_if_in:NnTF
+                            \g__circledtext_resize_method_clist {#1}
+                            { \tl_set:Nx \l__circledtext_resize_method_tl {#1} }
+                            { \msg_error:nnx { circledtext } { resize-method } {#1} }
+                        },
+    % 缩放参数
+    xscale .tl_set:N = \l__circledtext_x_scale_tl ,
+    xscale .initial:n = 1 ,
+    yscale .tl_set:N = \l__circledtext_y_scale_tl ,
+    yscale .initial:n = 1 ,
+    scale  .meta:n = { xscale = #1 , yscale = #1 } ,
+    width  .dim_set:N = \l__circledtext_box_width_dim ,
+    height .dim_set:N = \l__circledtext_box_height_dim ,
+
+    % 字符边框线宽
+    boxlinewidth .dim_set:N = \l__circledtext_box_linewidth_dim ,
+    boxlinewidth .initial:n = 0.4pt ,
+    % 十字线线宽
+    crosslinewidth .dim_set:N = \l__circledtext_cross_linewidth_dim ,
+    crosslinewidth .initial:n = 0.3pt ,
+
+    % 边框线颜色
+    boxcolor  .code:n = { \tl_set:Nx \l_tmpa_tl {
+                          #1 ! \int_use:N \l__circledtext_cross_color_ratio_int }
+                          \__circledtext_color_select:nn { circledtextcharboxcolor } {#1}
+                          \__circledtext_color_select:nx { circledtextcrosscolor }
+                                                         { \l_tmpa_tl }
+                        } ,
+    boxcolor  .initial:n = black ,
+    boxcolor* .code:n = { \tl_set:Nx \l_tmpa_tl {
+                          #1 ! \int_use:N \l__circledtext_cross_color_ratio_int }
+                          \__circledtext_color_select:nnn { circledtextcharboxcolor } #1
+                          \__circledtext_color_select:nnx { circledtextcrosscolor }
+                                                          \l_tmpa_tl
+                        } ,
+    % 十字线颜色点边框颜色的比例(必须在boxcolor后)
+    crosscolorratio  .code:n = { \int_set:Nn \l__circledtext_cross_color_ratio_int { #1 }
+                                 \__circledtext_color_select:nn { circledtextcrosscolor }
+                                   { circledtextcharboxcolor ! #1 }
+                               },
+    crosscolorratio  .initial:n = 30,
+
+    % 字符颜色
+    charcolor  .code:n = { \__circledtext_color_select:nn { circledtextcharcolor } {#1}
+                           \tl_if_eq:nnT { #1 } { black }
+                             {
+                               \__circledtext_color_select:nn { circledtextboxfill }
+                                                          { white }
+                               \cs_set_nopar:Npn \__circledtext_aux_color_boxfill:
+                                  { \color_fill:n { white } }
+                             }
+                         } ,
+    charcolor  .initial:n = black ,
+    charcolor* .code:n = { \__circledtext_color_select:nnn { circledtextcharcolor } #1 } ,
+    color  .meta:n = { boxcolor = #1, crosscolor = #1,  charcolor = #1 } ,
+    color* .meta:n = { boxcolor* = #1, crosscolor = #1,  charcolor* = #1 } ,
+    % 字符盒子背景填充颜色
+    boxfill  .code:n = { \exp_args:Nx \tl_if_empty:nTF {#1}
+                           {
+                             \__circledtext_color_select:nn { circledtextboxfill }
+                                                        { white }
+                             \cs_set_nopar:Npn \__circledtext_aux_color_boxfill:
+                                { \color_fill:n { white } }
+                           }{ \__circledtext_color_select:nn { circledtextboxfill } {#1}
+                              \cs_set_nopar:Npn \__circledtext_aux_color_boxfill:
+                                { \color_fill:n {#1} }
+                           }
+                        } ,
+    boxfill  .initial:n = {} ,
+    boxfill* .code:n = { \__circledtext_color_select:nnn { circledtextboxfill } #1
+                           \cs_set_nopar:Npn \__circledtext_aux_color_boxfill:
+                             { \color_fill:nn #1 }
+                         } ,
+
+    % 无反色时底层盒子背景填充颜色
+    lowerbgcolor  .code:n = { \exp_args:Nx \tl_if_empty:nTF {#1}
+                                {
+                                  \__circledtext_color_select:nn { lowerbgboxfill }
+                                    { yellow!70!red }
+                                  \cs_set_nopar:Npn \__circledtext_aux_color_boxfill:
+                                    { \color_fill:n { yellow!70!red } }
+                                }{ \__circledtext_color_select:nn { lowerbgboxfill } { #1 }
+                                  \cs_set_nopar:Npn \__circledtext_aux_color_boxfill:
+                                    { \color_fill:n { #1 } }
+                                }
+                            } ,
+    lowerbgcolor  .initial:n = {} ,
+
+    % 无反色时上层盒子背景填充颜色
+    upperbgcolor  .code:n = { \exp_args:Nx \tl_if_empty:nTF {#1}
+                                {
+                                  \__circledtext_color_select:nn { upperbgboxfill }
+                                    { yellow!80!black }
+                                  \cs_set_nopar:Npn \__circledtext_aux_color_boxfill:
+                                    { \color_fill:n { yellow!80!black } }
+                                }{ \__circledtext_color_select:nn { upperbgboxfill } { #1 }
+                                  \cs_set_nopar:Npn \__circledtext_aux_color_boxfill:
+                                    { \color_fill:n { #1 } }
+                                }
+                            } ,
+    upperbgcolor  .initial:n = {} ,
+
+    % 盒子阴影填充颜色
+    shadowcolor  .code:n = { \exp_args:Nx \tl_if_empty:nTF {#1}
+                               {
+                                 \__circledtext_color_select:nn { shadowboxfill }
+                                   { black!35!white }
+                                 \cs_set_nopar:Npn \__circledtext_aux_color_boxfill:
+                                   { \color_fill:n { black!35!white } }
+                               }{ \__circledtext_color_select:nn { shadowboxfill } { #1 }
+                                 \cs_set_nopar:Npn \__circledtext_aux_color_boxfill:
+                                   { \color_fill:n { #1 } }
+                               }
+                            } ,
+    shadowcolor  .initial:n = {} ,
+
+    % 笔画参数
+    charstroke .choice:,
+    charstroke .value_required:n = true,
+    charstroke .choices:nn =
+      { none, solid, dashed, invisible }
+      { \int_set_eq:NN \l__circledtext_charstroke_type_int \l_keys_choice_int },
+    charstroke .initial:n = none,
+    % 虚线样式
+    dashpattern .tl_set:N = \l__circledtext_dash_pattern_tl ,
+    dashpattern .initial:n = { } ,
+
+    % 字符自身缩放比例
+    charshrink  .fp_set:N  = \l__circledtext_char_shrink_fp ,
+    charshrink  .initial:n = 0.75,
+
+    unknown .code:n = { \msg_error:nn { circledtext } { unknown-option } }
+  }
+\msg_new:nnn { circledtext } { unknown-option }
+  { package~ option~ "\l_keys_key_tl"~ is~ unknown. }
+
+% 根据编译引擎设置基字符
+\sys_if_engine_xetex:TF
+  {
+    \keys_set:nn { circledtext }
+      {
+        basechar = 好,
+      }
+  }{
+    \sys_if_engine_luatex:TF
+      {
+        \keys_set:nn { circledtext }
+          {
+            basechar = 好,
+          }
+      }{
+        \keys_set:nn { circledtext }
+          {
+            basechar = x,
+          }
+      }
+  }
+
+\keys_set:nn { circledtext }
+  {
+    charf    = \normalsize,
+    boxtype  = o,
+    resize   = none,
+  }
+
+% 选项设置用户接口
+\NewDocumentCommand \circledtextset { m }
+  {
+    \keys_set:nn { circledtext } {#1}
+  }
+
+% 构建字符盒子，如字符为空，则用基字符构造
+% #1 需要处理的字符(串)
+\cs_new:Npn \__circledtext_single_char_construct:N #1
+  {
+    \tl_if_empty:NTF #1
+      {
+        \hcoffin_set:Nn \l__circledtext_char_coffin
+          {
+            \__circledtext_single_handle:N \c__circledtext_basechar_tl
+          }
+      }{
+        \hcoffin_set:Nn \l__circledtext_char_coffin
+          {
+            \__circledtext_single_handle:N #1
+          }
+      }
+  }
+
+% 构建带圈文字内部函数
+% #1 选项内容
+% #2 需要处理的字符(串)
+\cs_new:Npn \__circledtext_handle:nn #1#2
+  {
+    \group_begin:
+      % 选项设置
+      \keys_set:nn { circledtext } { #1 }
+
+      % 设置字符串
+      \tl_gset:Nx \l__circledtext_chars_tl {#2}
+
+      % 构造盒子
+      \__circledtext_single_char_construct:N \l__circledtext_chars_tl
+
+      % 复制盒子准备缩放与输出
+      \coffin_set_eq:NN \l__circledtext_box_coffin \l__circledtext_char_coffin
+
+      % 测量盒子容器总高度(用内切圆则不需要)
+      \dim_set:Nn \l_tmpa_dim
+        { \__circledtext_coffin_ht_plus_dp:N \l__circledtext_box_coffin }
+      % 缩放字符盒子容器到字符大小
+      \coffin_scale:Nnn \l__circledtext_box_coffin
+        {
+          \dim_ratio:nn { \charboxht } { \l_tmpa_dim }
+        }
+        {
+          \dim_ratio:nn { \charboxht } { \l_tmpa_dim }
+        }
+
+      % 根据指定的方式缩放盒子
+      \__circledtext_resize_c:n { \l__circledtext_resize_method_tl }
+
+      % 下沉距离=字符深度+外框线宽
+      \dim_add:Nn \l__circledtext_char_dp_dim { \l__circledtext_box_linewidth_dim }
+
+      % 输出盒子(下沉深度距离)
+      \coffin_typeset:Nnnnn \l__circledtext_box_coffin
+        { l } { b } { 0pt } { -\l__circledtext_char_dp_dim }
+    \group_end:
+  }
+
+% 字符处理句柄函数
+% #1 需要处理的字符(串)变量
+\cs_new:Npn \__circledtext_single_handle:N #1
+  {
+    \group_begin:
+      \tl_set:Nf \l__circledtext_curr_char_tl {#1}
+      \__circledtext_single_construct:N \l__circledtext_curr_char_tl
+    \group_end:
+  }
+
+% 构造带圈字符
+% #1 需要处理的字符(串)变量
+\cs_new:Npn \__circledtext_single_construct:N #1
+  {
+    % 按指定的格式和内容构造一个字符盒子容器
+    \hcoffin_set:Nn \l__circledtext_box_coffin
+      {
+        \bool_if:NTF \l__circledtext_negative_bool
+          {
+            \color_select:n { circledtextboxfill   }
+          }{
+            \color_select:n { circledtextcharcolor }
+          }
+        \tl_use:N \l__circledtext_character_format_tl
+        \__circledtext_chars_stroke_construct:n { #1 }
+      }
+
+    % 构造字符盒子容器边框
+    \__circledtext_single_box_construct:
+  }
+
+% 字符盒子及边框组合盒子容器构造函数
+\cs_new:Npn \__circledtext_single_box_construct:
+  {
+    % 根据文字内容计算缩放比例
+    \dim_set:Nn \l_tmpa_dim
+      { \coffin_wd:N \l__circledtext_box_coffin }
+    \dim_set:Nn \l_tmpb_dim
+      { \__circledtext_coffin_ht_plus_dp:N \l__circledtext_box_coffin }
+    \dim_compare:nNnF \l_tmpa_dim > \l_tmpb_dim
+      {
+        \dim_set_eq:NN \l_tmpa_dim \l_tmpb_dim
+      }
+
+    % 缩放字符盒子容器
+    \coffin_scale:Nnn \l__circledtext_box_coffin
+      {
+        \dim_ratio:nn { \charboxwd } { \l_tmpa_dim }
+      }
+      {
+        \dim_ratio:nn { \charboxht } { \l_tmpa_dim }
+      }
+
+    % 按指定缩放系数对字符盒子容器进行缩放
+    \coffin_scale:Nnn \l__circledtext_box_coffin
+      { \l__circledtext_char_shrink_fp }
+      { \l__circledtext_char_shrink_fp }
+
+    % 绘制外框并拼装结果
+    \draw_begin:
+      \draw_linewidth:n { \l__circledtext_box_linewidth_dim }
+
+      \draw_path_scope_begin:
+        \__circledtext_char_box_type_c:n { \l__circledtext_char_box_type_tl }
+          { 0 } { 0 } { \charboxwd } { \charboxht } { 1.0 } { 1.0 }
+        \draw_transform_shift:n {\charboxwd / 2.0, \charboxht / 2.0 }
+        \draw_coffin_use:Nnn \l__circledtext_box_coffin { hc } { vc }
+      \draw_path_scope_end:
+    \draw_end:
+  }
+
+\endinput

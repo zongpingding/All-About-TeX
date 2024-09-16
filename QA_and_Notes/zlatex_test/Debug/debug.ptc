@@ -1,0 +1,23 @@
+\babel@toc {english}{}\relax 
+\contentsline {chapter}{\numberline {1}Basic}{3}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Partial toc}{4}{section.1.1}%
+\ttl@change@i {\@ne }{psection}{2em}{}{\contentslabel {2em}}{}{\titlerule *[1pc]{.}\contentspage }\relax 
+\ttl@change@v {psection}{}{}{}\relax 
+\ttl@change@i {\@ne }{psubsection}{4.5em}{}{\contentslabel {2.5em}}{}{\titlerule *[1pc]{.}\contentspage }\relax 
+\ttl@change@v {psubsection}{}{}{}\relax 
+\ttl@change@i {\@ne }{psubsubsection}{5.5em}{}{\contentslabel {0em}}{}{\titlerule *[1pc]{.}\contentspage }\relax 
+\ttl@change@v {psubsubsection}{}{}{}\relax 
+\ttl@starttoc {chapters@1}
+\contentsline {section}{\numberline {1.2}Graphics}{4}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}include}{4}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}export}{4}{subsection.1.2.2}%
+\ttl@stoptoc {chapters@1}
+\contentsline {chapter}{\numberline {2}Env Setup}{5}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Math Env}{6}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Babel}{6}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}minted test}{6}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}titletoc usage}{6}{subsection.2.2.2}%
+\ttl@stoptoc {chapters@1}
+\contentsline {section}{\numberline {2.3}layout}{8}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Multicol}{8}{section.2.4}%
+\contentsfinish 

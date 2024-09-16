@@ -1,0 +1,180 @@
+\documentclass[
+  hyper, fancy,
+  class=book,
+  % classOption={12pt},
+  % layout={margin, slide, aspect=16|9}
+]{zlatex}
+\zlatexSetup {
+  toc={
+    title=\hfill\large\normalfont CONTENTS {\sffamily\small NEW}\hfill,
+    % column = 2,
+    title-vspace = 0em
+  }
+}
+
+% ===> minted test
+\usepackage{minted}
+\definecolor{bg}{rgb}{0.95,0.95,0.95}
+\setminted{
+  fontsize=\small,
+  bgcolor=bg, 
+  breaklines=true, 
+  tabsize=2,
+  breakanywhere=true,
+  breakanywheresymbolpre=,
+  breaksymbolleft=,
+}
+\renewcommand{\theFancyVerbLine}{
+  \sffamily\textcolor{black}{\oldstylenums{\arabic{FancyVerbLine}}}
+}
+\setminted{numbersep=0pt}
+
+% ===> metadata test
+\usepackage{pifont}
+\definecolor{ColorA}{HTML}{1abc9c}
+\definecolor{ColorB}{HTML}{8e44ad}
+\definecolor{ColorC}{HTML}{341f97}
+% \zslideSetup{
+%   sec = {bg=ColorC, fg=white, prefix=\ding{73}\ },
+%   UL = {bg = ColorA, text=UL-TEXT\textcolor{white}{WHITE}, fg=ColorB},
+%   BC = {text={\hyperlink{zslide-title-page}{\zslideTitle}}},
+% }
+% ===> toc test
+% \zslideSetup[toc]{
+  % leftmargin = {
+  %   chapter=2em,
+  %   section=4em, 
+  %   subsection=6em
+  % },
+  % suffix = {
+  %   section=\dotfill\textcolor{blue}{\textbf{\zslideTocPage}}
+  % },
+  % label = {
+  %   chapter=\zslideToclabelSet{\thecontentslabel}, 
+  %   section=\zslideToclabelSet{\DLE},
+  %   subsection=\zslideToclabelSet[.5em]{\zslidesubsecIcon}
+  % },
+% }
+
+% ===> expl 3 code block
+\ExplSyntaxOn
+\makeatletter
+\makeatother
+\ExplSyntaxOff
+
+
+
+
+\title{Debug z\TeX{}}
+\author{Eureka}
+\date{\today}
+\zlatexMathEnvStyle{paris}
+\begin{document}
+\maketitle
+\tableofcontents
+% \mainmatter
+\chapter{Basic}
+\section{Partial toc}
+Below is the partial tableofcontents of this chapter:
+
+\partialToc
+
+
+\section{Graphics}
+\subsection{include}
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[height=.5\paperheight]{example-image-a}
+\end{figure}
+% \newpage
+
+
+\subsection{export}
+Something in the last page: \pageref{zslide-last-page}
+
+New Box:\hbox to 6em{Hello\hfill} world.
+
+
+\chapter{Env Setup}
+\zslideSetup{
+  sec = {prefix=\ding{105}\ },
+}
+\section{Math Env}
+\begin{theorem}[Pythagorean theorem]\label{pythagorean}
+  This is a right triangle, where $a$ is the length of one of the legs, $b$ is the length of the other leg, 
+  and $c$ is the length of the hypotenuse. The Pythagorean theorem is then:
+  \begin{equation}
+    a^2 + b^2 = c^2
+  \end{equation}
+\end{theorem}
+
+
+\section{Babel}
+\makeatletter
+\@ifpackageloaded{titlesec}{loaded}{does not load}
+\@ifpackageloaded{titletoc}{loaded}{does not load}
+\makeatother
+
+
+\subsection{minted test}
+Below is a minted package test:
+\begin{minted}[linenos=true]{latex}
+\makeatletter
+\bool_if:NTF \g__zlatex_slide_bool {
+  \renewcommand\maketitle{
+    \null\vfill\begin{center}
+      \begin{tabular}{c}{\huge\zslideTitle}\\[2em]
+      \zslideAuthor\\[2em]\zslideDate\end{tabular}
+      \vspace{\stretch{2}}\end{center}
+    \thispagestyle{empty}\setcounter{page}{0}
+    \newpage
+  }
+}{
+  \renewcommand{\maketitle}{
+    \bool_if:NT \g__zlatex_hyperref_bool {\hypersetup{pageanchor=false}}
+    \newgeometry{margin=1.5in}
+      \thispagestyle{empty}
+      \begin{center}\vfill\vspace*{40pt}
+      \rule{6pt}{77.5pt}
+      \begin{tabular}[b]{l}{\huge\bfseries\@title}\\[5em]{\Large\bfseries\@author}\end{tabular}
+      \par\vfill{\Large\textcolor{gray}{\@date}}
+      \end{center}
+    \restoregeometry
+    \bool_if:NT \g__zlatex_hyperref_bool {\hypersetup{pageanchor=true}}
+  }
+}
+\makeatother
+\end{minted}
+
+\subsection{titletoc usage}
+Some notes about titletoc package usage:
+\begin{minted}{latex}
+\titlecontents{chapter}
+  [2em]% left margin
+  {\vspace*{\fill}}
+    % 1. the above code, in vertical mode
+  {\contentslabel{1em}}
+    % 1. hbox of length to put this number, expand to left; 
+    % 2. you can't use '[]' in it, just set a new macro.
+  {}
+    % 1. numberless format (usually ignored)
+  {\hspace*{2em}\contentspage}
+    % 1. fill page format, in horizontal mode
+  []
+    % 1. after code, in vertical mode
+\end{minted}
+
+
+\chapter*{Other Item}
+\section{layout}
+Print layout using \verb|\layout| command provided by \texttt{layout} package.
+
+
+\section{Multicol}
+If column number >= 1, the \texttt{multicol} package will be loaded. \cref{pythagorean}.
+
+Consectetuer id, vulputate a, magna. Donec vehicula augue eu neque. Pellentesque habitant
+morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris ut leo. Cras
+viverra metus rhoncus sem.
+
+\end{document}

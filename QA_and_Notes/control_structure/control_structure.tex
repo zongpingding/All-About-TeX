@@ -1,0 +1,26 @@
+\documentclass{article}
+\ExplSyntaxOn
+\prg_new_conditional:Npnn \if_is_odd:n #1 {TF}
+{
+  \int_compare:nTF { \int_mod:nn {#1} {2} = 1 }
+    { \prg_return_true: }
+    { \prg_return_false: }
+}
+\ExplSyntaxOff
+
+
+\begin{document}
+\ExplSyntaxOn
+\if_is_odd:nTF { 4 } { 4~is~odd } { 4~is~even }\par
+
+% replicate token list
+\prg_replicate:nn {10}{hello~ world\par }
+
+\newcommand{\cmda}{
+  \mode_if_math:TF 
+    {\alpha}
+    {\texttt{\textbackslash alpha}}
+}
+\cmda{}~ $\cmda$
+\ExplSyntaxOff
+\end{document}

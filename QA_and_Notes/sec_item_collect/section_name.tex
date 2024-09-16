@@ -1,0 +1,84 @@
+\documentclass{book}
+\usepackage[margin=1.5in]{geometry}
+\setlength{\parindent}{0pt}
+\usepackage{titlesec}
+\usepackage{etoolbox}
+\usepackage[T1]{fontenc}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 'titlesec' package didn't use command `\@sect` to create sectioning command'
+% so \def\@sect#1#2#3#4#5#6[#7]#8{} % ==> no impact
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% currentname
+\makeatletter
+\NewHook{cmd/section/after}
+\apptocmd{\ttl@straight@i}
+  {\gdef\currentSecName{#3}\UseHook{cmd/section/after}}
+  {\typeout{--> success}}{\typeout{--> fail}}
+\makeatother
+
+
+\ExplSyntaxOn
+\seq_new:N \g_sec_item_page_seq
+\prop_new:N \g_sec_item_doc_prop
+\cs_new_protected:Npn \_sec_item_collect:n #1 {
+  \prop_gclear:N \g_sec_item_doc_prop
+  \AddToHook{cmd/section/after}{
+    \seq_gput_right:Ne \g_sec_item_page_seq {\thesection|\currentSecName}
+  }
+  \AddToHook{shipout/before}{
+    \prop_gput:Nee \g_sec_item_doc_prop {\thepage} {\seq_use:Nn \g_sec_item_page_seq {/}}
+    \seq_gclear:N \g_sec_item_page_seq
+  }
+}
+\NewDocumentCommand{\showPageSec}{O{1}}{
+  \seq_item:Nn \g_sec_item_page_seq {#1}
+}
+\NewDocumentCommand{\showAllSec}{}{
+  \prop_map_inline:Nn \g_sec_item_doc_prop {
+    Page~ \textbf{##1}:\par \seq_use:Nn ##2 \par
+  }
+}
+\_sec_item_collect:n {}
+\ExplSyntaxOff
+
+
+
+\begin{document}
+% \tableofcontents
+
+\makeatletter
+\setcounter{section}{2}
+\ttl@straightclass{section}{AAA}
+\ttl@useclass\ttl@straight@i{section}{BBB}
+\ttl@useclass\ttl@straight@i{section}[TOC CCC]{CCC}
+\section{Find Definition}
+\begin{itemize}
+  \item section def = \meaning\section
+  \item ttl@straightclass def = \meaning\ttl@straightclass
+  \item ttl@straight@i def = \meaning\ttl@straight@i
+\end{itemize}
+\makeatother
+
+\section*{STAR SECTION}
+Hello world
+
+\section{success}
+\meaning\currentSecName. Thus the section name lies in the 3rd argument of \texttt{\textbackslash ttl@straight@i}.
+
+\vskip2em
+Last Sec Info: \showPageSec[-1] \hfill \textbf{BUG}
+
+
+\section{Command to collect sec}
+\subsection{page sec}
+First Sec Info: \showPageSec[1]
+
+Last Sec Info: \showPageSec[-1]
+
+\newpage
+\subsection{document sec}
+\showAllSec
+\end{document}

@@ -1,0 +1,28 @@
+\documentclass{article}
+
+\makeatletter
+% 1. write to external file
+\newcommand{\whatiwant}{\@starttoc{wiw}}
+% 2. print style setting
+\newcommand{\l@xxx}[2]{#1\par}
+% 3. add collected item
+\newcommand{\mycmd}[1]{\addcontentsline{wiw}{xxx}{#1}}
+\makeatother
+
+
+\begin{document}
+Lorem ipsum 1 \ldots
+
+\whatiwant
+
+Lorem ipsum 2 \ldots
+
+\mycmd{text number 1}
+\mycmd{text number 2}
+\mycmd{text number 3}
+
+Lorem ipsum 3 \ldots
+
+\whatiwant% Doesn't print anything
+
+\end{document}

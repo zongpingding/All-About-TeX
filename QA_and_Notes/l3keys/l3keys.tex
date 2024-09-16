@@ -1,0 +1,55 @@
+\documentclass{article}
+
+\begin{document}
+\ExplSyntaxOn
+% ==> meta key: keys which themselves set other keys.
+% ==> meta key declare 
+\keys_define:nn { mymodule }
+{
+  % normal key
+  keyname   .code:n  = Some~code~using:~#1\par,
+  % meta key II
+  mkey-a    .code:n    = #1\par,
+  mkey-b    .tl_set:N  = \l_tmpb_tl,  
+  MetanameS .meta:n    = { mkey-a = #1, mkey-b = #1 },
+  % meta key
+  Metaname  .meta:nn = { mymodule / metakey }{#1},
+  metakey / mkey-inner .code:n = Some~inner~key~using:~#1\par,
+}
+% meta key define outside
+\keys_define:nn { mymodule / metakey }
+{
+  mkey-c   .code:n = MetaKey~Some~code~using:~#1\par,
+  unknown  .code:n = MetaKey~Unknown~key:\l_keys_key_str\par
+}
+
+
+% ==> \keys_set:nn will get or run or get the "def-value" part to stream,
+% 1. like 'Some~code~using:~#1\par' for key 'keyname', 
+% 2. or 'MetaKey~Some~code~using:~#1\par' for key 'mkey-c' in matekey 'Metaname'
+% 3. if no value given, #1 = <empty>
+\keys_set:nn { mymodule }{
+  % ===> normal key
+  keyname = KEY-CONTENT,
+  keyname = \textbf{COMMAND VALUE},
+
+  % ===> .meta:nn
+  Metaname = { mkey-c = META-CONTENT,  mkey-inner = INNER-VALUE },
+  % Metaname = { mkey-c },
+  % Metaname = { mkey-ca },
+  % Metaname = { mkey-c = \textbf{META-CONTENT} },
+
+  % ===> .meta:n 
+  MetanameS = { CONTENTS-FOR-ALL },
+  mkey-a = AAA, 
+  mkey-b = BBB
+}
+\tl_use:N \l_tmpb_tl
+
+% ==> difference between '.multichoice' and '.multichoices'
+% 1. def: {key .multichoices:nn {c-a, c-b}{CODE-RUN}}; 
+%    use: either {key=c-a} or {key=c-b} will get 'CODE-RUN'
+% 2. def: {key .multichoice: {c-a}{CODE-RUN-A}, {c-b}{CODE-RUN-B}}; 
+%    use: {key=c-a} will get 'CODE-RUN-A', {key=c-b} will get 'CODE-RUN-B'
+\ExplSyntaxOff
+\end{document}

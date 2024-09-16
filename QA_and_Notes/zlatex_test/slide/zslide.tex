@@ -1,0 +1,86 @@
+\documentclass[
+  % hyper,
+  % fancy,
+  class=book,
+  % classOption={10pt, oneside},
+  mathSpec={envStyle=paris},
+  % font={config},
+  layout={slide, aspect=16|9},
+  % toc={redef}
+]{zlatex}
+% \def\chapter*{}
+% \def\chapter{}
+\usepackage[bottom]{footmisc}
+\usepackage{lipsum, layout}
+% \usepackage{csquotes}
+% \zslideMetadataSetup{
+%   UL = \textcolor{zslideII}{Section \thesection},
+%   UR = \textcolor{zslideMain}{Subsection \thesubsection},
+% }
+
+
+
+
+
+\title{z\TeX{} Fancy Slide}
+\author{Eureka}
+\date{\today}
+\begin{document}
+% \frontmatter
+\maketitle
+\thispagestyle{fancy}
+\tableofcontents
+\newpage
+
+% \mainmatter
+\chapter{z\TeX{} Fisrt}
+\section{Test}
+\subsection{Math Env}
+\begin{theorem}[Pythagorean theorem]\label{pythagorean}
+  This is a right triangle, where $a$ is the length of one of the legs, $b$ is the length of the other leg, 
+  and $c$ is the length of the hypotenuse. The Pythagorean theorem is then:
+  \begin{equation}
+    a^2 + b^2 = c^2
+  \end{equation}
+\end{theorem}
+
+
+\subsection{Comment}
+Consectetuer id, vulputate a, magna. Donec vehicula augue eu neque. Pellentesque habitant
+morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris ut leo. Cras
+viverra metus rhoncus sem.
+
+
+\section{Graphics}
+\subsection{include}
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[height=.5\paperheight]{test.png}
+\end{figure}
+% \newpage
+
+\lipsum[1]
+\subsection{export}
+Hello world
+
+
+\section*{Other}
+\contentsname
+
+Hello \footnote[1]{the fisrt note}\footnote[2]{the second note}\footnote[3]{the third note}
+
+\chapter*{Other Item}
+\section{layout}
+\lipsum[2]
+Print layout using \verb|\layout| command provided by \texttt{layout} package.
+
+% \layout
+
+\section{Hello}
+Hello world \pageref{zslide-last-page}
+
+New Box:\hbox to 6em{Hello\hfill} world
+
+\section{new toc}
+
+\end{document}

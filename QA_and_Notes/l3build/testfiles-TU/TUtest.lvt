@@ -1,0 +1,7 @@
+\documentclass{article}
+\usepackage{fontspec}
+
+
+\begin{document}
+Hello world
+\end{document}
