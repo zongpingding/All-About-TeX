@@ -38,7 +38,10 @@
 % ----------------------------------------------------------------------
 \cs_new_nopar:Npn \g__ztikz_load_module:n #1 {
   \clist_map_inline:nn {#1} {
-    \file_if_exist_input:nF {modules/ztikzmodule.##1.tex} {}
+    \file_if_exist_input:nF {modules/ztikzmodule.##1.tex} {
+      \msg_new:nnn {ztikz} {module-not-found} {Module~`##1'~not~found.}
+      \msg_error:nnn {ztikz} {module-not-found} {##1}
+    }
   }
 }
 \NewDocumentCommand\ztikzLoadModule{m}{

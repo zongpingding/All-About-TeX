@@ -42,6 +42,7 @@
 }
 
 % wolfram graphicx
+\cs_generate_variant:Nn \xsim_file_write_start:nn {nx}
 \NewDocumentEnvironment{wolframGraphics}{ O{width=.75\linewidth}m }{
   \newcommand{\mmafile}{#2}
   \xsim_file_write_start:nx {\c_true_bool}{\g__ztikz_mma_path_tl/#2}

@@ -1,0 +1,325 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage[hmargin=1.5in, vmargin=1in]{geometry}
+\setlength{\parindent}{0pt}
+\usepackage{xparse}
+\usepackage{minted}
+\usepackage{tcolorbox}
+\tcbuselibrary{listings, minted, breakable, skins}
+\tcbset{listing engine=minted}
+\definecolor{bg}{RGB}{242, 242, 242}
+\DeclareTCBListing{code}{!O{tex}}{
+  enhanced,
+  breakable,
+  colback=bg, 
+  frame hidden, 
+  left=1mm, right=1mm,
+  top=0mm, bottom=0mm, 
+  listing side text,
+  minted language=#1, 
+  minted style=manni,
+  minted options = {  
+    autogobble,
+    tabsize=2,
+    breaklines=true, 
+    breakanywhere=true,
+    breakanywheresymbolpre=,
+    breaksymbolleft=,
+    fontsize=\footnotesize
+  }
+}
+\usepackage{hyperref}
+\hypersetup{
+  bookmarksnumbered,
+  colorlinks = true,
+  linkcolor = teal,
+  urlcolor = red,
+  citecolor = blue,
+  pdfauthor = {Eureka},
+  pdftitle = {LaTeX Hook Management Tutorial}
+}
+
+\begin{document}
+{\setlength{\parskip}{1.5em}
+\tableofcontents
+}
+\newpage
+
+\section{argument sepcification}
+Three more characters have a special meaning when creating an argument specifier:
+
+\begin{itemize}
+\item First, \texttt{+} is used to make an argument \textbf{long} (to accept paragraph tokens-\verb|\par|).
+\item Secondly, \texttt{>} is used to declare so-called ``argument processors'', see below.
+\item Thirdly, \texttt{!} is used to stress the \textbf{space(s)}, such that 
+  \verb|\NewDocumentCommand\foobar{ m!o } {...}| and \verb|\foobar{arg1} [arg2]| will raise error.
+\end{itemize}
+
+Recommendation: A very common syntax is to have one optional argument \texttt{o} treated as a key–value list
+(using for instance \texttt{l3keys}) followed by some mandatory arguments \texttt{m} (or \texttt{+m}).
+
+\vskip2em
+Other argument type: \texttt{l, u} (mandatory), and the corresponding \texttt{g, G}(optional) is not reccomended to use.
+
+\subsection{basic intro}
+The mandatory types are: \texttt{m, r, R, v, b}; The types which define optional arguments are: 
+\texttt{o, d, D, s, t, e, E}, The first three types are \textbf{corresponding}.
+
+\begin{code}
+\NewDocumentCommand{\foobar}{R(){DEFAULT-ARG}}
+{
+  \#1~ is:~ #1
+}
+\foobar()\par
+\foobar(a)\par
+% \foobar
+% > raise error and leave: "DEFAULT-ARG" into the stream.
+\end{code}
+
+To avoid the ``argument missing error", you should use ``The types which define optional arguments", 
+the corresponding types for \texttt{R} is \texttt{D}.
+
+\begin{code}
+\NewDocumentCommand{\foobar}{D(){DEFAULT-ARG}}
+{
+  \#1~ is:~ #1
+}
+\foobar()\par
+\foobar(a)\par
+\foobar
+\end{code}
+
+
+\def\TypeT#1{\textbullet\; \texttt{#1}-type:}
+\subsection{special case Example}
+\TypeT{v}
+\begin{code}
+\NewDocumentCommand\foo{v}
+{
+  BEFORE-(#1)-AFTER
+}
+
+\foo|\hello #1|\par
+\foo{\hello #1}
+\end{code}
+
+\TypeT{b}
+\begin{code}
+% The prefix '+' is used to allow multiple paragraphs in the environment's body.
+\NewDocumentEnvironment { twice }
+  { O{\ttfamily} +b }
+  {#2#1#2} {}
+
+\begin{twice}[\itshape]
+  Hello world!
+\end{twice}
+\end{code}
+
+\TypeT{s}
+\begin{code}
+% 's' must be the first argument type.
+\NewDocumentCommand\foo{sm}
+{
+  \IfBooleanTF{#1}{TRUE--#2}{FALSE--#2}
+}
+
+\foo{ARG}\par
+\foo*{ARG}
+\end{code}
+
+\TypeT{t}; corresponding to optional type \texttt{s}:
+\begin{code}
+% 't' must be the first argument type.
+% \NewDocumentCommand\foo{t{|}m}{
+% or
+\NewDocumentCommand\foo{t|m}
+{
+  \IfBooleanTF{#1}{TRUE--#2}{FALSE--#2}
+}
+
+\foo{ARG}\par
+\foo|{ARG}
+\end{code}
+
+\TypeT{!}; Providing a simple example:
+\begin{code}
+% amsmath package signature: 
+% \DeclareDocumentCommand \\ {!s !o}{...}
+% When display breaks are enabled with \allowdisplaybreaks, the \\* command can be used to prohibit a pagebreak after a given line, as usual.
+
+\begin{align}
+  a = 1 \\[1em]
+  b = 2
+\end{align}
+
+\begin{align}
+  a = 1 \\*[1em]
+  b = 2
+\end{align}
+
+\begin{align}
+  a = 1 \\* [1em]
+  b = 2
+\end{align}
+
+\begin{align}
+  a = 1 \\ *[1em]
+  b = 2
+\end{align}
+\end{code}
+
+\TypeT{e}
+\begin{code}
+\NewDocumentCommand\foo{e:e|}
+{
+  \#1~ is:~ #1\par
+  \#2~ is:~ #2\par
+}
+\NewDocumentCommand\foobar{e{:|}}
+{
+  \#1~ is:~ #1\par
+  \#2~ is:~ #2\par
+}
+
+\foo:{ARG-A}|{ARG-B}\vskip2em
+\foo|{ARG-B}:{ARG-A}
+
+\dotfill\par
+\foobar:{ARG-A}|{ARG-B}\vskip2em
+\foobar|{ARG-B}:{ARG-A}
+\end{code}
+
+\TypeT{E}
+\begin{code}
+\NewDocumentCommand\foo{E{:|/}{{ARG-1}{ARG-2}{ARG-3}}}
+{
+  \#1~ is:~ #1\par
+  \#2~ is:~ #2\par
+  \#3~ is:~ #3\par
+}
+
+\foo:{ARG-A}/{ARG-C}
+\end{code}
+
+\section{Argument Processor}
+Syntax: \verb|>{<processor>}| in the specification, \verb|>{\ProcessorB} >{\ProcessorA} m| would apply 
+\verb|\ProcessorA| followed by \verb|\ProcessorB| to the tokens grabbed by the \texttt{m} argument.
+
+\subsection{SplitArgument Processor}
+Split the argument by the separator:
+\begin{code}
+\ExplSyntaxOn
+\NewDocumentCommand\foo{>{\SplitArgument{2}{,}}m}
+{ 
+  \tl_set:Nn \l_tmpa_tl {#1}
+  % \tl_show:N \l_tmpa_tl 
+  % > \l_tmpa_tl={a}{b}{c}.
+  \argsRead #1
+}
+\NewDocumentCommand\argsRead{mmm}
+{
+  \#1-(1)~ is:~ { #1 }\par
+  \#1-(2)~ is:~ { #2 }\par
+  \#1-(3)~ is:~ { #3 }\par
+}
+\ExplSyntaxOff
+
+\foo{a, b, c}
+\end{code}
+
+Before \verb|#1| passed to command \verb|\argsRead|, it has been splited into 3 parts, and passed to 
+\verb|\argsRead| as 3 arguments.(\verb|something like {#1.1}{#1.2}{#1.3} inside of #1|). Thus we can use 
+\LaTeX3 based functions \verb|\use_i:nn {}{}, \use_ii:nn {}{}| to get each part.
+
+\begin{code}
+\ExplSyntaxOn
+\NewDocumentCommand\foo{>{\SplitArgument{1}{,}}m}
+{
+  \#1-(1)~ is:~ \use_i:nn #1\par
+  \#1-(2)~ is:~ \use_ii:nn #1
+}
+\ExplSyntaxOff
+
+\foo{a, b}
+\end{code}
+
+\subsection{SplitList Processor}
+\begin{code}
+\ExplSyntaxOn
+\NewDocumentCommand\foo{>{\SplitList{|}}m}
+{ 
+  \tl_set:Nn \l_tmpa_tl {#1}
+  % \tl_show:N \l_tmpa_tl 
+  % > \l_tmpa_tl={a}{b}{c}{d}.
+  \use_iii:nnnn #1
+}
+\ExplSyntaxOff
+
+\foo{a | b | c | d}
+\end{code}
+
+
+\subsection{ProcessList Processor}
+\begin{code}
+\ExplSyntaxOn
+\NewDocumentCommand\foo{ >{\SplitList{;}}m }
+{ 
+  \ProcessList {#1} { \addBrace } 
+}
+\NewDocumentCommand\addBrace{m}{
+  (#1)\par
+}
+\ExplSyntaxOff
+
+\foo{a ; b ; c ; d}
+\end{code}
+
+\subsection{TrimSpaces Processor}
+Use command: \verb|>{\TrimSpaces}m|
+
+
+\subsection{ProcessedArgument Processor}
+This processor provide a way to process the argument using our own function.
+\begin{code}
+\ExplSyntaxOn
+\NewDocumentCommand\foo{ >{\_eq_and_braket:n}m }
+{
+  \#1~ is:~ #1
+}
+\cs_set:Npn \_eq_and_braket:n #1 
+{
+  \tl_set:Nn \ProcessedArgument {[=~#1~=]}  
+  % or in this way
+  % \def\ProcessedArgument{[=~#1~=]}
+}
+\ExplSyntaxOff
+
+\foo{a}
+\end{code}
+
+
+\section{Expandable command and environment}
+Parsing arguments expandably imposes a number of restrictions on both the type of
+arguments that can be read and the error checking available:
+\begin{itemize}
+  \item The last argument (if any are present) must be one of the mandatory types \texttt{m, r, R, l, u}.
+  \item All short arguments appear before long arguments.
+  \item The mandatory argument types \texttt{l} and \texttt{u} may not be used after optional arguments.
+  \item The optional argument types \texttt{g} and \texttt{G} are not available.
+  \item The ``verbatim" argument type \texttt{v} is not available.
+  \item Argument processors (using \texttt{>}) are not available.
+  \item ..., checking for optional arguments is less robust than in the standard version.
+\end{itemize}
+
+\section{Access to the argument specification}
+\begin{code}
+\ExplSyntaxOn
+\NewDocumentCommand\foo{oO{DEFAULT}R()me{:|}m}{}
+\GetDocumentCommandArgSpec \foo
+\tl_to_str:N \ArgumentSpecification
+% \tl_show:N \ArgumentSpecification
+% > \ArgumentSpecification=oO{DEFAULT}R()me{:|}m.
+\ExplSyntaxOff
+\end{code}
+\end{document}
