@@ -1,0 +1,19 @@
+\documentclass{article}
+\usepackage{ctex}
+
+\makeatletter
+% \setlength{\labelsep}{5em}
+\def\@opargbegintheorem#1#2#3{\trivlist
+  \labelsep0pt
+  \item[\hskip\labelsep{\bfseries #1\ #2\ #3:}]\itshape}
+\makeatother
+\newtheorem{dfn}{定义}[section]
+
+
+\begin{document}
+\section{Test}
+\begin{dfn}[光速]
+  真空中光速为 {299792458}{m/s}。
+\end{dfn}
+\end{document}
+

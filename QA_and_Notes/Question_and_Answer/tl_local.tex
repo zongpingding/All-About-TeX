@@ -1,0 +1,80 @@
+\documentclass{article}
+\usepackage{tikz, xparse}
+
+
+
+\ExplSyntaxOn
+\tl_new:N \l_tikz_opts_tl
+\NewDocumentCommand{ \myLine }{ m }
+{
+  \tl_set:Nn \l_tikz_opts_tl {#1}
+  \__red_rec:V \l_tikz_opts_tl
+}
+\cs_new_protected:Nn \__red_rec:n
+{
+  \draw[#1] (0, 0) -- (2, 2);
+}
+\cs_generate_variant:Nn \__red_rec:n { V }
+\ExplSyntaxOff
+
+
+
+\begin{document}
+\begin{tikzpicture}
+  \myLine{color=red, very thick}
+\end{tikzpicture}
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\documentclass{article}
+\usepackage{tikz}
+
+
+\begin{document}
+\ExplSyntaxOn
+\tl_set:Nn \l_tmpa_tl {red}
+% \clist_set:Nn \l_tmpa_clist {thick, red}
+% \newcommand\tlUseTikz{\draw[\clist_use:Nn \l_tmpa_tl {,}] (0, 2)--(1, 2);}
+% \NewExpandableDocumentCommand{\tlUse}{}{\tl_use:N \l_tmpa_tl}
+
+
+\newcommand{\drawLine}[1]{
+  \_draw_line:n {\l_tmpa_tl}
+}
+
+\cs_new:Npn \_draw_line:n #1 {
+  \draw (0, 2) -- (1, 2);
+}
+% \cs_generate_variant:Nn \_draw_line:n {V}
+\ExplSyntaxOff
+
+
+
+\begin{tikzpicture}
+  \drawLine
+  \draw[red, thick] (0, 2) -- (1, 2);
+\end{tikzpicture}
+
+
+\end{document}

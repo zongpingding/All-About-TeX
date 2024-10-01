@@ -1,0 +1,31 @@
+\documentclass{article}
+\usepackage{xcolor}
+\usepackage[colorlinks=true]{hyperref}
+\newsavebox{\mybox}
+\NewDocumentEnvironment{hyperbox}{}
+  {\begin{lrbox}{\mybox}}
+  {\end{lrbox}\fbox{\usebox{\mybox}}}
+
+\begin{document}
+\makeatletter
+\def\Hy@colorlink#1{%
+  \begingroup%
+  \HyColor@UseColor#1%
+  \begin{hyperbox}
+}%
+\def\Hy@endcolorlink{\end{hyperbox}\endgroup}%
+\makeatother
+
+
+\tableofcontents
+\section{Test Title}
+Href Test: \href{www.google.com}{GOOGLE}
+
+
+\subsection{Bib Test}
+This is a test.\cite{meow}
+\begin{thebibliography}{1}
+\setcounter{enumiv}{15}
+\bibitem{meow} Meow, Cat. \emph{Meow}. 2021.
+\end{thebibliography}
+\end{document}
