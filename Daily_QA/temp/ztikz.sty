@@ -1,0 +1,301 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesExplPackage{ztikz}{2024/06/12}{1.0.0}{A~pre-release~diagram~plot~package}
+
+
+% ----------------------------------------------------------------------
+%                        Init ztikz's Environment
+% ----------------------------------------------------------------------
+\RequirePackage{l3sys-shell}
+\NewDocumentCommand\ztikzMkdir{m}{ \sys_shell_mkdir:n {#1} }
+\ztikzMkdir{ztikz_output/}
+\tl_const:Nn \g__ztikz_scripts_path_tl  {ztikz_output/scripts}
+
+
+% ----------------------------------------------------------------------
+%                            basic packages
+% ----------------------------------------------------------------------
+\RequirePackage{tikz}
+\RequirePackage{etoolbox}
+\patchcmd{\pgfutil@InputIfFileExists}{\input #1}{%
+  \@pushfilename
+  \xdef\@currname{#1}%
+  \input #1 %
+  \@popfilename
+}{}{}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{intersections}
+\usetikzlibrary{patterns}
+\usetikzlibrary{plotmarks}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes.geometric}
+% for shade curve
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{fadings}
+
+
+% ----------------------------------------------------------------------
+%                        load module interface
+% ----------------------------------------------------------------------
+\cs_new_nopar:Npn \g__ztikz_load_module:n #1 {
+  \clist_map_inline:nn {#1} {
+    \file_if_exist_input:nF {modules/ztikzmodule.##1.tex} {}
+  }
+}
+\NewDocumentCommand\ztikzLoadModule{m}{
+  \g__ztikz_load_module:n {#1}\ExplSyntaxOff
+}
+
+
+% ----------------------------------------------------------------------
+%                          ztikz's cache mechanism 
+% ----------------------------------------------------------------------
+\cs_set_protected:Npn \ztikz_hash_if_change_cs:n #1 {
+  \bool_gset_true:N \g__hash_change_bool
+}
+\cs_generate_variant:Nn \ztikz_hash_if_change_cs:n { x }
+
+
+% ----------------------------------------------------------------------
+%                       coordinate basic components
+% ----------------------------------------------------------------------
+% ==> point
+\keys_define:nn { ztikz / point }{
+  type    .str_set:N  = \l__point_type_str,
+  type    .initial:n = { * },
+  radius  .dim_set:N = \l__point_radius_dim,
+  radius  .initial:n = { 1pt },
+  color   .tl_set:N  = \l__point_color_tl, 
+  color   .initial:n = { black },
+  opacity .tl_set:N  = \l__point_opacity_tl, 
+  opacity .initial:n = { 1 },
+  rotate  .fp_set:N  = \l__point_rotate_angle,
+  rotate  .initial:n = { 0 },  
+}
+\NewDocumentCommand\ShowPoint{ O{}mO{}O{} }{
+  \group_begin:
+  \exp_args:Nne \keys_set:nn { ztikz / point } { #1 }
+  \seq_set_split:Nnn \l__point_list_seq { ; }{#2}
+  \seq_set_split:Nnn \l__point_label_seq { ; }{#3}
+  \int_step_inline:nnnn {1}{1}{\seq_count:N \l__point_list_seq}{        
+    \draw plot [
+      only~ marks,
+      mark = \str_use:N \l__point_type_str, 
+      mark~ size = \dim_use:N \l__point_radius_dim,
+      mark~ options = {
+        rotate  = \fp_use:N \l__point_rotate_angle, 
+        opacity = \tl_use:N \l__point_opacity_tl, 
+        color   = \tl_use:N \l__point_color_tl,
+        ball~ color = \tl_use:N \l__point_color_tl,
+      }
+    ] coordinates{\seq_item:Nn \l__point_list_seq{##1}} node[#4]{\seq_item:Nn \l__point_label_seq{##1}};
+  }
+  \group_end:
+}
+
+% ==> grid
+\NewDocumentCommand\ShowGrid{ O{color=gray, very~ thin, step=1}m }{
+  \seq_set_split:Nnn \l__grid_param_ii_seq { ; }{#2}
+  \draw[#1] \seq_item:Nn \l__grid_param_ii_seq{1}  grid \seq_item:Nn \l__grid_param_ii_seq{2};
+}
+
+% ==> axis
+\keys_define:nn { ztikz / axis }{
+  % basic tick args
+  tickStart       .fp_set:N   = \l__start_fp,
+  tickStart       .initial:n  = { -5 },
+  tickEnd         .fp_set:N   = \l__end_fp,
+  tickEnd         .initial:n  = { 5 },
+  axisRotate      .fp_set:N   = \l__axis_rotate_angle,
+  axisRotate      .initial:n  = { 0 },
+  % tick dimension spec
+  mainStep        .fp_set:N   = \l__main_step_fp,
+  mainStep        .initial:n  = { 1.0 },
+  subStep         .fp_set:N   = \l__sub_step_fp,
+  subStep         .initial:n  = { 0.1 },
+  mainTickLabel   .tl_set:N   = \l__main_tick_label_tl,
+  mainTickLabel   .initial:n  = { \fp_use:N {\CurrentFp} },
+  tickLabelShift  .dim_set:N  = \l__tick_label_shift_dim,
+  tickLabelShift  .initial:n  = { 0pt },
+  mainTickLength  .dim_set:N  = \l__main_tick_length_dim,
+  mainTickLength  .initial:n  = { 4pt },
+  subTickLength   .dim_set:N  = \l__sub_tick_length_dim,
+  subTickLength   .initial:n  = { 2pt },
+  mainTickLabelPosition .tl_set:N  = \l__main_tick_label_position_tl,
+  mainTickLabelPosition .initial:n = { below },
+  % color spec
+  axisColor       .tl_set:N   = \l__axis_color_tl,
+  axisColor       .initial:n  = { black },
+  mainTickColor   .tl_set:N   = \l__main_tick_color_tl,
+  mainTickColor   .initial:n  = { black },
+  subTickColor    .tl_set:N   = \l__sub_tick_color_tl,
+  subTickColor    .initial:n  = { black },
+  mainTickLabelColor .tl_set:N  = \l__main_tick_label_color_tl,
+  mainTickLabelColor .initial:n = { black },
+  % tick cross type spec
+  tickStyle       .choice:,
+  tickStyle/cross .code:n     = \tl_set:Nn \l__tick_spec_tl { cross },
+  tickStyle/above .code:n     = \tl_set:Nn \l__tick_spec_tl { above },
+  tickStyle/below .code:n     = \tl_set:Nn \l__tick_spec_tl { below },
+}
+% ticks style
+\tl_new:N  \l__tick_type_tl    % `main' or `sub'
+\tl_new:N  \l__tick_spec_tl    % `cross', `above' or `below
+\tl_new:N  \l__tick_color_tl 
+\dim_new:N \l__tick_length_dim
+\tl_new:N  \l__node_text_tl
+% draw ticks (main or sub)
+\cs_new_protected:Npn \ztikz_draw_axis_ticks_cs:n #1 {
+  \str_case:NnT \l__tick_type_tl {
+    {main}{
+      \dim_set_eq:NN \l__tick_length_dim\l__main_tick_length_dim
+      \tl_set:NV \l__tick_color_tl\l__main_tick_color_tl
+      \tl_set:Nn \l__node_text_tl {\tl_use:N \l__main_tick_label_tl}
+    }
+    {sub}{
+      \dim_set_eq:NN \l__tick_length_dim\l__sub_tick_length_dim
+      \tl_set:NV \l__tick_color_tl \l__sub_tick_color_tl
+      \tl_set:Nn \l__node_text_tl {}
+    }
+  }{}
+  \str_case:VnT \l__tick_spec_tl {
+    {cross}{
+      \draw[\tl_use:N \l__tick_color_tl] 
+        (#1, 0)++(0, \dim_eval:n {\l__tick_length_dim/2}) -- ++(0, \dim_eval:n {-\l__tick_length_dim}) 
+        node[\tl_use:N \l__main_tick_label_position_tl] 
+        {\textcolor{\tl_use:N \l__main_tick_label_color_tl}{\tl_use:N \l__node_text_tl}};
+    }
+    {above}{
+      \draw[\tl_use:N \l__tick_color_tl] (#1, 0) -- ++(0, \dim_eval:n {\l__tick_length_dim/2}) 
+        node[\tl_use:N \l__main_tick_label_position_tl] 
+        {\textcolor{\tl_use:N \l__main_tick_label_color_tl}{\tl_use:N \l__node_text_tl}};
+    }
+    {below}{
+      \draw[\tl_use:N \l__tick_color_tl] (#1, 0) -- ++(0, \dim_eval:n {-\l__tick_length_dim/2}) 
+        node[\tl_use:N \l__main_tick_label_position_tl=\dim_use:N \l__tick_label_shift_dim] 
+        {\textcolor{\tl_use:N \l__main_tick_label_color_tl}{\tl_use:N \l__node_text_tl}};
+    }
+  }{}
+} 
+% draw axis
+\int_new:N \l__substep_num_int
+\fp_new:N \CurrentFp
+\NewDocumentCommand\ShowAxis{O{}m}{
+  \group_begin:
+  \keys_set:nn { ztikz / axis } { #1 }
+  \seq_set_split:Nnn \l__points_seq { ; }{#2}
+  \begin{scope}[rotate=\fp_use:N \l__axis_rotate_angle]
+  \draw[->, \tl_use:N \l__axis_color_tl] \seq_item:Nn \l__points_seq{1} -- \seq_item:Nn \l__points_seq{2};
+  % draw ticks
+  \fp_step_inline:nnnn {\fp_eval:n {\l__start_fp}}{\fp_use:N \l__main_step_fp}{\fp_use:N \l__end_fp}{
+    % main ticks
+    \tl_set:Nn \l__tick_type_tl {main}
+    \fp_gset:Nn \CurrentFp {##1}
+    \ztikz_draw_axis_ticks_cs:n {##1}
+    % sub ticks
+    \tl_set:Nn \l__tick_type_tl {sub}
+    \int_set:Nn \l__substep_num_int {\fp_eval:n {floor(\l__main_step_fp/\l__sub_step_fp)}}
+    \fp_compare:nNnTF {##1}<{\fp_eval:n {floor(\l__end_fp)}}{
+      \fp_step_function:nnnN                 
+        {\fp_eval:n {##1+\l__sub_step_fp}}
+        {\fp_use:N \l__sub_step_fp}
+        {\fp_eval:n {##1+\l__substep_num_int*\l__sub_step_fp}}
+        \ztikz_draw_axis_ticks_cs:n
+    }{}
+  }
+  \end{scope}
+  \group_end:
+}
+\NewDocumentCommand{\xAxis}{O{-2}O{8}}{
+  \ShowAxis[
+    tickStart=\fp_eval:n {#1+1}, tickEnd=\fp_eval:n {#2-0.75}, 
+    mainStep=1, subStep=.25, 
+    axisRotate=0, axisColor=black,
+    mainTickColor=black, subTickColor=black,
+    mainTickLength=10pt, subTickLength=5pt,
+    tickLabelShift=0pt, tickStyle=below, 
+    mainTickLabelPosition=below
+  ]{(#1, 0); (#2, 0)}
+}
+\NewDocumentCommand{\yAxis}{O{-2}O{8}}{
+  \ShowAxis[
+    tickStart=\fp_eval:n {#1+1}, tickEnd=\fp_eval:n {#2-0.75}, 
+    mainStep=1, subStep=.25, 
+    axisRotate=90, axisColor=black,
+    mainTickColor=black, subTickColor=black,
+    mainTickLength=10pt, subTickLength=5pt,
+    tickLabelShift=0pt, tickStyle=above, 
+    mainTickLabelPosition=left
+  ]{(#1, 0); (#2, 0)}
+}
+
+% ==> intersection
+\NewDocumentCommand\ShowIntersection{ omm }{
+  \seq_set_split:Nnn \l__intersection_num_seq { ; }{#2}
+  % get all intersections
+  \path[name~ intersections={of=\seq_item:Nn \l__intersection_num_seq{1}~ and~ \seq_item:Nn \l__intersection_num_seq{2}}]; 
+  % show all intersections by \ShowPoint
+  \int_step_inline:nnnn {1}{1}{#3}{
+    \ShowPoint[#1]{(intersection-##1)}
+  }
+}
+
+
+% ----------------------------------------------------------------------
+%                        basic geometry object
+% ----------------------------------------------------------------------
+% ==> polygon
+\keys_define:nn { ztikz / polygon }{
+  radius       .fp_set:N  = \l__polygon_radius_fp,
+  radius       .initial:n = { 1 },
+  edgeColor    .tl_set:N  = \l__polygon_edge_color_tl,
+  edgeColor    .initial:n = { black },
+  fillColor    .tl_set:N  = \l__polygon_fill_color_tl,
+  fillColor    .initial:n = { },
+  fillOpacity  .fp_set:N  = \l__polygon_fill_opacity_fp,
+  fillOpacity  .initial:n = { 0 },
+  rotate       .fp_set:N  = \l__polygon_rotate_angle,
+  rotate       .initial:n = { 0 },
+  shift        .tl_set:N  = \l__polygon_shift_tl,
+  shift        .initial:n = { (0,0) },
+  marker       .tl_set:N  = \l__polygon_marker_option_tl,
+  marker       .initial:n = { },
+}
+\tl_new:N \l__poly_path_tl
+\NewDocumentCommand\Polygon{ O{}m }{
+  \group_begin:
+  \keys_set:nn { ztikz / polygon } { #1 }
+  % strip '(' and ')'
+  \tl_replace_once:Nnn \l__polygon_shift_tl{(}{}
+  \tl_replace_once:Nnn \l__polygon_shift_tl{)}{}
+  \coordinate (mv) at (\tl_use:N \l__polygon_shift_tl);
+  % create polygon
+  \begin{scope}[shift=(mv), rotate=\fp_use:N \l__polygon_rotate_angle]
+  \int_step_inline:nnn {1}{#2}{
+    % draw edges
+    \fp_set:Nn \l_angle_fp {360/#2*##1*\c_one_degree_fp}
+    \fp_set:Nn \l_angle_next_fp {360/#2*(##1+1)*\c_one_degree_fp}
+    \draw[\tl_use:N \l__polygon_edge_color_tl] (\fp_eval:n {\l__polygon_radius_fp*cos(\l_angle_fp)}, \fp_eval:n {\l__polygon_radius_fp*sin(\l_angle_fp)})
+      --(\fp_eval:n {\l__polygon_radius_fp*cos(\l_angle_next_fp)}, \fp_eval:n {\l__polygon_radius_fp*sin(\l_angle_next_fp)});
+    % fill polygon path 
+    \int_compare:nNnTF {##1}<{#2}{
+      \tl_put_right:Nn \l__poly_path_tl {(p##1)--}
+    }{
+      \tl_put_right:Nn \l__poly_path_tl {(p##1)--cycle}
+    }
+    % mark coordinates
+    \coordinate (p##1) at (\fp_eval:n {\l__polygon_radius_fp*cos(\l_angle_fp)}, \fp_eval:n {\l__polygon_radius_fp*sin(\l_angle_fp)});
+  }
+  % fill polygon (none-color -> opacity=1; or opacity=.75)
+  \tl_if_empty:NTF \l__polygon_fill_color_tl {
+    \fp_set:Nn \l__polygon_fill_opacity_fp {0}
+  }{
+    \fp_set:Nn \l__polygon_fill_opacity_fp {.75}
+  }
+  \fill [\tl_use:N \l__polygon_fill_color_tl, fill~opacity=\fp_use:N \l__polygon_fill_opacity_fp] \l__poly_path_tl;
+  % show markers
+  \int_step_inline:nnn {1}{#2}{
+    \ShowPoint[\l__polygon_marker_option_tl]{(p##1)}
+  }
+  \end{scope} 
+  \group_end:
+}

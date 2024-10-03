@@ -1,0 +1,57 @@
+\ProvidesExplFile{ztikzmodule.cache.tex}{2024/06/15}{1.0.0}{cache~module~for~ztikz}
+
+
+
+
+
+% ----------------------------------------------
+%                 set up                
+% ----------------------------------------------
+\bool_new:N \g__hash_change_bool
+\bool_gset_true:N \g__hash_change_bool
+\usetikzlibrary{external}
+\ztikzMkdir{ztikz_output/tikz_data/}
+\tikzexternalize[prefix=ztikz_output/tikz_data/]
+\immediate\write18 {touch~ ztikz_output/ztikz.hash}
+
+
+
+
+
+% ----------------------------------------------
+%                 cache function                
+% ----------------------------------------------
+% generate md5 hash (history) of a file
+\ior_new:N \g__ztikz_file_ior
+\seq_new:N \g__ztikz_file_hash_seq
+\cs_new_protected:Nn \ztikz_file_read_lines_cs:n {
+  \ior_open:Nn \g__ztikz_file_ior {#1}
+  \seq_gclear:N \g__ztikz_file_hash_seq
+  \ior_str_map_inline:Nn \g__ztikz_file_ior
+    {
+      \seq_gput_right:Nx \g__ztikz_file_hash_seq
+        { \tl_trim_spaces:n {##1} }
+    }
+  \ior_close:N \g__ztikz_file_ior
+}
+\cs_generate_variant:Nn \ztikz_file_read_lines_cs:n { e }
+
+% check if code changed (compare hash value of source code)
+\seq_new:N \l__ztikz_hash_seq
+\cs_set_protected:Npn \ztikz_hash_if_change_cs:n #1 {
+  % Param: #1 -> file name of source code
+  % read from hash list and remove duplicate item
+  \ztikz_file_read_lines_cs:e { ./ztikz_output/ztikz.hash }
+  \seq_gremove_duplicates:N \g__ztikz_file_hash_seq
+  % check if in
+  \file_get_mdfive_hash:nN {#1} \l__ztikz_hash_seq
+  \typeout{current~hash~is~\l__ztikz_hash_seq}
+  \seq_if_in:NVTF \g__ztikz_file_hash_seq \l__ztikz_hash_seq {
+    \bool_gset_false:N \g__hash_change_bool
+  }{
+    \bool_gset_true:N \g__hash_change_bool
+    \typeout{current~hash~is~unique~-->~recorded}
+    \sys_shell_now:x { echo~ \l__ztikz_hash_seq >> ./ztikz_output/ztikz.hash}
+  }
+}
+\cs_generate_variant:Nn \ztikz_hash_if_change_cs:n { x }
