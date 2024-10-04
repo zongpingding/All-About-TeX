@@ -1,0 +1,27 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{framed}
+% \usepackage{float}
+
+
+\begin{document}
+\begin{framed}
+  Hello world
+  \begin{figure}
+    \centering
+    \includegraphics[width=.5\linewidth]{example-image-a}
+    \caption{World}
+  \end{figure}
+\end{framed}
+
+
+% => Reason: For framed is a static env, the figure 
+% is float, thus it is lost. 
+% => solution:
+% Put the figure outside the framed env.
+\begin{figure}
+  \centering
+  \includegraphics[width=.5\linewidth]{example-image-a}
+  \caption{World}
+\end{figure}
+\end{document}

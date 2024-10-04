@@ -1,0 +1,32 @@
+\documentclass{article}
+\usepackage{ctex} 
+\usepackage{amsmath}
+\DeclareMathOperator*{\hugeLambda}{\Lambda}
+\DeclareMathOperator*{\hugePi}{\pi}
+
+
+% ==> way 1
+% \usepackage{unicode-math}
+% \setoperatorfont\mathcal
+
+
+% ==> way 2
+\DeclareFontShape{OMX}{cmex}{m}{n}{%
+  <-7.5>cmex7%
+  <7.5-8.5>cmex8%
+  <8.5-9.5>cmex9%
+  <9.5->cmex10%
+}{}
+\makeatletter
+\DeclareSymbolFont{YoursfOperatorFont}{OT1}{cmr}{m}{n}
+\def\operator@font{\mathgroup\symYoursfOperatorFont}
+\makeatother
+
+
+
+\begin{document}
+\begin{align}
+  & \hugeLambda_{n=1}^\infty = 1\\
+  & \hugePi_{n=1}^\infty = 1
+\end{align}
+\end{document}

@@ -1,0 +1,373 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1.5in]{geometry}
+\setlength{\parindent}{0pt}
+\usepackage{xcolor}
+\definecolor{lstbg}{HTML}{F6F6F6}
+\usepackage{listings}
+\lstset{%
+  language = TeX,
+  basicstyle = \ttfamily,
+  morekeywords = {},
+  backgroundcolor = \color{lstbg},
+  commentstyle =\color{gray}\texttt,
+  keywordstyle = {\color{teal}},
+  numbers = left, 
+  numbersep = 5pt,
+  numberstyle = \ttfamily,
+}
+\renewcommand{\labelitemii}{\(\circ\)}
+\usepackage{hyperref}
+\hypersetup{
+  bookmarksnumbered,
+  colorlinks = true,
+  linkcolor = teal,
+  urlcolor = red,
+  citecolor = blue,
+  pdfauthor = {Eureka},
+  pdftitle = {LaTeX Hook Management Tutorial}
+}
+
+
+
+\title{\LaTeX{} Table Management\footnote{All implement can be found in ``latex.ltx''}}
+\author{Eureka}
+\date{\today}
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Main commands}
+The main commands for making a table of contents are:
+
+\begin{lstlisting}
+* \@starttoc{<ext>}
+
+* \addcontentsline{<table>}{<type>}{<entry>} 
+
+* \addtocontents{<table>}{<text>}
+
+* \contentsline{<type>}{<entry>}{<page>}{<hyperref option>}
+
+* \@dottedtocline{<level>}{<indent>}{<numwidth>}{<title>}{<page>}
+
+* \numberline{<number>}
+\end{lstlisting}
+
+Firstly, we need to know that what is \textbf{contents(table)} ? Then we could know what the following commands will operator will. 
+It is a file with extension \textbf{.toc}, \textbf{.lof}, \textbf{.lot}, etc. which contains the information 
+about the table of contents, list of figures, list of tables, etc. respectively.
+
+\vskip2em
+When and How does these commands add these contentsline ? If you see the definition of \verb|\@sect|, you will see:
+\begin{lstlisting}
+\def\@sect#1#2#3#4#5#6[#7]#8{%
+  ...
+  \ifdim \@tempskipa>\z@
+    ...
+    \csname #1mark\endcsname{#7}%
+    \addcontentsline{toc}{#1}{% The key command lies here !!
+      \ifnum #2>\c@secnumdepth \else
+        \protect\numberline{\csname the#1\endcsname}%
+      \fi
+      #7}%
+  \else
+    \def\@svsechd{%
+      ...
+      \addcontentsline{toc}{#1}{% The key command lies here !!
+        \ifnum #2>\c@secnumdepth \else
+          \protect\numberline{\csname the#1\endcsname}%
+        \fi
+        #7}}%
+  \fi
+  \@xsect{#5}}
+
+% Remark:
+% * counter definition: \newcount\c@secnumdepth 
+%                       \newcount\c@tocdepth
+\end{lstlisting}
+
+To see these counter values, use:
+\begin{lstlisting}
+\makeatletter
+\the\c@tocdepth
+\the\c@secnumdepth
+
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{5}
+\the\c@tocdepth
+\the\c@secnumdepth
+\makeatother
+
+% Result:
+% 3 3 2 5 
+\end{lstlisting}
+
+Please use commands \verb|\newcount| only in package code and with much care. The other counter is used in command \verb|\@dottedtocline|, see:
+\begin{lstlisting}
+\def\@dottedtocline#1#2#3#4#5{%
+  \ifnum #1>\c@tocdepth \else
+  ...}
+\end{lstlisting}
+
+Almost all the section commands, like \verb|\section|, \verb|\subsection|, etc. are defined by \verb|\@sect|. Thus they will call 
+this command to add the contentsline. Something like:
+\begin{lstlisting}
+\contentsline {section}{\numberline {1}<sse I>}{<page>}{}%
+\contentsline {subsection}{\numberline {1.1}<sss I>}{<page>}{}%
+\contentsline {subsection}{\numberline {1.2}<sss II>}{<page>}{}%
+\contentsline {subsection}{\numberline {1.3}<sss III>}{<page>}{}%
+
+% Remark:
+% * The \numberline was added for that '\ifnum #2 < \c@secnumdepth'
+\end{lstlisting}
+
+If you load package `hyperref', then the ToC file will look like:
+\begin{lstlisting}
+\contentsline {section}{<sse I>s}{<page>}{section.1}%
+\contentsline {subsection}{<sss I>}{<page>}{subsection.1.1}%
+\contentsline {subsection}{<sss II>}{<page>}{subsection.1.2}%
+\contentsline {subsection}{<sss III>}{<page>}{subsection.1.3}%
+\end{lstlisting}
+
+
+
+\subsection{The command \textbackslash @starttoc}
+This command can be used to define \verb|\tableofcontents|, \verb|\listoffigures| etc. For example: 
+\begin{itemize}
+\item \verb|\@starttoc{lof}| is used in \verb|\listoffigures|. 
+\item \verb|\@starttoc{lot}| is used in \verb|\listoftables|.
+\item \verb|\@starttoc{toc}| is used in \verb|\tableofcontents|.
+\end{itemize}
+
+The full definition of this command is:
+\begin{lstlisting}
+\def\@starttoc#1{%
+  \begingroup
+    \makeatletter
+    \@input{\jobname.#1}% The key command lies here !!
+    \if@filesw
+      \expandafter\newwrite\csname tf@#1\endcsname
+      \immediate\openout \csname tf@#1\endcsname \jobname.#1\relax
+    \fi
+    \@nobreakfalse
+  \endgroup}
+\end{lstlisting}
+
+
+\subsection{The command \textbackslash addcontentsline}
+Usually, user have to use this command to add her/his own entries to the table of contents. The syntax is:
+\begin{lstlisting}
+\addcontentsline{<table>}{<type>}{<entry>}
+\end{lstlisting}
+
+What does this command do for us ? For example, after use command:
+\begin{lstlisting}
+\addcontentsline{toc}{chapter}{References}
+\addcontentsline{toc}{chapter}{Index}
+\end{lstlisting}
+
+There will be two entries(lines) in file: \verb|\jobname.toc| as follows:
+\begin{lstlisting}
+% The last empty brace is for hyperref option
+\contentsline {chapter}{References}{1}{}%
+\contentsline {chapter}{Index}{1}{}%
+\end{lstlisting}
+
+Thus you can simply see this command as: \textbackslash\textbf{addcontentsline} = \textbf{add} + \textbackslash\textbf{contentsline}
+
+The full definition of this command is:
+\begin{lstlisting}
+\def\addcontentsline#1#2#3{%
+  \addtocontents{#1}{\protect\contentsline{#2}{#3}{\thepage}{}%
+  \protected@file@percent}}
+
+% Remark: 
+% * \protected@file@percent:a percent sign in toc file
+\end{lstlisting}
+
+
+\subsection{The command \textbackslash addtocontents}
+This command just add a text to the \verb|<table>| file without any manipulation. Thus if you use a command like:
+\begin{lstlisting}
+\addtocontents{toc}{something to be added}
+\end{lstlisting}
+
+There will be a line in toc file, something like:
+\begin{lstlisting}
+\contentsline {<type-1>}{<entry-1>}{<page-1>}{}
+something to be added
+\contentsline {<type-2>}{<entry-2>}{<page-2>}{}
+\end{lstlisting}
+
+The full definition is:
+\begin{lstlisting}
+\long\def\addtocontents#1#2{%
+  \protected@write\@auxout
+    {\let\label\@gobble \let\index\@gobble \let\glossary\@gobble}%
+    {\string\@writefile{#1}{#2}}}% The key command lies here !!
+\end{lstlisting}
+
+Thus you can add any text to not only toc file but also lof, lot, etc. by using this command.
+
+\subsection{The command \textbackslash contentsline}
+This commands lies in the \verb|<table>| file, \textbf{it is not a command in normal context}. But if you want to add the 
+contentsline manually, you can use this command in some places, such as the very begining of document, chapter, etc. 
+
+\textbf{Remark}: The fourth argument is used when `hyperref' was loaded. This argument is saveed in a 
+macro \verb|\@contentsline@destination|. 
+
+The full definition is:
+\begin{lstlisting}
+\def\contentsline#1#2#3#4{\gdef\@contentsline@destination{#4}%
+  \csname l@#1\endcsname{#2}{#3}}
+
+% By default:
+\let\@contentsline@destination\@empty
+\end{lstlisting}
+
+\verb|\csname l@#1\endcsname| is the old interface for \verb|<table>| creating. They are defined in each document class. In 
+\verb|article.cls|, they are defined as:
+\begin{lstlisting}
+\newcommand*\l@section[2]{%
+  \ifnum \c@tocdepth >\z@
+    \addpenalty\@secpenalty
+    \addvspace{1.0em \@plus\p@}%
+    \setlength\@tempdima{1.5em}%
+    \begingroup
+      \parindent \z@ \rightskip \@pnumwidth
+      \parfillskip -\@pnumwidth
+      \leavevmode \bfseries
+      \advance\leftskip\@tempdima
+      \hskip -\leftskip
+      #1\nobreak\hfil
+      \nobreak\hb@xt@\@pnumwidth{\hss #2%
+                                \kern-\p@\kern\p@}\par
+    \endgroup
+  \fi}
+\newcommand*\l@subsection{\@dottedtocline{2}{1.5em}{2.3em}}
+\newcommand*\l@subsubsection{\@dottedtocline{3}{3.8em}{3.2em}}
+\newcommand*\l@paragraph{\@dottedtocline{4}{7.0em}{4.1em}}
+\newcommand*\l@subparagraph{\@dottedtocline{5}{10em}{5em}}
+\end{lstlisting}
+
+
+\subsection{The command \textbackslash @dottedtocline}
+This command is used to create a dotted line in table of contents, for sections, for figures, for tables, etc.
+If we'd like to custom this dotted line, just modify these 4 arguments.
+
+
+The full definition is:
+\begin{lstlisting}
+\def\@dottedtocline#1#2#3#4#5{%
+  \ifnum #1>\c@tocdepth \else
+    \vskip \z@ \@plus.2\p@
+    {\leftskip #2\relax \rightskip \@tocrmarg \parfillskip -\rightskip
+      \parindent #2\relax\@afterindenttrue
+      \interlinepenalty\@M
+      \leavevmode
+      \@tempdima #3\relax
+      \advance\leftskip \@tempdima \null\nobreak\hskip -\leftskip
+      {#4}\nobreak
+      \leaders\hbox{$\m@th
+          \mkern \@dotsep mu\hbox{.}\mkern \@dotsep
+          mu$}\hfill
+      \nobreak
+      \hb@xt@\@pnumwidth{\hfil\normalfont \normalcolor #5}%
+      \par}%
+  \fi}
+\def\numberline#1{\hb@xt@\@tempdima{#1\hfil}}
+\end{lstlisting}
+
+When and How this command generate the dotted line? This commands has not been used in \verb|latex.ltx| but in some other basic 
+document class, such as article class, book class, etc. See the usage in \verb|article.cls|:
+\begin{lstlisting}
+\newcommand*\l@section[2]{%
+  \ifnum \c@tocdepth >\z@
+    \addpenalty\@secpenalty
+    \addvspace{1.0em \@plus\p@}%
+    \setlength\@tempdima{1.5em}%
+    \begingroup
+      \parindent \z@ \rightskip \@pnumwidth
+      \parfillskip -\@pnumwidth
+      \leavevmode \bfseries
+      \advance\leftskip\@tempdima
+      \hskip -\leftskip
+      #1\nobreak\hfil
+      \nobreak\hb@xt@\@pnumwidth{\hss #2%
+                                \kern-\p@\kern\p@}\par
+    \endgroup
+  \fi}
+\newcommand*\l@subsection{\@dottedtocline{2}{1.5em}{2.3em}}
+\newcommand*\l@subsubsection{\@dottedtocline{3}{3.8em}{3.2em}}
+\newcommand*\l@paragraph{\@dottedtocline{4}{7.0em}{4.1em}}
+\newcommand*\l@subparagraph{\@dottedtocline{5}{10em}{5em}}
+\newcommand\listoffigures{%
+    \section*{\listfigurename}%
+      \@mkboth{\MakeUppercase\listfigurename}%
+              {\MakeUppercase\listfigurename}%
+    \@starttoc{lof}%
+    }
+\newcommand*\l@figure{\@dottedtocline{1}{1.5em}{2.3em}}
+\newcommand\listoftables{%
+    \section*{\listtablename}%
+      \@mkboth{%
+          \MakeUppercase\listtablename}%
+        {\MakeUppercase\listtablename}%
+    \@starttoc{lot}%
+    }
+\let\l@table\l@figure
+\end{lstlisting}
+
+
+\textbf{Remark}: This command defines the page number format, the number align, the number width, the number color. See the 
+following definition:
+\begin{lstlisting}
+\def\@dottedtocline#1#2#3#4#5{%
+  ...
+  \hb@xt@\@pnumwidth{\hfil\normalfont \normalcolor #5}%
+  ...
+}
+\end{lstlisting}
+
+
+\subsection{The command \textbackslash numberline}
+This command is simple to use. This command pull page number to right most in a box of width \verb|\@tempdim|. The 
+full definition is:
+
+\begin{lstlisting}
+% \hb@xt@ = \hbox to 
+\def\numberline#1{\hb@xt@\@tempdima{#1\hfil}}
+\end{lstlisting}
+
+\textbf{Remark}: This command is the left label(such as 1.1, 1.1.1, etc.) in \verb|<table>|, Thus we can redefine this 
+command the modify the left margin of toc, lof, lot entries.
+
+
+
+\section{Conclusion}
+\subsection{traditional way}
+Then we can see how the \verb|table| is generated in \LaTeX{}:
+
+\begin{itemize}
+  \item Firstly, In each section command, the \verb|\addcontentsline| will be called, then a line will be added to the \verb|<table>| file.
+    \begin{itemize}
+      \item For the command \verb|\contentsline| in the \verb|<table>| file, the \verb|\csname l@#1\endcsname| will be called. The first 3 arguments 
+        of command \verb|\@dottedtocline| are provided by it.
+      \item Then the \verb|\@dottedtocline| will be called by \verb|\csname l@#1\endcsname|. The ``entry label(like 1.1, 1.1.1, etc) +
+        entry name''[{\color{gray}2nd in \verb|\contentsline|, 4th in \verb|\@dottedtocline|}] and ``page number''[{\color{gray}3rd in \verb|\contentsline|, 5th in \verb|\@dottedtocline|}]
+        will be grabbed by this command. 
+      \item If package ``hyperref'' is loaded, then the last argument of \verb|\contentsline| will be saved in a macro \verb|\@contentsline@destination|, 
+        which will be used by \verb|hyperref| package in the future.
+      \item The ``entry label'' will be packed in a box of width \verb|@tempdima|, ``entry name'' will follow the ``entry label'' out of the box. 
+        Then they will be put in the left side of the \verb|<table>| line; The page number will also be packed in a box of width \verb|\@pnumwidth| and a dotted line will be 
+        added by command \verb|\leaders\hbox{$<item>$}\nobreak|.
+    \end{itemize}
+  \item Secondly, In the \verb|\@starttoc{toc}| command will be called by \verb|\tableofcontents|, 
+  \item Finally, \verb|<table>| file will be inputed and the contents will be shown in the document.
+\end{itemize}
+
+
+\subsection{titletoc package}
+If you use package `titletoc' package or `titlesec' package, then there will be something defferent.
+\end{document}

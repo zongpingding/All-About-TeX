@@ -1,0 +1,21 @@
+% TeX-Program: pdflatex
+\documentclass{article}
+\usepackage{stix}
+\DeclareSymbolFont{cmmlargesymbols}{OMX}{cmex}{m}{n}
+% \DeclareMathSymbol{\Newint}{\mathop}{cmmlargesymbols}{"5A}
+% \DeclareMathSymbol{\Newsum}{\mathop}{cmmlargesymbols}{"58}
+\DeclareMathDelimiter{\Newint}{\mathop}{cmmlargesymbols}{"52}{cmmlargesymbols}{"5A}
+\DeclareMathDelimiter{\Newsum}{\mathop}{cmmlargesymbols}{"50}{cmmlargesymbols}{"58}
+
+\begin{document}
+stix style int $\int_a^b$ and sum $\sum_a^b$:
+
+\[
+  \int_{a}^{b} x \;\mathrm{d}x = \sum_{i=1}^{\infty}\frac{x^2}{2} + C
+\]
+
+computer modern math style int $\Newint_a^b$ and sum $\Newsum_a^b$:
+\[
+  \Newint\nolimits_{a}^{b} x \;\mathrm{d}x = \Newsum_{i=1}^{\infty}\frac{x^2}{2} + C
+\]
+\end{document}
