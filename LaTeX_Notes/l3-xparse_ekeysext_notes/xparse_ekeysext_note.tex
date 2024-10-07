@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[oneside]{book}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath}
 \usepackage[hmargin=1.5in, vmargin=1in]{geometry}
@@ -29,6 +29,7 @@
     fontsize=\footnotesize
   }
 }
+\usepackage{comment}
 \usepackage{hyperref}
 \hypersetup{
   bookmarksnumbered,
@@ -40,12 +41,18 @@
   pdftitle = {LaTeX Hook Management Tutorial}
 }
 
+\title{Xparse and EkeysExt\footnote{Read usrguide.pdf for more details.}}
+\author{Eureka}
+\date{\today}
 \begin{document}
-{\setlength{\parskip}{1.5em}
-\tableofcontents
-}
+\def\contentsname{\textsc{Contents}}
+\maketitle
+{%\setlength{\parskip}{1.5em}
+\tableofcontents}
 \newpage
 
+
+\chapter{Xparse}
 \section{argument sepcification}
 Three more characters have a special meaning when creating an argument specifier:
 
@@ -54,6 +61,8 @@ Three more characters have a special meaning when creating an argument specifier
 \item Secondly, \texttt{>} is used to declare so-called ``argument processors'', see below.
 \item Thirdly, \texttt{!} is used to stress the \textbf{space(s)}, such that 
   \verb|\NewDocumentCommand\foobar{ m!o } {...}| and \verb|\foobar{arg1} [arg2]| will raise error.
+\item Finally, \texttt{=} is used to declare that the following argument should be interpreted
+  as a series of keyvals. 
 \end{itemize}
 
 Recommendation: A very common syntax is to have one optional argument \texttt{o} treated as a key–value list
@@ -61,6 +70,20 @@ Recommendation: A very common syntax is to have one optional argument \texttt{o}
 
 \vskip2em
 Other argument type: \texttt{l, u} (mandatory), and the corresponding \texttt{g, G}(optional) is not reccomended to use.
+
+An example of modify \texttt{=}:
+\begin{code}
+\DeclareDocumentCommand\foo{={keyA}o m}
+{%
+  \texttt{ARGS:#1}|{\color{red}#2}\par%
+}
+
+\foo[long-text-A]{short-text-1}
+\foo[keyA=long-text-A]{short-text-2}
+\foo[keyB=New-text-B]{short-text-3}
+\foo[{keyC=New-text-C}]{short-text-4}
+\foo[=,New-text-D]{short-text-5}
+\end{code}
 
 \subsection{basic intro}
 The mandatory types are: \texttt{m, r, R, v, b}; The types which define optional arguments are: 
@@ -322,4 +345,9 @@ arguments that can be read and the error checking available:
 % > \ArgumentSpecification=oO{DEFAULT}R()me{:|}m.
 \ExplSyntaxOff
 \end{code}
+
+
+\chapter{EkeysExt}
+This package is too difficult for me. Wait a moment.
+
 \end{document}

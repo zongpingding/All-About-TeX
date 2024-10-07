@@ -8,7 +8,10 @@
 \lstset{%
   language = TeX,
   basicstyle = \ttfamily,
-  morekeywords = {},
+  morekeywords = {
+    renewcommand, NewDocumentCommand,
+    makeatletter, makeatother,
+    ExplSyntaxOff, ExplSyntaxOn,},
   backgroundcolor = \color{lstbg},
   commentstyle =\color{gray}\texttt,
   keywordstyle = {\color{teal}},
@@ -30,12 +33,29 @@
 
 
 
-\title{\LaTeX{} Table Management\footnote{All implement can be found in ``latex.ltx''}}
+\title{\LaTeX{} ToC Management\footnote{All implement can be found in ``latex.ltx''}}
 \author{Eureka}
 \date{\today}
 \begin{document}
 \maketitle
 \tableofcontents
+\newpage
+
+\section{Preface}
+Some macors you need to know, these macros can be found in 'The TeXbook', Page 347: 'Appendix B: BasicControlSequences'
+\begin{lstlisting}
+\let\bgroup={       \let\egroup=}
+\let\endgraf=\par   \let\endline=\cr
+
+\def\lq{`}          \def\rq{'}      
+\def\lbrack{[}      \def\rbrack{]}
+
+\newlinechar=`\^^J  \def\^^I{\ }    \def\^^M{\ }
+\def\space{ }       \def\empty{}    \def\null{\hbox{}}
+
+\def\obeyspaces{\catcode`\ =\active}
+\obeylines says "\let^^M=\par"
+\end{lstlisting}
 
 \section{Main commands}
 The main commands for making a table of contents are:
@@ -130,7 +150,13 @@ If you load package `hyperref', then the ToC file will look like:
 \contentsline {subsection}{<sss III>}{<page>}{subsection.1.3}%
 \end{lstlisting}
 
+Thus, sometimes you need to renewcommand the \verb|\theHchapter|, \verb|\theHsection| etc as follows:
+\begin{lstlisting}
+\renewcommand\theHchapter{Appendix-\thechapter}
+\renewcommand\theHsection{\thechapter-\thesection}
+\end{lstlisting}
 
+Then the hyperref jumping will be correct.
 
 \subsection{The command \textbackslash @starttoc}
 This command can be used to define \verb|\tableofcontents|, \verb|\listoffigures| etc. For example: 
@@ -152,6 +178,32 @@ The full definition of this command is:
     \fi
     \@nobreakfalse
   \endgroup}
+\end{lstlisting}
+
+
+The switch \verb|\if@filesw| is used to control whether the file will be written or not. The default value is true in latex.ltx
+or in the very begining of the document.
+\begin{lstlisting}
+\newif\if@filesw \@fileswtrue
+\end{lstlisting}
+
+To set this switch to false, there are 2 ways:
+\begin{lstlisting}
+% 1. use \nofiles
+\def\nofiles{%
+  \@fileswfalse
+  \typeout{No auxiliary output files.^^J}%
+  ....}
+
+% 2. use \@fileswfalse directly
+\end{lstlisting}
+
+Thus, the first time , the handle \verb|\csname tf@ #1\ endcsname| will be used to write \verb|<table>| entries to the file.
+And the second time, the \verb|<table>| file will be read in. This commands will automatically check if the file exists or not,
+see definition:
+\begin{lstlisting}
+\def\@input#1{%
+  \IfFileExists{#1}{\@@input\@filef@und}{\typeout{No file #1.}}}
 \end{lstlisting}
 
 
@@ -214,9 +266,6 @@ Thus you can add any text to not only toc file but also lof, lot, etc. by using 
 This commands lies in the \verb|<table>| file, \textbf{it is not a command in normal context}. But if you want to add the 
 contentsline manually, you can use this command in some places, such as the very begining of document, chapter, etc. 
 
-\textbf{Remark}: The fourth argument is used when `hyperref' was loaded. This argument is saveed in a 
-macro \verb|\@contentsline@destination|. 
-
 The full definition is:
 \begin{lstlisting}
 \def\contentsline#1#2#3#4{\gdef\@contentsline@destination{#4}%
@@ -251,9 +300,17 @@ The full definition is:
 \newcommand*\l@subparagraph{\@dottedtocline{5}{10em}{5em}}
 \end{lstlisting}
 
+\textbf{Remark}: 
+\begin{itemize}
+  \item The fourth argument is used when `hyperref' was loaded. This argument is saveed in a 
+  macro \verb|\@contentsline@destination|. 
+  \item This command doese not print the table line, but just call the \verb|\csname l@#1\endcsname|
+  and command \verb|\@dottedtocline| to generate the table line.
+\end{itemize}
+
 
 \subsection{The command \textbackslash @dottedtocline}
-This command is used to create a dotted line in table of contents, for sections, for figures, for tables, etc.
+This command is used to create a (dotted) tabel line in table of contents, for sections, for figures, for tables, etc.
 If we'd like to custom this dotted line, just modify these 4 arguments.
 
 
@@ -350,7 +407,8 @@ command the modify the left margin of toc, lof, lot entries.
 Then we can see how the \verb|table| is generated in \LaTeX{}:
 
 \begin{itemize}
-  \item Firstly, In each section command, the \verb|\addcontentsline| will be called, then a line will be added to the \verb|<table>| file.
+  \item Firstly, In each section command, the \verb|\addcontentsline| will be called, a line starting with command \verb|\contentsline| 
+    will be added to the \verb|<table>| file afterward.
     \begin{itemize}
       \item For the command \verb|\contentsline| in the \verb|<table>| file, the \verb|\csname l@#1\endcsname| will be called. The first 3 arguments 
         of command \verb|\@dottedtocline| are provided by it.
@@ -370,4 +428,87 @@ Then we can see how the \verb|table| is generated in \LaTeX{}:
 
 \subsection{titletoc package}
 If you use package `titletoc' package or `titlesec' package, then there will be something defferent.
+
+
+\section{Application}
+\subsection{custom toc}
+
+
+\subsection{aux file}
+Lets write a commands like \verb|\ref|, \verb|\tableofcontents|, we call it \verb|\AfterItemCollector|. The definition 
+of this new command is:
+\begin{lstlisting}
+\makeatletter\ExplSyntaxOn
+\NewDocumentCommand{\activeCollect}{O{ac}}{
+  \if@filesw\@ifundefined{tf@#1}{}{
+    \expandafter\newwrite\csname tf@#1\endcsname
+    \immediate\openout \csname tf@#1\endcsname \jobname.#1\relax
+    % Do not open a same file handle twice, 
+    % it will overwrite the original file content
+  }\fi
+}
+\NewDocumentCommand{\AllItems}{O{ac}}{
+  \@input {\jobname.#1}
+}
+\NewDocumentCommand{\collectedItem}{O{ac}+m}{
+  \@writefile{#1}{#2}
+}
+\ExplSyntaxOff\makeatother
+
+\activeCollect
+The BEGIN
+\collectedItem{\par --> First Invoke}
+\collectedItem{\par --> Second Invoke}
+The whole collected item are: \AllItems
+\collectedItem{\par --> Third Invoke}
+\collectedItem{\par --> Fourth Invoke}
+\collectedItem{\par --> Fifth Invoke}
+The END
+\end{lstlisting}
+
+After the first compilation, a file named \verb|\jobname.ac| will be crerated; After the 2 compilations, 
+you will get the output: 
+\begin{lstlisting}
+The BEGIN
+The whole collected item are:
+--> First Invoke
+--> Second Invoke
+--> Third Invoke
+--> Fourth Invoke
+--> Fifth Invoke
+The END
+\end{lstlisting}
+
+The last 3 items have been successfully collected.
+
+\vskip2em
+\textbf{Remark}:
+\begin{itemize}
+  \item In this command, you can implement the \verb|\write,\openout| function by \LaTeX3, which will looks more 
+    elegant and more powerful.
+  \item Command \verb|\label| writing something to auxiliary file \texttt{*.aux} instead of \texttt{*.toc} file. 
+    It is like:
+\end{itemize}
+
+\begin{lstlisting}
+% ==> use \label-\ref
+\label{hello}\ref{hello}
+
+
+% ==> file: \jobname.aux
+\newlabel{hello}{{4.2}{10}{}{}{}}
+% If you load package 'hyperref', it will look like:
+\newlabel{hello}{{4.2}{10}{aux file}{lstnumber.-27.8}{}}
+\end{lstlisting}
+
+``4.2'' is the value of \verb|currentlabel|, which will be updated by command \verb|\refstepcounter|, see the 
+definition for \verb|\refstepcounter| in latex.ltx, it is:
+\begin{lstlisting} 
+\def\@currentcounter{} 
+\def\refstepcounter#1{\stepcounter{#1}%
+  \edef\@currentcounter{#1}%
+  \protected@edef\@currentlabel
+  {\csname p@#1\expandafter\endcsname\csname the#1\endcsname}% 
+}
+\end{lstlisting}
 \end{document}
