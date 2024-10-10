@@ -1,0 +1,15 @@
+%!LW recipe=latexmk (lualatex)
+%% REF: https://tex.stackexchange.com/a/728116/294585
+\documentclass{article}
+\usepackage{fontspec}
+
+% Comment one or the other to change emoji font
+% \newfontface\emojifont{Noto Color Emoji}[Renderer=Harfbuzz]
+\newfontface\emojifont{Segoe UI Emoji}[Renderer=Harfbuzz]
+
+
+\begin{document}
+  The quick brown fox {\emojifont 😺👅👩🎓} jumps over the lazy dog
+
+  Other font: {\emojifont 🧑 🎄 🫂 🪴}
+\end{document}
