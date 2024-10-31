@@ -1,0 +1,152 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{amsthm}
+\newcounter{theorem}
+\newenvironment{theorem}{\begin{flushleft}\textbf{Theorem}\;\refstepcounter{theorem}\thetheorem\enspace}{\end{flushleft}}
+\newtheorem{definition}{Definition}
+\makeatletter
+\setlength{\parindent}{0pt}
+\def\hyper@nopatch@thm{}
+\usepackage{lipsum}
+\usepackage{xcolor}
+\usepackage{hyperref}
+% \let\Hy@theorem@refstepcounter\stepcounter
+\hypersetup{
+  bookmarksnumbered,
+  colorlinks = true,
+  linkcolor = red,
+  urlcolor = blue,
+}
+\def\seeTargets{%
+  \par\noindent\dotfill\\
+  \string\@currentHref\ = \meaning\@currentHref\par
+  \string\@currentHpage\ = \meaning\@currentHpage\par
+  \string\Hy@currentbookmarklevel\ = \meaning\Hy@currentbookmarklevel\par\vskip3em
+}
+
+\begin{document}
+\tableofcontents
+
+% \@ifundefined{hyper@nopatch@thm}{UN-DEF}{DEF}
+% \meaning\@thm
+
+
+\newpage
+\section{Test 1}\label{test1}
+\subsection{sss b}
+Hello world I. 
+
+AAAA=BBBB
+% \MakeLinkTarget{ztargetA}
+\hyper@anchor{ztargetB}
+\seeTargets
+
+\newpage
+\section{thm link}
+\begin{theorem}\label{thm1}
+This is a theorem: $a^2+b^2=c^2$.
+\end{theorem}
+
+\begin{definition}\label{def1}
+This is a definition: $a^2+b^2=c^2$.
+\end{definition}
+
+\seeTargets
+
+
+\newpage
+\section*{Test 2}
+Hello world II, the star version section target is:\par
+\seeTargets
+
+\MakeLinkTarget[newType]{}
+\seeTargets
+
+
+\section{see targets}
+\subsection{sss aaa}
+\subsection{sss bbb}
+\seeTargets
+
+
+\section{Manually change target}
+\subsection{theHCOUNTER}
+Original current target is:\par
+\seeTargets
+
+Then i change current target manually:\par 
+\def\theHsection{1000}
+\seeTargets
+
+\textbf{Can NOT change the target manually by \string\theHCOUNTER.}
+
+\subsection{MakeLinkTarget-star}
+The command \string\MakeLinkTarget* can change \string\@currentHref{} manually:\par
+\MakeLinkTarget*{newManualType} \label{checkTarget}
+\seeTargets
+
+% \vskip3em
+% \meaning\ref
+
+% \vskip2em
+% \ExplSyntaxOn
+% \cs_meaning:N \__cmd_start:nNNnnn
+% \cs_meaning:N \__cmd_start_aux:NNnnnn
+% \cs_meaning:N \__cmd_run_code:
+% \ExplSyntaxOff
+
+
+\newpage
+\section{book mark}
+% \meaning\pdfbookmark\par
+% \meaning\new@pdflink\par
+
+AAA:\pdfbookmark[1]{ManuallyBookMark-I}{targetA}
+\seeTargets
+
+BBB: \currentpdfbookmark{ManuallyBookMark-II}{targetB}
+\seeTargets
+
+CCC: \subpdfbookmark{ManuallyBookMark-III}{targetC}
+\seeTargets
+
+DDD:(Even bookmark level not step, the number in dstination show step) \belowpdfbookmark{ManuallyBookMark-IV}{targetD}
+\seeTargets
+
+EEE: \hyper@anchorstart{target.X}\hyper@anchorend
+\seeTargets
+
+
+\newpage
+1. \string\ref{} commad Test:
+\begin{itemize}
+  \item Hello world III:\ref{test1}
+  \item Hello THM: \ref{thm1}
+  \item Hello DEF: \ref{def1}
+\end{itemize}
+
+\vskip3em
+2. \string\hyperlink{} commad Test:
+\begin{itemize}
+  \item Link Target Manually: % \LinkTargetOn ztargetA \LinkTargetOff
+  \item \hyper@link {url}{ztargetB}{link text}; 
+        \hyper@linkstart{link}{ztargetB} long long link text \hyper@linkend
+\end{itemize}
+
+\vskip3em
+3. \string\MakeLinkTarget{} commad Test:
+\begin{itemize}
+  \item \hyper@link {link}{section*.2}{link text};
+  \item \hyper@link {link}{newType*.3}{link text};
+\end{itemize} 
+
+\vskip3em
+4. bookmark related target link:
+\begin{itemize}
+  \item AAA: \hyper@link {link}{targetA.1}{link text 1};
+  \item BBB: \hyper@link {link}{targetB.1}{link text 2};
+  \item CCC: \hyper@link {link}{targetC.2}{link text 3};
+  \item DDD: \hyper@link {link}{targetD.3}{link text 4};
+  \item EEE: \hyper@link {link}{target.X}{link text 5};
+\end{itemize} 
+\end{document}

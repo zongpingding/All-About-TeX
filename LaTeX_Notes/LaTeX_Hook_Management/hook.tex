@@ -62,7 +62,7 @@
 \put(0, -15pt){\tikz\fill[orange] (0, 0) rectangle (\paperwidth, 15pt);}
 \put(.92\paperwidth, -6em){\makebox(0,0){\shipoutPageNum}}
 \put(.5\paperwidth, -.5\paperheight){\makebox(0, 0){%
-\transparent{.5}\includegraphics[width=.5\paperwidth]{latex-logo}}}
+\transparent{.2}\includegraphics[width=.5\paperwidth]{latex-logo.pdf}}}
 \fi
 }
 
@@ -90,6 +90,19 @@
 \RemoveFromHook{cmd/cmda/after}
 % Content
 \end{lstlisting}
+
+\subsection{create hook}
+There are 2 commands to create a hook:
+\begin{itemize}
+  \item \verb|\NewHook{<hook>}|: create a normal hook
+  \item \verb|\NewReversedHook{<hook>}|: create a reversed hook
+\end{itemize}
+
+the code chunk can have arguments as well, see section: ``Hooks with Args''.
+
+\textbf{Remark}: To add code chunks to hook, there is only one command: \verb|\AddToHook{<hook>}{code}|, 
+and the \verb|<label>| is essential for reversed hook. See the last subsection in this section.
+
 
 \subsection{where is the code chunk ?}
 To see where this code chunk is stored, and what is the difference
@@ -195,6 +208,35 @@ An example to see the difference between the normal and reversed hooks:
 \end{lstlisting}
 
 Then the \texttt{cmd/<name>/after} hook is a reversed hook.
+
+Another example of creating your own reversed hook:
+\begin{lstlisting}
+\documentclass{article}
+\NewHook{zlatex/thmstyle/before}
+\NewReversedHook{zlatex/thmstyle/after}
+\newenvironment{test}
+  {\UseHook{zlatex/thmstyle/before}}
+  {\UseHook{zlatex/thmstyle/after}}
+
+
+\AddToHook{zlatex/thmstyle/before}[bf-1]{aaa}
+\AddToHook{zlatex/thmstyle/before}[bf-2]{bbb}
+\AddToHook{zlatex/thmstyle/after}[af-1]{AAA}
+\AddToHook{zlatex/thmstyle/after}[af-2]{BBB}
+\begin{document}
+\begin{test}
+Hello
+\end{test}
+\end{document}
+
+% aaabbb Hello AAABBB
+\end{lstlisting}
+
+\textbf{Remark}: The labels(`af-1', `af-2') for the reversed hook is essential, or it will work as a normal hook. See ``lthooks-doc:2.1.4
+Updating code for hooks'':
+
+{\textcolor{red}If there already exists code under the \verb|<label>| then the new \verb|<code>| is appended to
+the existing one (even if this is a \textbf{reversed} hook).}
 
 \section{Common Hooks}
 \subsection{environment hooks}

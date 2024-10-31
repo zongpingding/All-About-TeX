@@ -1,0 +1,36 @@
+% ref: 예제로 배우는 EXPL3
+\documentclass{article}
+\usepackage{tikz}
+
+\begin{document}
+\ExplSyntaxOn
+\NewDocumentCommand \mydraw {}
+{
+  \tl_clear:N \l_tmpa_tl
+  \my_draw:w
+}
+\cs_new:Npn \my_draw:w (#1,#2)
+{
+  \tl_put_right:Nn \l_tmpa_tl { (#1,#2) }
+  \peek_charcode:NTF (%%% if next token is open­paren
+  {
+    \tl_put_right:Nn \l_tmpa_tl {--}
+    \my_draw:w
+  }
+  {
+    \tl_put_right:Nn \l_tmpa_tl {--cycle}
+    \draw_final:N \l_tmpa_tl
+  }
+}
+\cs_new:Npn \draw_final:N #1
+{
+  \exp_last_unbraced:No
+  \draw #1 ;
+}
+\ExplSyntaxOff
+
+
+\begin{tikzpicture}
+\mydraw(0,0)(1,1)(2,1)(2,0)
+\end{tikzpicture}
+\end{document}

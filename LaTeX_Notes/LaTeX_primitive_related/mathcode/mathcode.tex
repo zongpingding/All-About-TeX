@@ -1,0 +1,28 @@
+%%%%% ==> active catcode 
+\documentclass{article}
+\usepackage{amsmath}
+
+\begin{document}
+\let\oricat\catcode
+\let\oricef\def
+\let\oriifmmoce\ifmmode
+\catcode`d\active
+\oricef d{\oriifmmoce \,\mathrm{\char100}\else \char100\fi}
+
+\section{catcode}
+Hello d 
+
+\[
+  \int xdx = 1 + C
+\]
+
+\oricat`d11
+
+
+\section{mathcode}
+\mathcode`d="7064
+Hello d 
+\[
+  \int xdx = 1 + C
+\]
+\end{document}
