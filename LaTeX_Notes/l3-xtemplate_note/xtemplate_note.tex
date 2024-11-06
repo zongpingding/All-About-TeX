@@ -1,0 +1,192 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{xtemplate}
+
+
+\begin{document}
+\ExplSyntaxOn
+% 1. create a new object type
+\DeclareObjectType{ObjA}{2}
+
+% 2. create a new template for the object type
+\DeclareTemplateInterface{ObjA}{TemplateA}{2}
+  {
+    keyA : function 2 = #1|#2,
+  }
+\DeclareTemplateCode{ObjA}{TemplateA}{2}
+  {
+    keyA = \func:nn,
+  }{
+    \AssignTemplateKeys
+    \func:nn {#1}{#2}AB
+    % \cs_meaning:N \func:nn
+  }
+
+% 3. create an instance of this template
+\cs_set:Npn \__mwe_swap:nn #1#2 {#2<-->#1}
+
+% \SetTemplateKeys{ObjA}{TemplateA}{
+%   keyA = \__mwe_swap:nn,
+% }
+
+\DeclareInstance{ObjA}{InstA}{TemplateA}
+  {
+    % keyA = WORLD,            % bug
+  }
+
+% 4. use this instance
+\UseInstance{ObjA}{InstA}
+  {ARG-1}{ARG-2}
+\ExplSyntaxOff
+\end{document}
+
+
+
+
+
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{xtemplate}
+
+
+\begin{document}
+Ha-Ha
+
+\ExplSyntaxOn
+% 1. create a new object type
+\DeclareObjectType{ObjA}{0}
+
+% 2. create a new template for the object type
+\DeclareTemplateInterface{ObjA}{TemplateA}{0}
+  {
+    keyA : tokenlist = HELLO,
+  }
+
+BEGIN:\cs_meaning:N \l__xtemplate_assignments_tl\par
+\DeclareTemplateCode{ObjA}{TemplateA}{0}
+  {
+    keyA = \l_tmpa_tl,
+  }{
+    \AssignTemplateKeys
+    % \tl_use:N \l_tmpa_tl
+    INNER:\cs_meaning:N \l__xtemplate_assignments_tl\par
+  }
+
+AFTER:\cs_meaning:N \l__xtemplate_assignments_tl\par
+
+% 3. create an instance of this template
+\DeclareInstance{ObjA}{InstA}{TemplateA}
+  {
+    keyA = WORLD
+  }
+
+% 4. use this instance
+% \cs_meaning:N \l_tmpb_tl\par
+\UseInstance{ObjA}{InstA}\par
+\cs_meaning:N \l_tmpa_tl\par
+\ExplSyntaxOff
+\end{document}
+
+
+
+
+
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage[hmargin=1in, vmargin=1in]{geometry}
+\setlength{\parindent}{0pt}
+\usepackage{xtemplate}
+\usepackage{minted}
+\usepackage{tcolorbox}
+\tcbuselibrary{listings, minted, breakable, skins}
+\tcbset{listing engine=minted}
+\definecolor{bg}{RGB}{242, 242, 242}
+\DeclareTCBListing{code}{!O{tex}}{
+  enhanced,
+  breakable,
+  colback=bg, 
+  frame hidden, 
+  left=1mm, right=1mm,
+  top=0mm, bottom=0mm, 
+  % listing side text,
+  minted language=#1, 
+  minted style=manni,
+  minted options = {  
+    autogobble,
+    tabsize=2,
+    breaklines=true, 
+    breakanywhere=true,
+    breakanywheresymbolpre=,
+    breaksymbolleft=,
+    fontsize=\footnotesize
+  }
+}
+% \usepackage{comment}
+% \usepackage{hyperref}
+% \hypersetup{
+%   bookmarksnumbered,
+%   colorlinks = true,
+%   linkcolor = teal,
+%   urlcolor = red,
+%   citecolor = blue,
+%   pdfauthor = {Eureka},
+%   pdftitle = {LaTeX Hook Management Tutorial}
+% }
+
+
+\title{Xtemplate Note}
+\author{Eureka}
+\date{\today}
+\begin{document}
+\maketitle
+\begin{code}
+\ExplSyntaxOn
+% 1. create a new object type
+\DeclareObjectType{ObjA}{2}
+
+% 2. create a new template for the object type
+\DeclareTemplateInterface{ObjA}{TemplateA}{2}
+  {
+    keyA : tokenlist,
+    keyB : integer = 1,
+    keyC : function 2 = #1|#2,
+    keyD : commalist,
+  }
+\DeclareTemplateCode{ObjA}{TemplateA}{2}
+  {
+    keyA = \l_tmpa_tl,
+    keyB = \l_tmpa_int,
+    keyC = \func:nn,
+    keyD = \l_tmpa_clist,
+  }{
+    \AssignTemplateKeys
+    % Args:
+    \#1 = #1;~ \#2 = #2\par
+    % predefined keys(template):
+    % keyA~ Value=\tl_use:N \l_tmpa_tl \par
+    % keyB~ Value=\int_use:N \l_tmpa_int\par
+    % keyC~ Value=\func:nn {#1}{#2} \par
+    keyC~ func=\cs_meaning:N \func:nn\par
+    \func:nn AB{#1}{#2}
+    % keyD~ Value=\clist_use:Nn \l_tmpa_clist {:}
+  }
+
+% 3. create an instance of this template
+\cs_set:Npn \__temp_swap:nn #1#2 {#2<-->#1}
+\DeclareInstance{ObjA}{InstA}{TemplateA}
+  {
+    keyA = {Hello, \LaTeX{}!},
+    keyB = 100,
+    % keyC = \__temp_swap:nn {#1}{#2}, % right
+    keyC = \__temp_swap:nn,            % bug
+    keyD = {A, B, C},
+  }
+
+% 4. use this instance
+\UseInstance{ObjA}{InstA}
+  {ARG-1}{ARG-2}
+\ExplSyntaxOff
+\end{code}
+
+\end{document}

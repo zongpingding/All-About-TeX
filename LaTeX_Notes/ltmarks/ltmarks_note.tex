@@ -1,0 +1,164 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\def\footrulewidth{0.4pt}
+\fancyfoot[C]{\thepage}
+\fancyfoot[L]{\TopMark{test}}
+\fancyhead[L]{\FirstMark{test}}
+\fancyhead[R]{\FirstMark{2e-right-nonempty}}
+
+
+\ExplSyntaxOn
+% create a new mark class
+% NOTE: only in the preamble
+\mark_new_class:n {test}
+\ExplSyntaxOff
+
+
+
+\begin{document}
+\section{WARN}
+The commands are only meaningful inside the \textbf{output routine}(such as in a running header declaration), in other places their
+result is (while not random) unpredictable due to the way \LaTeX{} cuts text material into
+pages.
+
+Using any of the these commands is useful only when your code is \textbf{executed} while 
+\LaTeX{} is building a page. At other times they still return values from the \textbf{last page-build},
+so their result is not random, but it is essentially meaningless because you do not
+know on which page the current point in the text galley ends up.
+
+
+\vskip\fill
+\noindent\textbf{REFERENCE}\\{}
+[1]. The LaTeX Companion, 3nd Edition, Page 391.\\{}
+[2]. ltmarks-doc -- The new LaTeX marks mechanism.
+\newpage
+
+
+
+\section{I}
+Basic marks:
+\begin{itemize}
+  \item \verb|2e-left|: \textbf{Main-Mark} -- ``section'' in article (or ``chapter''  in book class)
+  \item \verb|2e-right|: \textbf{Sub-Mark} -- ``subsection'' in article (or ``section'' in book class)
+  \item \verb|2e-right-nonempty|: if you have a section at the start of a page.
+\end{itemize}
+
+\subsection{I-1}
+\subsection{I-2}
+PAGE I: top mark -- last mark on the previous page. These marks only avaliable 
+after shipout(a page has been created).
+
+
+\ExplSyntaxOn
+% insert content to a mark class
+% NOTE: It has no effect in places in which you can’t place floats
+\mark_insert:nn {test} {Mark-A}
+\mark_insert:nn {test} {Mark-B}
+\mark_insert:nn {test} {Mark-C}
+
+% use content of a mark class
+% 1. optional regions are:
+% - page
+% - previous-page
+% - column
+% - previous-column
+
+% 2. when does these marks update ?
+% If a page has just been finished then the region page refers to the current page and
+% previous-page, as the name indicates, to the page that has been finished previously.
+\begin{itemize}
+  \item \mark_use_top:nn {page}{test} 
+  \item \mark_use_first:nn {page}{test}
+  \item \mark_use_last:nn {page}{test}
+\end{itemize}
+
+
+% The~ text~ in~ shipout~ routine~ is:
+% \AddToHook{shipout}{
+%   \begin{itemize}
+%     \item \mark_use_top:nn {page}{test} 
+%     \item \mark_use_first:nn {page}{test}
+%     \item \mark_use_last:nn {page}{test}
+%   \end{itemize}
+% }
+% \cs_meaning:N \FirstMark
+\ExplSyntaxOff
+
+
+\newpage
+\subsection{II-1}
+\subsection{II-2}
+PAGE II: Insert a new mark ``Mark-Z1'', ``Mark-Z2''
+\ExplSyntaxOn
+\begin{itemize}
+  \item \mark_use_top:nn {page}{test} 
+  \item \mark_use_first:nn {page}{test}
+  \item \mark_use_last:nn {page}{test}
+\end{itemize}
+
+\mark_debug_on:
+\mark_insert:nn {test} {Mark-Z1}
+\mark_insert:nn {test} {Mark-Z2}
+\mark_debug_off:
+\ExplSyntaxOff
+
+\newpage
+PAGE III
+\ExplSyntaxOn
+\begin{itemize}
+  \item \mark_use_top:nn {page}{test} 
+  \item \mark_use_first:nn {page}{test}
+  \item \mark_use_last:nn {page}{test}
+\end{itemize}
+\ExplSyntaxOff
+
+\newpage
+PAGE IV
+\ExplSyntaxOn
+\mark_insert:nn {test} {Mark-A2}
+\mark_insert:nn {test} {Mark-B2}
+\mark_insert:nn {test} {Mark-C2}
+
+\begin{itemize}
+  \item \mark_use_top:nn {page}{test} 
+  \item \mark_use_first:nn {page}{test}
+  \item \mark_use_last:nn {page}{test}
+\end{itemize}
+\ExplSyntaxOff
+
+
+\newpage
+PAGE V: The ``first'' and ``last'' marks are those seen first and last in the current region/page, respectively.
+\ExplSyntaxOn
+\begin{itemize}
+  \item \mark_use_top:nn {page}{test} 
+  \item \mark_use_first:nn {page}{test}
+  \item \mark_use_last:nn {page}{test}
+\end{itemize}
+\ExplSyntaxOff
+
+
+\section{An Example}
+\begin{verbatim}
+\newenvironment{story}[1]
+{\InsertMark{story}{#1}%
+  \InsertMark{story}%
+  {\ldots continued}%
+  \InsertMark{storyend}%
+  {turn page to continue}}
+{\InsertMark{storyend}{}}
+
+
+\begin{story}{A story}
+\section{Lorem}
+\lipsum[1][1]
+\subsection{Ipsum} 
+\lipsum[1][2-7]\newpage
+\lipsum[1][2-7]
+\end{story}
+\end{verbatim}
+
+
+\end{document}
