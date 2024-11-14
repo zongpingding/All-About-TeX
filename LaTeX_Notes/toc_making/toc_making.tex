@@ -15,9 +15,9 @@
   backgroundcolor = \color{lstbg},
   commentstyle =\color{gray}\texttt,
   keywordstyle = {\color{teal}},
-  numbers = left, 
-  numbersep = 5pt,
-  numberstyle = \ttfamily,
+  % numbers = left, 
+  % numbersep = 5pt,
+  % numberstyle = \ttfamily,
 }
 \renewcommand{\labelitemii}{\(\circ\)}
 \usepackage{hyperref}
@@ -260,7 +260,32 @@ The full definition is:
     {\string\@writefile{#1}{#2}}}% The key command lies here !!
 \end{lstlisting}
 
-Thus you can add any text to not only toc file but also lof, lot, etc. by using this command.
+\verb|\@writefile| is used to write content to an \textbf{existing file stream}(\verb|tf@| is the prefix), and 
+definition of this command is:
+\begin{lstlisting}
+\long\def\@writefile#1#2{%
+  \@ifundefined{tf@#1}\relax
+    {\@temptokena{#2}%
+      \immediate\write\csname tf@#1\endcsname{\the\@temptokena}%
+    }%
+}
+\end{lstlisting}
+
+If you want to create a ``list of theorems'' file: \verb|\jobname.lom|, you need creat this stream first:
+\begin{lstlisting}
+\makeatletter
+\newwrite\tf@lom
+\immediate\openout\tf@lom\jobname.lom
+\addcontentsline{lom}{section}{<section name>}
+\makeatother
+\end{lstlisting}
+
+or simply use \verb|\@starttoc| to create such stream:
+\begin{lstlisting}
+\@starttoc{lom}
+\end{lstlisting}
+
+Thus you can add any text to not only toc file but also \textbf{lof, lot, lom} etc. by using this command.
 
 \subsection{The command \textbackslash contentsline}
 This commands lies in the \verb|<table>| file, \textbf{it is not a command in normal context}. But if you want to add the 
