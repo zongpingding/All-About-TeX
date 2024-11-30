@@ -1,0 +1,177 @@
+\documentclass{article}
+\usepackage[margin=.5in, paperwidth=400mm, paperheight=280mm]{geometry}
+\usepackage{xcolor}
+\usepackage{tabularray}
+\usepackage{ctex}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\def\headrule{}
+\cfoot{\Large\sffamily American Standard Code for Information Interchange}
+\usepackage{hyperref}
+% ** NOTE **:
+% 1. For that "tabularray environments need to see every & and \\ when splitting the table body with l3regex."
+%    thus, your commands need to expand so that '&' and '\\' are visible to the tabularray parser.
+% 2. Something should NOT be full expanded verse versa, for example, command '\lowascii' should 
+%    NOT be fully expanded when tabularray is parsing the table body.
+% 3. To display unicode symbol, you need to use a font that has these glyphs, while most fonts do not have
+%    or the glyphs indexes are not right.
+%    REF: https://tex.stackexchange.com/a/51400/294585
+%   \newfontfamily{\lowasciifont}{OpenSans.ttf}                  ---> do NOT has these glyphs
+%   \newcommand{\oldlowascii}[1]{{\lowasciifont\char\string"#1}} ---> some glyphs are not right
+\newfontfamily{\lowasciifont}{FreeSans.otf} 
+\newcommand{\lowascii}[1]{\innerlowascii#1\relax}
+\def\innerlowascii#1#2#3\relax{%
+  $\vcenter{
+  \fontsize{4}{4}\sffamily
+  \offinterlineskip
+  \kern-1.2ex
+  \sbox0{#1}\dimen0=\wd0 \box0
+  \sbox0{#2}\moveright\dimen0\copy0 \advance\dimen0\wd0
+  \if\relax\detokenize{#3}\relax\else\moveright\dimen0\hbox{#3}\fi}$}
+\definecolor{Head}{HTML}{eaecf0}
+\definecolor{Body}{HTML}{f8f9fa}
+\definecolor{Lines}{HTML}{9aa2ab}
+\definecolor{Blue}{HTML}{1645ad}
+\definecolor{Red}{HTML}{b40000}
+\hypersetup {
+  colorlinks = true,
+  urlcolor   = Blue,
+}
+\ExplSyntaxOn
+\cs_generate_variant:Nn \prg_replicate:nn {e}
+\cs_generate_variant:Nn \tl_count:n {e}
+\cs_generate_variant:Nn \tl_range:nnn {e}
+\cs_new:Npn \__oct_to_bin:n #1 
+  {% to keep expandable, that's we in this way
+    \tl_range:enn {\prg_replicate:en 
+      {8-\tl_count:e {\int_to_bin:n {#1}}} 
+      {0}\int_to_bin:n {#1}}{1}{4}
+    \c_space_tl
+    \tl_range:enn {\prg_replicate:en 
+      {8-\tl_count:e {\int_to_bin:n {#1}}} 
+      {0}\int_to_bin:n {#1}}{5}{8}
+  }
+\cs_set:Npn \__row_gen:n #1
+  {% #1: oct number
+    \__oct_to_bin:n {#1} & 
+    #1 &
+    \int_to_Hex:n {#1} &
+    \char_generate:nn {#1}{12} \\
+  }
+\newcommand\controlSym[4]
+  {% #1:oct number; #2:abbreviation; #3:like '^@'; #4:meaning 
+    \__oct_to_bin:n {#1} & 
+    #1 &
+    \prg_replicate:en 
+      {2-\tl_count:e {\int_to_Hex:n {#1}}} 
+      {0}\int_to_Hex:n {#1} &
+    #2 & 
+    % \exp_after:wN \lowascii \exp_after:wN {\int_eval:n {2400+#1}} &
+    \exp_not:N \lowascii{#2} &
+    \tl_to_str:n {^#3} &
+    #4 \\
+  }
+\newcommand\LoopRow[2]
+  {%#1:start; #2: end
+    \int_step_function:nnN {#1} {#2} 
+      \__row_gen:n
+  }
+% \tl_set:Ne \l_tmpa_tl {\__oct_to_bin:n {33}}
+% \tl_show:N \l_tmpa_tl
+% \tl_set:Ne \l_tmpa_tl {\LoopRow{33}{36}}
+% \tl_show:N \l_tmpa_tl
+% --> INFO:
+\hook_gput_next_code:nn {shipout/background}
+  {
+    \put(\paperwidth, -\paperheight){
+      \makebox(0, 0)[br]{\parbox{16em}{
+        \begin{itemize}
+          \item Reference:~ from~ \href{https://www.runoob.com/w3cnote/ascii.html}{RUNOOB}
+          \item Re-Typeset:~ by~ \href{https://github.com/zongpingding}{Eureka}
+        \end{itemize}}
+      }
+    }
+  }
+\ExplSyntaxOff
+
+
+\begin{document}
+% \SetTblrOuter[tblr]{ expand=\AllRows}
+\SetTblrOuter[tblr]{ baseline=T}
+\SetTblrInner[tblr]{
+  width=.4\linewidth,
+  colspec = {ccccccc},
+  columns = {leftsep=6pt,rightsep=6pt},
+  % colspec = {X[1.5, c]X[1, c]X[1.5, c]X[1, c]},
+  row{1}={fg=Blue, bg=Head, font=\sffamily\small},
+  row{2-Z}={bg=Body, font=\sffamily\small},
+  column{even}={fg=Blue},
+  hlines={Lines, .5pt},
+  vlines={Lines, .5pt},
+}
+\centering
+\begin{tblr}[expand=\expanded]{
+  width=.75\linewidth,
+  colspec = {ccccccl},
+  column{even}={fg=black},
+  column{2}={fg=Blue},
+  row{1}={fg=Blue, bg=Head, font=\sffamily\lowasciifont\small},
+  column{6}={font=\sffamily\lowasciifont\small},
+  column{Z}={fg=Blue},
+  cell{1}{Z} = {c}
+}
+二进制 & 十进制 & 十六进制 & 缩写 & 
+  \parbox{4em}{\centering Unicode\\ \textcolor{black}{表示法}} & 
+  \parbox{4em}{\centering 脱出字符\\ \textcolor{black}{表示法}} & 名称/意义 \\
+\expanded{\controlSym{0}{NUL}{@}{空字符(NULL)}}
+\expanded{\controlSym{1}{SOH}{A}{\textcolor{red}{标题开始}}}
+\expanded{\controlSym{2}{STX}{B}{\textcolor{red}{本文开始}}}
+\expanded{\controlSym{3}{ETX}{C}{\textcolor{red}{本文结束}}}
+\expanded{\controlSym{3}{EOT}{D}{\textcolor{red}{传输结束}}}
+\expanded{\controlSym{5}{ENQ}{E}{\textcolor{red}{请求}}}
+\expanded{\controlSym{6}{ACK}{F}{\textcolor{red}{确认回应}}}
+\expanded{\controlSym{7}{BEL}{G}{\textcolor{red}{响铃}}}
+\expanded{\controlSym{8}{BS}{H}{退格}}
+\expanded{\controlSym{9}{HT}{I}{水平定位符号}}
+\expanded{\controlSym{10}{LF}{J}{换行键}}
+\expanded{\controlSym{11}{VT}{K}{\textcolor{red}{垂直定位符号}}}
+\expanded{\controlSym{12}{FF}{L}{\textcolor{red}{换页键}}}
+\expanded{\controlSym{13}{CR}{M}{CR(字符)}}
+\expanded{\controlSym{14}{SO}{N}{取消变换 (Shift Out)}}
+\expanded{\controlSym{15}{SI}{O}{启用变换 (Shift In)}}
+\expanded{\controlSym{16}{DLE}{P}{\textcolor{red}{跳出数据通讯}}}
+\expanded{\controlSym{17}{DC1}{Q}{\textcolor{red}{设备控制}一 (\textcolor{red}{XON 激活软件速度控制})}}
+\expanded{\controlSym{18}{DC2}{R}{\textcolor{red}{设备控制}二}}
+\expanded{\controlSym{19}{DC3}{S}{\textcolor{red}{设备控制}三 (\textcolor{red}{XOFF 停用软件速度控制})}}
+\expanded{\controlSym{20}{DC4}{T}{\textcolor{red}{设备控制}四}}
+\expanded{\controlSym{21}{NAK}{U}{确认失败回应}}
+\expanded{\controlSym{22}{SYN}{V}{\textcolor{red}{同步用暂停}}}
+\expanded{\controlSym{23}{ETB}{W}{\textcolor{red}{区块传输结束}}}
+\expanded{\controlSym{24}{CAN}{X}{\textcolor{red}{取消}}}
+\expanded{\controlSym{25}{EM}{Y}{\textcolor{red}{连线介质中断}}}
+\expanded{\controlSym{26}{SUB}{Z}{替换}}
+\expanded{\controlSym{27}{ESC}{[}{退出键}}
+\expanded{\controlSym{28}{FS}{\ }{\textcolor{red}{文件分割符}}}
+\expanded{\controlSym{29}{GS}{]}{\textcolor{red}{组群分隔符}}}
+\expanded{\controlSym{30}{RS}{^}{\textcolor{red}{记录分隔符}}}
+\expanded{\controlSym{31}{US}{_}{\textcolor{red}{单元分隔符}}}
+\expanded{\controlSym{127}{DEL}{?}{Delete 字符}}
+\end{tblr}
+\quad
+\begin{tblr}[expand=\expanded]{}
+  二进制 & 十进制 & 十六进制 & 图形 \\
+  0010 0000 & 32 & 20 &  (space) \\
+  \expanded{\LoopRow{33}{63}}
+\end{tblr}
+\quad
+\begin{tblr}[expand=\expanded]{}
+  二进制 & 十进制 & 十六进制 & 图形 \\
+  \expanded{\LoopRow{64}{95}}
+\end{tblr}
+\quad
+\begin{tblr}[expand=\expanded]{}
+  二进制 & 十进制 & 十六进制 & 图形 \\
+  0110 0000 & 96 & 60 & \textasciigrave\\
+  \expanded{\LoopRow{97}{126}}
+\end{tblr}
+\end{document}
