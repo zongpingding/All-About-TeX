@@ -1,0 +1,31 @@
+\documentclass{report}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage{tasks,xcoffins}
+\usepackage{etoolbox} 
+\ExplSyntaxOn
+\color{red}
+\color_select:n{red}
+\ExplSyntaxOff
+
+\begin{document}
+\section{A section heading}
+some test text
+
+\begin{tasks}
+  \task item1
+  \task item2
+\end{tasks}
+
+\begin{itemize}
+  \item item1
+  \item item2
+\end{itemize}
+
+\NewCoffin\MyCoffin
+\SetHorizontalCoffin\MyCoffin{Explorer}
+\TypesetCoffin\MyCoffin
+
+\normalcolor blub
+\end{document} 

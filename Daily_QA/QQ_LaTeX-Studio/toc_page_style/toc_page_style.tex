@@ -1,0 +1,54 @@
+\documentclass[landscape,openany]{book}
+\usepackage[a6paper]{geometry}
+\makeatletter
+\renewcommand\tableofcontents{%
+          \if@twocolumn
+            \@restonecoltrue\onecolumn
+          \else
+            \@restonecolfalse
+          \fi
+          \@schapter{\contentsname
+              \@mkboth{%
+                  \MakeUppercase\contentsname}{\MakeUppercase\contentsname}}%
+          \@starttoc{toc}%
+          \if@restonecol\twocolumn\fi
+          }
+\makeatother
+
+\begin{document}
+\pagestyle{empty}
+\tableofcontents 
+
+\chapter{First}
+\chapter{Second}
+\chapter{Third}
+\chapter{First}
+\chapter{Second}
+\chapter{Third}
+\chapter{First}
+\chapter{Second}
+\chapter{Third}
+\end{document}
+
+
+% OTHER TEST CODE
+\documentclass[landscape,openany]{book}
+\usepackage[a6paper]{geometry}
+\makeatletter
+
+\begin{document}
+\pagestyle{empty}
+\@schapter{Contents}
+\thispagestyle{plain}
+\@starttoc{toc}
+
+\chapter{First}
+\chapter{Second}
+\chapter{Third}
+\chapter{First}
+\chapter{Second}
+\chapter{Third}
+\chapter{First}
+\chapter{Second}
+\chapter{Third}
+\end{document}

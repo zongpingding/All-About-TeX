@@ -1,0 +1,14 @@
+\documentclass{elsarticle}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\newtheorem{theorem}{Theorem}
+\Crefname{theorem}{Theorem}{Theorems}
+
+
+\begin{document}
+\begin{theorem}\label{thm:10095}
+  Hello world: $a^2 + b^2 = c^2$
+\end{theorem}
+
+test \Cref{thm:10095} test
+\end{document}

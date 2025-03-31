@@ -1,0 +1,34 @@
+\documentclass{article}
+
+
+\begin{document}
+\section{SSE}
+\subsection{SS1}
+Hello, world!
+
+\begin{enumerate}
+  \item First item
+  \item Second item
+  \item Third item
+\end{enumerate}
+
+\subsection{SS2}
+\makeatletter
+\renewcommand\theenumi{\arabic{section}.\@arabic\c@enumi}
+% \renewcommand\theenumii{\arabic{section}.\@arabic\c@enumii}
+\renewcommand\p@enumii{\theenumi-}
+\def\labelenumi{\theenumi}
+\def\labelenumii{\p@enumii\Alph{enumii}}
+\makeatother
+HELLO, WORLD!
+\begin{enumerate}
+  \item First item
+  \begin{enumerate}
+    \item First 1 item 
+    \item First 2 item
+  \end{enumerate}
+  \item Second item
+  \item Third item
+\end{enumerate}
+
+\end{document}

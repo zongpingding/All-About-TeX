@@ -1,0 +1,25 @@
+\documentclass{article}
+\makeatletter
+\renewcommand\theenumi{\@arabic\c@enumi\(\rightarrow\)\inteval{\@arabic\c@enumi+1}}
+\renewcommand\theenumii{\@arabic\c@enumii\(\rightarrow\)\inteval{\@arabic\c@enumii+1}}
+\renewcommand\p@enumii{\Alph{enumi}-}
+\def\labelenumi{\theenumi}
+\def\labelenumii{\p@enumii[\theenumii]}
+\makeatother
+
+
+\begin{document}
+\begin{enumerate}
+  \item AAA-1
+  \begin{enumerate}
+    \item BBB-1
+    \item BBB-2
+  \end{enumerate}
+  \item AAA-2
+  \begin{enumerate}
+    \item BBB-1
+    \item BBB-2
+  \end{enumerate}
+  \item AAA-3
+\end{enumerate}
+\end{document}
